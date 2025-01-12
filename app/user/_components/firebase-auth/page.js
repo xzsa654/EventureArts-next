@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import firebaseConfig from '@/config/firebase-config'
 import { initializeApp } from 'firebase/app'
-import { getAnalytics } from 'firebase/analytics'
+import FirebaseApiPage from '../firebase-api/page'
 import {
   getAuth,
   signInWithPopup,
@@ -15,6 +15,7 @@ const auth = getAuth(app)
 auth.languageCode = 'cn'
 
 export default function FirebaseAuthPage(props) {
+  const [isAuth, setIsAuth] = useState(false)
   const firebaseAuth = (e) => {
     let provider
     e.target.name == 'google'
@@ -22,6 +23,7 @@ export default function FirebaseAuthPage(props) {
       : (provider = new FacebookAuthProvider())
     signInWithPopup(auth, provider)
       .then((result) => {
+        setIsAuth(true)
         const credential =
           provider.providerId == 'google.com'
             ? GoogleAuthProvider.credentialFromResult(result)
@@ -38,6 +40,7 @@ export default function FirebaseAuthPage(props) {
     auth.onAuthStateChanged(async (user) => {
       //登入狀態
       if (user) {
+        setIsAuth(true)
         user.getIdToken().then((token) => {
           setToken(token)
         })
@@ -46,13 +49,19 @@ export default function FirebaseAuthPage(props) {
   }, [token])
   return (
     <>
-      <button name="google" onClick={firebaseAuth}>
-        GOOGLE
-      </button>
-      <hr />
-      <button name="facebook" onClick={firebaseAuth}>
-        FACEBOOK
-      </button>
+      {isAuth ? (
+        <FirebaseApiPage token={token} />
+      ) : (
+        <>
+          <button name="google" onClick={firebaseAuth}>
+            GOOGLE
+          </button>
+          <hr />
+          <button name="facebook" onClick={firebaseAuth}>
+            FACEBOOK
+          </button>
+        </>
+      )}
     </>
   )
 }
