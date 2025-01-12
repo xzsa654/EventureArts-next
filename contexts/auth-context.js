@@ -24,6 +24,11 @@ export function AuthContextProvider({ children }) {
       console.log(error)
     }
   }, [])
+  // 登入
+  const login = (obj) => {
+    setAuth(obj)
+    localStorage.setItem(storageKey, JSON.stringify(obj))
+  }
   // 登出
   const logOut = () => {
     localStorage.removeItem(storageKey)
