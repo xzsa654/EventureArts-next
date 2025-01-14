@@ -34,16 +34,19 @@ export function AuthContextProvider({ children }) {
     setAuth({ ...result })
     localStorage.setItem(storageKey, JSON.stringify(auth))
   }
+
   // 登入
   const login = (obj) => {
     setAuth(obj)
     localStorage.setItem(storageKey, JSON.stringify(obj))
   }
+
   // 登出
   const logOut = () => {
     localStorage.removeItem(storageKey)
     setAuth({ ...defaultAuth })
   }
+  
   // 驗證登入狀態憑證
   const getAuthHeader = () => {
     if (!auth.token) {
