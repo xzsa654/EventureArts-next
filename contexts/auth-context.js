@@ -1,7 +1,7 @@
 'use client'
 import { createContext } from 'react'
 const AuthContext = createContext()
-
+import { FIREBASE_LOGIN } from '@/lib/user-api'
 import React, { useState, useEffect } from 'react'
 
 export function AuthContextProvider({ children }) {
@@ -24,6 +24,16 @@ export function AuthContextProvider({ children }) {
       console.log(error)
     }
   }, [])
+  // firebase 登入
+  const firebaseLogin = async (token) => {
+    if (token) {
+      const res = await fetch(FIREBASE_LOGIN, {
+        headers: { Authorization: 'Bearer ' + token },
+      })
+      const result = await res.json()
+      console.log(result)
+    }
+  }
   // 登入
   const login = (obj) => {
     setAuth(obj)
@@ -45,7 +55,9 @@ export function AuthContextProvider({ children }) {
   }
   return (
     <>
-      <AuthContext.Provider>{children}</AuthContext.Provider>
+      <AuthContext.Provider value={{ firebaseLogin }}>
+        {children}
+      </AuthContext.Provider>
     </>
   )
 }
