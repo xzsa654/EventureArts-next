@@ -17,7 +17,6 @@ auth.languageCode = 'cn'
 export default function FirebaseAuthPage(props) {
   const { firebaseLogin } = useAuth()
   const [isAuth, setIsAuth] = useState(false)
-  const [token, setToken] = useState('')
   const firebaseAuth = (e) => {
     let provider
     e.target.name == 'google'
@@ -41,17 +40,14 @@ export default function FirebaseAuthPage(props) {
     if (isAuth) {
       auth.onAuthStateChanged(async (user) => {
         //登入狀態
-
         if (user) {
-          setIsAuth(true)
           user.getIdToken().then((token) => {
-            setToken(token)
             firebaseLogin(token)
           })
         }
       })
     }
-  }, [token, isAuth, firebaseLogin])
+  }, [isAuth, firebaseLogin])
 
   return (
     <>

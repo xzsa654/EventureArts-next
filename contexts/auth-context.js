@@ -3,14 +3,15 @@ import { createContext } from 'react'
 const AuthContext = createContext()
 import { FIREBASE_LOGIN } from '@/lib/user-api'
 import React, { useState, useEffect } from 'react'
+import { set } from 'react-hook-form'
 
 export function AuthContextProvider({ children }) {
   const storageKey = 'EventureArts-auth'
   const defaultAuth = {
-    id: 0,
+    user_id: 0,
     name: '',
-    nickName: '',
-    email: '',
+    nickname: '',
+    user_email: '',
     avatar: '',
     token: '',
   }
@@ -26,13 +27,12 @@ export function AuthContextProvider({ children }) {
   }, [])
   // firebase 登入
   const firebaseLogin = async (token) => {
-    if (token) {
-      const res = await fetch(FIREBASE_LOGIN, {
-        headers: { Authorization: 'Bearer ' + token },
-      })
-      const result = await res.json()
-      console.log(result)
-    }
+    const res = await fetch(FIREBASE_LOGIN, {
+      headers: { Authorization: 'Bearers ' + token },
+    })
+    const result = await res.json()
+    setAuth({ ...result })
+    localStorage.setItem(storageKey, JSON.stringify(auth))
   }
   // 登入
   const login = (obj) => {
