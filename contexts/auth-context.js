@@ -1,7 +1,7 @@
 'use client'
 import { createContext } from 'react'
 const AuthContext = createContext()
-import { FIREBASE_LOGIN } from '@/lib/user-api'
+import { FIREBASE_LOGIN } from '@/lib/authorization-api'
 import React, { useState, useEffect } from 'react'
 import { set } from 'react-hook-form'
 
@@ -31,8 +31,10 @@ export function AuthContextProvider({ children }) {
       headers: { Authorization: 'Bearers ' + token },
     })
     const result = await res.json()
-    setAuth({ ...result })
-    localStorage.setItem(storageKey, JSON.stringify(auth))
+    if (result.success) {
+      setAuth({ ...result })
+      localStorage.setItem(storageKey, JSON.stringify(auth))
+    }
   }
 
   // 登入
@@ -46,7 +48,7 @@ export function AuthContextProvider({ children }) {
     localStorage.removeItem(storageKey)
     setAuth({ ...defaultAuth })
   }
-  
+
   // 驗證登入狀態憑證
   const getAuthHeader = () => {
     if (!auth.token) {

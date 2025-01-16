@@ -1,11 +1,11 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import PasswordUpdatePage from './password-update'
+import ResetPasswordPage from './resetPassword'
 import { emailSchema } from '@/hooks/zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { VERIFY_EMAIL } from '@/lib/user-api'
+import { VERIFY_EMAIL } from '@/lib/authorization-api'
 export default function VerifyEmailPage() {
   const {
     handleSubmit,
@@ -29,29 +29,29 @@ export default function VerifyEmailPage() {
     // 後端驗證查無email
     if (!result.success) {
       return setMessage('查無email')
-    }
-    //email正確時啟動OTP重新寄送的計時器
-    //預設值設定
-    setSecond(30)
-
-    let timer = setInterval(() => {
-      setSecond((prev) => {
-        // 秒數跑動
-        if (prev > 0) {
-          setOtpMessage('驗證碼已送出')
-          if (prev == 1) {
-            setOtpMessage('重新寄送')
+    } else {
+      //email正確時啟動OTP重新寄送的計時器
+      //預設值設定
+      // setSecond(30)
+      let timer = setInterval(() => {
+        setSecond((prev) => {
+          // 秒數跑動
+          if (prev > 0) {
+            setOtpMessage('驗證碼已送出')
+            if (prev == 1) {
+              setOtpMessage('重新寄送')
+            }
+            return prev - 1
           }
-          return prev - 1
-        }
-        //秒數跑完停止計時函式
+          //秒數跑完停止計時函式
 
-        if (prev == 0) {
-          clearInterval(timer)
-          return 0
-        }
-      })
-    }, 1000)
+          if (prev == 0) {
+            clearInterval(timer)
+            return 0
+          }
+        })
+      }, 1000)
+    }
   }
 
   return (
@@ -113,7 +113,7 @@ export default function VerifyEmailPage() {
             (message && <p className="text-red-500 text-sm">{message}</p>)}
         </form>
 
-        <PasswordUpdatePage email={email} second={second} />
+        <ResetPasswordPage email={email} second={second} />
       </div>
     </>
   )

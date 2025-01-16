@@ -3,8 +3,8 @@ import React, { useState, useEffect } from 'react'
 import { otpSchema } from '@/hooks/zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { PASSWORD_UPDATE } from '@/lib/user-api'
-export default function PasswordUpdatePage({ second = 0, email = '' }) {
+import { PASSWORD_RESET } from '@/lib/authorization-api'
+export default function ResetPasswordPage({ second = 0, email = '' }) {
   //取得填寫的otp到狀態內
   const [message, setMessage] = useState('')
   const {
@@ -21,7 +21,7 @@ export default function PasswordUpdatePage({ second = 0, email = '' }) {
     const { password } = data
     const nextData = { email, password, otp }
 
-    const res = await fetch(PASSWORD_UPDATE, {
+    const res = await fetch(PASSWORD_RESET, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
