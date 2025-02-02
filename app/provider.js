@@ -1,7 +1,11 @@
 'use client'
 
 import { AuthContextProvider } from '@/contexts/auth-context'
-
+import { HeroUIProvider } from '@heroui/react'
 export default function Provider({ children }) {
-  return <AuthContextProvider>{children}</AuthContextProvider>
+  return (
+    <HeroUIProvider>
+      <AuthContextProvider>{children}</AuthContextProvider>
+    </HeroUIProvider>
+  )
 }
