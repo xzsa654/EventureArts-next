@@ -6,10 +6,10 @@ import './globals.css'
 import Provider from './provider'
 export default function RootLayout({ children }) {
   return (
-    <Provider>
-      <html lang="en">
-        <body>{children}</body>
-      </html>
-    </Provider>
+    <html lang="en">
+      <body>
+        <Provider>{children}</Provider>
+      </body>
+    </html>
   )
 }
