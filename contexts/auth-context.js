@@ -40,7 +40,7 @@ export function AuthContextProvider({ children }) {
   }
   return (
     <>
-      <AuthContext.Provider>{children}</AuthContext.Provider>
+      <AuthContext.Provider value={''}>{children}</AuthContext.Provider>
     </>
   )
 }
