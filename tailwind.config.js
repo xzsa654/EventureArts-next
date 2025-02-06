@@ -9,6 +9,22 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        // 預設字體
+        sans: ['IBM Plex Mono', 'Noto Sans TC'],
+        // LOGO字體
+        logo: ['Megrim'],
+        // 中文襯線體
+        cn: ['"Noto Serif TC"', 'serif'],
+        kanit: ['"Kanit"', 'serif'],
+        unna: ['"Unna"', 'serif'],
+      },
+      fontWeight: {
+        regular: 400,
+        medium: 500,
+        semibold: 600,
+        bold: 700,
+      },
       colors: {
         gray: {
           DEFAULT: '#f5f5f5',

@@ -32,7 +32,7 @@ export default function Home() {
 
   return (
     <>
-      <h3>primary</h3>
+      <h3 className="font-mono ">primary</h3>
       <Button color="primary">Default</Button>
       {colorShow('primary')}
       <hr />
@@ -56,6 +56,23 @@ export default function Home() {
       <h3>gray</h3>
       <Button className="bg-gray">Default</Button>
       {colorShow('gray', false)}
+      <hr />
+      <h1 className="mb-2 text-6xl ">字型測試(中文預設)</h1>
+      <h1 className="mb-2 text-6xl ">HELLO WORLD(EN-Default)</h1>
+      <h1 className="mb-2 text-6xl font-cn">字型測試(font-cn)</h1>
+      <h1 className="text-6xl mb-2 font-logo">EVENTUREARTS(font-logo)</h1>
+      <h1 className="text-6xl mb-2 font-kanit">EVENTUREARTS(font-kanit)</h1>
+      <h1 className="text-6xl mb-2 font-unna">EVENTUREARTS(font-unna)</h1>
+      {/* <Button className="bg-yellow-50">Default</Button>
+      <Button className="bg-yellow-100">Default</Button>
+      <Button className="bg-yellow-200">Default</Button>
+      <Button className="bg-yellow-300">Default</Button>
+      <Button className="bg-yellow-400">Default</Button>
+      <Button className="bg-yellow-500">Default</Button>
+      <Button className="bg-yellow-600">Default</Button>
+      <Button className="bg-yellow-700">Default</Button>
+      <Button className="bg-yellow-800">Default</Button>
+      <Button className="bg-yellow-900">Default</Button> */}
     </>
   )
 }
