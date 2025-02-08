@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import LoginModal from '@/components/common/login/layout'
+import LoginModal from '@/components/common/login/login'
 export default function UserPage(props) {
   return (
     <>
