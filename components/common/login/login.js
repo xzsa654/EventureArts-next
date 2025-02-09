@@ -1,11 +1,12 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import Image from 'next/image'
 import Link from 'next/link'
 import { Input } from '@heroui/react'
-import { Button, ButtonGroup } from '@heroui/button'
+import { Button } from '@heroui/button'
 import ModalLayout from './layout'
+import { useModalHandle } from '@/hooks/use-modal'
+import { useModal } from '@/contexts/modal-context'
 
 // 箭頭向右 SVG
 const arrowRight = (
@@ -110,10 +111,14 @@ const facebookLogo = (
   </svg>
 )
 
-export default function LoginModal(props) {
+export default function LoginModal() {
   const tips = '登入'
   const title = 'EVENTUREARTS'
 
+  const { login, switchToModal, register1, reset } = useModal()
+  const { isOpen, onOpenChange } = login
+  const { onOpen: onRegOpen } = register1
+  const { onOpen: onResOpen } = reset
   const formBody = (
     <form className="gap-[10px] flex flex-wrap justify-center text-center">
       <Input
@@ -148,7 +153,14 @@ export default function LoginModal(props) {
       >
         登入
       </Button>
-      <Link href={'#'} className="text-zinc  text-center hover:border-b-1">
+      <Link
+        href={'javascript:'}
+        onClick={() => {
+          onOpenChange(false)
+          onResOpen()
+        }}
+        className="text-zinc  text-center hover:border-b-1"
+      >
         忘記密碼?
       </Link>
       <div className="w-full flex items-center gap-2 text-gray-600">
@@ -173,16 +185,25 @@ export default function LoginModal(props) {
     </form>
   )
   const footer = (
-    <div className="w-full justify-center text-white flex gap-1">
+    <div className="w-full justify-center text-white flex gap-1 font-cn">
       <div>還沒有帳號?</div>
-      <Link href={'#'} className="border-b-1 border-zinc text-zinc">
+      <Link
+        href={'javascript:'}
+        onClick={() => {
+          onOpenChange(false)
+          onRegOpen()
+        }}
+        className="border-b-1 border-zinc text-zinc"
+      >
         立即註冊
       </Link>
     </div>
   )
   return (
     <>
-      <ModalLayout {...{ formBody, footer, tips, title }} />
+      <ModalLayout
+        {...{ formBody, footer, tips, title, isOpen, onOpenChange }}
+      />
     </>
   )
 }

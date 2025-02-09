@@ -3,7 +3,6 @@ import { createContext } from 'react'
 const AuthContext = createContext()
 import { FIREBASE_LOGIN } from '@/lib/authorization-api'
 import React, { useState, useEffect } from 'react'
-import { set } from 'react-hook-form'
 
 export function AuthContextProvider({ children }) {
   const storageKey = 'EventureArts-auth'

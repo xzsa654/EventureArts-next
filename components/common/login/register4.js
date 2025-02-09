@@ -9,6 +9,7 @@ import {
   CheckIcon,
   BracketsIcon,
 } from '@/public/user/icons'
+import { useModal } from '@/contexts/modal-context'
 
 const testData = [
   { test: 'draw', id: 1 },
@@ -17,6 +18,8 @@ const testData = [
 ]
 
 export default function RegisterStep4(props) {
+  const { register4, switchToModal } = useModal()
+  const { isOpen, onOpenChange } = register4
   const tips = '註冊帳號(4/4)'
 
   const title = '興趣列表'
@@ -143,7 +146,9 @@ export default function RegisterStep4(props) {
   )
   return (
     <>
-      <ModalLayout {...{ formBody, footer, tips, title, section }} />
+      <ModalLayout
+        {...{ formBody, footer, tips, title, section, isOpen, onOpenChange }}
+      />
     </>
   )
 }

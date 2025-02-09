@@ -5,7 +5,6 @@ import {
   ModalBody,
   ModalFooter,
   Button,
-  useDisclosure,
 } from '@heroui/react'
 import { useEffect } from 'react'
 import { BracketsIcon, TipsIcon } from '@/public/user/icons'
@@ -16,15 +15,11 @@ export default function ModalLayout({
   section = <></>,
   footer = <></>,
   prompt = '',
+  isOpen,
+  onOpenChange,
 }) {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure()
-  useEffect(() => {
-    onOpen()
-  }, [])
-
   return (
     <>
-      <Button onPress={onOpen}>Open Modal</Button>
       <Modal
         // 禁止向外點擊關閉
         isDismissable={false}

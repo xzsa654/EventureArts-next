@@ -7,10 +7,13 @@ import { Input } from '@heroui/react'
 import { Button, ButtonGroup } from '@heroui/button'
 import ModalLayout from './layout'
 import { ArrowRight, BracketsIcon, StatusIcon } from '@/public/user/icons'
-
-export default function RegisterStep1(props) {
+import { useModal } from '@/contexts/modal-context'
+export default function RegisterStep1() {
   const tips = '註冊帳號(1/4)'
   const title = '基本資料'
+  const { register1, switchToModal, register2: next } = useModal()
+  const { onOpen } = next
+  const { isOpen, onOpenChange } = register1
   const section = (
     <div className="flex items-center gap-1  w-full">
       {/* 左侧项目 */}
@@ -93,7 +96,14 @@ export default function RegisterStep1(props) {
   )
   const footer = (
     <div className="w-full justify-end text-white flex gap-1">
-      <Link href={'#'} className="flex text-base">
+      <Link
+        href={'javascript:'}
+        onClick={() => {
+          onOpenChange(false)
+          onOpen()
+        }}
+        className="flex text-base"
+      >
         下一步
         <ArrowRight />
       </Link>
@@ -101,7 +111,9 @@ export default function RegisterStep1(props) {
   )
   return (
     <>
-      <ModalLayout {...{ formBody, footer, tips, title, section }} />
+      <ModalLayout
+        {...{ formBody, footer, tips, title, section, isOpen, onOpenChange }}
+      />
     </>
   )
 }

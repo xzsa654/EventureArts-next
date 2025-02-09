@@ -6,8 +6,11 @@ import { Input, InputOtp } from '@heroui/react'
 import { Button, ButtonGroup } from '@heroui/button'
 import ModalLayout from './layout'
 import { ArrowRight, BracketsIcon, StatusIcon } from '@/public/user/icons'
-
-export default function ResetPassword(props) {
+import { useModal } from '@/contexts/modal-context'
+export default function ResetPassword() {
+  const { reset, switchToModal, login } = useModal()
+  const { onOpen } = login
+  const { isOpen, onOpenChange } = reset
   const tips = '忘記密碼'
   const title = '取得驗證碼'
   const prompt = (
@@ -83,9 +86,16 @@ export default function ResetPassword(props) {
   )
   const footer = (
     <div className="w-full justify-between text-white text-xs items-center  flex gap-1">
-      <div href={'#'} className="font-cn text-center">
+      <div className="font-cn text-center">
         已經有帳號了?
-        <Link href={'#'} className=" text-gray underline">
+        <Link
+          href={'javascript:'}
+          onClick={() => {
+            onOpenChange(false)
+            onOpen()
+          }}
+          className=" text-gray underline"
+        >
           立即登入
         </Link>
       </div>
@@ -97,7 +107,17 @@ export default function ResetPassword(props) {
   )
   return (
     <>
-      <ModalLayout {...{ formBody, footer, tips, title, prompt }} />
+      <ModalLayout
+        {...{
+          formBody,
+          footer,
+          tips,
+          title,
+          prompt,
+          isOpen,
+          onOpenChange,
+        }}
+      />
     </>
   )
 }

@@ -7,8 +7,12 @@ import { Input, Textarea } from '@heroui/react'
 import { Button, ButtonGroup } from '@heroui/button'
 import ModalLayout from './layout'
 import { ArrowRight, BracketsIcon, StatusIcon } from '@/public/user/icons'
+import { useModal } from '@/contexts/modal-context'
 
 export default function RegisterStep2(props) {
+  const { register2, switchToModal, register3 } = useModal()
+  const { onOpen } = register3
+  const { isOpen, onOpenChange } = register2
   const tips = '註冊帳號(2/4)'
   const title = '基本資料'
   const section = (
@@ -96,10 +100,24 @@ export default function RegisterStep2(props) {
   )
   const footer = (
     <div className="w-full justify-between text-white flex gap-1">
-      <Link href={'#'} className="text-gray-800">
+      <Link
+        href={'javascript:'}
+        onClick={() => {
+          onOpenChange(false)
+          onOpen()
+        }}
+        className="text-gray-800"
+      >
         略過
       </Link>
-      <Link href={'#'} className=" flex justify-center items-center ">
+      <Link
+        href={'javascript:'}
+        onClick={() => {
+          onOpenChange(false)
+          onOpen()
+        }}
+        className=" flex justify-center items-center "
+      >
         下一步
         <div className="">
           <ArrowRight />
@@ -109,7 +127,9 @@ export default function RegisterStep2(props) {
   )
   return (
     <>
-      <ModalLayout {...{ formBody, footer, tips, title, section }} />
+      <ModalLayout
+        {...{ formBody, footer, tips, title, section, isOpen, onOpenChange }}
+      />
     </>
   )
 }

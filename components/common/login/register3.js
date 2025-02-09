@@ -10,8 +10,12 @@ import {
   BracketsIcon,
   StatusIcon,
 } from '@/public/user/icons'
+import { useModal } from '@/contexts/modal-context'
 
 export default function RegisterStep3(props) {
+  const { register3, switchToModal, register4 } = useModal()
+  const { onOpen } = register4
+  const { isOpen, onOpenChange } = register3
   const tips = '註冊帳號(3/4)'
   const title = '大頭貼'
   const section = (
@@ -59,10 +63,24 @@ export default function RegisterStep3(props) {
   )
   const footer = (
     <div className="w-full justify-between text-white flex gap-1">
-      <Link href={'#'} className="text-gray-800">
+      <Link
+        href={'javascript:'}
+        onClick={() => {
+          onOpenChange(false)
+          onOpen()
+        }}
+        className="text-gray-800"
+      >
         略過
       </Link>
-      <Link href={'#'} className=" flex justify-center items-center ">
+      <Link
+        href={'javascript:'}
+        onClick={() => {
+          onOpenChange(false)
+          onOpen()
+        }}
+        className=" flex justify-center items-center "
+      >
         下一步
         <div className="">
           <ArrowRight />
@@ -72,7 +90,18 @@ export default function RegisterStep3(props) {
   )
   return (
     <>
-      <ModalLayout {...{ formBody, footer, tips, title, section, prompt }} />
+      <ModalLayout
+        {...{
+          formBody,
+          footer,
+          tips,
+          title,
+          section,
+          prompt,
+          isOpen,
+          onOpenChange,
+        }}
+      />
     </>
   )
 }
