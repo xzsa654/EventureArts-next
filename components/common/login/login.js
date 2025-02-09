@@ -3,28 +3,15 @@
 import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Input, extendVariants } from '@heroui/react'
+import { Input } from '@heroui/react'
 import { Button, ButtonGroup } from '@heroui/button'
 import ModalLayout from './layout'
-const MyInput = extendVariants(Input, {
-  variants: {
-    color: {
-      white: {
-        inputWrapper: ['text-white'],
-      },
-    },
-  },
-  defaultVariants: {
-    color: 'white',
-    textSize: 'base',
-    removeLabel: true,
-  },
-})
+
 // 箭頭向右 SVG
 const arrowRight = (
   <svg
-    width="25"
-    height="25"
+    width={25}
+    height={25}
     viewBox="0 0 25 25"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
@@ -32,18 +19,18 @@ const arrowRight = (
     <path
       d="M15.3057 6.43652L21.3757 12.5065L15.3057 18.5765"
       stroke="white"
-      stroke-width="1.5"
-      stroke-miterlimit="10"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeWidth="1.5"
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
     <path
       d="M4.37598 12.5063H21.206"
       stroke="white"
-      stroke-width="1.5"
-      stroke-miterlimit="10"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeWidth="1.5"
+      strokeMiterlimit={10}
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
   </svg>
 )
@@ -51,39 +38,39 @@ const arrowRight = (
 // Google Logo SVG
 const googleLogo = (
   <svg
-    width="25"
-    height="25"
+    width={25}
+    height={25}
     viewBox="0 0 25 25"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
   >
     <rect
-      width="24"
-      height="24"
+      width={24}
+      height={24}
       transform="translate(0.410156 0.351074)"
       fill="white"
     />
     <path
-      fill-rule="evenodd"
-      clip-rule="evenodd"
+      fillRule="evenodd"
+      clipRule="evenodd"
       d="M23.4502 12.6125C23.4502 11.7971 23.377 11.013 23.2411 10.2603H12.4102V14.7087H18.5992C18.3327 16.1462 17.5224 17.3641 16.3045 18.1796V21.065H20.0211C22.1956 19.063 23.4502 16.1148 23.4502 12.6125Z"
       fill="#4285F4"
     />
     <path
-      fill-rule="evenodd"
-      clip-rule="evenodd"
+      fillRule="evenodd"
+      clipRule="evenodd"
       d="M12.4096 23.8511C15.5146 23.8511 18.1178 22.8214 20.0205 21.065L16.3039 18.1795C15.2742 18.8695 13.9569 19.2773 12.4096 19.2773C9.4144 19.2773 6.87918 17.2543 5.97486 14.5361H2.13281V17.5157C4.02509 21.2741 7.91418 23.8511 12.4096 23.8511Z"
       fill="#34A853"
     />
     <path
-      fill-rule="evenodd"
-      clip-rule="evenodd"
+      fillRule="evenodd"
+      clipRule="evenodd"
       d="M5.97538 14.5361C5.74538 13.8461 5.6147 13.109 5.6147 12.3511C5.6147 11.5931 5.74538 10.8561 5.97538 10.1661V7.18652H2.13334C1.35447 8.73902 0.910156 10.4954 0.910156 12.3511C0.910156 14.2068 1.35447 15.9631 2.13334 17.5156L5.97538 14.5361Z"
       fill="#FBBC05"
     />
     <path
-      fill-rule="evenodd"
-      clip-rule="evenodd"
+      fillRule="evenodd"
+      clipRule="evenodd"
       d="M12.4096 5.42494C14.098 5.42494 15.614 6.00516 16.8058 7.14471L20.1042 3.8463C18.1126 1.99062 15.5094 0.851074 12.4096 0.851074C7.91418 0.851074 4.02509 3.42812 2.13281 7.18653L5.97486 10.1661C6.87918 7.44789 9.4144 5.42494 12.4096 5.42494Z"
       fill="#EA4335"
     />
@@ -92,16 +79,16 @@ const googleLogo = (
 // Facebook Logo SVG
 const facebookLogo = (
   <svg
-    width="25"
-    height="25"
+    width={25}
+    height={25}
     viewBox="0 0 25 25"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
   >
-    <g clip-path="url(#clip0_1041_2633)">
+    <g clipPath="url(#clip0_1041_2633)">
       <rect
-        width="24"
-        height="24"
+        width={24}
+        height={24}
         transform="translate(0.410156 0.351074)"
         fill="#1877F2"
       />
@@ -113,8 +100,8 @@ const facebookLogo = (
     <defs>
       <clipPath id="clip0_1041_2633">
         <rect
-          width="24"
-          height="24"
+          width={24}
+          height={24}
           fill="white"
           transform="translate(0.410156 0.351074)"
         />
@@ -129,24 +116,30 @@ export default function LoginModal(props) {
 
   const formBody = (
     <form className="gap-[10px] flex flex-wrap justify-center text-center">
-      <MyInput
+      <Input
         label="Email"
         variant="underlined"
         type="email"
         className="w-full"
         classNames={{
-          label: 'text-white group-data-[focus=true]:text-white',
+          label:
+            'text-white group-data-[focus=true]:text-white group-data-[filled-within=true]:text-white',
+          input:
+            'group-data-[focus=true]:text-white group-data-[has-value=true]:text-white',
         }}
-      ></MyInput>
-      <MyInput
+      ></Input>
+      <Input
         label="密碼"
         variant="underlined"
         type="password"
         className="w-full"
         classNames={{
-          label: 'text-white group-data-[focus=true]:text-white',
+          label:
+            'text-white group-data-[focus=true]:text-white group-data-[filled-within=true]:text-white',
+          input:
+            'group-data-[focus=true]:text-white group-data-[has-value=true]:text-white',
         }}
-      ></MyInput>
+      ></Input>
       <Button
         className="w-full "
         radius="none"
