@@ -9,15 +9,19 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontSize: {
+        12: '0.75rem',
+        16: '1rem',
+      },
       fontFamily: {
         // 預設字體
         sans: ['IBM Plex Mono', 'Noto Sans TC'],
-        // LOGO字體
-        logo: ['Megrim'],
         // 中文襯線體
         cn: ['"Noto Serif TC"', 'serif'],
+        // 英文襯線體
+        en: ['"Unna"', 'serif'],
+        // 特殊字體
         kanit: ['"Kanit"', 'serif'],
-        unna: ['"Unna"', 'serif'],
       },
       fontWeight: {
         regular: 400,
@@ -25,6 +29,7 @@ module.exports = {
         semibold: 600,
         bold: 700,
       },
+
       colors: {
         gray: {
           DEFAULT: '#f5f5f5',
@@ -65,6 +70,19 @@ module.exports = {
           800: '#856930',
           900: '#5C4921',
         },
+        green: {
+          DEFAULT: '#5DC7B7',
+          50: '#D2EFEB',
+          100: '#C5EBE5',
+          200: '#ABE2DA',
+          300: '#91D9CE',
+          400: '#77D0C3',
+          500: '#5DC7B7',
+          600: '#4EA79A',
+          700: '#3F877C',
+          800: '#30675F',
+          900: '#214842',
+        },
         zinc: {
           DEFAULT: '#D9D9D9',
         },
@@ -93,16 +111,6 @@ module.exports = {
             },
             secondary: {
               DEFAULT: '#E3C8B9',
-              50: '#fdf0e8',
-              100: '#e9d4c8',
-              200: '#d9b8a6',
-              300: '#c99c83',
-              400: '#ba7f5f',
-              500: '#a16646',
-              600: '#7d4f36',
-              700: '#5a3926',
-              800: '#372216',
-              900: '#160901',
             },
           },
         },

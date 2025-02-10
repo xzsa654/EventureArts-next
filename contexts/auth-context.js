@@ -1,16 +1,16 @@
 'use client'
 import { createContext } from 'react'
 const AuthContext = createContext()
-
+import { FIREBASE_LOGIN } from '@/lib/authorization-api'
 import React, { useState, useEffect } from 'react'
 
 export function AuthContextProvider({ children }) {
   const storageKey = 'EventureArts-auth'
   const defaultAuth = {
-    id: 0,
+    user_id: 0,
     name: '',
-    nickName: '',
-    email: '',
+    nickname: '',
+    user_email: '',
     avatar: '',
     token: '',
   }
@@ -24,11 +24,30 @@ export function AuthContextProvider({ children }) {
       console.log(error)
     }
   }, [])
+  // firebase 登入
+  const firebaseLogin = async (token) => {
+    const res = await fetch(FIREBASE_LOGIN, {
+      headers: { Authorization: 'Bearers ' + token },
+    })
+    const result = await res.json()
+    if (result.success) {
+      setAuth({ ...result })
+      localStorage.setItem(storageKey, JSON.stringify(auth))
+    }
+  }
+
+  // 登入
+  const login = (obj) => {
+    setAuth(obj)
+    localStorage.setItem(storageKey, JSON.stringify(obj))
+  }
+
   // 登出
   const logOut = () => {
     localStorage.removeItem(storageKey)
     setAuth({ ...defaultAuth })
   }
+
   // 驗證登入狀態憑證
   const getAuthHeader = () => {
     if (!auth.token) {
@@ -40,7 +59,9 @@ export function AuthContextProvider({ children }) {
   }
   return (
     <>
-      <AuthContext.Provider value={''}>{children}</AuthContext.Provider>
+      <AuthContext.Provider value={{ firebaseLogin }}>
+        {children}
+      </AuthContext.Provider>
     </>
   )
 }

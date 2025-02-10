@@ -1,37 +1,11 @@
 'use client'
-import { Button } from '@heroui/react'
-import { button, commonColors, semanticColors } from '@heroui/theme'
-export default function Home() {
-  const colorShow = (color, text = true) => {
-    const arr = Array(10)
-      .fill(100)
-      .map((r, i) => {
-        let count = r * i
-        if (count <= 0) {
-          return (
-            <Button
-              key={i}
-              className={`bg-${color}-50 m-2 ${text ? 'text-white' : ''}`}
-            >
-              {`${color}-50`}
-            </Button>
-          )
-        } else {
-          return (
-            <Button
-              key={i}
-              className={`bg-${color}-${count} m-2 ${text ? 'text-white' : ''}`}
-            >
-              {`${color}-${count}`}
-            </Button>
-          )
-        }
-      })
-    return arr
-  }
 
+import React, { useState, useEffect } from 'react'
+
+export default function AppPage(props) {
   return (
     <>
+<<<<<<< HEAD
       <h3 className="font-mono ">primary</h3>
       <Button color="primary">Default</Button>
       {colorShow('primary')}
@@ -73,6 +47,9 @@ export default function Home() {
       <Button className="bg-gray-700">Default</Button>
       <Button className="bg-gray-800">Default</Button>
       <Button className="bg-gray-900">Default</Button>
+=======
+      <div>App Page</div>
+>>>>>>> main
     </>
   )
 }
