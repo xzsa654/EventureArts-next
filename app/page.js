@@ -63,16 +63,16 @@ export default function Home() {
       <h1 className="text-6xl mb-2 font-logo">EVENTUREARTS(font-logo)</h1>
       <h1 className="text-6xl mb-2 font-kanit">EVENTUREARTS(font-kanit)</h1>
       <h1 className="text-6xl mb-2 font-unna">EVENTUREARTS(font-unna)</h1>
-      {/* <Button className="bg-yellow-50">Default</Button>
-      <Button className="bg-yellow-100">Default</Button>
-      <Button className="bg-yellow-200">Default</Button>
-      <Button className="bg-yellow-300">Default</Button>
-      <Button className="bg-yellow-400">Default</Button>
-      <Button className="bg-yellow-500">Default</Button>
-      <Button className="bg-yellow-600">Default</Button>
-      <Button className="bg-yellow-700">Default</Button>
-      <Button className="bg-yellow-800">Default</Button>
-      <Button className="bg-yellow-900">Default</Button> */}
+      <Button className="bg-gray-50">Default</Button>
+      <Button className="bg-gray-100">Default</Button>
+      <Button className="bg-gray-200">Default</Button>
+      <Button className="bg-gray-300">Default</Button>
+      <Button className="bg-gray-400">Default</Button>
+      <Button className="bg-gray-500">Default</Button>
+      <Button className="bg-gray-600">Default</Button>
+      <Button className="bg-gray-700">Default</Button>
+      <Button className="bg-gray-800">Default</Button>
+      <Button className="bg-gray-900">Default</Button>
     </>
   )
 }
