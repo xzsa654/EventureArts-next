@@ -9,7 +9,7 @@ import {
   AvatarIcon,
   BracketsIcon,
   StatusIcon,
-} from '@/public/user/icons'
+} from '@/public/Yao/icons'
 import { useModal } from '@/contexts/modal-context'
 
 export default function RegisterStep3(props) {

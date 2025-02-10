@@ -8,7 +8,7 @@ import {
   StatusIcon,
   CheckIcon,
   BracketsIcon,
-} from '@/public/user/icons'
+} from '@/public/Yao/icons'
 import { useModal } from '@/contexts/modal-context'
 
 const testData = [

@@ -7,7 +7,7 @@ import {
   Button,
 } from '@heroui/react'
 import { useEffect } from 'react'
-import { BracketsIcon, TipsIcon } from '@/public/user/icons'
+import { BracketsIcon, TipsIcon } from '@/public/Yao/icons'
 export default function ModalLayout({
   formBody = <></>,
   tips = '',

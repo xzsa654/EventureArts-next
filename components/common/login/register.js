@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { Input } from '@heroui/react'
 import { Button, ButtonGroup } from '@heroui/button'
 import ModalLayout from './layout'
-import { ArrowRight, BracketsIcon, StatusIcon } from '@/public/user/icons'
+import { ArrowRight, BracketsIcon, StatusIcon } from '@/public/Yao/icons'
 import { useModal } from '@/contexts/modal-context'
 export default function RegisterStep1() {
   const tips = '註冊帳號(1/4)'

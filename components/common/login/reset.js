@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { Input, InputOtp } from '@heroui/react'
 import { Button, ButtonGroup } from '@heroui/button'
 import ModalLayout from './layout'
-import { ArrowRight, BracketsIcon, StatusIcon } from '@/public/user/icons'
+import { ArrowRight, BracketsIcon, StatusIcon } from '@/public/Yao/icons'
 import { useModal } from '@/contexts/modal-context'
 export default function ResetPassword() {
   const { reset, switchToModal, login } = useModal()
