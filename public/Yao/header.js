@@ -12,18 +12,17 @@ export const UserIcon = ({color='#3B4163'}) => {
 
 export const RainbowBG = () => {
   return (
-    <svg width="1920" height="1080" viewBox="0 0 1920 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect width="1920" height="1080" fill="url(#paint0_linear_1064_6269)"/>
-    <defs>
+  <svg width={1920} height={1080} viewBox="0 0 1920 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width={1920} height={1080} fill="url(#paint0_linear_1064_6269)" />
+  <defs>
     <linearGradient id="paint0_linear_1064_6269" x1="626.667" y1="-160.312" x2="1121.06" y2="1298.69" gradientUnits="userSpaceOnUse">
-    <stop stop-color="#5DC787"/>
-    <stop offset="0.345" stop-color="#FFCA5C"/>
-    <stop offset="0.67" stop-color="#E3C8B9"/>
-    <stop offset="0.97" stop-color="#F0686C"/>
+      <stop stopColor="#5DC787" />
+      <stop offset="0.345" stopColor="#FFCA5C" />
+      <stop offset="0.67" stopColor="#E3C8B9" />
+      <stop offset="0.97" stopColor="#F0686C" />
     </linearGradient>
-    </defs>
-    </svg>
-    
+  </defs>
+</svg>
 
   )
 }

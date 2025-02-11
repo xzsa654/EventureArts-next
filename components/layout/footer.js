@@ -16,7 +16,7 @@ export default function Footer(props) {
         <div className="flex justify-between w-[1140] font-serif  py-5 border-t border-t-1">
           {/* start content */}
           <ul className="text-16 w-full  text-secondary px-10 flex flex-col gap-[10] ">
-            <p className>舉辦活動</p>
+            <p>舉辦活動</p>
             {footerHref.map((item, i) => {
               if (i < 2) {
                 return (

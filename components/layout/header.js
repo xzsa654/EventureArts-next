@@ -62,7 +62,7 @@ export default function Header(props) {
                 'data-[active=true]:after:bg-primary',
               ],
             }}
-            className={`overflow-hidden fixed w-full h-[80]  flex justify-between max-lg:px-0 px-16 py-4 bg-white/30 ${
+            className={`overflow-hidden fixed w-full h-20  flex justify-between max-lg:px-0 px-16 py-4 bg-white/30 ${
               isMenuOpen ? 'bg-[#3B4163]/50 ' : ''
             }  `}
             height={'5rem'}
@@ -133,14 +133,14 @@ export default function Header(props) {
               )}
             </NavbarContent>
             <NavbarContent justify="end">
-              <NavbarItem className={`${!isMenuOpen && 'hidden'} lg:flex`}>
-                <Link href="javascript:" onPress={onOpen}>
+              <NavbarItem className={`${!isMenuOpen ? 'hidden' : ''} lg:flex`}>
+                <Link href="#" onPress={onOpen}>
                   {isMenuOpen ? <UserIcon color="#ffffff" /> : <UserIcon />}
                 </Link>
               </NavbarItem>
               {/* menu 展開 */}
               <NavbarMenuToggle
-                className={`${isMenuOpen && 'text-white '} overflow-hidden`}
+                className={`${isMenuOpen ? 'text-white' : ''} overflow-hidden`}
                 aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
               />
               <NavbarMenu className="   w-screen bg-[#3B4163]/50 flex justify-center gap   items-center">
@@ -311,14 +311,14 @@ export default function Header(props) {
               )}
             </NavbarContent>
             <NavbarContent justify="end">
-              <NavbarItem className={`${!isMenuOpen && 'hidden'} lg:flex`}>
-                <Link href="javascript:" onPress={onOpen}>
+              <NavbarItem className={`${!isMenuOpen ? 'hidden' : ''} lg:flex`}>
+                <Link href="#" onPress={onOpen}>
                   {isMenuOpen ? <UserIcon color="#ffffff" /> : <UserIcon />}
                 </Link>
               </NavbarItem>
               {/* menu 展開 */}
               <NavbarMenuToggle
-                className={`${isMenuOpen && 'text-white '} overflow-hidden`}
+                className={`${isMenuOpen ? 'text-white ' : ''} overflow-hidden`}
                 aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
               />
               <NavbarMenu className="   w-screen bg-[#3B4163]/50 flex justify-center gap   items-center">

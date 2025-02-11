@@ -101,7 +101,7 @@ export default function RegisterStep2(props) {
   const footer = (
     <div className="w-full justify-between text-white flex gap-1">
       <Link
-        href={'javascript:'}
+        href={'#'}
         onClick={() => {
           onOpenChange(false)
           onOpen()
@@ -111,7 +111,7 @@ export default function RegisterStep2(props) {
         略過
       </Link>
       <Link
-        href={'javascript:'}
+        href={'#'}
         onClick={() => {
           onOpenChange(false)
           onOpen()
