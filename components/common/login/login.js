@@ -5,7 +5,6 @@ import Link from 'next/link'
 import { Input } from '@heroui/react'
 import { Button } from '@heroui/button'
 import ModalLayout from './layout'
-import { useModalHandle } from '@/hooks/use-modal'
 import { useModal } from '@/contexts/modal-context'
 import { ArrowRight, FacebookLogo, GoogleLogo } from '@/public/Yao/icons'
 
