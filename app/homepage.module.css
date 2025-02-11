@@ -24,6 +24,7 @@
   animation: gradient-shift 12s linear infinite;
 }
 
+/* ---背景 start--- */
 /* 背景格線 */
 .gridBackground {
   position: absolute;
@@ -179,4 +180,44 @@
 .centerPosition {
   top: calc(50%);
   left: calc(50% - 200px);
+}
+
+/* ---背景 end--- */
+
+
+/* button 效果 */
+.btn {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  text-decoration: none; /* 移除連結的下劃線 */
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+.btn:hover {
+  transform: translate(-50%, -50%) scale(1.1);
+  color: #3b4163;
+}
+/* button 效果 */
+
+/* btn 定位 */
+.courseButton {
+  top: 50%;
+  left: calc(50% - 36%);
+}
+.eventButton {
+  top: calc(50% + 18%);
+  left: calc(50% - 25%);
+}
+
+.exhibitButton{
+  top: calc(50% - 20%);
+  left: calc(50% + 10%);
+}
+
+.mapButton{
+  top: calc(50% + 6%);
+  left: calc(50% + 30%);
 }
