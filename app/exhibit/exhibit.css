@@ -4,7 +4,8 @@
 
 @layer components {
   .animate-verticalScrollDown {
-    animation: verticalScrollDown 20s linear infinite;
+    animation: verticalScrollDown 20s linear infinite 5s;
+
   }
 
   .animate-verticalScrollUp {

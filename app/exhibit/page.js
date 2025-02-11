@@ -1,20 +1,21 @@
 import ExhibitionSection from "./_components/ExhibitionSection"
 import Image from "next/image"
-import ExCard from "@/app/exhibit/_components/Excard"
+import Excard from "./_components/Excard"
 import { ChevronLeftIcon, ChevronRightIcon, ArrowLongRightIcon } from "@heroicons/react/24/outline"
 import "./exhibit.css"
 
 export default function ExhibitPage() {
   return (
-    <main className="min-h-screen">
-
+    <main className="min-h-screen mt-[80px]">
       {/* Exhibition Section */}
       <ExhibitionSection />
-      
+
       {/* First Hero Section */}
       <section className="relative h-[180px] w-full bg-[rgba(33,72,66,1)] flex items-center justify-between px-20">
         <h1 className="text-xl md:text-xl text-white">Too busy to visit an exhibition?</h1>
-        <button className="text-xl font-bold bg-white px-6 py-4 text-black hover:bg-opacity-90">Try online Exhibition</button>
+        <button className="text-xl font-bold bg-white px-6 py-4 text-black hover:bg-opacity-90">
+          Try online Exhibition
+        </button>
       </section>
 
       {/* Second Hero Section */}
@@ -43,7 +44,7 @@ export default function ExhibitPage() {
       {/* Online Exhibition Section */}
       <section className="mb-20 p-6">
         <div className="flex justify-between items-center mb-10">
-          <h1 className="text-2xl font-bold">What's Online...</h1>
+          <h1 className="text-2xl font-bold">What&#39;s Online...</h1>
           <a href="#" className="text-xl font-bold flex items-center gap-2 hover:opacity-70">
             See All Online Exhibition
             <ArrowLongRightIcon className="w-5 h-5" />
@@ -52,9 +53,27 @@ export default function ExhibitPage() {
 
         <div className="relative">
           <div className="flex gap-6 justify-center">
-            <ExCard imageSrc="/chu-images/img_9.jpg" alt="Exhibition 1" />
-            <ExCard imageSrc="/chu-images/img_9.jpg" alt="Exhibition 2" />
-            <ExCard imageSrc="/chu-images/img_9.jpg" alt="Exhibition 3" />
+            <Excard
+              tag="NATURAL"
+              image="/chu-images/img_9.jpg"
+              date="2025 | Dec.12th -Dec.20th"
+              title="Root your designs in earthy visuals that reflect the spirit of"
+              description="這是會上下滑動的區域，藉由直線，相鄰..."
+            />
+            <Excard
+              tag="NATURAL"
+              image="/chu-images/img_9.jpg"
+              date="2025 | Dec.12th -Dec.20th"
+              title="Root your designs in earthy visuals that reflect the spirit of"
+              description="這是會上下滑動的區域，藉由直線，相鄰..."
+            />
+            <Excard
+              tag="NATURAL"
+              image="/chu-images/img_9.jpg"
+              date="2025 | Dec.12th -Dec.20th"
+              title="Root your designs in earthy visuals that reflect the spirit of"
+              description="這是會上下滑動的區域，藉由直線，相鄰..."
+            />
           </div>
 
           <button className="absolute left-[-40px] top-1/2 transform -translate-y-1/2">

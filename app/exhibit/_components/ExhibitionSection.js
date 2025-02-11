@@ -42,7 +42,7 @@ export default function ExhibitionSection() {
         />
         <div className="relative z-10 w-full h-[80px] px-[5%] flex justify-between items-center border-b border-black bg-opacity-80">
           <h1 className="text-2xl font-bold">Current Exhibition</h1>
-          <a href="#" className="text-xl hover:underline">
+          <a href="/exhibit/explore" className="text-xl hover:underline">
             See All Exhibition →
           </a>
         </div>
