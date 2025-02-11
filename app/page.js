@@ -5,7 +5,6 @@ import React, { useState, useEffect } from 'react'
 export default function AppPage(props) {
   return (
     <>
-<<<<<<< HEAD
       <h3 className="font-mono ">primary</h3>
       <Button color="primary">Default</Button>
       {colorShow('primary')}
@@ -47,9 +46,6 @@ export default function AppPage(props) {
       <Button className="bg-gray-700">Default</Button>
       <Button className="bg-gray-800">Default</Button>
       <Button className="bg-gray-900">Default</Button>
-=======
-      <div>App Page</div>
->>>>>>> main
     </>
   )
 }
