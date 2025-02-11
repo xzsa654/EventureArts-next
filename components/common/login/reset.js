@@ -6,10 +6,12 @@ import { Input, InputOtp } from '@heroui/react'
 import { Button, ButtonGroup } from '@heroui/button'
 import ModalLayout from './layout'
 import { ArrowRight, BracketsIcon, StatusIcon } from '@/public/Yao/icons'
+import { motion } from 'framer-motion'
 import { useModal } from '@/contexts/modal-context'
 export default function ResetPassword() {
-  const { reset, switchToModal, login } = useModal()
+  const { reset, login } = useModal()
   const { onOpen } = login
+  const [isVerify, setIsVerify] = useState(false)
   const { isOpen, onOpenChange } = reset
   const tips = '忘記密碼'
   const title = '取得驗證碼'
@@ -18,6 +20,11 @@ export default function ResetPassword() {
       請填寫註冊時email後點擊獲取驗證碼
     </p>
   )
+  useEffect(() => {
+    if (isOpen == false) {
+      setIsVerify(false)
+    }
+  }, [isOpen])
 
   const formBody = (
     <form className="relative w-full h-full gap-[10px] flex flex-wrap justify-center items-center">
@@ -32,13 +39,31 @@ export default function ResetPassword() {
             'group-data-[focus=true]:text-white group-data-[has-value=true]:text-white',
         }}
       ></Input>
-      <div className="absolute w-[300] h-[254] bottom-0 flex justify-center items-center z-10">
-        <Button size="lg" className="bg-red text-white">
-          獲取驗證碼
-          <ArrowRight />
-        </Button>
-      </div>
-      <div className="blur-sm ">
+      {!isVerify && (
+        <motion.div
+          exit={{
+            opacity: 0,
+            transition: {
+              duration: 0.5,
+              ease: 'easeIn',
+            },
+          }}
+          className="absolute w-[300] h-[254] bottom-0 flex justify-center items-center z-10"
+        >
+          <Button
+            size="lg"
+            className="bg-red text-white"
+            onPress={() => {
+              setIsVerify(true)
+            }}
+          >
+            獲取驗證碼
+            <ArrowRight />
+          </Button>
+        </motion.div>
+      )}
+
+      <div className={`${!isVerify ? 'blur-sm' : ''} `}>
         <div className="text-white w-full text-base">
           驗證碼
           <InputOtp
@@ -89,7 +114,7 @@ export default function ResetPassword() {
       <div className="font-cn text-center">
         已經有帳號了?
         <Link
-          href={'javascript:'}
+          href={'#'}
           onClick={() => {
             onOpenChange(false)
             onOpen()

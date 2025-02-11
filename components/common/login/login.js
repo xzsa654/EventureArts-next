@@ -52,7 +52,7 @@ export default function LoginModal() {
         登入
       </Button>
       <Link
-        href={'javascript:'}
+        href={'#'}
         onClick={() => {
           onOpenChange(false)
           onResOpen()
@@ -86,7 +86,7 @@ export default function LoginModal() {
     <div className="w-full justify-center text-white flex gap-1 font-cn">
       <div>還沒有帳號?</div>
       <Link
-        href={'javascript:'}
+        href={'#'}
         onClick={() => {
           onOpenChange(false)
           onRegOpen()
