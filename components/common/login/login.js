@@ -57,7 +57,7 @@ export default function LoginModal() {
           onOpenChange(false)
           onResOpen()
         }}
-        className="text-zinc  text-center hover:border-b-1"
+        className="text-zinc relative after:bg-white  text-center after:h-[1px] after:w-0 after:absolute after:bottom-0 after:left-0 hover:after:w-full"
       >
         忘記密碼?
       </Link>
