@@ -36,27 +36,19 @@
   background-color: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(10px);
   transform-origin: top;
-  transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
-  animation: growDown 0.3s ease-in-out;
+  transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
 }
 
 .advanced-search-open {
   max-height: 1000px;
   opacity: 1;
+  transform: scaleY(1);
 }
 
 .advanced-search-closed {
   max-height: 0;
   opacity: 0;
-}
-
-@keyframes growDown {
-  0% {
-    transform: scaleY(0);
-  }
-  100% {
-    transform: scaleY(1);
-  }
+  transform: scaleY(0);
 }
 
 /* Style the dropdown buttons */
