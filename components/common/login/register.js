@@ -1,17 +1,15 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import Image from 'next/image'
 import Link from 'next/link'
 import { Input } from '@heroui/react'
-import { Button, ButtonGroup } from '@heroui/button'
 import ModalLayout from './layout'
 import { ArrowRight, BracketsIcon, StatusIcon } from '@/public/Yao/icons'
 import { useModal } from '@/contexts/modal-context'
 export default function RegisterStep1() {
   const tips = '註冊帳號(1/4)'
   const title = '基本資料'
-  const { register1, switchToModal, register2: next } = useModal()
+  const { register1, register2: next } = useModal()
   const { onOpen } = next
   const { isOpen, onOpenChange } = register1
   const section = (
@@ -35,7 +33,7 @@ export default function RegisterStep1() {
         </div>
       </div>
 
-      {/* 中间项目 */}
+      {/* 右側项目 */}
       <div className="flex items-center">
         <div className="flex flex-col items-center">
           <BracketsIcon />
@@ -51,7 +49,7 @@ export default function RegisterStep1() {
         label="Email"
         variant="underlined"
         type="email"
-        className="w-full"
+        className={`w-full `}
         classNames={{
           label: 'text-white group-data-[focus=true]:text-white',
           input:
@@ -62,7 +60,7 @@ export default function RegisterStep1() {
         label="密碼"
         variant="underlined"
         type="password"
-        className="w-full"
+        className="w-full "
         classNames={{
           label: 'text-white group-data-[focus=true]:text-white',
           input:

@@ -5,7 +5,6 @@ import Link from 'next/link'
 import { Input } from '@heroui/react'
 import { Button } from '@heroui/button'
 import ModalLayout from './layout'
-import { useModalHandle } from '@/hooks/use-modal'
 import { useModal } from '@/contexts/modal-context'
 import { ArrowRight, FacebookLogo, GoogleLogo } from '@/public/Yao/icons'
 
@@ -57,7 +56,7 @@ export default function LoginModal() {
           onOpenChange(false)
           onResOpen()
         }}
-        className="text-zinc  text-center hover:border-b-1"
+        className="text-zinc relative after:bg-white  text-center after:h-[1px] after:w-0 after:absolute after:bottom-0 after:left-0 hover:after:w-full"
       >
         忘記密碼?
       </Link>
