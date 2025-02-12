@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import Image from 'next/image'
+import { Image } from '@heroui/react'
 import { Link } from '@heroui/react'
 import UserPageSelect from './select'
 import OurPagination from '@/components/common/pagination'
@@ -66,10 +66,8 @@ export default function UserPageFrame(props) {
               </li>
               <li className="flex items-center justify-center grow">
                 <Image
-                  src="/Lichia/3-line-start.svg" // public 資料夾內的 logo.svg
+                  src="/Yao/user/Group 47.svg" // public 資料夾內的 logo.svg
                   alt="Logo"
-                  width={100}
-                  height={100}
                 />
               </li>
             </ul>

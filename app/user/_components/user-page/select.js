@@ -10,6 +10,8 @@ export default function UserPageSelect(props) {
           className="w-48"
           variant="underlined"
           size="sm"
+          // 開啟必須添加這行
+          aria-label="open select"
           defaultSelectedKeys={['由新到舊排列']}
         >
           <SelectItem key={'由新到舊排列'}>收藏時間由新到舊排列</SelectItem>
