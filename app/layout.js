@@ -6,6 +6,7 @@ import './globals.css'
 import Provider from './provider'
 import Header from '@/components/layout/header'
 import Footer from '@/components/layout/footer'
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en">

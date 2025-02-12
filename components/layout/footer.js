@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { Link } from '@heroui/react'
+import { usePathname } from 'next/navigation'
 export default function Footer(props) {
   const footerHref = [
     { title: '常見問題', href: '#' },
@@ -9,6 +10,8 @@ export default function Footer(props) {
     { title: '了解EventureArts', href: '#' },
     { title: '隱私權政策', href: '#' },
   ]
+  const pathname = usePathname();
+  if (pathname === '/') return null; // 如果是首頁，就不渲染 Footer
   return (
     <>
       <div className="w-full   bg-black text-white flex  max-sm:p-0 p-10 flex-col  justify-center items-center gap-10   bottom-0">

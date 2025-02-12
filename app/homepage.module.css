@@ -1,0 +1,222 @@
+.container {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial, sans-serif;
+  position: relative;
+  background: linear-gradient(
+    149deg,
+    #5dc787 0%,
+    #ffca5c 10%,
+    #e3c8b9 20%,
+    #f0686c 30%,
+    #ffca5c 40%,
+    #5dc787 50%,
+    #ffca5c 60%,
+    #e3c8b9 70%,
+    #f0686c 80%,
+    #ffca5c 90%,
+    #5dc787 100%
+  );
+  background-size: 200% 200%;
+  animation: gradient-shift 12s linear infinite;
+}
+
+/* ---背景 start--- */
+/* 背景格線 */
+.gridBackground {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22200%22%20height%3D%22200%22%3E%3Crect%20width%3D%22200%22%20height%3D%22200%22%20fill%3D%22none%22%20stroke%3D%22gray%22%20stroke-width%3D%221%22/%3E%3C/svg%3E');
+  background-size: 200px 200px;
+  background-position: calc(50% - 100px) calc(50% - 100px);
+}
+
+/* 第一個動畫容器 */
+.animationContainer1 {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  overflow: hidden;
+  padding: 0px;
+}
+
+/* 第二個動畫容器 */
+.animationContainer2 {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  overflow: hidden;
+  top: calc(50% - 200px);
+  left: calc(50% - 400px);
+}
+
+/* 第三個動畫容器 */
+.animationContainer3 {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  overflow: hidden;
+  top: calc(50% + 200px);
+  left: calc(50%);
+}
+
+/* 第四個動畫容器 */
+.animationContainer4 {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  overflow: hidden;
+  top: calc(50%);
+  left: calc(50%);
+  top: calc(50% + 200px);
+  left: calc(50% + 200px); /* 第三個容器右邊 200px */
+}
+
+/* 第一個動畫容器的文字 */
+.animatedText1 {
+  position: absolute;
+  white-space: nowrap;
+  font-size: 200px;
+  font-weight: bold;
+  top: -50px; /* 上移 50px */
+  color: #000000;
+  animation: move-text-right-left-1 6s ease-in-out infinite;
+}
+
+/* 第二個動畫容器的文字 */
+.animatedText2 {
+  position: absolute;
+  white-space: nowrap;
+  font-size: 200px;
+  font-weight: bold;
+  left: -50px; /* 左移 50px */
+  color: #000000;
+  writing-mode: vertical-rl;
+  animation: move-text-bottom-top-2 4s ease-in-out infinite 2s;
+}
+
+/* 第三個動畫容器的文字 */
+.animatedText3 {
+  position: absolute;
+  white-space: nowrap;
+  font-size: 200px;
+  font-weight: bold;
+  top: -50px; /* 上移 50px */
+  color: #000000;
+  animation: move-text-right-left-3 4s ease-in-out infinite 2s;
+}
+
+/* 第四個動畫容器的文字 */
+.animatedText4 {
+  position: absolute;
+  white-space: nowrap;
+  font-size: 200px;
+  font-weight: bold;
+  left: -50px; /* 左移 50px */
+  color: #000000;
+  writing-mode: vertical-rl;
+  animation: move-text-bottom-top-4 6s ease-in-out infinite 2s;
+}
+
+/* 動畫效果 */
+
+/* 第一個動畫效果：從右向左移動 */
+@keyframes move-text-right-left-1 {
+  0% {
+    transform: translateX(50%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+/* 第二個動畫效果：從下向上移動 */
+@keyframes move-text-bottom-top-2 {
+  0% {
+    transform: translateY(50%);
+  }
+  100% {
+    transform: translateY(-100%);
+  }
+}
+
+/* 第三個動畫效果：從右向左移動 */
+@keyframes move-text-right-left-3 {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+/* 第四個動畫效果：從下向上移動 */
+@keyframes move-text-bottom-top-4 {
+  0% {
+    transform: translateY(50%);
+  }
+  100% {
+    transform: translateY(-100%);
+  }
+}
+
+/* 漸層背景動畫 */
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 100% 100%;
+  }
+}
+
+/* 定位第一個動畫容器到畫面中央 */
+.centerPosition {
+  top: calc(50%);
+  left: calc(50% - 200px);
+}
+
+/* ---背景 end--- */
+
+/* button 效果 */
+.btn {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  text-decoration: none; /* 移除連結的下劃線 */
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+.btn:hover {
+  transform: translate(-50%, -50%) scale(1.1);
+  color: #3b4163;
+}
+/* button 效果 */
+
+/* btn 定位 */
+.courseButton {
+  top: 50%;
+  left: calc(50% - 36%);
+}
+.eventButton {
+  top: calc(50% + 18%);
+  left: calc(50% - 25%);
+}
+
+.exhibitButton {
+  top: calc(50% - 20%);
+  left: calc(50% + 10%);
+}
+
+.mapButton {
+  top: calc(50% + 6%);
+  left: calc(50% + 30%);
+}
