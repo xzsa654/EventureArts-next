@@ -60,7 +60,7 @@ export default function AVatarGroup() {
               href="/"
               startContent=<Image
                 src="/Yao/user/brand.svg"
-                width={25}
+                width={23}
                 alt="brand_svg"
                 className="mr-3"
               ></Image>
