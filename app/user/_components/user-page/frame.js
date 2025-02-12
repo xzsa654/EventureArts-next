@@ -3,6 +3,8 @@
 import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { Link } from '@heroui/react'
+import UserPageSelect from './select'
+import OurPagination from '@/components/common/pagination'
 export default function UserPageFrame(props) {
   return (
     <>
@@ -72,8 +74,14 @@ export default function UserPageFrame(props) {
               </li>
             </ul>
           </div>
-          {/* contnet */}
-          <div className="w-[990px] h-[640px]"></div>
+          {/* content */}
+          <div className="w-full flex flex-col h-auto gap-5 mx-12 my-6 bg-yellow-200">
+            <UserPageSelect />
+            <div className="flex-auto bg-green"></div>
+            <div className="flex justify-center">
+              <OurPagination />
+            </div>
+          </div>
         </div>
       </div>
     </>
