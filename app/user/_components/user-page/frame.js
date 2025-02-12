@@ -1,47 +1,73 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-
+import Image from 'next/image'
+import { Link } from '@heroui/react'
 export default function UserPageFrame(props) {
   return (
     <>
       {/* layout */}
-      <div className=" min-w-[1440px] h-[780px] mt-20 ">
+      <div className=" min-w-[1140px] h-[92vh] mt-20 flex flex-col">
         {/* Screen Message */}
         <div className="w-full border-black border-t-1 border-b-1 text-center px-16 tracking-[0.08em]">
           <h1 className="w-full text-[128px] leading-[140px] font-bold">
-            LIKED EVENTS *
+            MY PROFILE *
           </h1>
         </div>
         {/* main */}
-        <div className="container border-black border-r-1 border-l-1    mx-auto flex   ">
+        <div
+          className="container flex-auto 
+          border-black border-r-1 border-l-1 mx-auto flex"
+        >
           {/*sidebar  */}
-          <div className="">
+          <div className="h-full border-black border-r-1">
             {/* sidebar-top */}
-            <ul className="w-[150px] border-r-1 border-black h-[320px] border-b-1  ">
-              <li className=" border-b-1 border-black flex items-center justify-center  w-full h-[43px] ">
-                我的檔案
+            <ul className="w-[150px]  border-black border-b-1 h-1/2">
+              <li className="border-black border-b-1 flex items-center justify-center  w-full h-[43px] ">
+                <Link href="#" size="sm" className="hover:text-yellow-600">
+                  我的檔案
+                </Link>
               </li>
-              <li className=" border-b-1 border-black w-full h-[43px] flex items-center justify-center ">
-                訂單
+              <li className="border-black border-b-1 w-full h-[43px] flex items-center justify-center ">
+                <Link href="#" size="sm" className="hover:text-yellow-600">
+                  訂單
+                </Link>
               </li>
-              <li className=" border-b-1 border-black  w-full h-[43px] flex items-center justify-center ">
-                收藏
+              <li className="border-black border-b-1 w-full h-[43px] flex items-center justify-center ">
+                <Link href="#" size="sm" className="hover:text-yellow-600">
+                  收藏
+                </Link>
               </li>
             </ul>
             {/* sidebar-tail */}
-            <ul className="w-[150px] border-r-1 border-black h-[320px] border-b-1  ">
+            <ul className="w-[150px] border-black border-b-1 h-1/2 flex flex-col ">
               <li className=" border-b-1 border-black flex items-center justify-center  w-full h-[43px] ">
-                我的品牌
+                <Link href="#" size="sm" className="hover:text-green-600">
+                  我的品牌
+                </Link>
               </li>
-              <li className=" border-b-1 border-black flex items-center justify-center  w-full h-[43px] ">
-                課程管理
+              <li className="border-black border-b-1 flex items-center justify-center  w-full h-[43px] ">
+                <Link href="#" size="sm" className="hover:text-green-600">
+                  課程管理
+                </Link>
               </li>
-              <li className=" border-b-1 border-black flex items-center justify-center  w-full h-[43px] ">
-                展覽管理
+              <li className=" border-black border-b-1 flex items-center justify-center  w-full h-[43px] ">
+                <Link href="#" size="sm" className="hover:text-green-600">
+                  展覽管理
+                </Link>
               </li>
-              <li className=" border-b-1 border-black flex items-center justify-center  w-full h-[43px] ">
-                訂單管理
+              <li className=" border-black border-b-1 flex items-center justify-center  w-full h-[43px] ">
+                <Link href="#" size="sm" className="hover:text-green-600">
+                  訂單管理
+                </Link>
+              </li>
+              <li className="flex items-center justify-center grow">
+                <Image
+                  src="/Lichia/3-line-start.svg" // public 資料夾內的 logo.svg
+                  alt="Logo"
+                  width={100}
+                  height={100}
+                />
               </li>
             </ul>
           </div>
