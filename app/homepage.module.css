@@ -184,7 +184,6 @@
 
 /* ---背景 end--- */
 
-
 /* button 效果 */
 .btn {
   position: absolute;
@@ -212,12 +211,12 @@
   left: calc(50% - 25%);
 }
 
-.exhibitButton{
+.exhibitButton {
   top: calc(50% - 20%);
   left: calc(50% + 10%);
 }
 
-.mapButton{
+.mapButton {
   top: calc(50% + 6%);
   left: calc(50% + 30%);
 }
