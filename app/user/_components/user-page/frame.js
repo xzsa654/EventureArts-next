@@ -73,9 +73,9 @@ export default function UserPageFrame(props) {
             </ul>
           </div>
           {/* content */}
-          <div className="w-full flex flex-col h-auto gap-5 mx-12 my-6 bg-yellow-200">
+          <div className="w-full flex flex-col h-auto gap-5 mx-12 my-6">
             <UserPageSelect />
-            <div className="flex-auto bg-green"></div>
+            <div className="flex-auto"></div>
             <div className="flex justify-center">
               <OurPagination />
             </div>

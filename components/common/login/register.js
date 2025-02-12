@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Input } from '@heroui/react'
+import InputPop from './input-pop'
 import ModalLayout from './layout'
 import { ArrowRight, BracketsIcon, StatusIcon } from '@/public/Yao/icons'
 import { useModal } from '@/contexts/modal-context'
@@ -11,6 +12,7 @@ export default function RegisterStep1() {
   const title = '基本資料'
   const { register1, register2: next } = useModal()
   const { onOpen } = next
+
   const { isOpen, onOpenChange } = register1
   const section = (
     <div className="flex items-center gap-1  w-full">
@@ -56,17 +58,15 @@ export default function RegisterStep1() {
             'group-data-[focus=true]:text-white group-data-[has-value=true]:text-white',
         }}
       ></Input>
-      <Input
+      <InputPop
+        name="password"
         label="密碼"
-        variant="underlined"
         type="password"
-        className="w-full "
-        classNames={{
-          label: 'text-white group-data-[focus=true]:text-white',
-          input:
-            'group-data-[focus=true]:text-white group-data-[has-value=true]:text-white',
-        }}
-      ></Input>
+        popContent="大小寫英文字母、數字或 “-” 符號；最小8位，最大12位"
+        className="w-full"
+        popTitle="密碼格式"
+      />
+
       <Input
         label="真實姓名"
         variant="underlined"
