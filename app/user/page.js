@@ -8,11 +8,11 @@ import RegisterStep2 from '@/components/common/login/register2'
 import RegisterStep3 from '@/components/common/login/register3'
 import RegisterStep4 from '@/components/common/login/register4'
 import ResetPassword from '@/components/common/login/reset'
-
 import { useModal } from '@/contexts/modal-context'
 export default function UserPage(props) {
   const { login } = useModal()
   const { onOpen } = login
+  
   return (
     <>
       <Button onPress={onOpen}>Open Modal</Button>
