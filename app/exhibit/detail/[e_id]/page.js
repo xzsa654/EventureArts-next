@@ -9,9 +9,9 @@ import { IoMdHeartEmpty } from "react-icons/io"
 import { IoShareOutline } from "react-icons/io5"
 import Image from "next/image"
 
-// This is a mock function to simulate fetching data from a backend
+// mock function to simulate fetching data from a backend
 const fetchExhibitionDetails = async (e_id) => {
-  // In a real application, this would be an API call using the e_id
+  //  API call using the e_id
   return {
     e_id,
     e_name: "Now/Here: Picasso and His Time 畢卡索",
