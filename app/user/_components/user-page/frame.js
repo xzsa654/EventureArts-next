@@ -1,7 +1,8 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-
+import { Image } from '@heroui/react'
+import { Link } from '@heroui/react'
 export default function UserPageFrame(props) {
   return (
     <>
@@ -16,32 +17,78 @@ export default function UserPageFrame(props) {
         {/* main */}
         <div className="container border-black border-r-1 border-l-1    mx-auto flex   ">
           {/*sidebar  */}
-          <div className="">
+          <div>
             {/* sidebar-top */}
-            <ul className="w-[150px] border-r-1 border-black h-[320px] border-b-1  ">
-              <li className=" border-b-1 border-black flex items-center justify-center  w-full h-[43px] ">
-                我的檔案
+            <ul className="w-[150px] border-r-1 border-black h-[320px] border-b-1 text-16 font-cn  ">
+              <li className=" border-b-1 border-black flex items-center justify-center   h-[43px] ">
+                <Link
+                  href="#"
+                  underline="hover"
+                  className="text-black hover:text-yellow-600"
+                >
+                  我的檔案
+                </Link>
               </li>
-              <li className=" border-b-1 border-black w-full h-[43px] flex items-center justify-center ">
-                訂單
+              <li className=" border-b-1 border-black h-[43px] flex items-center justify-center ">
+                <Link
+                  href="#"
+                  underline="hover"
+                  className="text-black  hover:text-yellow-600"
+                >
+                  訂單
+                </Link>
               </li>
-              <li className=" border-b-1 border-black  w-full h-[43px] flex items-center justify-center ">
-                收藏
+              <li className=" border-b-1 border-black   h-[43px] flex items-center justify-center ">
+                <Link
+                  href="#"
+                  underline="hover"
+                  className="text-black  hover:text-yellow-600"
+                >
+                  收藏
+                </Link>
               </li>
             </ul>
+
             {/* sidebar-tail */}
-            <ul className="w-[150px] border-r-1 border-black h-[320px] border-b-1  ">
-              <li className=" border-b-1 border-black flex items-center justify-center  w-full h-[43px] ">
-                我的品牌
+            <ul className="w-[150px] relative flex flex-col border-r-1 border-black h-[320px] border-b-1 text-16 font-cn  ">
+              <li className=" border-b-1 border-black flex items-center justify-center   h-[43px] ">
+                <Link
+                  href="#"
+                  underline="hover"
+                  className="text-black  hover:text-green-600"
+                >
+                  我的品牌
+                </Link>
               </li>
-              <li className=" border-b-1 border-black flex items-center justify-center  w-full h-[43px] ">
-                課程管理
+              <li className=" border-b-1 border-black flex items-center justify-center  h-[43px] ">
+                <Link
+                  href="#"
+                  underline="hover"
+                  className="text-black  hover:text-green-600"
+                >
+                  課程管理
+                </Link>
               </li>
-              <li className=" border-b-1 border-black flex items-center justify-center  w-full h-[43px] ">
-                展覽管理
+              <li className=" border-b-1 border-black flex items-center justify-center  h-[43px] ">
+                <Link
+                  href="#"
+                  underline="hover"
+                  className="text-black  hover:text-green-600"
+                >
+                  展覽管理
+                </Link>
               </li>
-              <li className=" border-b-1 border-black flex items-center justify-center  w-full h-[43px] ">
-                訂單管理
+              <li className=" border-b-1 border-black flex items-center justify-center  h-[43px] ">
+                <Link
+                  href="#"
+                  underline="hover"
+                  className="text-black  hover:text-green-600"
+                >
+                  訂單管理
+                </Link>
+              </li>
+              <li className=" w-full grow flex justify-center items-center ">
+                <Image src="Yao/user/Group 47.svg" alt="decorate"></Image>
               </li>
             </ul>
           </div>
