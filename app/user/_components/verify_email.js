@@ -102,7 +102,7 @@ export default function VerifyEmailPage() {
                   ? 'underline decoration-red-400 text-red-400 pt-5'
                   : 'text-gray-300 '
               }
-              disabled={second !== 0 && second !== 30 ? 'disabled' : ''}
+              disabled={second !== 0 && second !== 30}
             >
               {otpMessage}
             </button>

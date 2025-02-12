@@ -97,7 +97,7 @@ export default function RegisterStep1() {
   const footer = (
     <div className="w-full justify-end text-white flex gap-1">
       <Link
-        href={'javascript:'}
+        href={'#'}
         onClick={() => {
           onOpenChange(false)
           onOpen()

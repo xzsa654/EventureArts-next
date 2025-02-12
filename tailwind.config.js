@@ -93,6 +93,11 @@ module.exports = {
   plugins: [
     heroui({
       addCommonColors: true,
+      layout: {
+        fontSize: {
+          small: '12px',
+        },
+      },
       themes: {
         light: {
           colors: {
