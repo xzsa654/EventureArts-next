@@ -11,7 +11,7 @@ export default function UserPage() {
     <>
       <UserPageProfileFrame title="# MY BRAND">
         <div className=" w-4/5 flex flex-col border-r-1 border-black">
-          <div className="relative h-2/5 flex items-center border-b border-black">
+          <div className="relative px-4 h-2/5 flex items-center border-b border-black">
             {/* 左側固定 Banner */}
             <div className="flex-none w-16 flex justify-center">
               <h5 className="text-3xl font-bold -rotate-90">banner</h5>
@@ -52,7 +52,7 @@ export default function UserPage() {
             </div>
             <div className="w-3/5 flex flex-col justify-between h-full">
               {/* 讓 info 貼齊上方 */}
-              <h3 className="text-[88px] text-end font-bold">info</h3>
+              <h3 className="text-[88px] text-start font-bold">info</h3>
 
               {/* 讓 dl 的容器貼齊下方 */}
               <div className="flex flex-col gap-2">
