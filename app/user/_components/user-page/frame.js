@@ -5,6 +5,7 @@ import { Image } from '@heroui/react'
 import { Link } from '@heroui/react'
 import UserPageSelect from './select'
 import OurPagination from '@/components/common/pagination'
+import CourseMang from './course-mang'
 export default function UserPageFrame(props) {
   return (
     <>
@@ -75,7 +76,9 @@ export default function UserPageFrame(props) {
           {/* content */}
           <div className="w-full flex flex-col h-auto gap-5 mx-12 my-6">
             <UserPageSelect />
-            <div className="flex-auto"></div>
+            <div className="flex-auto ">
+              <CourseMang />
+            </div>
             <div className="flex justify-center">
               <OurPagination />
             </div>
