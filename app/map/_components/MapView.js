@@ -30,7 +30,7 @@ export default function MapView() {
     <div className="map-view">
       <MapContainer
         center={center}
-        zoom={13}
+        zoom={11}
         scrollWheelZoom={true}
         className="map-container"
         zoomControl={false}
@@ -38,16 +38,16 @@ export default function MapView() {
       >
         <ZoomControl position="bottomright" />
         <LayersControl position="topright">
-          <LayersControl.BaseLayer checked name="Light">
-            <TileLayer
-              attribution='&copy; <a href="https://carto.com/">CartoDB</a>'
-              url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
-            />
-          </LayersControl.BaseLayer>
-          <LayersControl.BaseLayer name="Dark">
+          <LayersControl.BaseLayer checked name="Dark">
             <TileLayer
               attribution='&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>'
               url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
+            />
+          </LayersControl.BaseLayer>
+          <LayersControl.BaseLayer name="Light">
+            <TileLayer
+              attribution='&copy; <a href="https://carto.com/">CartoDB</a>'
+              url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
             />
           </LayersControl.BaseLayer>
         </LayersControl>
