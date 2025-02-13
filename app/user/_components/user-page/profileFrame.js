@@ -5,10 +5,8 @@ import Image from 'next/image'
 import { Link } from '@heroui/react'
 import UserPageSelect from './select'
 import OurPagination from '@/components/common/pagination'
-export default function UserPageFrame({
+export default function UserPageProfileFrame({
   title = 'MY PROFILE *',
-  showSelect = true,
-  showPagination = true,
   children,
 }) {
   return (
@@ -80,14 +78,7 @@ export default function UserPageFrame({
             </ul>
           </div>
           {/* content */}
-          <div className="w-full flex flex-col h-auto gap-5 mx-12 my-6">
-            {showSelect && <UserPageSelect />} {/* 根據 props 決定是否渲染 */}
-            <div className="flex-auto">{children}</div>
-            <div className="flex justify-center">
-              {showPagination && <OurPagination />}{' '}
-              {/* 根據 props 決定是否渲染 */}
-            </div>
-          </div>
+          <div className="w-full flex h-auto ">{children}</div>
         </div>
       </div>
     </>
