@@ -8,12 +8,14 @@ import { ArrowRight, AvatarIcon } from '@/public/Yao/icons'
 import { useModal } from '@/contexts/modal-context'
 import RegisterSection from './section'
 export default function RegisterStep3(props) {
-  const { register3, switchToModal, register4 } = useModal()
+  const { register3, register4 } = useModal()
   const { onOpen } = register4
   const { isOpen, onOpenChange } = register3
   const tips = '註冊帳號(3/4)'
   const title = '大頭貼'
-  const section = <RegisterSection test={{ second: 'now' }} />
+  const section = (
+    <RegisterSection test={{ first: 'complete', second: 'now' }} />
+  )
   const prompt = (
     <p className="w-full font-cn text-yellow text-center">
       請上傳jpg格式，比例1:1最佳

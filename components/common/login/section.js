@@ -29,7 +29,7 @@ export default function RegisterSection({
         <div className="flex items-center ">
           <div className={`flex flex-col  text-${f1t}  `}>
             <StatusIcon color={f1c} />
-            <div className={`text-${f1t} ${nowStatus ? '' : 'h-[36px]'} `}>
+            <div className={`text-${f1t}  ${nowStatus ? '' : 'h-[36px]'} `}>
               基本資料
               <div>{nowStatus}</div>
             </div>

@@ -13,7 +13,7 @@ const testData = [
 ]
 
 export default function RegisterStep4(props) {
-  const { register4, switchToModal } = useModal()
+  const { register4 } = useModal()
   const { isOpen, onOpenChange } = register4
   const tips = '註冊帳號(4/4)'
 

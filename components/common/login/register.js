@@ -25,49 +25,39 @@ export default function RegisterStep1() {
   )
   const formBody = (
     <form className="w-full h-full gap-[10px] flex flex-wrap justify-center items-center">
-      <Input
-        label="Email"
-        variant="underlined"
+      <InputPop
+        name="email"
+        label="email"
         type="email"
-        className={`w-full `}
-        classNames={{
-          label: 'text-white group-data-[focus=true]:text-white',
-          input:
-            'group-data-[focus=true]:text-white group-data-[has-value=true]:text-white',
-        }}
-      ></Input>
+        popContent="請輸入有效的電子郵件地址（例：example@email.com）"
+        className="w-full"
+        popTitle="Email"
+      />
       <InputPop
         name="password"
         label="密碼"
         type="password"
         popContent="大小寫英文字母、數字或 “-” 符號；最小8位，最大12位"
         className="w-full"
-        popTitle="密碼格式"
+        popTitle="密碼"
       />
 
-      <Input
+      <InputPop
+        name="name"
         label="真實姓名"
-        variant="underlined"
         type="password"
+        popContent="請輸入中文姓名（2字以上）"
         className="w-full"
-        classNames={{
-          label: 'text-white group-data-[focus=true]:text-white',
-          input:
-            'group-data-[focus=true]:text-white group-data-[has-value=true]:text-white',
-        }}
-      ></Input>
-      <Input
+        popTitle="姓名"
+      />
+      <InputPop
+        name="mobile"
         label="手機"
-        variant="underlined"
         type="password"
+        popContent="請輸入10位數的台灣手機號碼（09開頭）"
         className="w-full"
-        classNames={{
-          label:
-            'text-white group-data-[focus=true]:text-white group-data-[filled-within=true]:text-white',
-          input:
-            'group-data-[focus=true]:text-white group-data-[has-value=true]:text-white',
-        }}
-      ></Input>
+        popTitle="手機格式"
+      />
     </form>
   )
   const footer = (

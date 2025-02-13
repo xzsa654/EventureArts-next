@@ -3,14 +3,20 @@
 import React, { useState, useEffect } from 'react'
 
 import Link from 'next/link'
-import { Input, Textarea } from '@heroui/react'
+import { Textarea, DatePicker, Select, SelectItem } from '@heroui/react'
+import InputPop from './input-pop'
 import RegisterSection from './section'
 import ModalLayout from './layout'
-import { ArrowRight, BracketsIcon, StatusIcon } from '@/public/Yao/icons'
+import { ArrowRight } from '@/public/Yao/icons'
 import { useModal } from '@/contexts/modal-context'
 
 export default function RegisterStep2(props) {
-  const { register2, switchToModal, register3 } = useModal()
+  const { register2, register3 } = useModal()
+  const gender = [
+    { label: '男性', key: 'male' },
+    { label: '女性', key: 'female' },
+    { label: '不願透漏', key: 'not provided' },
+  ]
   const { onOpen } = register3
   const { isOpen, onOpenChange } = register2
   const tips = '註冊帳號(2/4)'
@@ -19,42 +25,39 @@ export default function RegisterStep2(props) {
 
   const formBody = (
     <form className="w-full h-full gap-[8px] flex flex-wrap ">
-      <Input
-        label="Email"
-        variant="underlined"
-        type="email"
-        className="w-full"
-        classNames={{
-          label:
-            'text-white group-data-[focus=true]:text-white group-data-[filled-within=true]:text-white',
-          input:
-            'group-data-[focus=true]:text-white group-data-[has-value=true]:text-white',
-        }}
-      ></Input>
-      <Input
-        label="密碼"
-        variant="underlined"
+      <InputPop
+        label="暱稱"
+        isPop={false}
         type="password"
         className="w-full"
+      ></InputPop>
+
+      <div className="w-full ">
+        <DatePicker
+          showMonthAndYearPickers
+          label="生日"
+          color="danger"
+          variant="underlined"
+        />
+      </div>
+
+      <Select
+        className="max-w-xs"
+        label="性別"
+        placeholder="請選擇性別"
+        variant={'underlined'}
         classNames={{
-          label:
-            'text-white group-data-[focus=true]:text-white group-data-[filled-within=true]:text-white',
-          input:
-            'group-data-[focus=true]:text-white group-data-[has-value=true]:text-white',
+          base: 'max-w-xs',
+          trigger: 'min-h-12 py-2 ',
+          label: 'group-data-[filled=true]:text-white',
+          value: 'text-white text-tiny group-data-[has-value=true]:text-white',
+          selectorIcon: 'text-white text-tiny',
         }}
-      ></Input>
-      <Input
-        label="真實姓名"
-        variant="underlined"
-        type="password"
-        className="w-full"
-        classNames={{
-          label:
-            'text-white group-data-[focus=true]:text-white group-data-[filled-within=true]:text-white',
-          input:
-            'group-data-[focus=true]:text-white group-data-[has-value=true]:text-white',
-        }}
-      ></Input>
+      >
+        {gender.map((item) => (
+          <SelectItem key={item.key}>{item.label}</SelectItem>
+        ))}
+      </Select>
       <Textarea
         radius="none"
         variant="bordered"

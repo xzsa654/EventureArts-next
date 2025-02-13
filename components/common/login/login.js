@@ -12,7 +12,7 @@ export default function LoginModal() {
   const tips = '登入'
   const title = 'EVENTUREARTS'
 
-  const { login, switchToModal, register1, reset } = useModal()
+  const { login, register1, reset } = useModal()
   const { isOpen, onOpenChange } = login
   const { onOpen: onRegOpen } = register1
   const { onOpen: onResOpen } = reset

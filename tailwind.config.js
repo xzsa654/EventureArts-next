@@ -101,6 +101,7 @@ module.exports = {
       themes: {
         light: {
           colors: {
+            background: '#000000 ',
             primary: {
               DEFAULT: '#3B4163',
               50: '#C8CAD3',
@@ -116,6 +117,12 @@ module.exports = {
             },
             secondary: {
               DEFAULT: '#E3C8B9',
+            },
+            danger: {
+              DEFAULT: '#FFFFFF',
+            },
+            warning: {
+              DEFAULT: '#000000',
             },
           },
         },
