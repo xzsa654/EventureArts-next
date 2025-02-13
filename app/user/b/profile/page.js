@@ -39,14 +39,14 @@ export default function UserPage() {
                   className="px-2 text-base bg-primary text-white hover:text-[#E3C8B9] hover:scale-110 transition-transform duration-200 cursor-pointer flex items-center group gap-x-2 "
                 >
                   創意生成LOGO
-                  <HiArrowRight className="transition-transform duration-300 ease-out group-hover:translate-x-3" />
+                  <HiArrowRight className="transition-transform duration-300 ease-out group-hover:translate-x-1" />
                 </Button>
                 <Button
                   radius="none"
                   className="px-2 text-base bg-primary text-white hover:text-[#E3C8B9] hover:scale-110 transition-transform duration-200 cursor-pointer flex items-center group gap-x-2 "
                 >
                   上傳新LOGO
-                  <HiArrowRight className="transition-transform duration-300 ease-out group-hover:translate-x-3" />
+                  <HiArrowRight className="transition-transform duration-300 ease-out group-hover:translate-x-1" />
                 </Button>
               </div>
             </div>
