@@ -5,8 +5,9 @@ import Link from 'next/link'
 import { Input } from '@heroui/react'
 import InputPop from './input-pop'
 import ModalLayout from './layout'
-import { ArrowRight, BracketsIcon, StatusIcon } from '@/public/Yao/icons'
+import { ArrowRight } from '@/public/Yao/icons'
 import { useModal } from '@/contexts/modal-context'
+import RegisterSection from './section'
 export default function RegisterStep1() {
   const tips = '註冊帳號(1/4)'
   const title = '基本資料'
@@ -15,36 +16,13 @@ export default function RegisterStep1() {
 
   const { isOpen, onOpenChange } = register1
   const section = (
-    <div className="flex items-center gap-1  w-full">
-      {/* 左侧项目 */}
-      <div className="flex items-center ">
-        <div className="flex flex-col text-yellow  ">
-          <StatusIcon />
-          <div className="text-yellow ">
-            基本資料
-            <div>(1/2)</div>
-          </div>
-        </div>
-      </div>
-
-      {/* 中间项目 */}
-      <div className="flex items-center">
-        <div className="flex flex-col ">
-          <StatusIcon color="#FFFFFF" />
-          <div className="text-white h-[36px]">大頭貼</div>
-        </div>
-      </div>
-
-      {/* 右側项目 */}
-      <div className="flex items-center">
-        <div className="flex flex-col items-center">
-          <BracketsIcon />
-          <div className="text-white w-full h-[36px]">興趣列表</div>
-        </div>
-      </div>
-    </div>
+    <RegisterSection
+      firstColor="yellow"
+      firstIcon="#FFC45C"
+      nowStatus="(1/2)"
+      test={{ first: 'now' }}
+    />
   )
-
   const formBody = (
     <form className="w-full h-full gap-[10px] flex flex-wrap justify-center items-center">
       <Input
@@ -110,7 +88,7 @@ export default function RegisterStep1() {
   return (
     <>
       <ModalLayout
-        {...{ formBody, footer, tips, title, section, isOpen, onOpenChange }}
+        {...{ formBody, footer, tips, section, title, isOpen, onOpenChange }}
       />
     </>
   )
