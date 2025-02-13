@@ -3,21 +3,21 @@
 import { Card, CardHeader, CardBody } from '@heroui/react'
 import { Button } from '@heroui/button'
 import { HiArrowRight, HiXMark } from 'react-icons/hi2'
-import Image from 'next/image' // 確保 Hero UI 沒有問題時，使用 Next.js Image
+import Image from 'next/image'
 
 export default function UserPageCard() {
   return (
     <Card
       radius="none"
-      className="relative border border-black bg-transparent p-10 w-[400px] flex flex-col gap-4"
+      className="relative border border-black bg-transparent px-8 py-3 w-[360px] flex flex-col gap-4 h-auto"
     >
       {/* 右上角關閉按鈕 */}
       <button
-        className="absolute top-4 right-4 text-gray-600 hover:text-red-500 transition-colors duration-200 cursor-pointer"
+        className="absolute top-2 right-2 text-gray-600 hover:text-red-500 transition-colors duration-200 cursor-pointer"
         // onClick={() => alert('確定取消收藏！')}
         // aria-label="關閉卡片"
       >
-        <HiXMark className="w-6 h-6 " />
+        <HiXMark className="w-5 h-5 " />
       </button>
 
       {/* 行政區 + 課程分類 */}
@@ -35,7 +35,7 @@ export default function UserPageCard() {
       {/* 圖片 */}
       <Image
         alt="event first photo"
-        className="w-full h-[219px] object-cover"
+        className="w-full h-[180px] object-cover"
         src="https://heroui.com/images/hero-card-complete.jpeg"
         width={320}
         height={219}
@@ -45,7 +45,7 @@ export default function UserPageCard() {
       <CardHeader className="flex flex-col items-start gap-2 p-0">
         <p className="tracking-normal">2025 | Dec.12th - Dec.20th</p>
         <h4 className="font-bold text-base">
-          這裡放活動名稱｜這裡放活動名稱｜這裡放活動名稱｜這裡放活動名
+          這裡放活動名稱這裡放活動名稱這裡放活動名稱這裡放活動名稱這裡
         </h4>
         <p className="text-sm uppercase">$ 3200 NTD</p>
       </CardHeader>
