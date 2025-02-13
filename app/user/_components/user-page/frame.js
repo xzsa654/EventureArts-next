@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { Link } from '@heroui/react'
 import UserPageSelect from './select'
 import OurPagination from '@/components/common/pagination'
-export default function UserPageFrame(props) {
+export default function UserPageFrame({ title = 'MY PROFILE', children }) {
   return (
     <>
       {/* layout */}
@@ -13,7 +13,7 @@ export default function UserPageFrame(props) {
         {/* Screen Message */}
         <div className="w-full border-black border-t-1 border-b-1 text-center px-16 tracking-[0.08em]">
           <h1 className="w-full text-[128px] leading-[140px] font-bold">
-            MY PROFILE *
+            {title}
           </h1>
         </div>
         {/* main */}
@@ -75,9 +75,9 @@ export default function UserPageFrame(props) {
             </ul>
           </div>
           {/* content */}
-          <div className="w-full flex flex-col h-auto gap-5 mx-12 my-6 bg-yellow-200">
+          <div className="w-full flex flex-col h-auto gap-5 mx-12 my-6 bg-green-200">
             <UserPageSelect />
-            <div className="flex-auto bg-green"></div>
+            <div className="flex-auto bg-yellow-50">{children}</div>
             <div className="flex justify-center">
               <OurPagination />
             </div>

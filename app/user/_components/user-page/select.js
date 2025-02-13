@@ -7,6 +7,7 @@ export default function UserPageSelect(props) {
     <>
       <div className="flex justify-end">
         <Select
+          aria-label="請選擇"
           className="w-48"
           variant="underlined"
           size="sm"
