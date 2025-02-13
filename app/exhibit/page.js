@@ -44,7 +44,7 @@ export default function ExhibitPage() {
       {/* Online Exhibition Section */}
       <section className="mb-20 p-6">
         <div className="flex justify-between items-center mb-10">
-          <h1 className="text-2xl font-bold">What&#39;s Online...</h1>
+          <h1 className="text-2xl font-bold">What's Online...</h1>
           <a href="#" className="text-xl font-bold flex items-center gap-2 hover:opacity-70">
             See All Online Exhibition
             <ArrowLongRightIcon className="w-5 h-5" />
@@ -131,4 +131,3 @@ export default function ExhibitPage() {
     </main>
   )
 }
-

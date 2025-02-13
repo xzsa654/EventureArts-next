@@ -1,3 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .animate-verticalScrollDown {
+    animation: verticalScrollDown 20s linear infinite;
+  }
+
+  .animate-verticalScrollUp {
+    animation: verticalScrollUp 20s linear infinite;
+  }
+
+  @keyframes verticalScrollDown {
+    0% {
+      transform: translateY(0);
+    }
+    100% {
+      transform: translateY(-100%);
+    }
+  }
+
+  @keyframes verticalScrollUp {
+    0% {
+      transform: translateY(-100%);
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }
+}
+
+.exhibition-bg {
+  background-color: #f7f5f1;
+}
+
+.exhibition-white {
+  background-color: #ffffff;
+}
+
+
+
+/* below are for explore page.js */
+/* hero section */
 .hero-btn {
   position: relative;
   overflow: hidden;

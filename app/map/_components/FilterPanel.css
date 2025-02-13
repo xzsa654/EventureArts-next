@@ -1,0 +1,165 @@
+.filter-panel {
+  width: 320px;
+  padding: 2rem;
+  overflow-y: auto;
+  transition: all 0.3s ease;
+}
+
+.filter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.filter-header h2 {
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.clear-all {
+  font-size: 0.875rem;
+  color: #666;
+  border: 1px solid #e0e0e0;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.clear-all:hover {
+  background-color: #f0f0f0;
+}
+
+.filter-section {
+  margin-bottom: 2rem;
+}
+
+.filter-section p {
+  margin-bottom: 0.75rem;
+  font-size: 0.875rem;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.filter-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.filter-button {
+  padding: 0.75rem 1rem;
+  border: 1px solid #000;
+  border-radius: 9999px;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.filter-button:hover {
+  background-color: #f8f8f8;
+}
+
+.filter-button.active {
+  background-color: #000;
+  color: #fff;
+  border-color: #000;
+}
+
+.dropdown-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.price-range {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.price-range input {
+  flex: 1;
+  padding: 0.75rem;
+  border: 1px solid #000;
+  border-radius: 9999px;
+  transition: all 0.2s ease;
+}
+
+.price-range span {
+  color: #666;
+  font-size: 0.875rem;
+}
+
+.apply-button {
+  width: 100%;
+  padding: 0.75rem;
+  background: transparent;
+  color: #000;
+  border: 1px solid #000;
+  border-radius: 9999px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 2rem;
+  transition: all 0.2s ease;
+  height: 40px;
+}
+
+.apply-button:hover {
+  background-color: #000;
+  color: #fff;
+}
+
+/* Hero UI specific styles */
+.filter-panel .heroui-select,
+.filter-panel .heroui-datepicker {
+  width: 100%;
+}
+
+.filter-panel .heroui-select-trigger,
+.filter-panel .heroui-datepicker-input {
+  border-radius: 9999px !important;
+  height: 40px !important;
+  border-color: #000 !important;
+}
+
+.filter-panel .heroui-select-trigger:hover,
+.filter-panel .heroui-datepicker-input:hover {
+  border-color: #000 !important;
+}
+
+.filter-panel .heroui-select-trigger:focus,
+.filter-panel .heroui-datepicker-input:focus {
+  border-color: #000 !important;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Add these styles at the end of the file */
+.filter-panel .heroui-select .heroui-select-trigger,
+.filter-panel .heroui-datepicker .heroui-input {
+  border-color: #000 !important;
+  border-radius: 9999px !important;
+  height: 40px !important;
+}
+
+.filter-panel .heroui-select .heroui-select-trigger:hover,
+.filter-panel .heroui-datepicker .heroui-input:hover {
+  border-color: #000 !important;
+}
+
+.filter-panel .heroui-select .heroui-select-trigger:focus,
+.filter-panel .heroui-datepicker .heroui-input:focus {
+  border-color: #000 !important;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.2) !important;
+}
+
