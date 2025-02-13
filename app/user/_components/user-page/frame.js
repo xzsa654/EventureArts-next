@@ -1,11 +1,12 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { Image } from '@heroui/react'
-import { Link } from '@heroui/react'
+
+import { Link, Image, ScrollShadow } from '@heroui/react'
 import UserPageSelect from './select'
 import OurPagination from '@/components/common/pagination'
 import CourseMang from './course-mang'
+import UserAddForm from './add-form'
 export default function UserPageFrame(props) {
   return (
     <>
@@ -18,9 +19,10 @@ export default function UserPageFrame(props) {
           </h1>
         </div>
         {/* main */}
+
         <div
           className="container flex-auto 
-          border-black border-r-1 border-l-1 mx-auto flex"
+          border-black border-r-1 border-l-1 mx-auto flex "
         >
           {/*sidebar  */}
           <div className="h-full border-black border-r-1">
@@ -75,13 +77,15 @@ export default function UserPageFrame(props) {
           </div>
           {/* content */}
           <div className="w-full flex flex-col h-auto gap-5 mx-12 my-6">
-            <UserPageSelect />
-            <div className="flex-auto ">
-              <CourseMang />
-            </div>
-            <div className="flex justify-center">
+            <ScrollShadow className="h-[700px]">
+              {/* <UserPageSelect /> */}
+              <div className="flex-auto ">
+                <UserAddForm />
+              </div>
+              {/* <div className="flex justify-center">
               <OurPagination />
-            </div>
+            </div> */}
+            </ScrollShadow>
           </div>
         </div>
       </div>
