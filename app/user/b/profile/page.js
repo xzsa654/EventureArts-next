@@ -11,10 +11,10 @@ export default function UserPage() {
     <>
       <UserPageProfileFrame title="# MY BRAND">
         <div className=" w-4/5 flex flex-col border-r-1 border-black">
-          <div className="relative px-4 h-2/5 flex items-center border-b border-black">
+          <div className="relative px-4 h-3/5 flex items-center border-b border-black">
             {/* 左側固定 Banner */}
             <div className="flex-none w-16 flex justify-center">
-              <h5 className="text-3xl font-bold -rotate-90">banner</h5>
+              <h5 className="text-4xl font-bold -rotate-90">banner</h5>
             </div>
 
             {/* 右側圖片填滿 */}
@@ -28,22 +28,22 @@ export default function UserPage() {
               />
             </div>
           </div>
-          <div className=" h-3/5 gap-4  p-4 flex items-center justify-center border-b-1 border-black">
+          <div className=" h-2/5 gap-4  p-4 flex items-center justify-center border-b-1 border-black">
             <div className="w-2/5 h-auto flex flex-col justify-center items-center">
-              <div className="w-[350] h-[350px] mb-4 bg-blue-500">
+              <div className="w-[200] h-[200px] mb-4 bg-blue-500">
                 put brand's logo inside here.
               </div>
-              <div className="flex justify-around w-[350]">
+              <div className="flex justify-around w-[400]">
                 <Button
                   radius="none"
-                  className="px-2 text-base bg-primary text-white hover:text-[#E3C8B9] hover:scale-110 transition-transform duration-200 cursor-pointer flex items-center group gap-x-2 "
+                  className="px-4 text-12 bg-primary text-white hover:text-[#E3C8B9] hover:scale-110 transition-transform duration-200 cursor-pointer flex items-center group gap-x-2 "
                 >
                   創意生成LOGO
                   <HiArrowRight className="transition-transform duration-300 ease-out group-hover:translate-x-1" />
                 </Button>
                 <Button
                   radius="none"
-                  className="px-2 text-base bg-primary text-white hover:text-[#E3C8B9] hover:scale-110 transition-transform duration-200 cursor-pointer flex items-center group gap-x-2 "
+                  className="px-4 text-12 bg-primary text-white hover:text-[#E3C8B9] hover:scale-110 transition-transform duration-200 cursor-pointer flex items-center group gap-x-2 "
                 >
                   上傳新LOGO
                   <HiArrowRight className="transition-transform duration-300 ease-out group-hover:translate-x-1" />
@@ -52,7 +52,7 @@ export default function UserPage() {
             </div>
             <div className="w-3/5 flex flex-col justify-between h-full">
               {/* 讓 info 貼齊上方 */}
-              <h3 className="text-[88px] text-start font-bold">info</h3>
+              <h3 className="text-6xl text-start font-bold">Brand's info</h3>
 
               {/* 讓 dl 的容器貼齊下方 */}
               <div className="flex flex-col gap-2">
