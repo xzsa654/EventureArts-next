@@ -48,22 +48,22 @@ export default function UserPageProfileFrame({
             {/* sidebar-tail */}
             <ul className="w-[150px] border-black border-b-1 h-1/2 flex flex-col ">
               <li className="font-cn  border-black border-b-1 flex items-center justify-center  w-full h-[50px] ">
-                <Link href="#" size="md" className="hover:text-yellow-600 ">
+                <Link href="#" size="md" className="hover:text-green-600 ">
                   我的品牌
                 </Link>
               </li>
               <li className="font-cn  border-black border-b-1 flex items-center justify-center  w-full h-[50px] ">
-                <Link href="#" size="md" className="hover:text-yellow-600 ">
+                <Link href="#" size="md" className="hover:text-green-600 ">
                   課程管理
                 </Link>
               </li>
               <li className="font-cn  border-black border-b-1 flex items-center justify-center  w-full h-[50px] ">
-                <Link href="#" size="md" className="hover:text-yellow-600 ">
+                <Link href="#" size="md" className="hover:text-green-600 ">
                   展覽管理
                 </Link>
               </li>
               <li className="font-cn  border-black border-b-1 flex items-center justify-center  w-full h-[50px] ">
-                <Link href="#" size="md" className="hover:text-yellow-600 ">
+                <Link href="#" size="md" className="hover:text-green-600 ">
                   訂單管理
                 </Link>
               </li>
