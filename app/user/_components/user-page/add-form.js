@@ -19,7 +19,7 @@ export default function UserAddForm() {
       <MiddleForm />
       {/* 表單上傳 */}
       <UserFile />
-      <footer className="w-full mt-8 gap-2 flex justify-end">
+      <footer className="w-full my-6 gap-2 flex justify-end">
         <Button
           className="bg-gray px-8  border border-black"
           radius="large"

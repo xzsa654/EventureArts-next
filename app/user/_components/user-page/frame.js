@@ -77,7 +77,7 @@ export default function UserPageFrame(props) {
           </div>
           {/* content */}
           <div className="w-full flex flex-col h-auto gap-5 mx-12 my-6">
-            <ScrollShadow className="h-[700px]">
+            <ScrollShadow className="h-[680px]">
               {/* <UserPageSelect /> */}
               <div className="flex-auto ">
                 <UserAddForm />
