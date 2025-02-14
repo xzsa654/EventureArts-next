@@ -43,7 +43,7 @@ export default function UserPageCard() {
       />
 
       {/* 活動資訊 */}
-      <CardHeader className="flex flex-col items-start gap-1 p-0">
+      <CardHeader className="flex flex-col items-start gap-2 p-0">
         <p className="tracking-normal">2025 | Dec.12th - Dec.20th</p>
         <h4 className="font-semibold text-base">
           這裡放活動名稱這裡放活動名稱這裡放活動名稱這裡放活動名稱這裡
@@ -56,8 +56,9 @@ export default function UserPageCard() {
         <Button
           size="sm"
           radius="none"
+          classNames={{}}
           variant="light"
-          className="text-base text-yellow-600 hover:text-yellow-300 hover:scale-110 transition-transform duration-200 cursor-pointer flex items-center group gap-x-2"
+          className="text-base text-yellow-600 hover:text-yellow-300 hover:scale-110 transition-transform duration-200 cursor-pointer flex items-center group gap-x-2 mt-5 p-5  data-[hover=true]:bg-primary-300"
         >
           買票
           <HiArrowRight className="transition-transform duration-300 ease-out group-hover:translate-x-3" />

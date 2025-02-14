@@ -5,11 +5,12 @@ import { usePathname } from 'next/navigation'
 import { Link, Image, ScrollShadow, Button } from '@heroui/react'
 import CourseMang from './ex-mang'
 import ExAdd from './ex-add'
+import LikedEvents from '../LikedEvents'
 export default function UserPageFrame(props) {
   // 當前路由
   const pathName = usePathname().split('/user')[1]
 
-  // 路由對應的title和components
+  // 路由對應的 title 和 components
   const routing = {
     '/b/ex-mang': {
       title: '#EXHIBIT MANG.',
@@ -20,6 +21,7 @@ export default function UserPageFrame(props) {
       title: '#EXHIBIT MANG.',
       components: <ExAdd online={true} />,
     },
+    '/c/liked': { title: 'LIKED EVENTS *', components: <LikedEvents /> },
   }
 
   const isActive = { c: 'text-yellow-600', b: 'text-green-600' }
@@ -27,7 +29,7 @@ export default function UserPageFrame(props) {
   return (
     <>
       {/* layout */}
-      <div className=" min-w-[1140px] h-[92vh] mt-20 flex flex-col">
+      <div className=" min-w-[1140px]  mt-20 flex flex-col">
         {/* Screen Message */}
         <div className="w-full border-black border-t-1 border-b-1 text-center px-16 tracking-[0.08em]">
           <h1 className="w-full text-[128px] leading-[140px] font-bold">
@@ -38,11 +40,11 @@ export default function UserPageFrame(props) {
         {/* main */}
 
         <div
-          className="container flex-auto 
+          className="container h-full flex-auto 
           border-black border-r-1 border-l-1 mx-auto flex "
         >
           {/*sidebar  */}
-          <div className="h-full border-black border-r-1">
+          <div className="h-auto border-black border-r-1">
             {/* 用戶端 sidebar-top */}
             <ul className="w-[150px]  border-black border-b-1 h-1/2">
               <li className=" font-cn border-black border-b-1 flex items-center justify-center  w-full h-[50px] ">
