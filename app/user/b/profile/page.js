@@ -11,39 +11,41 @@ export default function UserPage() {
     <>
       <UserPageProfileFrame title="# MY BRAND">
         <div className=" w-4/5 flex flex-col border-r-1 border-black">
-          <div className="relative px-4 h-3/5 flex items-center border-b border-black">
+          <div className="relative p-4 h-3/5 flex items-center border-b border-black">
             {/* 左側固定 Banner */}
             <div className="flex-none w-16 flex justify-center">
               <h5 className="text-4xl font-bold -rotate-90">banner</h5>
             </div>
 
             {/* 右側圖片填滿 */}
-            <div className="flex-1 h-auto">
+            <div className="flex-1 h-full">
               <Image
                 src="/Yao/logo.svg"
                 alt="Banner Image"
-                className="w-full h-auto border border-blue-400"
+                className="w-full h-full border border-green-400"
                 width={300}
                 height={300}
               />
             </div>
           </div>
-          <div className=" h-2/5 gap-4  p-4 flex items-center justify-center border-b-1 border-black">
-            <div className="w-2/5 h-auto flex flex-col justify-center items-center">
-              <div className="w-[200] h-[200px] mb-4 bg-blue-500">
+          <div className=" h-auto gap-4  p-4 flex items-center justify-center border-b-1 border-black">
+            <div className="w-2/5   flex flex-col justify-center items-center">
+              <div className="w-[250] h-[250px] mb-4 bg-blue-500">
                 put brand's logo inside here.
               </div>
               <div className="flex justify-around w-[400]">
                 <Button
                   radius="none"
-                  className="px-4 text-12 bg-primary text-white hover:text-[#E3C8B9] hover:scale-110 transition-transform duration-200 cursor-pointer flex items-center group gap-x-2 "
+                  variant="bordered"
+                  className="px-4 text-12 border-green-600 text-primary hover:text-green-600 hover:scale-110 transition-transform duration-200 cursor-pointer flex items-center group gap-x-2 "
                 >
                   創意生成LOGO
                   <HiArrowRight className="transition-transform duration-300 ease-out group-hover:translate-x-1" />
                 </Button>
                 <Button
                   radius="none"
-                  className="px-4 text-12 bg-primary text-white hover:text-[#E3C8B9] hover:scale-110 transition-transform duration-200 cursor-pointer flex items-center group gap-x-2 "
+                  variant="bordered"
+                  className="px-4 text-12 border-green-600 text-primary hover:text-green-600 hover:scale-110 transition-transform duration-200 cursor-pointer flex items-center group gap-x-2 "
                 >
                   上傳新LOGO
                   <HiArrowRight className="transition-transform duration-300 ease-out group-hover:translate-x-1" />
@@ -87,7 +89,7 @@ export default function UserPage() {
           </div>
         </div>
         <div className=" w-1/5 flex flex-col">
-          <div className="h-1/2 p-4 flex flex-col border-b-1 border-black">
+          <div className="h-2/3 p-4 flex flex-col border-b-1 border-black">
             <div className="flex items-center justify-center gap-6 h-5/6">
               <h5 className="font-serif font-semibold text-3xl self-start mt-0">
                 品牌簡介
@@ -103,7 +105,7 @@ export default function UserPage() {
             </div>
           </div>
 
-          <div className="h-1/2 p-4 flex flex-col items-center justify-between">
+          <div className="h-1/3 p-4 flex flex-col items-center justify-between">
             <svg
               width="160"
               height="67"
@@ -130,7 +132,7 @@ export default function UserPage() {
             </svg>
             <Button
               radius="none"
-              className="px-12 text-base bg-primary text-white hover:text-[#E3C8B9] hover:scale-110 transition-transform duration-200 cursor-pointer flex items-center group gap-x-2 "
+              className="px-12 text-base bg-green-600 text-white hover:text-[#E3C8B9] hover:scale-110 transition-transform duration-200 cursor-pointer flex items-center group gap-x-2 "
             >
               編輯
               <HiArrowRight className="transition-transform duration-300 ease-out group-hover:translate-x-3" />
