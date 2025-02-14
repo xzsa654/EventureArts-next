@@ -1,17 +1,19 @@
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Unna:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+
 #app {
-    height: 100%;
-  }
-  html,
-  body {
-    position: relative;
     height: 100%;
   }
   
   body {
     font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
-    font-size: 14px;
     margin: 0;
     padding: 0;
+    position: relative;
+    height: 100%;
+    background-image: url('https://i.imgur.com/EM2tRJ6.jpeg');
+    background-repeat: repeat-y;
   }
   
   /* 元件：carousel */
@@ -50,7 +52,7 @@
   .bar{
     width: 100%;
     display: flex;
-    height: 70px;
+    height: 66px;
     display: flex;
     justify-content: space-between;
     background-color: white;
@@ -62,5 +64,50 @@
     border-right: #dadada 1px solid;
   }
 
-  
+/* card1 */
+.card1 {
+  border: #000000 2px solid;
+  background-color: #F7F5F1;
+}
 
+.pdate {
+  font-family: 'unna';
+  font-size: 16px;
+  color:rgb(87, 87, 87);
+}
+
+.pname {
+  font-size: 22px;
+  font-weight: 500;
+}
+
+.pprice {
+  font-family: 'unna';
+  font-size: 16px;
+}
+
+/* card2 */
+.rankNum {
+  font-size: 40px;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  color: #F0686C;
+  text-align: center;
+}
+
+.rank {
+  color: #f69ea1;
+  font-size: 50px;
+  font-family: "Unna", serif;
+  font-style: italic;
+}
+
+.pname2 {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* card-b1 */
+.joinus {
+  background-color: #FFFFFF;
+  padding: 8px 8px;
+}

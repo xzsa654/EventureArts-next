@@ -9,7 +9,7 @@ import 'swiper/css/pagination';
 import 'swiper/css/autoplay';
 
 // import 自定義樣式
-import '../style.css';
+import './style.css';
 
 // import required modules
 import { Pagination, Autoplay } from 'swiper/modules';

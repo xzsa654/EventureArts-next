@@ -7,7 +7,7 @@ import { Input } from "@heroui/react"; // 假設這是正確的路徑，原來�
 import BtnCTA from './btnCTA';
 
 // import 自定義樣式
-import '../style.css';
+import './style.css';
 
 const regions = [
   { key: "台北市全部", label: "台北市全部" },
