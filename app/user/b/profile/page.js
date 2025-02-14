@@ -9,11 +9,11 @@ import Image from 'next/image'
 export default function UserPage() {
   return (
     <>
-      <UserPageProfileFrame title="# MY BRAND">
+      <UserPageProfileFrame title="#MY BRAND">
         {/* 左邊 */}
         <div className=" w-4/5 flex flex-col border-r-1 border-black">
           {/* 左上方 */}
-          <div className="relative p-4 h-3/5 flex items-center border-b-1 border-black">
+          <div className="relative p-4 h-3/5 flex items-center border-b border-black">
             {/* 左側固定 Banner */}
             <div className="flex items-center justify-center h-4/6 w-fit">
               <h5 className="text-4xl font-bold self-start mt-0 -rotate-90">
@@ -26,14 +26,14 @@ export default function UserPage() {
               <Image
                 src="/Yao/logo.svg"
                 alt="Banner Image"
-                className="w-full h-full border border-green-400"
+                className="w-full h-full "
                 width={300}
                 height={300}
               />
             </div>
           </div>
           {/* 左下方 */}
-          <div className=" h-auto gap-4  p-4 flex items-center justify-center border-b-1 border-black">
+          <div className=" h-auto gap-4  p-4 flex items-center justify-center  border-b-1 border-black">
             <div className="w-2/5   flex flex-col justify-center items-center">
               <div className="w-[250] h-[250px] mb-4 bg-blue-500">
                 put brand's logo inside here.
@@ -42,7 +42,7 @@ export default function UserPage() {
                 <Button
                   radius="none"
                   variant="bordered"
-                  className="px-4 text-12 border--600 text-primary hover:text-green-600 hover:scale-110 transition-transform duration-200 cursor-pointer flex items-center group gap-x-2 "
+                  className="px-4 text-12 border-green-600 text-primary hover:text-green-600 hover:scale-110 transition-transform duration-200 cursor-pointer flex items-center group gap-x-2 "
                 >
                   創意生成LOGO
                   <HiArrowRight className="transition-transform duration-300 ease-out group-hover:translate-x-1" />
