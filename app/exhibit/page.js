@@ -1,28 +1,53 @@
+"use client"
+
+import { useState, useEffect, useRef } from "react"
 import ExhibitionSection from "./_components/ExhibitionSection"
 import Image from "next/image"
 import Excard from "./_components/Excard"
 import { ChevronLeftIcon, ChevronRightIcon, ArrowLongRightIcon } from "@heroicons/react/24/outline"
 import "./exhibit.css"
 import Link from "next/link"
+import CandidSection from "./_components/candid-section"
 
 export default function ExhibitPage() {
+  const [selectedExhibition, setSelectedExhibition] = useState(null)
+  const [isAnimating, setIsAnimating] = useState(false)
+  const secondHeroRef = useRef(null)
+
+  const handleExhibitionSelect = (exhibition) => {
+    setIsAnimating(true)
+    setSelectedExhibition(exhibition)
+    if (secondHeroRef.current) {
+      secondHeroRef.current.scrollIntoView({ behavior: "smooth" })
+    }
+  }
+
+  useEffect(() => {
+    if (isAnimating) {
+      const timer = setTimeout(() => {
+        setIsAnimating(false)
+      }, 500)
+      return () => clearTimeout(timer)
+    }
+  }, [isAnimating])
+
   return (
     <main className="min-h-screen mt-[80px]">
       {/* Exhibition Section */}
-      <ExhibitionSection />
+      <ExhibitionSection onExhibitionSelect={handleExhibitionSelect} />
 
       {/* First Hero Section */}
-      <section className="relative h-[180px] w-full bg-[rgba(33,72,66,1)] flex items-center justify-between px-20">
-        <h1 className="text-xl md:text-xl text-white">Want to Explore More?</h1>
+      <section id="first-hero-section" className="relative h-[120px] w-full flex items-center justify-between px-20">
+        <h1 className="text-xl md:text-xl text-black">Want to Explore More?</h1>
         <Link href="/exhibit/explore">
-          <button className="text-xl font-bold bg-white px-6 py-4 text-black hover:bg-opacity-90 transition-all">
-            See All Exhibition
+          <button className="text-xl px-6 py-4 text-black hover:bg-opacity-90 transition-all rounded-lg">
+            See All Exhibition →
           </button>
         </Link>
       </section>
 
       {/* Second Hero Section */}
-      <section className="relative h-[680px] w-full overflow-hidden">
+      <section id="second-hero-section" ref={secondHeroRef} className="relative h-[560px] w-full overflow-hidden">
         <Image
           src="/chu-images/img-bg.jpg"
           alt="Art gallery interior"
@@ -30,30 +55,55 @@ export default function ExhibitPage() {
           className="object-cover brightness-75"
           priority
         />
-        <div className="absolute inset-0 flex flex-col justify-center items-center text-white text-center">
-          <h2 className="text-3xl md:text-6xl font-bold mb-4">EventureArts Online Exhibition</h2>
-          <p className="text-xl mb-8">CREATED BY EVENTUREARTS</p>
-          <button className="border-2 border-white px-8 py-3 text-lg hover:bg-white hover:text-black transition-colors">
-            Explore Now
-          </button>
-          <div className="absolute bottom-8 flex gap-2">
-            <div className="w-2 h-2 bg-white rounded-full"></div>
-            <div className="w-2 h-2 bg-white/50 rounded-full"></div>
-            <div className="w-2 h-2 bg-white/50 rounded-full"></div>
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="container mx-auto px-4 flex items-stretch h-full">
+            {selectedExhibition ? (
+              <div className={`slide-in ${!isAnimating ? "active" : ""} flex w-full py-[30px]`}>
+                <div className="w-1/2 pr-8 flex items-center justify-center">
+                  <div className="relative w-full h-[400px]">
+                    <Image
+                      src={selectedExhibition.image || "/placeholder.svg"}
+                      alt={selectedExhibition.title}
+                      fill
+                      className="object-contain"
+                    />
+                  </div>
+                </div>
+                <div className="w-1/2 pl-8 text-white text-left flex flex-col justify-center">
+                  <h2 className="text-3xl md:text-5xl font-bold mb-4">{selectedExhibition.title}</h2>
+                  <p className="text-xl mb-4">{selectedExhibition.subtitle}</p>
+                  <p className="text-lg mb-8">{selectedExhibition.date}</p>
+                </div>
+              </div>
+            ) : (
+              <div
+                className={`fade-in-up ${!isAnimating ? "active" : ""} text-center text-white w-full flex flex-col justify-center`}
+              >
+                <h2 className="text-3xl md:text-6xl font-bold mb-4">EventureArts Online Exhibition</h2>
+                <p className="text-xl mb-8">CREATED BY EVENTUREARTS</p>
+              </div>
+            )}
           </div>
+        </div>
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex gap-2">
+          <div className="w-2 h-2 bg-white rounded-full"></div>
+          <div className="w-2 h-2 bg-white/50 rounded-full"></div>
+          <div className="w-2 h-2 bg-white/50 rounded-full"></div>
         </div>
       </section>
 
-      {/* Online Exhibition Section */}
-      <section className="mb-20 p-6">
+      <CandidSection />
+
+      {/* See more Exhibition Section */}
+      <section className="mb-20 p-9">
         <div className="flex justify-between items-center mb-10">
-          <h1 className="text-2xl font-bold">What's Online...</h1>
+          <h1 className="text-xl font-bold">Want to Explore More Online Exhibition?</h1>
           <a href="/exhibit/online" className="text-xl font-bold flex items-center gap-2 hover:opacity-70">
-            See All Online Exhibition
+            Explore More Online Exhibition →
             <ArrowLongRightIcon className="w-5 h-5" />
           </a>
         </div>
-
+ 
         <div className="relative">
           <div className="flex gap-6 justify-center">
             <Excard
