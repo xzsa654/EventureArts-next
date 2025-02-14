@@ -11,14 +11,31 @@ export default function UserPage() {
     <>
       <UserPageProfileFrame title="#MY BRAND">
         {/* 左邊 */}
-        <div className=" w-4/5 flex flex-col border-r-1 border-black">
+        <div className=" w-4/5 flex flex-col border-r-1 border-black ">
           {/* 左上方 */}
-          <div className="relative p-4 h-3/5 flex items-center border-b border-black">
-            {/* 左側固定 Banner */}
-            <div className="flex items-center justify-center h-4/6 w-fit">
-              <h5 className="text-4xl font-bold self-start mt-0 -rotate-90">
-                banner
-              </h5>
+          <div className="relative p-4 h-3/5 flex items-stretch gap-4 border-b border-black">
+            {/* 左側 Banner + 按鈕區域 */}
+            <div className="flex flex-col justify-between h-full w-fit pt-10">
+              {/* banner 貼齊上方 */}
+              <h5 className="text-4xl font-bold -rotate-90 ">banner</h5>
+              <div className="flex flex-col">
+                <Button
+                  radius="none"
+                  variant="bordered"
+                  className="px-4 text-12 border-green-600 text-primary hover:text-green-600 hover:scale-110 transition-transform duration-200 cursor-pointer flex items-center group gap-x-2 mb-2"
+                >
+                  創意生成 Banner
+                  <HiArrowRight className="transition-transform duration-300 ease-out group-hover:translate-x-1" />
+                </Button>
+                <Button
+                  radius="none"
+                  variant="bordered"
+                  className="px-4 text-12 border-green-600 text-primary hover:text-green-600 hover:scale-110 transition-transform duration-200 cursor-pointer flex items-center group gap-x-2 mb-2 "
+                >
+                  上傳新的 Banner
+                  <HiArrowRight className="transition-transform duration-300 ease-out group-hover:translate-x-1" />
+                </Button>
+              </div>
             </div>
 
             {/* 右側圖片填滿 */}
@@ -44,7 +61,7 @@ export default function UserPage() {
                   variant="bordered"
                   className="px-4 text-12 border-green-600 text-primary hover:text-green-600 hover:scale-110 transition-transform duration-200 cursor-pointer flex items-center group gap-x-2 "
                 >
-                  創意生成LOGO
+                  創意生成 Logo
                   <HiArrowRight className="transition-transform duration-300 ease-out group-hover:translate-x-1" />
                 </Button>
                 <Button
@@ -52,7 +69,7 @@ export default function UserPage() {
                   variant="bordered"
                   className="px-4 text-12 border-green-600 text-primary hover:text-green-600 hover:scale-110 transition-transform duration-200 cursor-pointer flex items-center group gap-x-2 "
                 >
-                  上傳新LOGO
+                  上傳新 Logo
                   <HiArrowRight className="transition-transform duration-300 ease-out group-hover:translate-x-1" />
                 </Button>
               </div>
