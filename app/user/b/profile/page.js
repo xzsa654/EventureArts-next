@@ -13,7 +13,7 @@ export default function UserPage() {
         {/* 左邊 */}
         <div className=" w-4/5 flex flex-col border-r-1 border-black">
           {/* 左上方 */}
-          <div className="relative p-4 h-3/5 flex items-center border-b border-black">
+          <div className="relative p-4 h-3/5 flex items-center border-b-1 border-black">
             {/* 左側固定 Banner */}
             <div className="flex items-center justify-center h-4/6 w-fit">
               <h5 className="text-4xl font-bold self-start mt-0 -rotate-90">
