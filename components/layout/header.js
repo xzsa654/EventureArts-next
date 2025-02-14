@@ -69,12 +69,14 @@ export default function Header(props) {
             maxWidth="full"
           >
             <NavbarBrand className="rounded-none ">
-              <Image
-                src="/Yao/white-logo.svg"
-                width={200}
-                alt="logo"
-                radius="none"
-              />
+              <Link href="/">
+                <Image
+                  src="/Yao/white-logo.svg"
+                  width={200}
+                  alt="logo"
+                  radius="none"
+                />
+              </Link>
             </NavbarBrand>
             <NavbarContent justify="end">
               <NavbarItem className={` lg:flex`}>
@@ -189,7 +191,14 @@ export default function Header(props) {
             maxWidth="full"
           >
             <NavbarBrand className="rounded-none ">
-              <Image src="/Yao/logo.svg" width={200} alt="logo" radius="none" />
+              <Link href="/">
+                <Image
+                  src="/Yao/logo.svg"
+                  width={200}
+                  alt="logo"
+                  radius="none"
+                />
+              </Link>
             </NavbarBrand>
             <NavbarContent
               className=" max-md:hidden gap-4 font-cn gap-8 "

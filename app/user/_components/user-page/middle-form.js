@@ -50,6 +50,7 @@ export default function MiddleForm(props) {
           </div>
           <div className="w-6/12 ">
             <Select
+              aria-label="status"
               size="lg"
               label="展覽狀態"
               isRequired
@@ -64,6 +65,7 @@ export default function MiddleForm(props) {
           </div>
           <div className="w-6/12 ">
             <Select
+              aria-label="place"
               size="lg"
               label="展覽地點"
               isRequired
@@ -79,6 +81,7 @@ export default function MiddleForm(props) {
             <Select
               size="lg"
               isRequired
+              aria-label="place2"
               variant="underlined"
               placeholder="請選擇地點"
               classNames={{
