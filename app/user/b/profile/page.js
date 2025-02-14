@@ -13,8 +13,10 @@ export default function UserPage() {
         <div className=" w-4/5 flex flex-col border-r-1 border-black">
           <div className="relative p-4 h-3/5 flex items-center border-b border-black">
             {/* 左側固定 Banner */}
-            <div className="flex-none w-16 flex justify-center">
-              <h5 className="text-4xl font-bold -rotate-90">banner</h5>
+            <div className="flex items-center justify-center h-4/6 w-fit">
+              <h5 className="text-4xl font-bold self-start mt-0 -rotate-90">
+                banner
+              </h5>
             </div>
 
             {/* 右側圖片填滿 */}
@@ -88,6 +90,7 @@ export default function UserPage() {
             </div>
           </div>
         </div>
+        {/* 右上方 */}
         <div className=" w-1/5 flex flex-col">
           <div className="h-2/3 p-4 flex flex-col border-b-1 border-black">
             <div className="flex items-center justify-center gap-6 h-5/6">
@@ -104,7 +107,7 @@ export default function UserPage() {
               <h5 className="text-3xl text-center font-bold">introduction</h5>
             </div>
           </div>
-
+          {/* 右下方 start */}
           <div className="h-1/3 p-4 flex flex-col items-center justify-between">
             <svg
               width="160"
