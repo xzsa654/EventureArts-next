@@ -9,7 +9,7 @@ export default function UserPageCard() {
   return (
     <Card
       radius="none"
-      className="relative border border-black bg-transparent px-8 py-3 w-[360px] flex flex-col gap-4 h-auto"
+      className="relative border border-black bg-transparent px-8 py-3 w-[320px] flex flex-col gap-2 h-auto"
     >
       {/* 右上角關閉按鈕 */}
       <button
@@ -25,8 +25,9 @@ export default function UserPageCard() {
         <p className="text-sm">行政區</p>
         <Button
           size="sm"
+          variant="bordered"
           radius="full"
-          className="bg-red-500 text-white text-sm"
+          className=" text-red text-sm border-red"
         >
           課程分類
         </Button>
@@ -42,16 +43,16 @@ export default function UserPageCard() {
       />
 
       {/* 活動資訊 */}
-      <CardHeader className="flex flex-col items-start gap-2 p-0">
+      <CardHeader className="flex flex-col items-start gap-1 p-0">
         <p className="tracking-normal">2025 | Dec.12th - Dec.20th</p>
-        <h4 className="font-bold text-base">
+        <h4 className="font-semibold text-base">
           這裡放活動名稱這裡放活動名稱這裡放活動名稱這裡放活動名稱這裡
         </h4>
         <p className="text-sm uppercase">$ 3200 NTD</p>
       </CardHeader>
 
       {/* 買票按鈕 */}
-      <div className="flex justify-end mt-5">
+      <div className="flex justify-end ">
         <Button
           size="sm"
           radius="none"

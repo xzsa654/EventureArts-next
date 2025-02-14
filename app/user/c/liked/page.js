@@ -32,7 +32,7 @@ export default function UserPage() {
             title="課程｜已收藏"
             className="flex items-center space-x-2 "
           >
-            <div className="w-full py-6 flex justify-evenly  border-y-1 border-black">
+            <div className="w-full py-4 flex justify-evenly  border-y-1 border-black">
               <UserPageCard />
               <UserPageCard />
               <UserPageCard />
@@ -45,7 +45,7 @@ export default function UserPage() {
             title="展覽｜已收藏"
             className="flex items-center space-x-2"
           >
-            <div className="w-full py-6 flex justify-evenly  border-y-1 border-black">
+            <div className="w-full py-4 flex justify-evenly  border-y-1 border-black">
               <UserPageCard />
               <UserPageCard />
             </div>
