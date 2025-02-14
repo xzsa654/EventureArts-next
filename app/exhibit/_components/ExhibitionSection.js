@@ -75,7 +75,7 @@ export default function ExhibitionSection({ onExhibitionSelect }) {
       {/* Original items */}
       {items.map((exhibition) => (
         <div key={exhibition.id} className="mb-16 space-y-4">
-          <span className="block text-7xl font-light">{exhibition.id}</span>
+          <span className="font-en block text-7xl font-light">{exhibition.id}</span>
           <div
             className="relative aspect-[3/4] cursor-pointer group overflow-hidden w-[300px]"
             onClick={() => handleExhibitionClick(exhibition)}
@@ -89,16 +89,16 @@ export default function ExhibitionSection({ onExhibitionSelect }) {
             />
           </div>
           <div className="space-y-1">
-            <h3 className="font text-lg">{exhibition.title}</h3>
-            <p className="text-sm leading-relaxed">{exhibition.subtitle}</p>
-            <p className="text-sm text-gray-600">{exhibition.date}</p>
+            <h3 className="font-en text-lg">{exhibition.title}</h3>
+            <p className="font-en text-sm leading-relaxed">{exhibition.subtitle}</p>
+            <p className="font-en text-sm text-gray-600">{exhibition.date}</p>
           </div>
         </div>
       ))}
       {/* Duplicated items for seamless loop */}
       {items.map((exhibition) => (
         <div key={`${exhibition.id}-duplicate`} className="mb-8 space-y-1">
-          <span className="block text-7xl font-light">{exhibition.id}</span>
+          <span className="font-en block text-7xl font-light">{exhibition.id}</span>
           <div
             className="relative aspect-[3/4] cursor-pointer group overflow-hidden w-[300px]"
             onClick={() => handleExhibitionClick(exhibition)}
