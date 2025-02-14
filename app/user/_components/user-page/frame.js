@@ -1,13 +1,17 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-
-import { Link, Image, ScrollShadow } from '@heroui/react'
-import UserPageSelect from './select'
-import OurPagination from '@/components/common/pagination'
-import CourseMang from './course-mang'
-import UserAddForm from './add-form'
+import { usePathname } from 'next/navigation'
+import { Link, Image, ScrollShadow, Button } from '@heroui/react'
+import CourseMang from './ex-mang'
+import ExAdd from './ex-add'
 export default function UserPageFrame(props) {
+  const pathName = usePathname().split('b/')[1]
+  const routing = {
+    'ex-mang': { title: '#EXHIBIT MANG.', components: <CourseMang /> },
+    'ex-add': { title: '#EXHIBIT MANG.', components: <ExAdd /> },
+  }
+
   return (
     <>
       {/* layout */}
@@ -15,7 +19,8 @@ export default function UserPageFrame(props) {
         {/* Screen Message */}
         <div className="w-full border-black border-t-1 border-b-1 text-center px-16 tracking-[0.08em]">
           <h1 className="w-full text-[128px] leading-[140px] font-bold">
-            MY PROFILE *
+            {routing[pathName].title}
+            {/* MY PROFILE * */}
           </h1>
         </div>
         {/* main */}
@@ -58,7 +63,11 @@ export default function UserPageFrame(props) {
                 </Link>
               </li>
               <li className=" border-black border-b-1 flex items-center justify-center  w-full h-[43px] ">
-                <Link href="#" size="sm" className="hover:text-green-600">
+                <Link
+                  href="/user/b/ex-mang"
+                  size="sm"
+                  className="hover:text-green-600"
+                >
                   展覽管理
                 </Link>
               </li>
@@ -77,15 +86,7 @@ export default function UserPageFrame(props) {
           </div>
           {/* content */}
           <div className="w-full flex flex-col h-auto gap-5 mx-12 my-6">
-            <ScrollShadow className="h-[680px]">
-              {/* <UserPageSelect /> */}
-              <div className="flex-auto ">
-                <UserAddForm />
-              </div>
-              {/* <div className="flex justify-center">
-              <OurPagination />
-            </div> */}
-            </ScrollShadow>
+            {routing[pathName].components}
           </div>
         </div>
       </div>

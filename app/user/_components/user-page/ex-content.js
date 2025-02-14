@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import { Image, Link } from '@heroui/react'
 
-export default function CourseMang(props) {
+export default function CourseMangContent(props) {
   const tableData = [
     {
       id: 24,

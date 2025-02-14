@@ -5,7 +5,9 @@ import MiddleForm from './middle-form'
 import UserFile from './user-file'
 import { Button } from '@heroui/react'
 import { Image } from '@heroui/react'
+import { useRouter } from 'next/navigation'
 export default function UserAddForm() {
+  const router = useRouter()
   return (
     <>
       <header className="w-full px-[78px] py-7">
@@ -24,6 +26,7 @@ export default function UserAddForm() {
           className="bg-gray px-8  border border-black"
           radius="large"
           size="lg"
+          onPress={() => router.back()}
         >
           取消
         </Button>
