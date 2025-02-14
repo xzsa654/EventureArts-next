@@ -10,23 +10,25 @@ export default function UserPage() {
   return (
     <>
       <UserPageProfileFrame title="MY PROFILE *">
+        {/* 左邊 */}
         <div className=" w-4/5 flex flex-col border-r-1 border-black">
-          <div className=" h-3/4 gap-4  p-4 flex items-center justify-center border-b-1 border-black">
+          {/* 左上方 */}
+          <div className=" h-auto gap-4  p-4 flex items-center justify-center border-b-1 border-black">
             <div className="w-3/5 h-auto flex flex-col justify-center items-center">
-              <div className="w-[450] h-[450px] mb-4 bg-blue-500">
+              <div className="w-[400px] h-[400px] mb-4 bg-blue-500">
                 put avatar inside here.
               </div>
-              <div className="flex justify-around w-[450]">
+              <div className="flex justify-around w-[400px]">
                 <Button
                   radius="none"
-                  className="px-8 text-base bg-primary text-white hover:text-[#E3C8B9] hover:scale-110 transition-transform duration-200 cursor-pointer flex items-center group gap-x-2 "
+                  className="px-5 text-base bg-primary text-white hover:text-[#E3C8B9] hover:scale-110 transition-transform duration-200 cursor-pointer flex items-center group gap-x-2 "
                 >
                   嘗試創意生成
                   <HiArrowRight className="transition-transform duration-300 ease-out group-hover:translate-x-3" />
                 </Button>
                 <Button
                   radius="none"
-                  className="px-8 text-base bg-primary text-white hover:text-[#E3C8B9] hover:scale-110 transition-transform duration-200 cursor-pointer flex items-center group gap-x-2 "
+                  className="px-5 text-base bg-primary text-white hover:text-[#E3C8B9] hover:scale-110 transition-transform duration-200 cursor-pointer flex items-center group gap-x-2 "
                 >
                   上傳新大頭貼
                   <HiArrowRight className="transition-transform duration-300 ease-out group-hover:translate-x-3" />
@@ -39,15 +41,15 @@ export default function UserPage() {
 
               {/* 讓 dl 的容器貼齊下方 */}
               <div className="flex flex-col gap-2">
-                <dl className="text-base flex font-serif justify-between">
+                <dl className="text-base flex font-cn justify-between">
                   <dt>姓名：</dt>
                   <dt>馬宜庭</dt>
                 </dl>
-                <dl className="text-base flex font-serif justify-between">
+                <dl className="text-base flex font-cn justify-between">
                   <dt>暱稱：</dt>
                   <dt className="font-sans">Amelia</dt>
                 </dl>
-                <dl className="text-base flex font-serif justify-between">
+                <dl className="text-base flex font-cn justify-between">
                   <dt>生日：</dt>
                   <dt className="font-sans">1994-10-14</dt>
                 </dl>
@@ -62,10 +64,11 @@ export default function UserPage() {
               </div>
             </div>
           </div>
-          <div className="relative h-1/4 p-4 flex items-center justify-between">
+          {/* 左下方 */}
+          <div className="relative h-full p-4 flex items-center justify-between">
             <div className="self-stretch justify-start items-center gap-6">
-              <h5 className="font-serif font-semibold text-3xl mb-4">興趣</h5>
-              <dl className="flex flex-col font-serif text-base mb-2">
+              <h5 className="font-cn font-semibold text-3xl mb-4">興趣</h5>
+              <dl className="flex flex-col font-cn text-base mb-2">
                 <dt>展覽：</dt>
                 <dd>這裡放展覽分類</dd>
                 <dt>課程：</dt>
@@ -77,13 +80,16 @@ export default function UserPage() {
             </div>
           </div>
         </div>
+
+        {/* 右邊 */}
         <div className=" w-1/5 flex flex-col">
+          {/* 右上方 */}
           <div className="h-1/2 p-4 flex flex-col border-b-1 border-black">
-            <div className="flex items-center justify-center gap-6 h-5/6">
-              <h5 className="font-serif font-semibold text-3xl self-start mt-0">
+            <div className="flex items-center justify-center h-5/6 gap-4">
+              <h4 className="font-cn font-semibold text-4xl self-start mt-0">
                 個人簡介
-              </h5>
-              <p className="font-serif text-base">
+              </h4>
+              <p className="font-cn text-base">
                 熱愛單車旅行，嚮往騎車環遊世界。最愛清晨的第一道曙光。熱愛單車旅行，嚮往騎車環遊世界。最愛清晨的第一道曙光。
               </p>
             </div>
@@ -93,7 +99,7 @@ export default function UserPage() {
               <h4 className="text-4xl text-center font-bold">about me</h4>
             </div>
           </div>
-
+          {/* 右下方 */}
           <div className="h-1/2 p-4 flex flex-col items-center justify-between">
             <svg
               width="160"

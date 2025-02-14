@@ -30,17 +30,17 @@ export default function UserPageFrame({
           <div className="h-full border-black border-r-1">
             {/* sidebar-top */}
             <ul className=" w-[150px] border-black border-b-1 h-1/2">
-              <li className="font-serif border-black border-b-1 flex items-center justify-center  w-full h-[43px] ">
+              <li className="font-cn border-black border-b-1 flex items-center justify-center  w-full h-[43px] ">
                 <Link href="#" size="sm" className="hover:text-yellow-600 ">
                   我的檔案
                 </Link>
               </li>
-              <li className="font-serif border-black border-b-1 w-full h-[43px] flex items-center justify-center ">
+              <li className="font-cn border-black border-b-1 w-full h-[43px] flex items-center justify-center ">
                 <Link href="#" size="sm" className="hover:text-yellow-600">
                   訂單
                 </Link>
               </li>
-              <li className="font-serif border-black border-b-1 w-full h-[43px] flex items-center justify-center ">
+              <li className="font-cn border-black border-b-1 w-full h-[43px] flex items-center justify-center ">
                 <Link href="#" size="sm" className="hover:text-yellow-600">
                   收藏
                 </Link>
@@ -49,22 +49,22 @@ export default function UserPageFrame({
 
             {/* sidebar-tail */}
             <ul className="w-[150px] border-black border-b-1 h-1/2 flex flex-col ">
-              <li className="font-serif border-b-1 border-black flex items-center justify-center  w-full h-[43px] ">
+              <li className="font-cn border-b-1 border-black flex items-center justify-center  w-full h-[43px] ">
                 <Link href="#" size="sm" className="hover:text-green-600">
                   我的品牌
                 </Link>
               </li>
-              <li className="font-serif border-black border-b-1 flex items-center justify-center  w-full h-[43px] ">
+              <li className="font-cn border-black border-b-1 flex items-center justify-center  w-full h-[43px] ">
                 <Link href="#" size="sm" className="hover:text-green-600">
                   課程管理
                 </Link>
               </li>
-              <li className="font-serif border-black border-b-1 flex items-center justify-center  w-full h-[43px] ">
+              <li className="font-cn border-black border-b-1 flex items-center justify-center  w-full h-[43px] ">
                 <Link href="#" size="sm" className="hover:text-green-600">
                   展覽管理
                 </Link>
               </li>
-              <li className="font-serif border-black border-b-1 flex items-center justify-center  w-full h-[43px] ">
+              <li className="font-cn border-black border-b-1 flex items-center justify-center  w-full h-[43px] ">
                 <Link href="#" size="sm" className="hover:text-green-600">
                   訂單管理
                 </Link>

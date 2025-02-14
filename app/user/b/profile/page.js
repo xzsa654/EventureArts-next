@@ -10,7 +10,9 @@ export default function UserPage() {
   return (
     <>
       <UserPageProfileFrame title="# MY BRAND">
+        {/* 左邊 */}
         <div className=" w-4/5 flex flex-col border-r-1 border-black">
+          {/* 左上方 */}
           <div className="relative p-4 h-3/5 flex items-center border-b border-black">
             {/* 左側固定 Banner */}
             <div className="flex items-center justify-center h-4/6 w-fit">
@@ -30,6 +32,7 @@ export default function UserPage() {
               />
             </div>
           </div>
+          {/* 左下方 */}
           <div className=" h-auto gap-4  p-4 flex items-center justify-center border-b-1 border-black">
             <div className="w-2/5   flex flex-col justify-center items-center">
               <div className="w-[250] h-[250px] mb-4 bg-blue-500">
