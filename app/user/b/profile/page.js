@@ -81,7 +81,7 @@ export default function UserPage() {
                 </dl>
                 <dl className="text-base flex font-cn justify-between">
                   <dt>品牌聯絡信箱：</dt>
-                  <dt className="font-sans">emma89032@test.com</dt>
+                  <dt className="font-sans">bonfrogbf@gmail.com</dt>
                 </dl>
                 <dl className="text-base flex font-cn justify-between">
                   <dt>品牌官方網站：</dt>
