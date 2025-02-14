@@ -22,7 +22,7 @@ export default function UserPage() {
             </div>
 
             {/* 右側圖片填滿 */}
-            <div className="flex-1 h-full">
+            <div className="flex-1 h-full bg-slate-300">
               <Image
                 src="/Yao/logo.svg"
                 alt="Banner Image"
@@ -42,7 +42,7 @@ export default function UserPage() {
                 <Button
                   radius="none"
                   variant="bordered"
-                  className="px-4 text-12 border-green-600 text-primary hover:text-green-600 hover:scale-110 transition-transform duration-200 cursor-pointer flex items-center group gap-x-2 "
+                  className="px-4 text-12 border--600 text-primary hover:text-green-600 hover:scale-110 transition-transform duration-200 cursor-pointer flex items-center group gap-x-2 "
                 >
                   創意生成LOGO
                   <HiArrowRight className="transition-transform duration-300 ease-out group-hover:translate-x-1" />
