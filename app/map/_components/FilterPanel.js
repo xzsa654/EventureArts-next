@@ -1,17 +1,17 @@
-"use client"
+'use client'
 
-import { useState } from "react"
-import { DatePicker, Select, SelectItem } from "@heroui/react"
-import "./FilterPanel.css"
+import { useState } from 'react'
+import { DatePicker, Select, SelectItem } from '@heroui/react'
+import './FilterPanel.css'
 
 export default function FilterPanel() {
   const [filters, setFilters] = useState({
-    type: "",
-    district: "",
-    metro: "",
-    station: "",
+    type: '',
+    district: '',
+    metro: '',
+    station: '',
     date: null,
-    price: "",
+    price: '',
   })
 
   const handleFilterChange = (key, value) => {
@@ -20,32 +20,40 @@ export default function FilterPanel() {
 
   const clearAll = () => {
     setFilters({
-      type: "",
-      district: "",
-      metro: "",
-      station: "",
+      type: '',
+      district: '',
+      metro: '',
+      station: '',
       date: null,
-      price: "",
+      price: '',
     })
   }
 
   const districts = [
-    "中正區",
-    "大同區",
-    "中山區",
-    "松山區",
-    "大安區",
-    "萬華區",
-    "信義區",
-    "士林區",
-    "北投區",
-    "內湖區",
-    "南港區",
-    "文山區",
+    '中正區',
+    '大同區',
+    '中山區',
+    '松山區',
+    '大安區',
+    '萬華區',
+    '信義區',
+    '士林區',
+    '北投區',
+    '內湖區',
+    '南港區',
+    '文山區',
   ]
-  const metros = ["紅線", "藍線", "綠線", "橘線", "棕線"]
-  const stations = ["台北車站", "中山站", "西門站", "東門站", "忠孝復興站", "南京復興站", "中正紀念堂站"]
-  const priceRanges = ["Free", "$ 0-100", "$ 100-500", "No price filter"]
+  const metros = ['紅線', '藍線', '綠線', '橘線', '棕線']
+  const stations = [
+    '台北車站',
+    '中山站',
+    '西門站',
+    '東門站',
+    '忠孝復興站',
+    '南京復興站',
+    '中正紀念堂站',
+  ]
+  const priceRanges = ['Free', '$ 0-100', '$ 100-500', 'No price filter']
 
   return (
     <div className="filter-panel">
@@ -60,14 +68,18 @@ export default function FilterPanel() {
         <p>Find</p>
         <div className="filter-buttons">
           <button
-            className={`filter-button ${filters.type === "courses" ? "active" : ""}`}
-            onClick={() => handleFilterChange("type", "courses")}
+            className={`filter-button border-1.5 ${
+              filters.type === 'courses' ? 'active' : ''
+            }`}
+            onClick={() => handleFilterChange('type', 'courses')}
           >
             Courses
           </button>
           <button
-            className={`filter-button ${filters.type === "exhibitions" ? "active" : ""}`}
-            onClick={() => handleFilterChange("type", "exhibitions")}
+            className={`filter-button border-1.5 ${
+              filters.type === 'exhibitions' ? 'active' : ''
+            }`}
+            onClick={() => handleFilterChange('type', 'exhibitions')}
           >
             Exhibitions
           </button>
@@ -82,7 +94,10 @@ export default function FilterPanel() {
             variant="bordered"
             radius="full"
             value={filters.district}
-            onChange={(value) => handleFilterChange("district", value)}
+            onChange={(value) => handleFilterChange('district', value)}
+            classNames={{
+              trigger: 'border-1.5 border-black',
+            }}
           >
             {districts.map((district) => (
               <SelectItem key={district} value={district}>
@@ -96,7 +111,10 @@ export default function FilterPanel() {
             variant="bordered"
             radius="full"
             value={filters.metro}
-            onChange={(value) => handleFilterChange("metro", value)}
+            onChange={(value) => handleFilterChange('metro', value)}
+            classNames={{
+              trigger: 'border-1.5 border-black',
+            }}
           >
             {metros.map((metro) => (
               <SelectItem key={metro} value={metro}>
@@ -110,7 +128,10 @@ export default function FilterPanel() {
             variant="bordered"
             radius="full"
             value={filters.station}
-            onChange={(value) => handleFilterChange("station", value)}
+            onChange={(value) => handleFilterChange('station', value)}
+            classNames={{
+              trigger: 'border-1.5 border-black',
+            }}
           >
             {stations.map((station) => (
               <SelectItem key={station} value={station}>
@@ -128,7 +149,14 @@ export default function FilterPanel() {
           variant="bordered"
           radius="full"
           value={filters.date}
-          onChange={(date) => handleFilterChange("date", date)}
+          onChange={(date) => handleFilterChange('date', date)}
+          defaultValue={new Date()}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              className="myDatePicker" // 傳遞自定義的 className
+            />
+          )}
         />
       </div>
 
@@ -139,7 +167,10 @@ export default function FilterPanel() {
           variant="bordered"
           radius="full"
           value={filters.price}
-          onChange={(value) => handleFilterChange("price", value)}
+          onChange={(value) => handleFilterChange('price', value)}
+          classNames={{
+            trigger: 'border-1.5 border-black',
+          }}
         >
           {priceRanges.map((range) => (
             <SelectItem key={range} value={range}>
@@ -149,10 +180,9 @@ export default function FilterPanel() {
         </Select>
       </div>
 
-      <button className="apply-button">
+      <button className="apply-button border-1.5">
         Apply <span>→</span>
       </button>
     </div>
   )
 }
-

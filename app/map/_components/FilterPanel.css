@@ -52,7 +52,7 @@
 
 .filter-button {
   padding: 0.75rem 1rem;
-  border: 1px solid #000;
+  border: 1.5px solid #000;
   border-radius: 9999px;
   background: transparent;
   cursor: pointer;
@@ -103,7 +103,7 @@
   padding: 0.75rem;
   background: transparent;
   color: #000;
-  border: 1px solid #000;
+  border: 1.5px solid #000;
   border-radius: 9999px;
   cursor: pointer;
   display: flex;
@@ -144,22 +144,51 @@
   box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.2) !important;
 }
 
-/* Add these styles at the end of the file */
-.filter-panel .heroui-select .heroui-select-trigger,
-.filter-panel .heroui-datepicker .heroui-input {
+/* New styles for DatePicker */
+.filter-panel .heroui-datepicker-input {
+  border: 1.5px solid #000 !important;
+  background-color: transparent !important;
+}
+
+.filter-panel .heroui-datepicker-input:hover,
+.filter-panel .heroui-datepicker-input:focus {
   border-color: #000 !important;
+}
+
+.filter-panel .heroui-datepicker-inputWrapper {
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Add these specific styles for the DatePicker */
+.filter-panel .heroui-datepicker {
+  width: 100%;
+}
+
+.filter-panel .heroui-datepicker-input {
+  border: 1.5px solid #000 !important;
   border-radius: 9999px !important;
   height: 40px !important;
+  background-color: transparent !important;
+  transition: all 0.2s ease !important;
 }
 
-.filter-panel .heroui-select .heroui-select-trigger:hover,
-.filter-panel .heroui-datepicker .heroui-input:hover {
+.filter-panel .heroui-datepicker-input:hover {
   border-color: #000 !important;
 }
 
-.filter-panel .heroui-select .heroui-select-trigger:focus,
-.filter-panel .heroui-datepicker .heroui-input:focus {
+.filter-panel .heroui-datepicker-input:focus {
   border-color: #000 !important;
-  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.2) !important;
+  box-shadow: none !important;
+}
+
+.filter-panel .heroui-datepicker-inputWrapper {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.filter-panel .heroui-datepicker-calendar {
+  border-color: #000 !important;
 }
 

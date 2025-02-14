@@ -1,107 +1,202 @@
-"use client"
+'use client'
 
-import { useState, useEffect, useRef } from "react"
-import Image from "next/image"
+import { useState, useRef } from 'react'
+import Image from 'next/image'
+import '../exhibit.css'
 
-const exhibitionImages = [
-  { src: "/chu-images/img_9.jpg", alt: "Exhibition Image 1" },
-  { src: "/chu-images/img_5.jpg", alt: "Exhibition Image 2" },
-  { src: "/chu-images/img_17.jpg", alt: "Exhibition Image 3" },
-  { src: "/chu-images/image15.jpg", alt: "Exhibition Image 4" },
+const exhibitionData = [
+  // Column 1
+  {
+    id: '01',
+    column: 1,
+    image: '/chu-images/img_9.jpg',
+    title: 'Bryce Thompson for',
+    subtitle: 'Modeliste Magazine. Shot by Anisia Kuzmina.',
+    date: '24.2.2024',
+  },
+  {
+    id: '04',
+    column: 1,
+    image: '/chu-images/img_9.jpg',
+    title: 'Urban Stories',
+    subtitle: 'City Life Magazine',
+    date: '20.2.2024',
+  },
+  // Column 2
+  {
+    id: '02',
+    column: 2,
+    image: '/chu-images/img_5.jpg',
+    title: 'Dennis Stenild for ELLE',
+    subtitle: 'Denmark with Hannah, Jasmine and Zoe. Artists & Nature.',
+    date: '22.2.2024',
+  },
+  {
+    id: '05',
+    column: 2,
+    image: '/chu-images/img_5.jpg',
+    title: "Nature's Canvas",
+    subtitle: 'Environmental Portraits',
+    date: '19.2.2024',
+  },
+  // Column 3
+  {
+    id: '03',
+    column: 3,
+    image: '/chu-images/img_17.jpg',
+    title: 'Darren Mcdonald for',
+    subtitle: 'Marie Claire Australia',
+    date: '18.2.2024',
+  },
+  {
+    id: '06',
+    column: 3,
+    image: '/chu-images/img_17.jpg',
+    title: 'Modern Light',
+    subtitle: 'Fashion Weekly',
+    date: '15.2.2024',
+  },
 ]
 
 export default function ExhibitionSection() {
-  const [enlargedImage, setEnlargedImage] = useState(null)
-  const enlargedSectionRef = useRef(null)
-  const [randomOffsets, setRandomOffsets] = useState([])
+  const [selectedImage, setSelectedImage] = useState(null)
+  const modalRef = useRef(null)
 
-  useEffect(() => {
-    setRandomOffsets(exhibitionImages.map(() => Math.random() * -100))
-  }, [])
+  // Group items by column
+  const column1 = exhibitionData.filter((item) => item.column === 1)
+  const column2 = exhibitionData.filter((item) => item.column === 2)
+  const column3 = exhibitionData.filter((item) => item.column === 3)
 
-  useEffect(() => {
-    if (enlargedImage && enlargedSectionRef.current) {
-      enlargedSectionRef.current.scrollIntoView({ behavior: "smooth" })
-    }
-  }, [enlargedImage])
-
-  const handleImageClick = (image) => {
-    setEnlargedImage(image)
-  }
+  const renderColumn = (items, animationDelay = '0s') => (
+    <div className="carousel-column" style={{ animationDelay }}>
+      {/* Original items */}
+      {items.map((exhibition) => (
+        <div key={exhibition.id} className="mb-16 space-y-4">
+          <span className="block text-7xl font-light">{exhibition.id}</span>
+          <div
+            className="relative aspect-[3/4] cursor-pointer group overflow-hidden w-[300px]"
+            onClick={() => setSelectedImage(exhibition)}
+          >
+            <Image
+              src={exhibition.image || '/placeholder.svg'}
+              alt={exhibition.title}
+              fill
+              sizes="(max-width: 768px) 150vw, (max-width: 1200px) 33vw"
+              className="object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+          </div>
+          <div className="space-y-1">
+            <h3 className="font-serif text-lg">{exhibition.title}</h3>
+            <p className="text-sm leading-relaxed">{exhibition.subtitle}</p>
+            <p className="text-sm text-gray-600">{exhibition.date}</p>
+          </div>
+        </div>
+      ))}
+      {/* Duplicated items for seamless loop */}
+      {items.map((exhibition) => (
+        <div key={`${exhibition.id}-duplicate`} className="mb-8 space-y-1">
+          <span className="block text-7xl font-light">{exhibition.id}</span>
+          <div
+            className="relative aspect-[3/4] cursor-pointer group overflow-hidden w-[300px]"
+            onClick={() => setSelectedImage(exhibition)}
+          >
+            <Image
+              src={exhibition.image || '/placeholder.svg'}
+              alt={exhibition.title}
+              fill
+              sizes="(max-width: 768px) 150vw, (max-width: 1200px) 100vw"
+              className="object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+          </div>
+          <div className="space-y-1">
+            <h3 className="font-serif text-lg">{exhibition.title}</h3>
+            <p className="text-sm leading-relaxed">{exhibition.subtitle}</p>
+            <p className="text-sm text-gray-600">{exhibition.date}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  )
 
   return (
-    <>
-      <section className="relative w-screen h-[1080px] overflow-hidden">
+    <section className="relative h-[770px]">
+      {/* Background Image */}
+      <div className="fixed inset-0 -z-10">
         <Image
           src="/chu-images/img-bg.jpg"
           alt="Background"
-          layout="fill"
-          objectFit="cover"
-          quality={100}
-          className="z-0"
+          fill
+          className="object-cover"
+          priority
         />
-        <div className="relative z-10 w-full h-[80px] px-[5%] flex justify-between items-center border-b border-black bg-opacity-80">
-          <h1 className="text-2xl font-bold">Current Exhibition</h1>
-          <a href="/exhibit/explore" className="text-xl hover:underline">
-            See All Exhibition →
-          </a>
-        </div>
-        <div className="relative z-10 w-full h-[1000px] overflow-hidden grid grid-cols-4 gap-2.5">
-          {exhibitionImages.map((image, index) => (
-            <div key={index} className="relative flex justify-center items-center w-full h-full overflow-hidden">
-              <div className="absolute top-0 left-1/2 h-full w-px bg-black"></div>
-              <div
-                className={`absolute w-full ${
-                  index % 2 === 0 ? "animate-verticalScrollDown" : "animate-verticalScrollUp"
-                }`}
-                style={{ transform: `translateY(${randomOffsets[index]}%)` }}
-              >
-                <Image
-                  src={image.src || "/chu-images/img_9.jpg"}
-                  alt={image.alt}
-                  width={400}
-                  height={600}
-                  className="w-full h-auto cursor-pointer transition-transform duration-300 ease-in-out hover:scale-105"
-                  onClick={() => handleImageClick(image)}
-                />
-              </div>
+      </div>
+      
+      {/* this is Left text + carousel area  */}
+      <section className="relative min-h-screen">
+        <div className="flex justify-between px-5 w-full">
+          {/* Left side title - rotated 90 degrees */}
+          <div className="w-1/4 flex items-center h-screen">
+            <h1 className="left-text text-2xl font-serif transform -rotate-90 origin-left whitespace-nowrap ml-8">
+              Current Exhibition
+            </h1>
+          </div>
+
+          {/* Right side vertical carousels */}
+          <div
+            className="w-[70%] grid grid-cols-3 gap-1 overflow-hidden relative pr-0 ml-auto justify-items-end"
+            style={{ height: '770px' }}
+          >
+            {/* Vertical lines */}
+            <div className="vertical-line left-1/3"></div>
+            <div className="vertical-line left-2/3"></div>
+
+            {/* Each column has different animation delay for varied movement */}
+            <div className="overflow-hidden">{renderColumn(column1, '0s')}</div>
+            <div className="overflow-hidden">
+              {renderColumn(column2, '-3s')}
             </div>
-          ))}
+            <div className="overflow-hidden">
+              {renderColumn(column3, '-6s')}
+            </div>
+          </div>
         </div>
       </section>
-      {enlargedImage && (
-        <section ref={enlargedSectionRef} className="relative flex h-screen bg-white bg-opacity-80">
-          <Image
-            src="/chu-images/img-bg.jpg"
-            alt="Background"
-            layout="fill"
-            objectFit="cover"
-            quality={100}
-            className="z-0"
-          />
-          <div className="relative z-10 flex-1 p-8 flex justify-center items-center">
-            <Image
-              src={enlargedImage.src || "/placeholder.svg"}
-              alt={enlargedImage.alt}
-              width={800}
-              height={600}
-              className="max-w-full max-h-full object-contain"
-            />
+
+      {/* Modal */}
+      {selectedImage && (
+        <div
+          ref={modalRef}
+          className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center"
+          onClick={(e) => {
+            if (e.target === modalRef.current) setSelectedImage(null)
+          }}
+        >
+          <div className="max-w-5xl w-full p-8">
+            <button
+              className="absolute top-8 right-8 text-white hover:text-gray-300"
+              onClick={() => setSelectedImage(null)}
+            >
+              Close
+            </button>
+            <div className="relative aspect-[3/4] max-h-[80vh]">
+              <Image
+                src={selectedImage.image || '/placeholder.svg'}
+                alt={selectedImage.title}
+                fill
+                className="object-contain"
+                sizes="(max-width: 1800px) 100vw"
+              />
+            </div>
+            <div className="mt-4 text-white">
+              <h2 className="text-2xl font-serif mb-2">
+                {selectedImage.title}
+              </h2>
+              <p className="text-gray-600">{selectedImage.subtitle}</p>
+              <p className="text-gray-800">{selectedImage.date}</p>
+            </div>
           </div>
-          <div className="relative z-10 flex-1 p-8 flex flex-col justify-center">
-            <h2 className="text-2xl font-bold mb-4">Image Details</h2>
-            <p className="mb-2">Title: {enlargedImage.alt}</p>
-            <p className="mb-2">Artist: Unknown</p>
-            <p className="mb-2">Year: 2023</p>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et
-              dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
-              ea commodo consequat.
-            </p>
-          </div>
-        </section>
+        </div>
       )}
-    </>
+    </section>
   )
 }
-

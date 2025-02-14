@@ -2,13 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  @font-face {
+    font-family: "Editorial";
+    src: url("/fonts/EditorialNew-Light.woff2") format("woff2");
+    font-weight: 300;
+    font-style: normal;
+  }
+}
+
 @layer components {
   .animate-verticalScrollDown {
-    animation: verticalScrollDown 20s linear infinite;
+    animation: verticalScrollDown 40s linear infinite;
   }
 
   .animate-verticalScrollUp {
-    animation: verticalScrollUp 20s linear infinite;
+    animation: verticalScrollUp 40s linear infinite;
   }
 
   @keyframes verticalScrollDown {
@@ -16,16 +25,82 @@
       transform: translateY(0);
     }
     100% {
-      transform: translateY(-100%);
+      transform: translateY(-50%);
     }
   }
 
   @keyframes verticalScrollUp {
     0% {
-      transform: translateY(-100%);
+      transform: translateY(-50%);
     }
     100% {
       transform: translateY(0);
+    }
+  }
+
+  .stroke-animation line {
+    stroke-dasharray: 5;
+    animation: strokeAnimation 20s linear infinite;
+  }
+
+  @keyframes strokeAnimation {
+    to {
+      stroke-dashoffset: 100;
+    }
+  }
+
+  .vertical-scroll {
+    animation: verticalScroll 20s linear infinite;
+  }
+
+  @keyframes verticalScroll {
+    0% {
+      transform: translateY(0);
+    }
+    100% {
+      transform: translateY(-100%);
+    }
+  }
+}
+
+@layer utilities {
+  .animate-marquee-slow {
+    animation: marquee 30s linear infinite;
+  }
+
+  .animate-marquee-normal {
+    animation: marquee 20s linear infinite;
+  }
+
+  .animate-marquee-fast {
+    animation: marquee 15s linear infinite;
+  }
+
+  .animate-marquee-reverse {
+    animation-direction: reverse;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-out 2s forwards;
+  }
+
+  @keyframes marquee {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translate(20px, -50%);
+    }
+    to {
+      opacity: 1;
+      transform: translate(0, -50%);
     }
   }
 }
@@ -38,96 +113,40 @@
   background-color: #ffffff;
 }
 
-
-
-/* below are for explore page.js */
-/* hero section */
-.hero-btn {
-  position: relative;
-  overflow: hidden;
-  transition: color 0.3s ease;
+.font-serif {
+  font-family: "Editorial", serif;
 }
 
-.hero-btn::before {
-  content: "";
-  position: absolute;
-  top: -1px;
-  left: -1px;
-  right: -1px;
-  bottom: -1px;
-  background: white;
-  border-radius: 9999px;
-  clip-path: circle(0% at 100% 50%);
-  transition: clip-path 0.3s ease-out;
-}
 
-.hero-btn:hover::before {
-  clip-path: circle(150% at 100% 50%);
-}
-
-.hero-btn:hover {
-  color: black;
-}
-
-.hero-btn span {
-  position: relative;
-  z-index: 1;
-}
-
-/* advanced search area */
-.advanced-search {
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  background-color: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(10px);
-  transform-origin: top;
-  transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
-  animation: growDown 0.3s ease-in-out;
-}
-
-.advanced-search-open {
-  max-height: 1000px;
-  opacity: 1;
-}
-
-.advanced-search-closed {
-  max-height: 0;
-  opacity: 0;
-}
-
-@keyframes growDown {
+@keyframes scrollUp {
   0% {
-    transform: scaleY(0);
+    transform: translateY(0);
   }
   100% {
-    transform: scaleY(1);
+    transform: translateY(-50%);
   }
 }
 
-/* Style the dropdown buttons */
-.dropdown-button {
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  background-color: transparent;
-  color: white;
-  transition: all 0.3s ease;
+/* ExhibitionSection.js CSS  */
+.carousel-column {
+  animation: scrollUp 40s linear infinite;
+  will-change: transform;
 }
 
-.dropdown-button:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+.carousel-column:hover {
+  animation-play-state: paused;
 }
 
-/* Style the dropdown menu */
-.dropdown-menu {
-  background-color: rgba(0, 0, 0, 0.8);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+
+.left-text {
+  transform-origin: left;
+  bottom: 0;
 }
 
-.dropdown-item {
-  color: white;
-  transition: background-color 0.3s ease;
+.vertical-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background-color: #d1d5db;
 }
-
-.dropdown-item:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-}
-

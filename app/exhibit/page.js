@@ -3,6 +3,7 @@ import Image from "next/image"
 import Excard from "./_components/Excard"
 import { ChevronLeftIcon, ChevronRightIcon, ArrowLongRightIcon } from "@heroicons/react/24/outline"
 import "./exhibit.css"
+import Link from "next/link"
 
 export default function ExhibitPage() {
   return (
@@ -12,10 +13,12 @@ export default function ExhibitPage() {
 
       {/* First Hero Section */}
       <section className="relative h-[180px] w-full bg-[rgba(33,72,66,1)] flex items-center justify-between px-20">
-        <h1 className="text-xl md:text-xl text-white">Too busy to visit an exhibition?</h1>
-        <button className="text-xl font-bold bg-white px-6 py-4 text-black hover:bg-opacity-90">
-          Try online Exhibition
-        </button>
+        <h1 className="text-xl md:text-xl text-white">Want to Explore More?</h1>
+        <Link href="/exhibit/explore">
+          <button className="text-xl font-bold bg-white px-6 py-4 text-black hover:bg-opacity-90 transition-all">
+            See All Exhibition
+          </button>
+        </Link>
       </section>
 
       {/* Second Hero Section */}
@@ -45,7 +48,7 @@ export default function ExhibitPage() {
       <section className="mb-20 p-6">
         <div className="flex justify-between items-center mb-10">
           <h1 className="text-2xl font-bold">What's Online...</h1>
-          <a href="#" className="text-xl font-bold flex items-center gap-2 hover:opacity-70">
+          <a href="/exhibit/online" className="text-xl font-bold flex items-center gap-2 hover:opacity-70">
             See All Online Exhibition
             <ArrowLongRightIcon className="w-5 h-5" />
           </a>
@@ -131,3 +134,4 @@ export default function ExhibitPage() {
     </main>
   )
 }
+
