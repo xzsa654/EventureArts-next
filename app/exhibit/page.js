@@ -40,7 +40,7 @@ export default function ExhibitPage() {
       <section id="first-hero-section" className="relative h-[120px] w-full flex items-center justify-between px-20">
         <h1 className="text-xl md:text-xl text-black">Want to Explore More?</h1>
         <Link href="/exhibit/explore">
-          <button className="text-xl px-6 py-4 text-black hover:bg-opacity-90 transition-all rounded-lg">
+          <button className="text-xl px-6 py-4 text-black hover:bg-opacity-90 transition-all rounded-lg cursor-pointer">
             See All Exhibition →
           </button>
         </Link>
@@ -95,15 +95,18 @@ export default function ExhibitPage() {
       <CandidSection />
 
       {/* See more Exhibition Section */}
-      <section className="mb-20 p-9">
+      <section className="mb-20 p-6">
         <div className="flex justify-between items-center mb-10">
-          <h1 className="text-xl font-bold">Want to Explore More Online Exhibition?</h1>
-          <a href="/exhibit/online" className="text-xl font-bold flex items-center gap-2 hover:opacity-70">
-            Explore More Online Exhibition →
+          <h1 className="text-2xl font-bold">Want to Explore More?</h1>
+          <a
+            href="/exhibit/online"
+            className="text-xl font-bold flex items-center gap-2 hover:opacity-70 cursor-pointer"
+          >
+            See All Exhibition →
             <ArrowLongRightIcon className="w-5 h-5" />
           </a>
         </div>
- 
+
         <div className="relative">
           <div className="flex gap-6 justify-center">
             <Excard
@@ -129,10 +132,10 @@ export default function ExhibitPage() {
             />
           </div>
 
-          <button className="absolute left-[-40px] top-1/2 transform -translate-y-1/2">
+          <button className="absolute left-[-40px] top-1/2 transform -translate-y-1/2 cursor-pointer">
             <ChevronLeftIcon className="w-8 h-8" />
           </button>
-          <button className="absolute right-[-40px] top-1/2 transform -translate-y-1/2">
+          <button className="absolute right-[-40px] top-1/2 transform -translate-y-1/2 cursor-pointer">
             <ChevronRightIcon className="w-8 h-8" />
           </button>
         </div>
@@ -142,7 +145,7 @@ export default function ExhibitPage() {
       <section className="border-t border-b border-black py-8 mb-20 p-6">
         <div className="flex justify-between items-center">
           <h2 className="text-2xl font-bold">Make Your Own Exhibition</h2>
-          <button className="text-xl font-bold px-6 py-2 bg-white border border-black hover:bg-black hover:text-white transition-colors">
+          <button className="text-xl font-bold px-6 py-2 bg-white border border-black hover:bg-black hover:text-white transition-colors cursor-pointer">
             Create Now →
           </button>
         </div>
@@ -152,7 +155,7 @@ export default function ExhibitPage() {
       <section className="p-6">
         <div className="flex justify-between items-center mb-10">
           <h2 className="text-3xl font-bold">Artists</h2>
-          <a href="#" className="text-xl font-bold flex items-center gap-2 hover:opacity-70">
+          <a href="#" className="text-xl font-bold flex items-center gap-2 hover:opacity-70 cursor-pointer">
             See MORE
             <ArrowLongRightIcon className="w-5 h-5" />
           </a>
@@ -172,10 +175,10 @@ export default function ExhibitPage() {
           </div>
 
           <div className="flex justify-end gap-4 mt-6">
-            <button className="p-2 border border-black">
+            <button className="p-2 border border-black cursor-pointer">
               <ChevronLeftIcon className="w-6 h-6" />
             </button>
-            <button className="p-2 border border-black">
+            <button className="p-2 border border-black cursor-pointer">
               <ChevronRightIcon className="w-6 h-6" />
             </button>
           </div>

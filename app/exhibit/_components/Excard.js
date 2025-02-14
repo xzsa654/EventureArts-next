@@ -19,7 +19,7 @@ const Excard = ({ e_id, tag, image, date, title, description }) => {
           />
         </div>
         <div className="pt-4">
-          <div className="font-['Courier_New'] text-sm font-bold mb-2 text-black">{date}</div>
+          <div className="text-sm font-bold mb-2 text-black">{date}</div>
           <h2 className="text-sm leading-snug text-[#533527] mb-1.5 font-medium">{title}</h2>
           <p className="text-xs leading-tight text-gray-600">{description}</p>
         </div>

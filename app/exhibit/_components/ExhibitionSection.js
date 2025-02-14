@@ -89,7 +89,7 @@ export default function ExhibitionSection({ onExhibitionSelect }) {
             />
           </div>
           <div className="space-y-1">
-            <h3 className="font-serif text-lg">{exhibition.title}</h3>
+            <h3 className="font text-lg">{exhibition.title}</h3>
             <p className="text-sm leading-relaxed">{exhibition.subtitle}</p>
             <p className="text-sm text-gray-600">{exhibition.date}</p>
           </div>
@@ -112,7 +112,7 @@ export default function ExhibitionSection({ onExhibitionSelect }) {
             />
           </div>
           <div className="space-y-1">
-            <h3 className="font-serif text-lg">{exhibition.title}</h3>
+            <h3 className="font text-lg">{exhibition.title}</h3>
             <p className="text-sm leading-relaxed">{exhibition.subtitle}</p>
             <p className="text-sm text-gray-600">{exhibition.date}</p>
           </div>
@@ -133,7 +133,7 @@ export default function ExhibitionSection({ onExhibitionSelect }) {
         <div className="flex justify-between px-5 w-full">
           {/* Left side title - rotated 90 degrees */}
           <div className="w-1/4 flex items-center h-screen">
-            <h1 className="left-text text-2xl font-serif transform -rotate-90 origin-left whitespace-nowrap ml-8">
+            <h1 className="left-text text-2xl font transform -rotate-90 origin-left whitespace-nowrap ml-8">
               Current Exhibition
             </h1>
           </div>

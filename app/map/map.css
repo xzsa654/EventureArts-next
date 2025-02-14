@@ -10,12 +10,12 @@
 
 .map-content {
   flex: 1;
-  padding-top: 80px; /* Adjust this value to match your navbar height */
+  padding-top: 80px; 
 }
 
 .map-page {
   display: flex;
-  min-height: calc(100vh - 80px - 2rem); /* Subtract navbar height and some padding */
+  min-height: calc(100vh - 80px - 2rem); 
   padding: 1rem;
   gap: 2rem;
 }
