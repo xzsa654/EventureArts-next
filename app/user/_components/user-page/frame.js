@@ -7,15 +7,19 @@ import CourseMang from './ex-mang'
 import ExAdd from './ex-add'
 export default function UserPageFrame(props) {
   // 當前路由
-  const pathName = usePathname().split('/')[3]
+  const pathName = usePathname().split('/user')[1]
 
   // 路由對應的title和components
   const routing = {
-    'ex-mang': {
+    '/b/ex-mang': {
       title: '#EXHIBIT MANG.',
       components: <CourseMang />,
     },
-    'ex-add': { title: '#EXHIBIT MANG.', components: <ExAdd /> },
+    '/b/ex-mang/add-on': { title: '#EXHIBIT MANG.', components: <ExAdd /> },
+    '/b/ex-mang/add-off': {
+      title: '#EXHIBIT MANG.',
+      components: <ExAdd online={true} />,
+    },
   }
 
   const isActive = { c: 'text-yellow-600', b: 'text-green-600' }
@@ -41,10 +45,10 @@ export default function UserPageFrame(props) {
           <div className="h-full border-black border-r-1">
             {/* 用戶端 sidebar-top */}
             <ul className="w-[150px]  border-black border-b-1 h-1/2">
-              <li className="border-black border-b-1 flex items-center justify-center  w-full h-[43px] ">
+              <li className=" font-cn border-black border-b-1 flex items-center justify-center  w-full h-[50px] ">
                 <Link
                   href="#"
-                  size="sm"
+                  size="md"
                   className={`hover:text-yellow-600 ${
                     pathName == 'profile' ? isActive.c : ''
                   }`}
@@ -52,10 +56,10 @@ export default function UserPageFrame(props) {
                   我的檔案
                 </Link>
               </li>
-              <li className="border-black border-b-1 w-full h-[43px] flex items-center justify-center ">
+              <li className=" font-cn border-black border-b-1 w-full h-[50px] flex items-center justify-center ">
                 <Link
                   href="#"
-                  size="sm"
+                  size="md"
                   className={`hover:text-yellow-600 ${
                     pathName == 'order' ? isActive.c : ''
                   }`}
@@ -63,10 +67,10 @@ export default function UserPageFrame(props) {
                   訂單
                 </Link>
               </li>
-              <li className="border-black border-b-1 w-full h-[43px] flex items-center justify-center ">
+              <li className=" font-cn border-black border-b-1 w-full h-[50px] flex items-center justify-center ">
                 <Link
                   href="#"
-                  size="sm"
+                  size="md"
                   className={`hover:text-yellow-600 ${
                     pathName == 'liked' ? isActive.c : ''
                   }`}
@@ -78,10 +82,10 @@ export default function UserPageFrame(props) {
 
             {/* 品牌端 sidebar-tail */}
             <ul className="w-[150px] border-black border-b-1 h-1/2 flex flex-col ">
-              <li className=" border-b-1 border-black flex items-center justify-center  w-full h-[43px] ">
+              <li className=" border-b-1 font-cn  border-black flex items-center justify-center  w-full h-[50px] ">
                 <Link
                   href="#"
-                  size="sm"
+                  size="md"
                   className={`hover:text-green-600 ${
                     pathName == 'profile' ? isActive.b : ''
                   }`}
@@ -89,10 +93,10 @@ export default function UserPageFrame(props) {
                   我的品牌
                 </Link>
               </li>
-              <li className="border-black border-b-1 flex items-center justify-center  w-full h-[43px] ">
+              <li className=" font-cn border-black border-b-1 flex items-center justify-center  w-full h-[50px] ">
                 <Link
                   href="#"
-                  size="sm"
+                  size="md"
                   className={`hover:text-green-600 ${
                     pathName == 'co-mang' ? isActive.b : ''
                   }`}
@@ -100,21 +104,21 @@ export default function UserPageFrame(props) {
                   課程管理
                 </Link>
               </li>
-              <li className=" border-black border-b-1 flex items-center justify-center  w-full h-[43px] ">
+              <li className="  font-cn border-black border-b-1 flex items-center justify-center  w-full h-[50px] ">
                 <Link
                   href="/user/b/ex-mang"
-                  size="sm"
+                  size="md"
                   className={`hover:text-green-600 ${
-                    pathName == 'ex-mang' ? isActive.b : ''
+                    pathName.split('/')[2] == 'ex-mang' ? isActive.b : ''
                   }`}
                 >
                   展覽管理
                 </Link>
               </li>
-              <li className=" border-black border-b-1 flex items-center justify-center  w-full h-[43px] ">
+              <li className="  font-cn border-black border-b-1 flex items-center justify-center  w-full h-[50px] ">
                 <Link
                   href="#"
-                  size="sm"
+                  size="md"
                   className={`hover:text-green-600 ${
                     pathName == 'order' ? isActive.b : ''
                   }`}

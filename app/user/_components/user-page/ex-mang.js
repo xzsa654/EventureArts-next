@@ -17,15 +17,28 @@ export default function CourseMang(props) {
       </div>
       <div className="flex flex-col gap-8 items-center justify-center">
         <OurPagination />
-        <Button
-          size="lg"
-          onPress={() => router.push('/user/b/ex-add')}
-          color="primary"
-          className="text-16 text-white"
-          endContent=<ArrowRight />
-        >
-          新增體驗課程
-        </Button>
+        <div className="flex gap-4">
+          <Button
+            size="lg"
+            onPress={() => router.push('/user/b/ex-mang/add-off')}
+            color="primary"
+            radius="none"
+            className="text-16 text-white"
+            endContent=<ArrowRight />
+          >
+            新增線上展覽
+          </Button>
+          <Button
+            size="lg"
+            onPress={() => router.push('/user/b/ex-mang/add-on')}
+            color="primary"
+            radius="none"
+            className="text-16 text-white"
+            endContent=<ArrowRight />
+          >
+            新增線下展覽
+          </Button>
+        </div>
       </div>
     </>
   )
