@@ -26,7 +26,7 @@ export default function RegisterSection({
     <>
       <div className="flex items-center gap-1  w-full">
         {/* 左侧项目 */}
-        <div className="flex items-center ">
+        <div className="flex items-center text-green ">
           <div className={`flex flex-col  text-${f1t}  `}>
             <StatusIcon color={f1c} />
             <div className={`text-${f1t}  ${nowStatus ? '' : 'h-[36px]'} `}>
