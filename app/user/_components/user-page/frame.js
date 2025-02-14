@@ -6,11 +6,19 @@ import { Link, Image, ScrollShadow, Button } from '@heroui/react'
 import CourseMang from './ex-mang'
 import ExAdd from './ex-add'
 export default function UserPageFrame(props) {
-  const pathName = usePathname().split('b/')[1]
+  // 當前路由
+  const pathName = usePathname().split('/')[3]
+
+  // 路由對應的title和components
   const routing = {
-    'ex-mang': { title: '#EXHIBIT MANG.', components: <CourseMang /> },
+    'ex-mang': {
+      title: '#EXHIBIT MANG.',
+      components: <CourseMang />,
+    },
     'ex-add': { title: '#EXHIBIT MANG.', components: <ExAdd /> },
   }
+
+  const isActive = { c: 'text-yellow-600', b: 'text-green-600' }
 
   return (
     <>
@@ -19,7 +27,7 @@ export default function UserPageFrame(props) {
         {/* Screen Message */}
         <div className="w-full border-black border-t-1 border-b-1 text-center px-16 tracking-[0.08em]">
           <h1 className="w-full text-[128px] leading-[140px] font-bold">
-            {routing[pathName].title}
+            {routing[pathName]?.title}
             {/* MY PROFILE * */}
           </h1>
         </div>
@@ -31,34 +39,64 @@ export default function UserPageFrame(props) {
         >
           {/*sidebar  */}
           <div className="h-full border-black border-r-1">
-            {/* sidebar-top */}
+            {/* 用戶端 sidebar-top */}
             <ul className="w-[150px]  border-black border-b-1 h-1/2">
               <li className="border-black border-b-1 flex items-center justify-center  w-full h-[43px] ">
-                <Link href="#" size="sm" className="hover:text-yellow-600">
+                <Link
+                  href="#"
+                  size="sm"
+                  className={`hover:text-yellow-600 ${
+                    pathName == 'profile' ? isActive.c : ''
+                  }`}
+                >
                   我的檔案
                 </Link>
               </li>
               <li className="border-black border-b-1 w-full h-[43px] flex items-center justify-center ">
-                <Link href="#" size="sm" className="hover:text-yellow-600">
+                <Link
+                  href="#"
+                  size="sm"
+                  className={`hover:text-yellow-600 ${
+                    pathName == 'order' ? isActive.c : ''
+                  }`}
+                >
                   訂單
                 </Link>
               </li>
               <li className="border-black border-b-1 w-full h-[43px] flex items-center justify-center ">
-                <Link href="#" size="sm" className="hover:text-yellow-600">
+                <Link
+                  href="#"
+                  size="sm"
+                  className={`hover:text-yellow-600 ${
+                    pathName == 'liked' ? isActive.c : ''
+                  }`}
+                >
                   收藏
                 </Link>
               </li>
             </ul>
 
-            {/* sidebar-tail */}
+            {/* 品牌端 sidebar-tail */}
             <ul className="w-[150px] border-black border-b-1 h-1/2 flex flex-col ">
               <li className=" border-b-1 border-black flex items-center justify-center  w-full h-[43px] ">
-                <Link href="#" size="sm" className="hover:text-green-600">
+                <Link
+                  href="#"
+                  size="sm"
+                  className={`hover:text-green-600 ${
+                    pathName == 'profile' ? isActive.b : ''
+                  }`}
+                >
                   我的品牌
                 </Link>
               </li>
               <li className="border-black border-b-1 flex items-center justify-center  w-full h-[43px] ">
-                <Link href="#" size="sm" className="hover:text-green-600">
+                <Link
+                  href="#"
+                  size="sm"
+                  className={`hover:text-green-600 ${
+                    pathName == 'co-mang' ? isActive.b : ''
+                  }`}
+                >
                   課程管理
                 </Link>
               </li>
@@ -66,13 +104,21 @@ export default function UserPageFrame(props) {
                 <Link
                   href="/user/b/ex-mang"
                   size="sm"
-                  className="hover:text-green-600"
+                  className={`hover:text-green-600 ${
+                    pathName == 'ex-mang' ? isActive.b : ''
+                  }`}
                 >
                   展覽管理
                 </Link>
               </li>
               <li className=" border-black border-b-1 flex items-center justify-center  w-full h-[43px] ">
-                <Link href="#" size="sm" className="hover:text-green-600">
+                <Link
+                  href="#"
+                  size="sm"
+                  className={`hover:text-green-600 ${
+                    pathName == 'order' ? isActive.b : ''
+                  }`}
+                >
                   訂單管理
                 </Link>
               </li>
@@ -86,7 +132,7 @@ export default function UserPageFrame(props) {
           </div>
           {/* content */}
           <div className="w-full flex flex-col h-auto gap-5 mx-12 my-6">
-            {routing[pathName].components}
+            {routing[pathName]?.components}
           </div>
         </div>
       </div>
