@@ -41,7 +41,7 @@ export default function Header(props) {
     <>
       <div className=" w-full h-full overflow-hidden">
         {/*開啟 menu 後背景色 */}
-        {isMenuOpen && <RainbowBG />}
+        {/* {isMenuOpen && <Image src="/Yao/Group 41.jpg" alt="rainbow" fill />} */}
         {isMenuOpen ? (
           <Navbar
             onMenuOpenChange={setIsMenuOpen}
@@ -63,7 +63,7 @@ export default function Header(props) {
               ],
             }}
             className={`overflow-hidden fixed w-full h-20  flex justify-between max-lg:px-0 px-16 py-4 
-              bg-[#3B4163]/50
+              bg-[url('/Yao/1.jpg')] bg-cover   bg-left-top
               `}
             height={'5rem'}
             maxWidth="full"
@@ -89,7 +89,7 @@ export default function Header(props) {
                 className={` text-white  overflow-hidden`}
                 aria-label={'Close menu'}
               />
-              <NavbarMenu className="   w-screen bg-[#3B4163]/50 flex justify-center gap   items-center">
+              <NavbarMenu className="   w-screen  bg-[url('/Yao/1.jpg')] bg-cover  flex justify-center gap   items-center">
                 <div className=" w-full   h-3/5 lg:px-16 flex justify-between flex-auto ">
                   <div className=" font-serif flex flex-col justify-center  gap-10">
                     {/* 左側的導航項目 */}
