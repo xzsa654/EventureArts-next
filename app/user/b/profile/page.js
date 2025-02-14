@@ -60,27 +60,27 @@ export default function UserPage() {
 
               {/* 讓 dl 的容器貼齊下方 */}
               <div className="flex flex-col gap-2">
-                <dl className="text-base flex font-serif justify-between">
+                <dl className="text-base flex font-cn justify-between">
                   <dt>品牌名稱：</dt>
                   <dt>蹦蛙娛樂</dt>
                 </dl>
-                <dl className="text-base flex font-serif justify-between">
+                <dl className="text-base flex font-cn justify-between">
                   <dt>主理人：</dt>
                   <dt>張嘉航</dt>
                 </dl>
-                <dl className="text-base flex font-serif justify-between">
+                <dl className="text-base flex font-cn justify-between">
                   <dt>電話：</dt>
                   <dt className="font-sans">02-39100200</dt>
                 </dl>
-                <dl className="text-base flex font-serif justify-between">
+                <dl className="text-base flex font-cn justify-between">
                   <dt>地址：</dt>
                   <dt>臺北市中正區寧波西街1號2樓</dt>
                 </dl>
-                <dl className="text-base flex font-serif justify-between">
+                <dl className="text-base flex font-cn justify-between">
                   <dt>品牌聯絡信箱：</dt>
                   <dt className="font-sans">emma89032@test.com</dt>
                 </dl>
-                <dl className="text-base flex font-serif justify-between">
+                <dl className="text-base flex font-cn justify-between">
                   <dt>品牌官方網站：</dt>
                   <dt className="font-sans">
                     https://www.instagram.com/bonfrogbf/
@@ -94,10 +94,10 @@ export default function UserPage() {
         <div className=" w-1/5 flex flex-col">
           <div className="h-2/3 p-4 flex flex-col border-b-1 border-black">
             <div className="flex items-center justify-center gap-6 h-5/6">
-              <h5 className="font-serif font-semibold text-3xl self-start mt-0">
+              <h5 className="font-cn font-semibold text-3xl self-start mt-0">
                 品牌簡介
               </h5>
-              <p className="font-serif text-base">
+              <p className="font-cn text-base">
                 如果蹦蛙村相關問題，可以直接詢問！如果蹦蛙村相關問題，可以直接詢問！
               </p>
             </div>
