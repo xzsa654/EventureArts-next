@@ -1,0 +1,81 @@
+.hero-btn {
+  position: relative;
+  overflow: hidden;
+  transition: color 0.3s ease;
+}
+
+.hero-btn::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  right: -1px;
+  bottom: -1px;
+  background: white;
+  border-radius: 9999px;
+  clip-path: circle(0% at 100% 50%);
+  transition: clip-path 0.3s ease-out;
+}
+
+.hero-btn:hover::before {
+  clip-path: circle(150% at 100% 50%);
+}
+
+.hero-btn:hover {
+  color: black;
+}
+
+.hero-btn span {
+  position: relative;
+  z-index: 1;
+}
+
+/* Add styles for the advanced search area */
+.advanced-search {
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+  transform-origin: top;
+  transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.advanced-search-open {
+  max-height: 1000px;
+  opacity: 1;
+  transform: scaleY(1);
+}
+
+.advanced-search-closed {
+  max-height: 0;
+  opacity: 0;
+  transform: scaleY(0);
+}
+
+/* Style the dropdown buttons */
+.dropdown-button {
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background-color: transparent;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.dropdown-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Style the dropdown menu */
+.dropdown-menu {
+  background-color: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dropdown-item {
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+.dropdown-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+

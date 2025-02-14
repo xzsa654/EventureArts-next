@@ -26,9 +26,9 @@ export default function Header(props) {
   const { login } = useModal()
   const { onOpen } = login
   const menuItems = [
-    { title: 'Exhibit', href: '' },
+    { title: 'Exhibit', href: '/exhibit' },
     { title: 'Course', href: '' },
-    { title: 'Map', href: '' },
+    { title: 'Map', href: '/map' },
     { title: 'Event', href: '' },
   ]
   const qa = [

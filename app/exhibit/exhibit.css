@@ -1,0 +1,152 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  @font-face {
+    font-family: "Editorial";
+    src: url("/fonts/EditorialNew-Light.woff2") format("woff2");
+    font-weight: 300;
+    font-style: normal;
+  }
+}
+
+@layer components {
+  .animate-verticalScrollDown {
+    animation: verticalScrollDown 40s linear infinite;
+  }
+
+  .animate-verticalScrollUp {
+    animation: verticalScrollUp 40s linear infinite;
+  }
+
+  @keyframes verticalScrollDown {
+    0% {
+      transform: translateY(0);
+    }
+    100% {
+      transform: translateY(-50%);
+    }
+  }
+
+  @keyframes verticalScrollUp {
+    0% {
+      transform: translateY(-50%);
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }
+
+  .stroke-animation line {
+    stroke-dasharray: 5;
+    animation: strokeAnimation 20s linear infinite;
+  }
+
+  @keyframes strokeAnimation {
+    to {
+      stroke-dashoffset: 100;
+    }
+  }
+
+  .vertical-scroll {
+    animation: verticalScroll 20s linear infinite;
+  }
+
+  @keyframes verticalScroll {
+    0% {
+      transform: translateY(0);
+    }
+    100% {
+      transform: translateY(-100%);
+    }
+  }
+}
+
+@layer utilities {
+  .animate-marquee-slow {
+    animation: marquee 30s linear infinite;
+  }
+
+  .animate-marquee-normal {
+    animation: marquee 20s linear infinite;
+  }
+
+  .animate-marquee-fast {
+    animation: marquee 15s linear infinite;
+  }
+
+  .animate-marquee-reverse {
+    animation-direction: reverse;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-out 2s forwards;
+  }
+
+  @keyframes marquee {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translate(20px, -50%);
+    }
+    to {
+      opacity: 1;
+      transform: translate(0, -50%);
+    }
+  }
+}
+
+.exhibition-bg {
+  background-color: #f7f5f1;
+}
+
+.exhibition-white {
+  background-color: #ffffff;
+}
+
+.font-serif {
+  font-family: "Editorial", serif;
+}
+
+
+@keyframes scrollUp {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-50%);
+  }
+}
+
+/* ExhibitionSection.js CSS  */
+.carousel-column {
+  animation: scrollUp 40s linear infinite;
+  will-change: transform;
+}
+
+.carousel-column:hover {
+  animation-play-state: paused;
+}
+
+
+.left-text {
+  transform-origin: left;
+  bottom: 0;
+}
+
+.vertical-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background-color: #d1d5db;
+}
