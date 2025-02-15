@@ -96,7 +96,7 @@ export default function FilterPanel() {
             value={filters.district}
             onChange={(value) => handleFilterChange('district', value)}
             classNames={{
-              trigger: 'border-1.5 border-black',
+              trigger: 'border-1.5 border-black bg-white/50',
             }}
           >
             {districts.map((district) => (
@@ -113,7 +113,7 @@ export default function FilterPanel() {
             value={filters.metro}
             onChange={(value) => handleFilterChange('metro', value)}
             classNames={{
-              trigger: 'border-1.5 border-black',
+              trigger: 'border-1.5 border-black bg-white/50',
             }}
           >
             {metros.map((metro) => (
@@ -130,7 +130,7 @@ export default function FilterPanel() {
             value={filters.station}
             onChange={(value) => handleFilterChange('station', value)}
             classNames={{
-              trigger: 'border-1.5 border-black',
+              trigger: 'border-1.5 border-black bg-white/50',
             }}
           >
             {stations.map((station) => (
@@ -142,22 +142,18 @@ export default function FilterPanel() {
         </div>
       </div>
 
-      <div className="filter-section">
+      <div className="filter-section ">
         <p>Date</p>
-        <DatePicker
-          placeholder="YY/MM/DD"
-          variant="bordered"
-          radius="full"
-          value={filters.date}
-          onChange={(date) => handleFilterChange('date', date)}
-          defaultValue={new Date()}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              className="myDatePicker" // 傳遞自定義的 className
-            />
-          )}
-        />
+        <div className="border-1.5 border-black rounded-full px-3 py-[1px] bg-white/50">
+          <DatePicker
+            placeholder="YY/MM/DD"
+            variant="underlined"
+            radius="full"
+            value={filters.date}
+            onChange={(date) => handleFilterChange('date', date)}
+            defaultValue={new Date()}
+          />
+        </div>
       </div>
 
       <div className="filter-section">
@@ -169,7 +165,7 @@ export default function FilterPanel() {
           value={filters.price}
           onChange={(value) => handleFilterChange('price', value)}
           classNames={{
-            trigger: 'border-1.5 border-black',
+            trigger: 'border-1.5 border-black bg-white/50',
           }}
         >
           {priceRanges.map((range) => (

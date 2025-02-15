@@ -40,7 +40,7 @@ export default function ExhibitPage() {
       <section id="first-hero-section" className="relative h-[120px] w-full flex items-center justify-between px-20">
         <h1 className="text-xl md:text-xl text-black">Want to Explore More?</h1>
         <Link href="/exhibit/explore" className="cursor-pointer">
-          <button className="text-xl px-6 py-4 text-black hover:bg-opacity-90 transition-all rounded-lg">
+          <button className="text-xl px-6 py-4 text-black hover:bg-opacity-90 transition-all rounded-lg cursor-pointer">
             See All Exhibition →
           </button>
         </Link>
