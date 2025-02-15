@@ -6,7 +6,7 @@ import { IoClose } from 'react-icons/io5'
 
 export default function UploadsCard({ close = false }) {
   return (
-    <div className=" relative p-5 flex gap-5 w-full border-1 border-black justify-center items-center rounded-lg ">
+    <div className=" relative p-6 flex gap-5 w-full border-1 border-black justify-center items-center rounded-lg ">
       {close ? (
         <Button
           className=" absolute top-1  right-2"
