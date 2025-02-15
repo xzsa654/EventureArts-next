@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import { Image, Link } from '@heroui/react'
 
-export default function COMangContent(props) {
+export default function ExMangContent(props) {
   const tableData = [
     {
       id: 24,
@@ -45,23 +45,23 @@ export default function COMangContent(props) {
     <>
       <div className="w-full h-[21px]   border-t-[6px] border-black"></div>
       <div className=" flex justify-center items-center  h-12 border-t-1 border-b-1 border-black">
-        <h6 className=" font-cn  font-medium text-xl">所有課程</h6>
+        <h6 className=" font-cn  font-medium text-xl">所有展覽</h6>
       </div>
       {/* 表格 */}
       <table className="w-full h-5/6">
         <thead>
           <tr className="w-full ">
             <th className="text-start  text-16 font-cn  border-b-3 border-black p-[10px] font-regular">
-              課程ID
+              展覽ID
             </th>
             <th className="text-start  text-16 font-cn  border-b-3 border-black p-[10px] font-regular">
-              課程名稱
+              展覽名稱
             </th>
             <th className="text-start  text-16 font-cn  border-b-3 border-black p-[10px] font-regular">
-              課程日期
+              展覽日期
             </th>
             <th className="text-start  text-16 font-cn  border-b-3 border-black p-[10px] font-regular">
-              課程地點
+              展覽地點
             </th>
             <th className="text-start  text-16 font-cn  border-b-3 border-black p-[10px] font-regular">
               價格

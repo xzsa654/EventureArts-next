@@ -12,7 +12,7 @@ import {
 } from '@heroui/react'
 import { CustomCheckbox } from './custom-checkbox'
 
-export default function MiddleForm(props) {
+export default function CoMiddleForm(props) {
   const [groupSelected, setGroupSelected] = React.useState([])
   return (
     <>

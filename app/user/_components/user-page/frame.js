@@ -3,8 +3,9 @@
 import React, { useState, useEffect } from 'react'
 import { usePathname } from 'next/navigation'
 import { Link, Image, ScrollShadow, Button } from '@heroui/react'
-import CourseMang from './ex-mang'
+import Mang from './mang'
 import ExAdd from './ex-add'
+import CoAdd from './co-add'
 import LikedEvents from '../LikedEvents'
 export default function UserPageFrame(props) {
   // 當前路由
@@ -14,7 +15,7 @@ export default function UserPageFrame(props) {
   const routing = {
     '/b/ex-mang': {
       title: '#EXHIBIT MANG.',
-      components: <CourseMang />,
+      components: <Mang />,
     },
     '/b/ex-mang/add-on': { title: '#EXHIBIT MANG.', components: <ExAdd /> },
     '/b/ex-mang/add-off': {
@@ -22,6 +23,14 @@ export default function UserPageFrame(props) {
       components: <ExAdd online={true} />,
     },
     '/c/liked': { title: 'LIKED EVENTS *', components: <LikedEvents /> },
+    '/b/co-mang': {
+      title: '#COURSE MANG.',
+      components: <Mang type={'course'} />,
+    },
+    '/b/co-mang/add': {
+      title: '#COURSE MANG.',
+      components: <CoAdd />,
+    },
   }
 
   const isActive = { c: 'text-yellow-600', b: 'text-green-600' }
@@ -97,10 +106,10 @@ export default function UserPageFrame(props) {
               </li>
               <li className=" font-cn border-black border-b-1 flex items-center justify-center  w-full h-[50px] ">
                 <Link
-                  href="#"
+                  href="/user/b/co-mang"
                   size="md"
                   className={`hover:text-green-600 ${
-                    pathName == 'co-mang' ? isActive.b : ''
+                    pathName.split('/')[2] == 'co-mang' ? isActive.b : ''
                   }`}
                 >
                   課程管理

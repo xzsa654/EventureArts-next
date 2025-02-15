@@ -5,35 +5,42 @@ import { Button } from '@heroui/react'
 import UserPageSelect from './select'
 import OurPagination from '@/components/common/pagination'
 import { ArrowRight } from '@/public/Yao/icons'
+import ExMangContent from './co-content'
 import CourseMangContent from './ex-content'
 import { useRouter } from 'next/navigation'
-export default function CourseMang(props) {
+export default function Mang({ type }) {
   const router = useRouter()
   return (
     <>
       <UserPageSelect />
       <div className="flex-auto ">
-        <CourseMangContent />
+        {type == 'course' ? <CourseMangContent /> : <ExMangContent />}
       </div>
       <div className="flex flex-col gap-8 items-center justify-center">
         <OurPagination />
         <div className="flex gap-4">
           <Button
             size="lg"
-            onPress={() => router.push('/user/b/ex-mang/add-off')}
+            onPress={() => {
+              if (type == 'course') {
+                return router.push('/user/b/co-mang/add')
+              } else {
+                return router.push('/user/b/ex-mang/add-off')
+              }
+            }}
             color="primary"
             radius="none"
             className="text-16 text-white"
             endContent=<ArrowRight />
           >
-            新增線上展覽
+            {type == 'course' ? '新增課程' : '新增線上展覽'}
           </Button>
           <Button
             size="lg"
             onPress={() => router.push('/user/b/ex-mang/add-on')}
             color="primary"
             radius="none"
-            className="text-16 text-white"
+            className={`${type == 'course' ? 'hidden' : ''} text-16 text-white`}
             endContent=<ArrowRight />
           >
             新增線下展覽
