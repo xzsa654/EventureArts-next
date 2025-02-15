@@ -11,9 +11,9 @@ export default function UserCoAddForm() {
   const router = useRouter()
   return (
     <>
-      <header className="w-full px-[78px] py-7">
+      <header className="w-full px-[78px] max-sm:px-2 py-7">
         <div className="w-full border-b-5 border-black ">
-          <h1 className="w-full font-kanit text-6xl font-extrabold text-center ">
+          <h1 className="w-full font-kanit max-sm:text-3xl text-6xl font-extrabold text-center ">
             Add new Course
           </h1>
         </div>

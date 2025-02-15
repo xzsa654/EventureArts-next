@@ -7,6 +7,17 @@ import Mang from './mang'
 import ExAdd from './ex-add'
 import CoAdd from './co-add'
 import LikedEvents from '../LikedEvents'
+
+import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules'
+
+import { Swiper, SwiperSlide } from 'swiper/react'
+
+// Import Swiper styles
+import 'swiper/css'
+import 'swiper/css/navigation'
+import 'swiper/css/pagination'
+import 'swiper/css/scrollbar'
+
 export default function UserPageFrame(props) {
   // 當前路由
   const pathName = usePathname().split('/user')[1]
@@ -48,14 +59,103 @@ export default function UserPageFrame(props) {
         </div>
         {/* main */}
 
+        {/* sidebar-mobile */}
+        <div className="flex justify-between p-2 my-2  md:hidden   ">
+          <Swiper
+            modules={[Navigation, Pagination, Scrollbar, A11y]}
+            spaceBetween={30}
+            slidesPerView={2.7}
+            scrollbar={{ draggable: true }}
+          >
+            <SwiperSlide>
+              <Link
+                href="#"
+                size="md"
+                className={`hover:text-yellow-600 ${
+                  pathName == 'profile' ? isActive.c : ''
+                }   text-[14px] mb-5`}
+              >
+                我的檔案
+              </Link>
+            </SwiperSlide>
+            <SwiperSlide>
+              <Link
+                href="#"
+                size="md"
+                className={`hover:text-yellow-600 ${
+                  pathName == 'order' ? isActive.c : ''
+                }  text-[14px]`}
+              >
+                訂單
+              </Link>
+            </SwiperSlide>
+
+            <SwiperSlide>
+              <Link
+                href="#"
+                size="md"
+                className={`hover:text-yellow-600 ${
+                  pathName == 'liked' ? isActive.c : ''
+                }    text-[14px]`}
+              >
+                收藏
+              </Link>
+            </SwiperSlide>
+            <SwiperSlide>
+              <Link
+                href="#"
+                size="md"
+                className={`hover:text-green-600 ${
+                  pathName == 'profile' ? isActive.b : ''
+                }`}
+              >
+                我的品牌
+              </Link>
+            </SwiperSlide>
+            <SwiperSlide>
+              <Link
+                href="#"
+                size="md"
+                className={`hover:text-green-600 ${
+                  pathName.split('/')[2] == 'co-mang' ? isActive.b : ''
+                }`}
+              >
+                課程管理
+              </Link>
+            </SwiperSlide>
+            <SwiperSlide>
+              <Link
+                href="#"
+                size="md"
+                className={`hover:text-green-600 ${
+                  pathName.split('/')[2] == 'ex-mang' ? isActive.b : ''
+                }`}
+              >
+                展覽管理
+              </Link>
+            </SwiperSlide>
+            <SwiperSlide>
+              <Link
+                href="#"
+                size="md"
+                className={`hover:text-green-600 ${
+                  pathName == 'order' ? isActive.b : ''
+                }`}
+              >
+                訂單管理
+              </Link>
+            </SwiperSlide>
+          </Swiper>
+        </div>
+
         <div
           className="container h-full flex-auto  max-sm:border-none max-sm:px-2
-          border-black border-r-1 border-l-1  mx-auto  flex max-sm:flex-col "
+          border-black border-r-1 border-l-1  mx-auto max-sm:my-0  flex max-sm:flex-col "
         >
           {/*sidebar  */}
-          <div className="h-auto border-black border-r-1  max-sm:order-2 ">
+          <div className="h-auto border-black border-r-1 max-sm:hidden  ">
             {/* 用戶端 sidebar-top */}
-            <ul className="w-[150px]  border-black border-b-1 h-1/2">
+            <ul className="border-black border-b-1 h-1/2">
               <li className=" font-cn border-black border-b-1 flex items-center justify-center  w-full h-[50px] ">
                 <Link
                   href="#"
@@ -145,8 +245,9 @@ export default function UserPageFrame(props) {
               </li>
             </ul>
           </div>
+
           {/* content */}
-          <div className="w-full flex flex-col h-auto gap-5 mx-12 my-6 max-sm:mx-0   max-sm:order-1">
+          <div className="w-full flex flex-col h-auto gap-5 mx-12 my-6 max-sm:my-2 max-sm:mx-0   ">
             {routing[pathName]?.components}
           </div>
         </div>

@@ -207,7 +207,7 @@ export default function Header(props) {
           )}
 
           <NavbarContent justify="end">
-            <NavbarItem className="hidden lg:flex">
+            <NavbarItem className={` ${isOpen ? 'flex' : 'hidden'} lg:flex`}>
               <Link href="#" onPress={onOpen}>
                 {isOpen ? (
                   <HiUser size={35} color="white" />
