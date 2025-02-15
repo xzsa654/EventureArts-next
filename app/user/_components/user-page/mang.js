@@ -12,7 +12,7 @@ export default function Mang({ type }) {
   const router = useRouter()
   return (
     <>
-      <UserPageSelect />
+      <UserPageSelect type={type} />
       <div className="flex-auto ">
         {type == 'course' ? <CourseMangContent /> : <ExMangContent />}
       </div>
@@ -30,7 +30,7 @@ export default function Mang({ type }) {
             }}
             color="primary"
             radius="none"
-            className="text-16 text-white"
+            className="text-16 text-white max-sm:hidden"
             endContent=<ArrowRight />
           >
             {type == 'course' ? '新增課程' : '新增線上展覽'}

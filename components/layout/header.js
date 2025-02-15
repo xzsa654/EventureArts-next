@@ -133,7 +133,7 @@ export default function Header(props) {
               'data-[active=true]:after:bg-primary',
             ],
           }}
-          className={` overflow-hidden fixed w-full h-[80] flex justify-between max-lg:px-0 px-16 py-4 bg-white/30 `}
+          className={` overflow-hidden fixed w-full h-[80] flex justify-between max-lg:px-0 px-16 py-4 bg-white/30   `}
           height="5rem"
           maxWidth="full"
         >
@@ -156,30 +156,17 @@ export default function Header(props) {
               )}
             </Link>
           </NavbarBrand>
-          <NavbarContent
-            className="max-md:hidden gap-4 font-cn gap-8"
-            justify="center"
-          >
-            {menuItems.map((item, i) => {
-              if (pathName === item.href) {
-                return (
-                  <NavbarItem key={i} isActive className="w-auto h-auto p-2">
-                    <Link color="primary" href={item.href} className="text-xl">
-                      {item.title}
-                    </Link>
-                  </NavbarItem>
-                )
-              } else {
-                return (
-                  <NavbarItem
-                    key={i}
-                    className="after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-primary hover:after:w-full after:transition-all after:duration-300 w-auto h-auto p-2"
-                  >
-                    {isOpen ? (
-                      <Link color="danger" href={item.href} className="text-xl">
-                        {item.title}
-                      </Link>
-                    ) : (
+          {isOpen ? (
+            ''
+          ) : (
+            <NavbarContent
+              className="max-md:hidden gap-4 font-cn gap-8"
+              justify="center"
+            >
+              {menuItems.map((item, i) => {
+                if (pathName === item.href) {
+                  return (
+                    <NavbarItem key={i} isActive className="w-auto h-auto p-2">
                       <Link
                         color="primary"
                         href={item.href}
@@ -187,12 +174,38 @@ export default function Header(props) {
                       >
                         {item.title}
                       </Link>
-                    )}
-                  </NavbarItem>
-                )
-              }
-            })}
-          </NavbarContent>
+                    </NavbarItem>
+                  )
+                } else {
+                  return (
+                    <NavbarItem
+                      key={i}
+                      className="after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-primary hover:after:w-full after:transition-all after:duration-300 w-auto h-auto p-2"
+                    >
+                      {isOpen ? (
+                        <Link
+                          color="danger"
+                          href={item.href}
+                          className="text-xl"
+                        >
+                          {item.title}
+                        </Link>
+                      ) : (
+                        <Link
+                          color="primary"
+                          href={item.href}
+                          className="text-xl"
+                        >
+                          {item.title}
+                        </Link>
+                      )}
+                    </NavbarItem>
+                  )
+                }
+              })}
+            </NavbarContent>
+          )}
+
           <NavbarContent justify="end">
             <NavbarItem className="hidden lg:flex">
               <Link href="#" onPress={onOpen}>
@@ -203,7 +216,7 @@ export default function Header(props) {
                 )}
               </Link>
             </NavbarItem>
-            <NavbarItem className="hidden lg:flex">
+            <NavbarItem>
               <Link href="#" onPress={toggleMenu}>
                 {isOpen ? (
                   <HiOutlineX size={35} color="white" />
@@ -222,7 +235,7 @@ export default function Header(props) {
               animate="animate"
               exit="exit"
               variants={menuVariants}
-              className="fixed top-0 left-0 z-30  w-full bg-[url('/Yao/1.jpg')] bg-cover lg:px-16 flex justify-between flex-col overflow-hidden"
+              className="fixed top-0 left-0 z-30   w-full bg-[url('/Yao/1.jpg')] bg-cover lg:px-16 flex justify-between flex-col overflow-hidden"
             >
               <motion.div
                 variants={contentVariants}

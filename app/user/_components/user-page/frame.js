@@ -38,10 +38,10 @@ export default function UserPageFrame(props) {
   return (
     <>
       {/* layout */}
-      <div className=" min-w-[1140px]  mt-20 flex flex-col">
+      <div className="  max-sm:w-full mt-20 flex flex-col">
         {/* Screen Message */}
-        <div className="w-full border-black border-t-1 border-b-1 text-center px-16 tracking-[0.08em]">
-          <h1 className="w-full text-[128px] leading-[140px] font-bold">
+        <div className="w-full border-black border-t-1 border-b-1 text-center max-sm:px-0 px-16 tracking-[0.08em]">
+          <h1 className="w-full max-sm:text-4xl text-[128px] leading-[140px] font-bold">
             {routing[pathName]?.title}
             {/* MY PROFILE * */}
           </h1>
@@ -49,11 +49,11 @@ export default function UserPageFrame(props) {
         {/* main */}
 
         <div
-          className="container h-full flex-auto 
-          border-black border-r-1 border-l-1 mx-auto flex "
+          className="container h-full flex-auto  max-sm:border-none max-sm:px-2
+          border-black border-r-1 border-l-1  mx-auto  flex max-sm:flex-col "
         >
           {/*sidebar  */}
-          <div className="h-auto border-black border-r-1">
+          <div className="h-auto border-black border-r-1  max-sm:order-2 ">
             {/* 用戶端 sidebar-top */}
             <ul className="w-[150px]  border-black border-b-1 h-1/2">
               <li className=" font-cn border-black border-b-1 flex items-center justify-center  w-full h-[50px] ">
@@ -146,7 +146,7 @@ export default function UserPageFrame(props) {
             </ul>
           </div>
           {/* content */}
-          <div className="w-full flex flex-col h-auto gap-5 mx-12 my-6">
+          <div className="w-full flex flex-col h-auto gap-5 mx-12 my-6 max-sm:mx-0   max-sm:order-1">
             {routing[pathName]?.components}
           </div>
         </div>
