@@ -8,7 +8,10 @@ import ModalLayout from './layout'
 import { useModal } from '@/contexts/modal-context'
 import { ArrowRight, FacebookLogo, GoogleLogo } from '@/public/Yao/icons'
 import FirebaseAuthPage from '@/app/user/_components/firebase-auth'
+import { useAuth } from '@/hooks/use-auth'
 export default function LoginModal() {
+  const { firstLogin } = useAuth()
+
   const tips = '登入'
   const title = 'EVENTUREARTS'
 
@@ -16,6 +19,12 @@ export default function LoginModal() {
   const { isOpen, onOpenChange } = login
   const { onOpen: onRegOpen } = register1
   const { onOpen: onResOpen } = reset
+  useEffect(() => {
+    if (firstLogin.email) {
+      onOpenChange(false)
+      onRegOpen()
+    }
+  }, [firstLogin])
   const formBody = (
     <form className="gap-[10px] flex flex-wrap justify-center text-center">
       <Input

@@ -16,6 +16,20 @@ export function AuthContextProvider({ children }) {
   }
   const [auth, setAuth] = useState(defaultAuth)
 
+  // 當第一次第三方登入時使用
+  const [firstLogin, setFirstLogin] = useState({
+    email: '',
+    mobile: '',
+    nickname: '',
+    loginType: '',
+    name: '',
+    gender: '',
+    birthday: '',
+    profile: '',
+    e_interest: [],
+    c_interest: [],
+  })
+
   useEffect(() => {
     const str = localStorage.getItem(storageKey)
     try {
@@ -35,10 +49,15 @@ export function AuthContextProvider({ children }) {
     if (result.success && result.code == 200) {
       const { user_id, user_email, nickname, avatar, token } = result
 
-      setAuth({ user_id, user_email, nickname, avatar })
+      setAuth({ user_id, user_email, nickname, avatar, token })
     } else {
       console.log(result)
+      setFirstLogin(result.data)
     }
+  }
+  // 接受第一次註冊表單內容
+  const registerDataHandler = (obj) => {
+    setFirstLogin(obj)
   }
   // 登入是異步的 , 當狀態被改變時再添加到 localstorage 中
   useEffect(() => {
@@ -68,7 +87,9 @@ export function AuthContextProvider({ children }) {
   }
   return (
     <>
-      <AuthContext.Provider value={{ firebaseLogin, auth, logOut }}>
+      <AuthContext.Provider
+        value={{ firebaseLogin, auth, logOut, firstLogin, registerDataHandler }}
+      >
         {children}
       </AuthContext.Provider>
     </>
