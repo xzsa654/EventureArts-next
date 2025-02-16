@@ -4,6 +4,9 @@ import React, { useState, useEffect } from 'react'
 import firebaseConfig from '@/config/firebase-config'
 import { initializeApp } from 'firebase/app'
 import { useAuth } from '@/hooks/use-auth'
+import { Button } from '@heroui/button'
+import { FacebookLogo, GoogleLogo } from '@/public/Yao/icons'
+
 import {
   getAuth,
   signInWithPopup,
@@ -14,7 +17,7 @@ const app = initializeApp(firebaseConfig)
 const auth = getAuth(app)
 auth.languageCode = 'cn'
 
-export default function FirebaseAuthPage(props) {
+export default function FirebaseAuthPage() {
   const { firebaseLogin } = useAuth()
   const [isAuth, setIsAuth] = useState(false)
   const firebaseAuth = (e) => {
@@ -47,17 +50,27 @@ export default function FirebaseAuthPage(props) {
         }
       })
     }
-  }, [isAuth, firebaseLogin])
+  }, [isAuth])
 
   return (
     <>
-      <button name="google" onClick={firebaseAuth}>
-        GOOGLE
-      </button>
-      <hr />
-      <button name="facebook" onClick={firebaseAuth}>
-        FACEBOOK
-      </button>
+      <Button
+        name="google"
+        radius="none"
+        onPress={firebaseAuth}
+        className="bg-white w-full h-[54px] text-xs p-[15px] item-center justify-start"
+        startContent=<GoogleLogo />
+      >
+        使用Google帳號登入
+      </Button>
+      <Button
+        radius="none"
+        className="text-white h-[54px] w-full bg-[#1877F2] text-xs p-[15px] item-center justify-start"
+        startContent=<FacebookLogo />
+        onPress={firebaseAuth}
+      >
+        使用Facebook帳號登入
+      </Button>
     </>
   )
 }

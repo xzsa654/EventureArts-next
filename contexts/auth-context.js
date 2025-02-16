@@ -15,10 +15,12 @@ export function AuthContextProvider({ children }) {
     token: '',
   }
   const [auth, setAuth] = useState(defaultAuth)
+
   useEffect(() => {
     const str = localStorage.getItem(storageKey)
     try {
       const data = JSON.parse(str)
+
       setAuth(data)
     } catch (error) {
       console.log(error)
@@ -30,11 +32,18 @@ export function AuthContextProvider({ children }) {
       headers: { Authorization: 'Bearers ' + token },
     })
     const result = await res.json()
-    if (result.success) {
-      setAuth({ ...result })
-      localStorage.setItem(storageKey, JSON.stringify(auth))
+    if (result.success && result.code == 200) {
+      const { user_id, user_email, nickname, avatar, token } = result
+
+      setAuth({ user_id, user_email, nickname, avatar })
+    } else {
+      console.log(result)
     }
   }
+  // 登入是異步的 , 當狀態被改變時再添加到 localstorage 中
+  useEffect(() => {
+    localStorage.setItem(storageKey, JSON.stringify(auth))
+  }, [auth])
 
   // 登入
   const login = (obj) => {
@@ -59,7 +68,7 @@ export function AuthContextProvider({ children }) {
   }
   return (
     <>
-      <AuthContext.Provider value={{ firebaseLogin }}>
+      <AuthContext.Provider value={{ firebaseLogin, auth, logOut }}>
         {children}
       </AuthContext.Provider>
     </>

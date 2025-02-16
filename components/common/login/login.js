@@ -7,7 +7,7 @@ import { Button } from '@heroui/button'
 import ModalLayout from './layout'
 import { useModal } from '@/contexts/modal-context'
 import { ArrowRight, FacebookLogo, GoogleLogo } from '@/public/Yao/icons'
-
+import FirebaseAuthPage from '@/app/user/_components/firebase-auth'
 export default function LoginModal() {
   const tips = '登入'
   const title = 'EVENTUREARTS'
@@ -65,20 +65,8 @@ export default function LoginModal() {
         <div className="font-cn">或者</div>
         <div className="h-[1px] flex-grow bg-zinc" />
       </div>
-      <Button
-        radius="none"
-        className="bg-white w-full h-[54px] text-xs p-[15px] item-center justify-start"
-        startContent=<GoogleLogo />
-      >
-        使用Google帳號登入
-      </Button>
-      <Button
-        radius="none"
-        className="text-white h-[54px] w-full bg-[#1877F2] text-xs p-[15px] item-center justify-start"
-        startContent=<FacebookLogo />
-      >
-        使用Facebook帳號登入
-      </Button>
+      {/* 第三方登入 */}
+      <FirebaseAuthPage />
     </form>
   )
   const footer = (

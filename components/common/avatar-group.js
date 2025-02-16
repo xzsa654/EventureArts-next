@@ -9,12 +9,14 @@ import {
   Image,
 } from '@heroui/react'
 import { CiUser, CiLogout, CiShoppingCart, CiStar } from 'react-icons/ci'
-
+import { useAuth } from '@/hooks/use-auth'
 export default function AVatarGroup() {
+  const { auth, logOut } = useAuth()
+
   return (
     <div>
       <Dropdown
-        placement="bottom-start"
+        offset={17}
         classNames={{
           NavbarItem: 'text-16',
         }}
@@ -24,13 +26,13 @@ export default function AVatarGroup() {
             as="button"
             avatarProps={{
               isBordered: true,
-              src: 'https://i.pravatar.cc/150?u=a042581f4e29026024d',
+              src: `http://localhost:3001/uploads/avatar/${auth.avatar}`,
             }}
             className="transition-transform"
           />
         </DropdownTrigger>
         <DropdownMenu aria-label="User Actions" variant="flat">
-          <DropdownSection title={'nickname'} showDivider>
+          <DropdownSection title={auth.nickname} showDivider>
             <DropdownItem
               key="profile"
               href="/"
@@ -54,24 +56,31 @@ export default function AVatarGroup() {
               收藏清單
             </DropdownItem>
           </DropdownSection>
-          <DropdownSection showDivider title="我的品牌">
-            <DropdownItem
-              key="brand"
-              href="/"
-              startContent=<Image
-                src="/Yao/user/brand.svg"
-                width={23}
-                alt="brand_svg"
-                className="mr-3"
-              ></Image>
-            >
-              Brand
-            </DropdownItem>
-          </DropdownSection>
+          {/* 品牌方會員才會顯示 */}
+          {auth.role == 'brand' ? (
+            <DropdownSection showDivider title="我的品牌">
+              <DropdownItem
+                key="brand"
+                href="/"
+                startContent=<Image
+                  src="/Yao/user/brand.svg"
+                  width={23}
+                  alt="brand_svg"
+                  className="mr-3"
+                ></Image>
+              >
+                Brand
+              </DropdownItem>
+            </DropdownSection>
+          ) : (
+            ''
+          )}
+
           <DropdownItem
             key="logout"
             size={'small'}
-            color="danger"
+            onPress={logOut}
+            color="warning"
             startContent=<CiLogout size={20} />
           >
             登出

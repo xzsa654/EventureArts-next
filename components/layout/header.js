@@ -1,11 +1,10 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { UserIcon } from '@/public/Yao/header'
 import { HiMenuAlt4, HiOutlineX, HiUser } from 'react-icons/hi'
-
 import { Navbar, NavbarBrand, NavbarContent, NavbarItem } from '@heroui/navbar'
-import { Link, Image } from '@heroui/react'
+import { Link, Image, AvatarGroup } from '@heroui/react'
+import AVatarGroup from '../common/avatar-group'
 import { usePathname } from 'next/navigation'
 import { useModal } from '@/contexts/modal-context'
 import LoginModal from '@/components/common/login/login'
@@ -15,9 +14,10 @@ import RegisterStep3 from '@/components/common/login/register3'
 import RegisterStep4 from '@/components/common/login/register4'
 import ResetPassword from '@/components/common/login/reset'
 import { motion, AnimatePresence } from 'framer-motion'
-
+import { useAuth } from '@/hooks/use-auth'
 export default function Header(props) {
   const [isOpen, setIsOpen] = useState(false)
+  const { auth } = useAuth()
 
   const menuVariants = {
     initial: {
@@ -133,7 +133,7 @@ export default function Header(props) {
               'data-[active=true]:after:bg-primary',
             ],
           }}
-          className={` overflow-hidden fixed w-full h-[80] flex justify-between max-lg:px-0 px-16 py-4 bg-white/30   `}
+          className={` overflow-hidden fixed w-full h-[80] flex justify-between  max-lg:px-0 px-16 py-4 bg-white/30   `}
           height="5rem"
           maxWidth="full"
         >
@@ -207,9 +207,17 @@ export default function Header(props) {
           )}
 
           <NavbarContent justify="end">
-            <NavbarItem className={` ${isOpen ? 'flex' : 'hidden'} lg:flex`}>
+            <NavbarItem
+              className={` ${
+                isOpen ? 'flex' : 'hidden'
+              } lg:flex  justify-center text-small `}
+            >
               <Link href="#" onPress={onOpen}>
-                {isOpen ? (
+                {/* 已登入的 component */}
+                {auth.user_id !== 0 ? (
+                  <AVatarGroup />
+                ) : isOpen ? (
+                  // 未登入狀態下的 icon
                   <HiUser size={35} color="white" />
                 ) : (
                   <HiUser size={35} />
