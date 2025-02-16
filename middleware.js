@@ -4,7 +4,7 @@ import { NextResponse } from "next/server"
 // In a real application, this would likely be an API call or database query
 function checkIfExhibitionExists(e_id) {
   // For demonstration, let's assume exhibitions with e_id 1 to 10 exist
-  return Number.parseInt(e_id) >= 1 && Number.parseInt(e_id) <= 10
+  return Number.parseInt(e_id) >= 1 && Number.parseInt(e_id) <= 300
 }
 
 export function middleware(request) {

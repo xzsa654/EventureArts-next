@@ -120,14 +120,14 @@ export default function ExhibitionDetail() {
               <div className="flex gap-4 pt-6">
                 <a
                   href="#"
-                  className="flex-1 py-3 px-4 flex items-center justify-center text-gray-900 hover:underline border border-gray-900 rounded-md"
+                  className="text-xl font-bold flex-1 py-3 px-4 flex items-center justify-center text-black hover:underline"
                 >
                   <IoMdHeartEmpty size={20} className="mr-2" />
                   add like
                 </a>
                 <a
                   href="#"
-                  className="flex-1 py-3 px-4 flex items-center justify-center text-gray-900 hover:underline border border-gray-900 rounded-md"
+                  className="text-xl font-bold flex-1 py-3 px-4 flex items-center justify-center text-black hover:underline"
                 >
                   buy ticket
                   <span className="ml-2">→</span>

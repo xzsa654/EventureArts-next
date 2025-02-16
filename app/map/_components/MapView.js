@@ -115,7 +115,7 @@ export default function MapView() {
             </LayerGroup>
           </LayersControl.Overlay>
 
-          <LayersControl.Overlay name="Taipei Districts">
+          <LayersControl.Overlay checked name="Taipei Dist.">
             <LayerGroup>
               {taipeiDistricts && (
                 <GeoJSON key="districts" data={taipeiDistricts} style={districtStyle} onEachFeature={onEachDistrict} />

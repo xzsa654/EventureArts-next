@@ -129,7 +129,7 @@
 
 /* ExhibitionSection.js CSS  */
 .carousel-column {
-  animation: scrollUp 40s linear infinite;
+  animation: scrollUp 130s linear infinite;
   will-change: transform;
 }
 
