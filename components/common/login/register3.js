@@ -1,13 +1,27 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import ModalLayout from './layout'
-import { Button } from '@heroui/react'
+import { Button, Image } from '@heroui/react'
 import { ArrowRight, AvatarIcon } from '@/public/Yao/icons'
 import { useModal } from '@/contexts/modal-context'
 import RegisterSection from './section'
 export default function RegisterStep3(props) {
+  const fileRef = useRef()
+  const [avatar, setAvatar] = useState('')
+  const fileHandle = (e) => {
+    const file = fileRef.current.files[0]
+    console.log(file)
+
+    if (file) {
+      const reader = new FileReader(file)
+      reader.onload = () => {
+        setAvatar(reader.result)
+      }
+      reader.readAsDataURL(file)
+    }
+  }
   const { register3, register4 } = useModal()
   const { onOpen } = register4
   const { isOpen, onOpenChange } = register3
@@ -22,15 +36,41 @@ export default function RegisterStep3(props) {
     </p>
   )
   const formBody = (
-    <Button
-      isIconOnly
-      radius="none"
-      className="w-[250] h-[250] bg-gray-800 flex flex-col items-center justify-center "
-    >
-      <AvatarIcon />
-      <span className="text-white text-xl">點我</span>
-      <input type="file" className="hidden" />
-    </Button>
+    <>
+      {avatar ? (
+        <button
+          onClick={() => {
+            fileRef.current.click()
+          }}
+        >
+          <Image
+            src={avatar}
+            alt="avatar"
+            radius="none"
+            className="w-full aspect-square "
+          ></Image>
+        </button>
+      ) : (
+        <Button
+          isIconOnly
+          radius="none"
+          onPress={() => {
+            fileRef.current.click()
+          }}
+          className="w-[250] h-[250] bg-gray-800 flex flex-col items-center justify-center "
+        >
+          <AvatarIcon />
+          <span className="text-white text-xl">點我</span>
+        </Button>
+      )}
+
+      <input
+        type="file"
+        ref={fileRef}
+        onChange={fileHandle}
+        className="hidden"
+      />
+    </>
   )
   const footer = (
     <div className="w-full justify-between text-white flex gap-1">

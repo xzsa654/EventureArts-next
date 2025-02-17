@@ -17,6 +17,7 @@ export default function ModalLayout({
   prompt = '',
   isOpen,
   onOpenChange,
+  size,
 }) {
   const { auth } = useAuth()
   return (
@@ -25,8 +26,11 @@ export default function ModalLayout({
         // 禁止向外點擊關閉
         isDismissable={false}
         placement="center"
+        size="4xl"
         isKeyboardDismissDisabled={true}
-        className="w-[400]  bg-[FFF2F2] backdrop-blur-[10px]   border border-2  rounded-sm "
+        className={`${
+          size ? '' : 'w-[400]'
+        }  bg-[FFF2F2] backdrop-blur-[10px]   border border-2  rounded-sm `}
         motionProps={{
           variants: {
             enter: {
