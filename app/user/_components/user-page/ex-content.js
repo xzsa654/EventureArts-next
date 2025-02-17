@@ -51,7 +51,7 @@ export default function ExMangContent(props) {
       <table className="w-full h-5/6">
         <thead className="max-sm:hidden">
           <tr className="w-full ">
-            <th className="text-start  text-16 font-cn  border-b-3 border-black p-[10px] font-regular">
+            <th className="text-start hidden  text-16 font-cn  border-b-3 border-black p-[10px] font-regular">
               展覽ID
             </th>
             <th className="text-start  text-16 font-cn  border-b-3 border-black p-[10px] font-regular">
@@ -61,10 +61,10 @@ export default function ExMangContent(props) {
               展覽日期
             </th>
             <th className="text-start  text-16 font-cn  border-b-3 border-black p-[10px] font-regular">
-              展覽地點
+              價格
             </th>
             <th className="text-start  text-16 font-cn  border-b-3 border-black p-[10px] font-regular">
-              價格
+              展覽地點
             </th>
             <th className="text-start  text-16 font-cn  border-b-3 border-black p-[10px] font-regular">
               編輯

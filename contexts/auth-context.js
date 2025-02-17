@@ -3,6 +3,7 @@ import { createContext } from 'react'
 const AuthContext = createContext()
 import { FIREBASE_LOGIN } from '@/lib/authorization-api'
 import React, { useState, useEffect } from 'react'
+import next from 'next'
 
 export function AuthContextProvider({ children }) {
   const storageKey = 'EventureArts-auth'
@@ -45,19 +46,22 @@ export function AuthContextProvider({ children }) {
     const res = await fetch(FIREBASE_LOGIN, {
       headers: { Authorization: 'Bearers ' + token },
     })
+
     const result = await res.json()
+    console.log(result)
     if (result.success && result.code == 200) {
       const { user_id, user_email, nickname, avatar, token } = result
 
       setAuth({ user_id, user_email, nickname, avatar, token })
     } else {
-      console.log(result)
+      // console.log(result)
       setFirstLogin(result.data)
     }
   }
   // 接受第一次註冊表單內容
   const registerDataHandler = (obj) => {
-    setFirstLogin(obj)
+    const nextData = { ...firstLogin, ...obj }
+    setFirstLogin(nextData)
   }
   // 登入是異步的 , 當狀態被改變時再添加到 localstorage 中
   useEffect(() => {

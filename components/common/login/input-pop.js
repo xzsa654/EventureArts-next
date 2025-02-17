@@ -31,6 +31,8 @@ export default function InputPop({
   type = '',
   name = '',
   popContent = '',
+  value = '',
+  isRequired = false,
   popTitle = '',
   validateItem = () => {},
   realTimeValid = false,
@@ -39,6 +41,7 @@ export default function InputPop({
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
   const errors = []
   const [password, setPassword] = React.useState('')
+
   if (realTimeValid) {
     if (password.length < 8) {
       errors.push('密碼至少需要八位元')
@@ -59,9 +62,10 @@ export default function InputPop({
           <Input
             isInvalid={errors.length > 0}
             label={label}
+            isRequired
             type={type}
             name={name}
-            value={password}
+            value={value}
             onValueChange={setPassword}
             onChange={onChange}
             onClick={onOpen}
@@ -75,7 +79,7 @@ export default function InputPop({
             variant="underlined"
             classNames={{
               label:
-                'text-white group-data-[focus=true]:text-white group-data-[filled-within=true]:text-white',
+                'text-white group-data-[focus=true]:text-white after:text-red-500 group-data-[filled-within=true]:text-white',
               input:
                 'group-data-[focus=true]:text-white group-data-[has-value=true]:text-white ',
               errorMessage: 'text-red-500',
@@ -87,14 +91,15 @@ export default function InputPop({
             type={type}
             validate={(value) => validateItem(value)}
             name={name}
-            value={password}
+            value={value}
             onValueChange={setPassword}
             onChange={onChange}
             onClick={onOpen}
+            isRequired={isRequired}
             variant="underlined"
             classNames={{
               label:
-                'text-white group-data-[focus=true]:text-white group-data-[filled-within=true]:text-white',
+                'text-white group-data-[focus=true]:text-white after:text-red-500 group-data-[filled-within=true]:text-white',
               input:
                 'group-data-[focus=true]:text-white group-data-[has-value=true]:text-white ',
               errorMessage: 'text-red-500',
