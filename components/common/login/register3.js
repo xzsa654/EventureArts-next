@@ -11,13 +11,15 @@ export default function RegisterStep3(props) {
   const fileRef = useRef()
   const [avatar, setAvatar] = useState('')
   const fileHandle = (e) => {
+    // 取得 file 檔案
     const file = fileRef.current.files[0]
-    console.log(file)
-
     if (file) {
+      // 如果確認有檔案 , 建立新的 fileReader 物件
       const reader = new FileReader(file)
       reader.onload = () => {
+        // 讀取到 url 後寫入狀態內
         setAvatar(reader.result)
+        // TODO: 缺少了傳入firstLogin的狀態
       }
       reader.readAsDataURL(file)
     }
