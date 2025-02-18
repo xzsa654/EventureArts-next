@@ -78,7 +78,7 @@ export default function FilterPanel({
     '中正紀念堂站',
   ]
   const priceRanges = ['Free', '$ 0-100', '$ 100-500', 'No price filter']
-  const [value, setValue] = useState(null);
+  // const [value, setValue] = useState(null);
 
   return (
     <div className="filter-panel">
@@ -180,6 +180,7 @@ export default function FilterPanel({
           radius="full"
           value={filters.date}
           onChange={(date) => handleFilterChange("date", date)}
+          inputWrapper="border-1.5 border-black bg-transparent"
           aria-label="Select date"
         />
       </div>

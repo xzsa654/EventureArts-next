@@ -40,7 +40,6 @@ export default function ExhibitionSection({ onExhibitionSelect, exhibitions = []
           </div>
           <div className="space-y-1">
             <h3 className="font-serif text-lg">{exhibition.e_name}</h3>
-            
           </div>
         </div>
       ))}
@@ -62,7 +61,6 @@ export default function ExhibitionSection({ onExhibitionSelect, exhibitions = []
           </div>
           <div className="space-y-1">
             <h3 className="font-serif text-lg">{exhibition.e_name}</h3>
-            
           </div>
         </div>
       ))}
@@ -78,27 +76,27 @@ export default function ExhibitionSection({ onExhibitionSelect, exhibitions = []
 
       {/* this is Left text + carousel area  */}
       <section className="relative min-h-screen">
-        <div className="flex justify-between px-5 w-full">
+        <div className="flex flex-col md:flex-row justify-between px-5 w-full">
           {/* Left side title - rotated 90 degrees */}
-          <div className="w-1/4 flex items-center h-screen">
-            <h1 className="left-text text-2xl font-serif transform -rotate-90 origin-left whitespace-nowrap ml-8">
+          <div className="w-full md:w-1/4 flex items-center justify-center md:justify-start h-20 md:h-screen">
+            <h1 className="left-text text-2xl font-serif md:transform md:-rotate-90 md:origin-left whitespace-nowrap md:ml-8">
               Current Exhibition
             </h1>
           </div>
 
           {/* Right side vertical carousels */}
           <div
-            className="w-[70%] grid grid-cols-3 gap-1 overflow-hidden relative pr-0 ml-auto justify-items-end"
+            className="w-full md:w-[70%] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1 overflow-hidden relative pr-0 ml-auto justify-items-center md:justify-items-end"
             style={{ height: "700px" }}
           >
             {/* Vertical lines */}
-            <div className="vertical-line left-1/3"></div>
-            <div className="vertical-line left-2/3"></div>
+            <div className="vertical-line hidden md:block md:left-1/2 lg:left-1/3"></div>
+            <div className="vertical-line hidden lg:block lg:left-2/3"></div>
 
             {/* Each column has different animation delay for varied movement */}
-            <div className="overflow-hidden">{renderColumn(columns[0], "0s", 0)}</div>
-            <div className="overflow-hidden">{renderColumn(columns[1], "-3s", 1)}</div>
-            <div className="overflow-hidden">{renderColumn(columns[2], "-6s", 2)}</div>
+            <div className="overflow-hidden w-full">{renderColumn(columns[0], "0s", 0)}</div>
+            <div className="overflow-hidden w-full hidden md:block">{renderColumn(columns[1], "-3s", 1)}</div>
+            <div className="overflow-hidden w-full hidden lg:block">{renderColumn(columns[2], "-6s", 2)}</div>
           </div>
         </div>
       </section>
