@@ -21,8 +21,6 @@ export default function RegisterStep3(props) {
       const reader = new FileReader(file)
       reader.onload = () => {
         // 讀取到 url 後寫入狀態內
-        console.log(reader.result)
-
         setAvatar(reader.result)
         registerDataHandler({ avatar: reader.result })
         // TODO: 缺少了傳入firstLogin的狀態

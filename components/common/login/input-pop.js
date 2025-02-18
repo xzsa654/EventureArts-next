@@ -31,7 +31,7 @@ export default function InputPop({
   type = '',
   name = '',
   popContent = '',
-  value = '',
+
   isRequired = false,
   popTitle = '',
   validateItem = () => {},
@@ -65,7 +65,6 @@ export default function InputPop({
             isRequired
             type={type}
             name={name}
-            value={value}
             onValueChange={setPassword}
             onChange={onChange}
             onClick={onOpen}
@@ -91,7 +90,6 @@ export default function InputPop({
             type={type}
             validate={(value) => validateItem(value)}
             name={name}
-            value={value}
             onValueChange={setPassword}
             onChange={onChange}
             onClick={onOpen}

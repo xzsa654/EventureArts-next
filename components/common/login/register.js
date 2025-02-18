@@ -9,19 +9,29 @@ import { ArrowRight } from '@/public/Yao/icons'
 import { useModal } from '@/contexts/modal-context'
 import RegisterSection from './section'
 import { useAuth } from '@/hooks/use-auth'
+import { EMAIL_CHECKING } from '@/lib/authorization-api'
 
 export default function RegisterStep1() {
   const { firstLogin, registerDataHandler } = useAuth()
   const { register1, register2: next } = useModal()
   const { onOpen } = next
+  const [errorMessage, setErrorMessage] = useState(false)
   const { isOpen, onOpenChange } = register1
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault()
-    const data = new FormData(e.currentTarget)
+    const data = new FormData(e.target)
     const user_email = data.get('user_email')
     const password = data.get('password')
     const user_name = data.get('user_name')
     const mobile = data.get('mobile')
+    // 先驗證 email 是否已存在
+
+    const res = await fetch(EMAIL_CHECKING, { method: 'POST', body: data })
+    const result = await res.json()
+    if (!result.success) {
+      return setErrorMessage(!result.success)
+    }
+
     registerDataHandler({ user_email, password, user_name, mobile })
     onOpenChange(false)
     onOpen()
@@ -53,17 +63,25 @@ export default function RegisterStep1() {
           isRequired
           name="user_email"
           label="email"
-          value="djoais@jfjais"
           type="email"
+          validateItem={(value) => {
+            const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+            if (!regex.test(value)) {
+              return '請輸入有效的 Email 格式'
+            }
+          }}
           popContent="請輸入有效的電子郵件地址（例：example@email.com）"
-          className="w-full"
+          className={`w-full ${
+            errorMessage
+              ? 'after:text-red-500 after:content-["EMAIL已被註冊"]'
+              : ''
+          } `}
           popTitle="Email"
         />
         <InputPop
           isRequired
           name="password"
           label="密碼"
-          value="djijaDSJIOdsiojd"
           type="password"
           realTimeValid={true}
           className="w-full"
@@ -74,7 +92,6 @@ export default function RegisterStep1() {
       <InputPop
         isRequired
         name="user_name"
-        value="王大哥"
         label="真實姓名"
         validateItem={(value) => {
           const regex = /^[\u4e00-\u9fa5]{2,}$/
@@ -90,9 +107,8 @@ export default function RegisterStep1() {
       <InputPop
         isRequired
         name="mobile"
-        value="0944845154"
         label="手機"
-        type="password"
+        type="text"
         popContent="請輸入10位數的台灣手機號碼（09開頭）"
         className="w-full"
         popTitle="手機格式"

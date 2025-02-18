@@ -49,8 +49,7 @@ export default function RegisterStep2(props) {
         label="暱稱"
         isPop={false}
         name="nickname"
-        value="132"
-        type="password"
+        type="text"
         className="w-full"
       ></InputPop>
 
@@ -68,8 +67,8 @@ export default function RegisterStep2(props) {
         className="max-w-xs"
         label="性別"
         placeholder="請選擇性別"
-        value="132"
         name="gender"
+        defaultSelectedKeys={['not provided']}
         variant={'underlined'}
         classNames={{
           base: 'max-w-xs',
@@ -85,7 +84,6 @@ export default function RegisterStep2(props) {
       </Select>
       <Textarea
         radius="none"
-        value="132"
         name="profile"
         variant="bordered"
         className="max-w-xs focus:text-white  group-data-[focus=true]:text-white"

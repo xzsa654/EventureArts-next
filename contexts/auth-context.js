@@ -50,7 +50,6 @@ export function AuthContextProvider({ children }) {
     const e_interest = Array.from(e_liked)
     const c_interest = Array.from(c_liked)
     const data = { ...firstLogin, e_interest, c_interest }
-    console.log(data)
 
     const res = await fetch(REGISTER, {
       method: 'POST',
@@ -60,7 +59,9 @@ export function AuthContextProvider({ children }) {
       },
     })
     const result = await res.json()
-    console.log(result)
+    if (result.success) {
+      setAuth(result.data)
+    }
   }
 
   // firebase 登入
