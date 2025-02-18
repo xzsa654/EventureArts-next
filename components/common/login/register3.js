@@ -7,8 +7,11 @@ import { Button, Image } from '@heroui/react'
 import { ArrowRight, AvatarIcon } from '@/public/Yao/icons'
 import { useModal } from '@/contexts/modal-context'
 import RegisterSection from './section'
+import { useAuth } from '@/hooks/use-auth'
 export default function RegisterStep3(props) {
   const fileRef = useRef()
+  const { registerDataHandler } = useAuth()
+
   const [avatar, setAvatar] = useState('')
   const fileHandle = (e) => {
     // 取得 file 檔案
@@ -18,7 +21,10 @@ export default function RegisterStep3(props) {
       const reader = new FileReader(file)
       reader.onload = () => {
         // 讀取到 url 後寫入狀態內
+        console.log(reader.result)
+
         setAvatar(reader.result)
+        registerDataHandler({ avatar: reader.result })
         // TODO: 缺少了傳入firstLogin的狀態
       }
       reader.readAsDataURL(file)

@@ -18,11 +18,11 @@ export default function RegisterStep1() {
   const onSubmit = (e) => {
     e.preventDefault()
     const data = new FormData(e.currentTarget)
-    const email = data.get('email')
+    const user_email = data.get('user_email')
     const password = data.get('password')
-    const name = data.get('name')
+    const user_name = data.get('user_name')
     const mobile = data.get('mobile')
-    registerDataHandler({ email, password, name, mobile })
+    registerDataHandler({ user_email, password, user_name, mobile })
     onOpenChange(false)
     onOpen()
   }
@@ -51,7 +51,7 @@ export default function RegisterStep1() {
       <>
         <InputPop
           isRequired
-          name="email"
+          name="user_email"
           label="email"
           value="djoais@jfjais"
           type="email"
@@ -73,7 +73,7 @@ export default function RegisterStep1() {
 
       <InputPop
         isRequired
-        name="name"
+        name="user_name"
         value="王大哥"
         label="真實姓名"
         validateItem={(value) => {

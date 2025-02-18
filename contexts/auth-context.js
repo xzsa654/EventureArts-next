@@ -1,7 +1,7 @@
 'use client'
 import { createContext } from 'react'
 const AuthContext = createContext()
-import { FIREBASE_LOGIN } from '@/lib/authorization-api'
+import { FIREBASE_LOGIN, REGISTER } from '@/lib/authorization-api'
 import React, { useState, useEffect } from 'react'
 import next from 'next'
 
@@ -19,11 +19,11 @@ export function AuthContextProvider({ children }) {
 
   // 當第一次第三方登入時使用
   const [firstLogin, setFirstLogin] = useState({
-    email: '',
+    user_email: '',
     mobile: '',
     nickname: '',
     loginType: '',
-    name: '',
+    user_name: '',
     gender: '',
     birthday: '',
     profile: '',
@@ -41,6 +41,28 @@ export function AuthContextProvider({ children }) {
       console.log(error)
     }
   }, [])
+  //註冊 TODO:
+  // 1. 取出所有表單內會員資料
+  // 2. 送入後端
+  // 3. 直接登入寫入 localstorage 和 auth 狀態
+  const register = async (c_liked, e_liked) => {
+    // 將 set 物件轉型為 Array
+    const e_interest = Array.from(e_liked)
+    const c_interest = Array.from(c_liked)
+    const data = { ...firstLogin, e_interest, c_interest }
+    console.log(data)
+
+    const res = await fetch(REGISTER, {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    const result = await res.json()
+    console.log(result)
+  }
+
   // firebase 登入
   const firebaseLogin = async (token) => {
     const res = await fetch(FIREBASE_LOGIN, {
@@ -92,7 +114,14 @@ export function AuthContextProvider({ children }) {
   return (
     <>
       <AuthContext.Provider
-        value={{ firebaseLogin, auth, logOut, firstLogin, registerDataHandler }}
+        value={{
+          firebaseLogin,
+          auth,
+          logOut,
+          firstLogin,
+          registerDataHandler,
+          register,
+        }}
       >
         {children}
       </AuthContext.Provider>

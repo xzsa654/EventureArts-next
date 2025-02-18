@@ -6,15 +6,31 @@ import { Select, Chip, SelectItem } from '@heroui/react'
 import { ArrowRight, CheckIcon } from '@/public/Yao/icons'
 import { useModal } from '@/contexts/modal-context'
 import RegisterSection from './section'
-const testData = [
-  { test: 'draw', id: 1 },
-  { test: 'painting', id: 2 },
-  { test: 'swim', id: 3 },
-]
+import { useAuth } from '@/hooks/use-auth'
+import { ALLOPTIONS } from '@/lib/authorization-api'
 
 export default function RegisterStep4(props) {
+  const { register } = useAuth()
+  // 控制選項的狀態
+  const [options, setOptions] = useState([])
+  // 選中的狀態
+  const [c_interest, setCInterest] = useState([])
+  const [e_interest, setEInterest] = useState([])
+  const [shouldSend, setShouldSend] = useState(false)
+  // 1. 取得options
+  useEffect(() => {
+    fetch(ALLOPTIONS)
+      .then((r) => r.json())
+      .then((result) => {
+        setOptions(result)
+      })
+  }, [])
+  useEffect(() => {
+    if (shouldSend) register(c_interest, e_interest)
+  }, [shouldSend])
   const { register4 } = useModal()
   const { isOpen, onOpenChange } = register4
+
   const tips = '註冊帳號(4/4)'
 
   const title = '興趣列表'
@@ -33,13 +49,14 @@ export default function RegisterStep4(props) {
           value: 'text-white text-tiny',
           selectorIcon: 'text-white text-tiny',
         }}
-        items={testData}
+        items={options[1]?.course}
         isMultiline={true}
         label="課程類型"
         labelPlacement="outside"
         placeholder="請挑選感興趣的課程分類"
         selectionMode="multiple"
         variant="bordered"
+        onSelectionChange={setCInterest}
         renderValue={(items) => {
           return (
             <div className="flex flex-wrap gap-2">
@@ -47,19 +64,19 @@ export default function RegisterStep4(props) {
                 <Chip
                   color="primary"
                   radius="large"
-                  key={item.key}
+                  key={item?.data.c_optionID}
                   startContent=<CheckIcon />
                 >
-                  {item.data.test}
+                  {item?.data.c_optionName}
                 </Chip>
               ))}
             </div>
           )
         }}
       >
-        {(testData) => (
-          <SelectItem key={testData.id} textValue={testData.test}>
-            <span className="text-small">{testData.test}</span>
+        {(course) => (
+          <SelectItem key={course.c_optionID} textValue={course.c_optionID}>
+            <span className="text-small">{course.c_optionName}</span>
           </SelectItem>
         )}
       </Select>
@@ -71,12 +88,12 @@ export default function RegisterStep4(props) {
           value: 'text-white',
           selectorIcon: 'text-white',
         }}
-        items={testData}
+        items={options[0]?.exhibition}
         isMultiline={true}
         label="展覽類型"
         labelPlacement="outside"
         defaultSelectedKeys={''}
-        selectedKeys={''}
+        onSelectionChange={setEInterest}
         placeholder="請挑選感興趣的展覽分類"
         selectionMode="multiple"
         variant="bordered"
@@ -87,19 +104,24 @@ export default function RegisterStep4(props) {
                 <Chip
                   color="primary"
                   radius="large"
-                  key={item.key}
+                  key={item?.data.e_optionID}
                   startContent=<CheckIcon />
                 >
-                  {item.data.test}
+                  {item?.data.e_optionName.split('(')[0]}
                 </Chip>
               ))}
             </div>
           )
         }}
       >
-        {(testData) => (
-          <SelectItem key={testData.id} textValue={testData.test}>
-            <span className="text-small">{testData.test}</span>
+        {(exhibition) => (
+          <SelectItem
+            key={exhibition?.e_optionID}
+            textValue={exhibition?.e_optionName}
+          >
+            <span className="text-small">
+              {exhibition?.e_optionName.split('(')[0]}
+            </span>
           </SelectItem>
         )}
       </Select>
@@ -107,7 +129,14 @@ export default function RegisterStep4(props) {
   )
   const footer = (
     <div className="w-full justify-end text-white flex gap-1">
-      <Link href={'#'} className=" flex justify-center items-center ">
+      <Link
+        onClick={() => {
+          onOpenChange(false)
+          setShouldSend(true)
+        }}
+        href={'#'}
+        className=" flex justify-center items-center "
+      >
         完成註冊
         <div className="">
           <ArrowRight />
