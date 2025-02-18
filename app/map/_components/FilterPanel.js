@@ -149,35 +149,19 @@ export default function FilterPanel({ onLineSelect = () => {}, onDistrictSelect 
         </div>
       </div>
 
-      <div className="filter-section">
+      <div className="filter-section ">
         <p>Date</p>
-        <DatePicker
+        <div className="border-1.5 border-black rounded-full">
+          <DatePicker
           placeholder="YY/MM/DD"
-          variant="bordered"
+          variant="underlined"
           radius="full"
           value={filters.date}
           onChange={(date) => handleFilterChange("date", date)}
-          classNames={{
-            base: "w-full",
-            input: "border-1.5 border-black",
-            inputWrapper: "border-none shadow-none hover:border-black focus:border-black",
-            popover: "border border-black",
-            calendar: "border-black",
-          }}
-          styles={{
-            input: {
-              borderColor: "black",
-              "&:hover": {
-                borderColor: "black",
-              },
-              "&:focus": {
-                borderColor: "black",
-                boxShadow: "none",
-              },
-            },
-          }}
           aria-label="Select date"
         />
+        </div>
+        
       </div>
 
       <div className="filter-section">
