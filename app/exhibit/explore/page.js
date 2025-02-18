@@ -18,7 +18,7 @@ export default function ExploreExhibitions() {
   const [showAdvancedSearch, setShowAdvancedSearch] = useState(false)
 
   // 使用 SWR 獲取展覽資料，並從 MySQL 獲取資料
-  const { data: exhibitions, error } = useSWR(`${API_BASE_URL}/exhibit/exhibitions?page=${currentPage}`, fetcher)
+  const { data: exhibitions, error } = useSWR(`${API_BASE_URL}/exhibit/?page=${currentPage}`, fetcher)
 
   if (error) return <div>Error loading exhibitions</div>
   if (!exhibitions) return <div>Loading...</div>

@@ -16,7 +16,7 @@ export default function ExhibitionDetail({ params }) {
   const { e_id } = params
 
   // Use SWR to fetch exhibition data
-  const { data , error } = useSWR(`${API_BASE_URL}/exhibit/exhibition/${e_id}`, fetcher)
+  const { data , error } = useSWR(`${API_BASE_URL}/exhibit/api/${e_id}`, fetcher)
   const exhibitionData = data?.data;
   // exhibitionData?.data[0];
   console.log(error);

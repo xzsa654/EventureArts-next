@@ -38,7 +38,7 @@ export default function ExhibitPage() {
   }, [isAnimating])
 
   // 使用 useSWR 獲取展覽資料，從後端拉取數據
-  const { data: exhibitions, error } = useSWR(`${API_BASE_URL}/exhibit/exhibitions`, fetcher)
+  const { data: exhibitions, error } = useSWR(`${API_BASE_URL}/exhibit/`, fetcher)
 
   if (error) return <div>Error loading exhibitions</div>
   if (!exhibitions) return <div>Loading...</div>
