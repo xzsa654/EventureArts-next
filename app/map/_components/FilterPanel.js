@@ -1,65 +1,84 @@
-"use client"
+'use client'
 
-import { useState, useEffect } from "react"
-import { DatePicker, Select, SelectItem } from "@heroui/react"
-import "./FilterPanel.css"
+import { useState, useEffect } from 'react'
+import { DatePicker, Select, SelectItem } from '@heroui/react'
+import './FilterPanel.css'
 
-export default function FilterPanel({ onLineSelect = () => {}, onDistrictSelect = () => {} }) {
+
+export default function FilterPanel({
+  onLineSelect = () => {},
+  onDistrictSelect = () => {},
+}) {
   const [filters, setFilters] = useState({
-    type: "",
-    district: "",
-    metro: "",
-    station: "",
+    type: '',
+    district: '',
+    metro: '',
+    station: '',
     date: null,
-    price: "",
+    price: '',
   })
   const [mrtLines, setMrtLines] = useState([])
   const [districts, setDistricts] = useState([])
 
   useEffect(() => {
-    fetch("/map/TPE_MRT_ROUTE_4326.geojson")
+    fetch('/map/TPE_MRT_ROUTE_4326.geojson')
       .then((response) => response.json())
       .then((data) => {
-        const lines = [...new Set(data.features.map((feature) => feature.properties.MRTCODE))]
+        const lines = [
+          ...new Set(
+            data.features.map((feature) => feature.properties.MRTCODE)
+          ),
+        ]
         setMrtLines(lines)
       })
-      .catch((error) => console.error("Error loading MRT routes:", error))
+      .catch((error) => console.error('Error loading MRT routes:', error))
 
-    fetch("/map/TPE_Dist_4326.geojson")
+    fetch('/map/TPE_Dist_4326.geojson')
       .then((response) => response.json())
       .then((data) => {
-        const districtNames = [...new Set(data.features.map((feature) => feature.properties.TNAME))]
+        const districtNames = [
+          ...new Set(data.features.map((feature) => feature.properties.TNAME)),
+        ]
         setDistricts(districtNames)
       })
-      .catch((error) => console.error("Error loading districts:", error))
+      .catch((error) => console.error('Error loading districts:', error))
   }, [])
 
   const handleFilterChange = (key, value) => {
     console.log(value)
     setFilters((prev) => ({ ...prev, [key]: value }))
-    if (key === "metro") {
+    if (key === 'metro') {
       onLineSelect(value)
     }
-    if (key === "district") {
+    if (key === 'district') {
       onDistrictSelect(value)
     }
   }
 
   const clearAll = () => {
     setFilters({
-      type: "",
-      district: "",
-      metro: "",
-      station: "",
+      type: '',
+      district: '',
+      metro: '',
+      station: '',
       date: null,
-      price: "",
+      price: '',
     })
-    onLineSelect("")
-    onDistrictSelect("")
+    onLineSelect('')
+    onDistrictSelect('')
   }
 
-  const stations = ["台北車站", "中山站", "西門站", "東門站", "忠孝復興站", "南京復興站", "中正紀念堂站"]
-  const priceRanges = ["Free", "$ 0-100", "$ 100-500", "No price filter"]
+  const stations = [
+    '台北車站',
+    '中山站',
+    '西門站',
+    '東門站',
+    '忠孝復興站',
+    '南京復興站',
+    '中正紀念堂站',
+  ]
+  const priceRanges = ['Free', '$ 0-100', '$ 100-500', 'No price filter']
+  const [value, setValue] = useState(null);
 
   return (
     <div className="filter-panel">
@@ -74,14 +93,18 @@ export default function FilterPanel({ onLineSelect = () => {}, onDistrictSelect 
         <p>Find</p>
         <div className="filter-buttons">
           <button
-            className={`filter-button border-1.5 ${filters.type === "courses" ? "active" : ""}`}
-            onClick={() => handleFilterChange("type", "courses")}
+            className={`filter-button border-1.5 ${
+              filters.type === 'courses' ? 'active' : ''
+            }`}
+            onClick={() => handleFilterChange('type', 'courses')}
           >
             Courses
           </button>
           <button
-            className={`filter-button border-1.5 ${filters.type === "exhibitions" ? "active" : ""}`}
-            onClick={() => handleFilterChange("type", "exhibitions")}
+            className={`filter-button border-1.5 ${
+              filters.type === 'exhibitions' ? 'active' : ''
+            }`}
+            onClick={() => handleFilterChange('type', 'exhibitions')}
           >
             Exhibitions
           </button>
@@ -96,9 +119,9 @@ export default function FilterPanel({ onLineSelect = () => {}, onDistrictSelect 
             variant="bordered"
             radius="full"
             value={filters.district}
-            onChange={(value) => handleFilterChange("district", value)}
+            onChange={(value) => handleFilterChange('district', value)}
             classNames={{
-              trigger: "border-1.5 border-black",
+              trigger: 'border-1.5 border-black',
             }}
             aria-label="Select district"
           >
@@ -115,9 +138,9 @@ export default function FilterPanel({ onLineSelect = () => {}, onDistrictSelect 
             variant="bordered"
             radius="full"
             value={filters.metro}
-            onChange={(value) => handleFilterChange("metro", value)}
+            onChange={(value) => handleFilterChange('metro', value)}
             classNames={{
-              trigger: "border-1.5 border-black",
+              trigger: 'border-1.5 border-black',
             }}
             aria-label="Select metro line"
           >
@@ -134,9 +157,9 @@ export default function FilterPanel({ onLineSelect = () => {}, onDistrictSelect 
             variant="bordered"
             radius="full"
             value={filters.station}
-            onChange={(value) => handleFilterChange("station", value)}
+            onChange={(value) => handleFilterChange('station', value)}
             classNames={{
-              trigger: "border-1.5 border-black",
+              trigger: 'border-1.5 border-black',
             }}
             aria-label="Select station"
           >
@@ -151,17 +174,14 @@ export default function FilterPanel({ onLineSelect = () => {}, onDistrictSelect 
 
       <div className="filter-section ">
         <p>Date</p>
-        <div className="border-1.5 border-black rounded-full">
-          <DatePicker
+        <DatePicker
           placeholder="YY/MM/DD"
-          variant="underlined"
+          variant="borded"
           radius="full"
           value={filters.date}
           onChange={(date) => handleFilterChange("date", date)}
           aria-label="Select date"
         />
-        </div>
-        
       </div>
 
       <div className="filter-section">
@@ -171,9 +191,9 @@ export default function FilterPanel({ onLineSelect = () => {}, onDistrictSelect 
           variant="bordered"
           radius="full"
           value={filters.price}
-          onChange={(value) => handleFilterChange("price", value)}
+          onChange={(value) => handleFilterChange('price', value)}
           classNames={{
-            trigger: "border-1.5 border-black",
+            trigger: 'border-1.5 border-black',
           }}
           aria-label="Select price range"
         >
@@ -191,4 +211,3 @@ export default function FilterPanel({ onLineSelect = () => {}, onDistrictSelect 
     </div>
   )
 }
-

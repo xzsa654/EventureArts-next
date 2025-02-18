@@ -1,9 +1,14 @@
 "use client"
 
+import dynamic from 'next/dynamic';
 import { useState, useEffect, useMemo } from "react"
 import FilterPanel from "./_components/FilterPanel"
-import MapView from "./_components/MapView"
+// import MapView from "./_components/MapView"
 import "./map.css"
+
+const MapView = dynamic(() => import('./_components/MapView'), {
+  ssr: false, // remove SSR an ensure to load in browser
+});
 
 export default function Page() {
   const [selectedMRT, setSelectedMRT] = useState("")
