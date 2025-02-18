@@ -10,8 +10,8 @@ export default function Footer(props) {
     { title: '了解EventureArts', href: '#' },
     { title: '隱私權政策', href: '#' },
   ]
-  const pathname = usePathname();
-  if (pathname === '/') return null; // 如果是首頁，就不渲染 Footer
+  const pathname = usePathname()
+  if (pathname === '/') return null // 如果是首頁，就不渲染 Footer
   return (
     <>
       <div className="w-full   bg-black text-white flex  max-sm:p-0 p-10 flex-col  justify-center items-center gap-10   bottom-0">
@@ -57,7 +57,8 @@ export default function Footer(props) {
 
         {/*Copyright  */}
         <p className=" max-[540px]:text-12">
-          © 2025 EventureArts. All Rights Reserved.
+          © 2025 EventureArts.
+          <span className="max-sm:block">All Rights Reserved.</span>
         </p>
       </div>
     </>

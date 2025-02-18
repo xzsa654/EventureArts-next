@@ -3,8 +3,9 @@
 import React, { useState, useEffect } from 'react'
 import { usePathname } from 'next/navigation'
 import { Link, Image, ScrollShadow, Button } from '@heroui/react'
-import CourseMang from './ex-mang'
+import Mang from './mang'
 import ExAdd from './ex-add'
+import CoAdd from './co-add'
 import LikedEvents from '../LikedEvents'
 export default function UserPageFrame(props) {
   // 當前路由
@@ -14,7 +15,7 @@ export default function UserPageFrame(props) {
   const routing = {
     '/b/ex-mang': {
       title: '#EXHIBIT MANG.',
-      components: <CourseMang />,
+      components: <Mang />,
     },
     '/b/ex-mang/add-on': { title: '#EXHIBIT MANG.', components: <ExAdd /> },
     '/b/ex-mang/add-off': {
@@ -22,6 +23,14 @@ export default function UserPageFrame(props) {
       components: <ExAdd online={true} />,
     },
     '/c/liked': { title: 'LIKED EVENTS *', components: <LikedEvents /> },
+    '/b/co-mang': {
+      title: '#COURSE MANG.',
+      components: <Mang type={'course'} />,
+    },
+    '/b/co-mang/add': {
+      title: '#COURSE MANG.',
+      components: <CoAdd />,
+    },
   }
 
   const isActive = { c: 'text-yellow-600', b: 'text-green-600' }
@@ -29,10 +38,10 @@ export default function UserPageFrame(props) {
   return (
     <>
       {/* layout */}
-      <div className=" min-w-[1140px]  mt-20 flex flex-col">
+      <div className="  max-sm:w-full mt-20 flex flex-col">
         {/* Screen Message */}
-        <div className="w-full border-black border-t-1 border-b-1 text-center px-16 tracking-[0.08em]">
-          <h1 className="w-full text-[128px] leading-[140px] font-bold">
+        <div className="w-full border-black border-t-1 border-b-1 text-center max-sm:px-0 px-16 tracking-[0.08em]">
+          <h1 className="w-full max-sm:text-4xl text-[128px] leading-[140px] font-bold">
             {routing[pathName]?.title}
             {/* MY PROFILE * */}
           </h1>
@@ -40,11 +49,11 @@ export default function UserPageFrame(props) {
         {/* main */}
 
         <div
-          className="container h-full flex-auto 
-          border-black border-r-1 border-l-1 mx-auto flex "
+          className="container h-full flex-auto  max-sm:border-none max-sm:px-2
+          border-black border-r-1 border-l-1  mx-auto  flex max-sm:flex-col "
         >
           {/*sidebar  */}
-          <div className="h-auto border-black border-r-1">
+          <div className="h-auto border-black border-r-1  max-sm:order-2 ">
             {/* 用戶端 sidebar-top */}
             <ul className="w-[150px]  border-black border-b-1 h-1/2">
               <li className=" font-cn border-black border-b-1 flex items-center justify-center  w-full h-[50px] ">
@@ -97,10 +106,10 @@ export default function UserPageFrame(props) {
               </li>
               <li className=" font-cn border-black border-b-1 flex items-center justify-center  w-full h-[50px] ">
                 <Link
-                  href="#"
+                  href="/user/b/co-mang"
                   size="md"
                   className={`hover:text-green-600 ${
-                    pathName == 'co-mang' ? isActive.b : ''
+                    pathName.split('/')[2] == 'co-mang' ? isActive.b : ''
                   }`}
                 >
                   課程管理
@@ -137,7 +146,7 @@ export default function UserPageFrame(props) {
             </ul>
           </div>
           {/* content */}
-          <div className="w-full flex flex-col h-auto gap-5 mx-12 my-6">
+          <div className="w-full flex flex-col h-auto gap-5 mx-12 my-6 max-sm:mx-0   max-sm:order-1">
             {routing[pathName]?.components}
           </div>
         </div>
