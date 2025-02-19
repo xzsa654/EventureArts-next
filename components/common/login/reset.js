@@ -3,13 +3,14 @@
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Input, InputOtp } from '@heroui/react'
-import { Button, ButtonGroup } from '@heroui/button'
+import { Button } from '@heroui/button'
 import ModalLayout from './layout'
-import { ArrowRight, BracketsIcon, StatusIcon } from '@/public/Yao/icons'
+import { ArrowRight } from '@/public/Yao/icons'
 import { motion } from 'framer-motion'
 import { useModal } from '@/contexts/modal-context'
 export default function ResetPassword() {
   const { reset, login } = useModal()
+  const [disabled, setDisabled] = useState('pointer-events-none text-gray-900')
   const { onOpen } = login
   const [isVerify, setIsVerify] = useState(false)
   const { isOpen, onOpenChange } = reset
@@ -32,7 +33,7 @@ export default function ResetPassword() {
         label="Email"
         variant="underlined"
         type="email"
-        className="w-full"
+        className="w-full "
         classNames={{
           label: 'text-white group-data-[focus=true]:text-white',
           input:
@@ -55,6 +56,7 @@ export default function ResetPassword() {
             className="bg-red text-white"
             onPress={() => {
               setIsVerify(true)
+              setDisabled(false)
             }}
           >
             獲取驗證碼
@@ -124,9 +126,9 @@ export default function ResetPassword() {
           立即登入
         </Link>
       </div>
-      <Link href={'#'} className="flex text-base text-center">
+      <Link href={'#'} className={`flex text-base text-center ${disabled}`}>
         重設密碼
-        <ArrowRight />
+        <ArrowRight disabled={disabled} />
       </Link>
     </div>
   )

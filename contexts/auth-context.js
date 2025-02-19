@@ -3,7 +3,6 @@ import { createContext } from 'react'
 const AuthContext = createContext()
 import { FIREBASE_LOGIN, REGISTER } from '@/lib/authorization-api'
 import React, { useState, useEffect } from 'react'
-import next from 'next'
 
 export function AuthContextProvider({ children }) {
   const storageKey = 'EventureArts-auth'
@@ -61,6 +60,18 @@ export function AuthContextProvider({ children }) {
     const result = await res.json()
     if (result.success) {
       setAuth(result.data)
+      setFirstLogin({
+        user_email: '',
+        mobile: '',
+        nickname: '',
+        login_type: null,
+        user_name: '',
+        gender: '',
+        birthday: '',
+        profile: '',
+        e_interest: [],
+        c_interest: [],
+      })
     }
   }
 
@@ -91,7 +102,7 @@ export function AuthContextProvider({ children }) {
   }, [auth])
 
   // 登入
-  const login = (obj) => {
+  const loginhandle = async (obj) => {
     setAuth(obj)
     localStorage.setItem(storageKey, JSON.stringify(obj))
   }
@@ -118,6 +129,7 @@ export function AuthContextProvider({ children }) {
           firebaseLogin,
           auth,
           logOut,
+          loginhandle,
           firstLogin,
           registerDataHandler,
           register,

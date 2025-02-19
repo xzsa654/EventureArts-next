@@ -321,13 +321,17 @@ export default function Header(props) {
             </motion.div>
           )}
         </AnimatePresence>
-
-        <LoginModal />
-        <RegisterStep1 />
-        <RegisterStep2 />
-        <RegisterStep3 />
-        <RegisterStep4 />
-        <ResetPassword />
+        {/* 未登入才有註冊登入modal */}
+        {!auth.token && (
+          <>
+            <LoginModal />
+            <RegisterStep1 />
+            <RegisterStep2 />
+            <RegisterStep3 />
+            <RegisterStep4 />
+            <ResetPassword />
+          </>
+        )}
       </div>
     </>
   )
