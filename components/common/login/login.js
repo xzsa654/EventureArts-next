@@ -19,12 +19,14 @@ export default function LoginModal() {
   const { isOpen, onOpenChange } = login
   const { onOpen: onRegOpen } = register1
   const { onOpen: onResOpen } = reset
-  // useEffect(() => {
-  //   if (firstLogin.email) {
-  //     onOpenChange(false)
-  //     onRegOpen()
-  //   }
-  // }, [firstLogin])
+  useEffect(() => {
+   
+
+    if (firstLogin.login_type) {
+      onOpenChange(false)
+      onRegOpen()
+    }
+  }, [firstLogin.login_type])
   const formBody = (
     <form className="gap-[10px] flex flex-wrap justify-center text-center">
       <Input

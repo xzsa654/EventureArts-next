@@ -22,7 +22,7 @@ export function AuthContextProvider({ children }) {
     user_email: '',
     mobile: '',
     nickname: '',
-    loginType: '',
+    login_type: null,
     user_name: '',
     gender: '',
     birthday: '',
@@ -71,13 +71,12 @@ export function AuthContextProvider({ children }) {
     })
 
     const result = await res.json()
-    console.log(result)
     if (result.success && result.code == 200) {
       const { user_id, user_email, nickname, avatar, token } = result
 
       setAuth({ user_id, user_email, nickname, avatar, token })
     } else {
-      // console.log(result)
+      console.log(result)
       setFirstLogin(result.data)
     }
   }

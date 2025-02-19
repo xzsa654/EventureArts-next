@@ -17,6 +17,9 @@ export default function RegisterStep1() {
   const { onOpen } = next
   const [errorMessage, setErrorMessage] = useState(false)
   const { isOpen, onOpenChange } = register1
+  const { login_type } = firstLogin
+
+  // 送出驗證email表單
   const onSubmit = async (e) => {
     e.preventDefault()
     const data = new FormData(e.target)
@@ -24,15 +27,20 @@ export default function RegisterStep1() {
     const password = data.get('password')
     const user_name = data.get('user_name')
     const mobile = data.get('mobile')
-    // 先驗證 email 是否已存在
-
-    const res = await fetch(EMAIL_CHECKING, { method: 'POST', body: data })
-    const result = await res.json()
-    if (!result.success) {
-      return setErrorMessage(!result.success)
+    // 先驗證 email 是否已存在，第三方登入的話不用驗證
+    if (!login_type) {
+      const res = await fetch(EMAIL_CHECKING, { method: 'POST', body: data })
+      const result = await res.json()
+      if (!result.success) {
+        return setErrorMessage(!result.success)
+      }
     }
-
-    registerDataHandler({ user_email, password, user_name, mobile })
+    // 將資料丟回狀態等到最後在一併送出
+    if (user_email) {
+      registerDataHandler({ user_email, password, user_name, mobile })
+    } else {
+      registerDataHandler({ password, user_name, mobile })
+    }
     onOpenChange(false)
     onOpen()
   }
@@ -58,36 +66,39 @@ export default function RegisterStep1() {
       validationBehavior="native"
       className="w-full h-full gap-[10px] flex flex-wrap justify-center items-center"
     >
-      <>
-        <InputPop
-          isRequired
-          name="user_email"
-          label="email"
-          type="email"
-          validateItem={(value) => {
-            const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
-            if (!regex.test(value)) {
-              return '請輸入有效的 Email 格式'
-            }
-          }}
-          popContent="請輸入有效的電子郵件地址（例：example@email.com）"
-          className={`w-full ${
-            errorMessage
-              ? 'after:text-red-500 after:content-["EMAIL已被註冊"]'
-              : ''
-          } `}
-          popTitle="Email"
-        />
-        <InputPop
-          isRequired
-          name="password"
-          label="密碼"
-          type="password"
-          realTimeValid={true}
-          className="w-full"
-          isPop={false}
-        />
-      </>
+      {!login_type && (
+        <>
+          {' '}
+          <InputPop
+            isRequired
+            name="user_email"
+            label="email"
+            type="email"
+            validateItem={(value) => {
+              const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+              if (!regex.test(value)) {
+                return '請輸入有效的 Email 格式'
+              }
+            }}
+            popContent="請輸入有效的電子郵件地址（例：example@email.com）"
+            className={`w-full ${
+              errorMessage
+                ? 'after:text-red-500 after:content-["EMAIL已被註冊"]'
+                : ''
+            } `}
+            popTitle="Email"
+          />
+          <InputPop
+            isRequired
+            name="password"
+            label="密碼"
+            type="password"
+            realTimeValid={true}
+            className="w-full"
+            isPop={false}
+          />
+        </>
+      )}
 
       <InputPop
         isRequired
