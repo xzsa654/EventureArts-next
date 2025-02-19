@@ -1,10 +1,20 @@
-"use client"
+'use client'
 
-import { useEffect, useRef } from "react"
-import { MapContainer, TileLayer, LayersControl, ZoomControl, GeoJSON, LayerGroup, Marker, Popup } from "react-leaflet"
-import "leaflet/dist/leaflet.css"
-import "./MapView.css"
-import L from "leaflet"
+import { useEffect, useRef } from 'react'
+import {
+  MapContainer,
+  TileLayer,
+  LayersControl,
+  ZoomControl,
+  GeoJSON,
+  LayerGroup,
+  // CircleMarker,
+  Marker,
+  Popup,
+} from 'react-leaflet'
+import 'leaflet/dist/leaflet.css'
+import './MapView.css'
+import L from 'leaflet'
 
 export default function MapView({
   mrtRoutes,
@@ -22,36 +32,39 @@ export default function MapView({
     if (!mapRef.current) {
       delete L.Icon.Default.prototype._getIconUrl
       L.Icon.Default.mergeOptions({
-        iconRetinaUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png",
-        iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
-        shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
+        iconRetinaUrl:
+          'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
+        iconUrl:
+          'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
+        shadowUrl:
+          'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
       })
     }
   }, [])
 
   // MRT line default style
   const routeStyle = {
-    color: "#666666",
+    color: '#666666',
     weight: 3,
     opacity: 0.8,
   }
-    // MRT line highlight style
+  // MRT line highlight style
   const selectedStyle = {
-    color: "#ff0000",
+    color: '#ff0000',
     weight: 5,
     opacity: 1,
   }
   const hoverStyle = {
-    color: "#0000ff",
+    color: '#0000ff',
     weight: 5,
     opacity: 1,
   }
 
-  // 
+  //
   const stationStyle = {
     radius: 6,
-    fillColor: "#ffffff",
-    color: "#000000",
+    fillColor: '#ffffff',
+    color: '#000000',
     weight: 1.5,
     opacity: 1,
     fillOpacity: 1,
@@ -59,15 +72,15 @@ export default function MapView({
 
   // 行政區樣式：選到的區域 fillOpacity 會比較深
   const districtStyle = (feature) => {
-    const isSelected = feature.properties.TNAME === selectedDistrict;
+    const isSelected = feature.properties.TNAME === selectedDistrict
     return {
-      color: "#ff7800",
+      color: '#ff7800',
       weight: 2,
       opacity: 0.65,
       fillOpacity: isSelected ? 0.7 : 0.2,
-      fillColor: isSelected ? "#ff7800" : "#ffb380",
-    };
-  };
+      fillColor: isSelected ? '#ff7800' : '#ffb380',
+    }
+  }
 
   // MRT 車站用 circleMarker 呈現
   const pointToLayer = (feature, latlng) => {
@@ -84,7 +97,11 @@ export default function MapView({
       },
       mouseout: () => {
         if (!selectedMRT || feature.properties.MRTCODE === selectedMRT) {
-          layer.setStyle(selectedMRT === feature.properties.MRTCODE ? selectedStyle : routeStyle)
+          layer.setStyle(
+            selectedMRT === feature.properties.MRTCODE
+              ? selectedStyle
+              : routeStyle
+          )
         }
       },
     })
@@ -97,10 +114,13 @@ export default function MapView({
     }
     layer.on({
       mouseover: () => {
-        if (!selectedDistrict || feature.properties.TNAME === selectedDistrict) {
+        if (
+          !selectedDistrict ||
+          feature.properties.TNAME === selectedDistrict
+        ) {
           layer.setStyle({
             fillOpacity: 0.7,
-            fillColor: "#ff7800",
+            fillColor: '#ff7800',
           })
         }
       },
@@ -117,12 +137,14 @@ export default function MapView({
 
   // 決定 MRT 路線顏色
   const styleRoutes = (feature) => {
-    return selectedMRT === feature.properties.MRTCODE ? selectedStyle : routeStyle
+    return selectedMRT === feature.properties.MRTCODE
+      ? selectedStyle
+      : routeStyle
   }
 
   // 根據 selectedDistrict 過濾資料庫座標
   const filteredDbLocations =
-    selectedDistrict && selectedDistrict !== ""
+    selectedDistrict && selectedDistrict !== ''
       ? dbLocations.filter((loc) => loc.district === selectedDistrict)
       : dbLocations
 
@@ -159,7 +181,7 @@ export default function MapView({
             <LayerGroup>
               {mrtRoutes && (
                 <GeoJSON
-                  key={selectedMRT || "all"}
+                  key={selectedMRT || 'all'}
                   data={mrtRoutes}
                   style={styleRoutes}
                   onEachFeature={onEachRouteFeature}
@@ -186,7 +208,7 @@ export default function MapView({
             <LayerGroup>
               {taipeiDistricts && (
                 <GeoJSON
-                  key={selectedDistrict || "all-districts"}
+                  key={selectedDistrict || 'all-districts'}
                   data={taipeiDistricts}
                   style={districtStyle}
                   onEachFeature={onEachDistrict}
@@ -202,13 +224,29 @@ export default function MapView({
                 if (loc.latitude && loc.longitude) {
                   return (
                     <Marker
-                      key={loc.locat_id}
-                      position={[parseFloat(loc.latitude), parseFloat(loc.longitude)]}
+                    key={loc.locat_id}
+                    position={[+loc.latitude, +loc.longitude]}
+                  
+                      // key={loc.locat_id}
+                      // center={[
+                      //   parseFloat(loc.latitude),
+                      //   parseFloat(loc.longitude),
+                      // ]}
+                      // style of circle marker
+                      // pathOptions={{
+                      //   color: '#65a30d',
+                      //   weight: 2,
+                      //   fillColor: '#fbbf24',
+                      //   fillOpacity: 0.8,
+                      // }}
+                      // radius={10}
                     >
                       <Popup>
+                        <b>ID: {loc.locat_id}</b>
+                        <br />
                         <b>{loc.locat_name}</b>
                         <br />
-                        {loc.address}
+                        {loc.district}{loc.address}
                       </Popup>
                     </Marker>
                   )

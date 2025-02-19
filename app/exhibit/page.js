@@ -161,13 +161,13 @@ export default function ExhibitPage() {
         <div className="relative">
           <div className="grid grid-cols-3 gap-6">
             <div className="aspect-[4/3] relative">
-              <Image src="/chu-images/img_9.jpg" alt="Vinyl record player" fill className="object-cover" />
+              <Image src="/chu-images/img_9.jpg" alt="Vinyl record player" fill className="object-cover" priority/>
             </div>
             <div className="aspect-[4/3] relative">
-              <Image src="/chu-images/img_9.jpg" alt="Neon ART sign" fill className="object-cover" />
+              <Image src="/chu-images/img_9.jpg" alt="Neon ART sign" fill className="object-cover"  priority/>
             </div>
             <div className="aspect-[4/3] relative">
-              <Image src="/chu-images/img_9.jpg" alt="Album covers collection" fill className="object-cover" />
+              <Image src="/chu-images/img_9.jpg" alt="Album covers collection" fill className="object-cover"  priority/>
             </div>
           </div>
 
