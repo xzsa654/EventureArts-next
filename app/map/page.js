@@ -5,28 +5,38 @@ import { useState, useEffect, useMemo } from "react";
 import FilterPanel from "./_components/FilterPanel";
 import "./map.css";
 
-const MapView = dynamic(() => import('./_components/MapView'), {
-  ssr: false, // 關閉 SSR，確保只在瀏覽器端載入
+// 動態載入 MapView，關閉 SSR
+const MapView = dynamic(() => import("./_components/MapView"), {
+  ssr: false,
 });
 
-// 後端 API 的 base URL（預設為 http://localhost:3001）
+// 後端 API Base URL，可自行調整
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3001";
 
 export default function Page() {
+  // 即時篩選條件
+  const [selectedDistrict, setSelectedDistrict] = useState("");
   const [selectedMRT, setSelectedMRT] = useState("");
+
+  // MRT 路線、車站、行政區 GeoJSON
   const [mrtRoutes, setMrtRoutes] = useState(null);
   const [mrtStations, setMrtStations] = useState(null);
   const [taipeiDistricts, setTaipeiDistricts] = useState(null);
   const [mrtLines, setMrtLines] = useState([]);
-  const [dbLocations, setDbLocations] = useState([]); // 後端資料庫的場地座標資訊
+
+  // 後端資料庫座標資訊（例如 real_location）
+  const [dbLocations, setDbLocations] = useState([]);
+
+  // 載入資料用
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // 取得 MRT 路線、車站、行政區 GeoJSON 資料
+  // 一次載入 MRT 路線、車站、行政區 GeoJSON
   useEffect(() => {
     const fetchGeoJsonData = async () => {
       try {
         setIsLoading(true);
+
         const [routesRes, stationsRes, districtsRes] = await Promise.all([
           fetch("/map/TPE_MRT_ROUTE_4326.geojson"),
           fetch("/map/TPE_MRT_STATION_4326.geojson"),
@@ -41,6 +51,7 @@ export default function Page() {
         setMrtStations(stationsData);
         setTaipeiDistricts(districtsData);
 
+        // 從路線資料中取出所有不重複的路線代號
         const lines = [
           ...new Set(routesData.features.map((feature) => feature.properties.MRTCODE)),
         ];
@@ -57,7 +68,7 @@ export default function Page() {
     fetchGeoJsonData();
   }, []);
 
-  // 從後端 API 取得資料庫中的場地座標資訊
+  // 從後端 API 取得資料庫的座標資訊
   useEffect(() => {
     fetch(`${API_BASE_URL}/map`)
       .then((res) => res.json())
@@ -71,26 +82,40 @@ export default function Page() {
       .catch((error) => console.error("Error fetching backend locations:", error));
   }, []);
 
-  const handleLineSelect = (e) => {
-    setSelectedMRT(e.target.value);
+  // FilterPanel 回呼：使用者在選擇「行政區」時即時更新
+  const handleDistrictSelect = (district) => {
+    setSelectedDistrict(district);
   };
 
+  // FilterPanel 回呼：使用者在選擇「地鐵線」時即時更新
+  const handleLineSelect = (line) => {
+    setSelectedMRT(line);
+  };
+
+  // 篩選器面板
   const memoizedFilterPanel = useMemo(
-    () => <FilterPanel onLineSelect={handleLineSelect} />,
-    [] // 因為 handleLineSelect 為簡單函數，不需要額外依賴
+    () => (
+      <FilterPanel
+        onDistrictSelect={handleDistrictSelect}
+        onLineSelect={handleLineSelect}
+      />
+    ),
+    []
   );
 
+  // 地圖面板
   const memoizedMapView = useMemo(
     () => (
       <MapView
         mrtRoutes={mrtRoutes}
         mrtStations={mrtStations}
         taipeiDistricts={taipeiDistricts}
+        selectedDistrict={selectedDistrict}
         selectedMRT={selectedMRT}
-        dbLocations={dbLocations} // 將後端場地資料傳入 MapView 進行渲染
+        dbLocations={dbLocations}
       />
     ),
-    [mrtRoutes, mrtStations, taipeiDistricts, selectedMRT, dbLocations]
+    [mrtRoutes, mrtStations, taipeiDistricts, selectedDistrict, selectedMRT, dbLocations]
   );
 
   if (isLoading) {
