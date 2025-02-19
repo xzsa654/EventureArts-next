@@ -5,10 +5,11 @@ import Link from 'next/link'
 import { Form, Button } from '@heroui/react'
 import InputPop from './input-pop'
 import ModalLayout from './layout'
-import { ArrowRight } from '@/public/Yao/icons'
 import { useModal } from '@/contexts/modal-context'
 import RegisterSection from './section'
 import { useAuth } from '@/hooks/use-auth'
+import { HiArrowNarrowRight } from 'react-icons/hi'
+
 import { EMAIL_CHECKING } from '@/lib/authorization-api'
 
 export default function RegisterStep1() {
@@ -142,7 +143,7 @@ export default function RegisterStep1() {
         className="flex text-base  text-zinc"
       >
         下一步
-        <ArrowRight />
+        <HiArrowNarrowRight size={20} color="white" />
       </Link>
     </div>
   )

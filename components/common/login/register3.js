@@ -4,8 +4,10 @@ import React, { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import ModalLayout from './layout'
 import { Button, Image } from '@heroui/react'
-import { ArrowRight, AvatarIcon } from '@/public/Yao/icons'
+import { AvatarIcon } from '@/public/Yao/icons'
 import { useModal } from '@/contexts/modal-context'
+import { HiArrowNarrowRight } from 'react-icons/hi'
+
 import RegisterSection from './section'
 import { useAuth } from '@/hooks/use-auth'
 export default function RegisterStep3(props) {
@@ -100,7 +102,7 @@ export default function RegisterStep3(props) {
       >
         下一步
         <div className="">
-          <ArrowRight />
+          <HiArrowNarrowRight size={20} color="white" />
         </div>
       </Link>
     </div>

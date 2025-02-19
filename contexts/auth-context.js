@@ -87,7 +87,6 @@ export function AuthContextProvider({ children }) {
 
       setAuth({ user_id, user_email, nickname, avatar, token })
     } else {
-      console.log(result)
       setFirstLogin(result.data)
     }
   }

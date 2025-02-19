@@ -7,9 +7,9 @@ import { Textarea, DatePicker, Select, SelectItem, Form } from '@heroui/react'
 import InputPop from './input-pop'
 import RegisterSection from './section'
 import ModalLayout from './layout'
-import { ArrowRight } from '@/public/Yao/icons'
 import { useModal } from '@/contexts/modal-context'
 import { useAuth } from '@/hooks/use-auth'
+import { HiArrowNarrowRight } from 'react-icons/hi'
 
 export default function RegisterStep2(props) {
   const { registerDataHandler } = useAuth()
@@ -118,7 +118,7 @@ export default function RegisterStep2(props) {
       >
         下一步
         <div className="">
-          <ArrowRight />
+          <HiArrowNarrowRight size={20} color="white" />
         </div>
       </Link>
     </div>

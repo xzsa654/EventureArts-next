@@ -7,6 +7,8 @@ import { Button } from '@heroui/button'
 import ModalLayout from './layout'
 import { useModal } from '@/contexts/modal-context'
 import { ArrowRight } from '@/public/Yao/icons'
+import { HiArrowNarrowRight } from 'react-icons/hi'
+
 import FirebaseAuthPage from '@/app/user/_components/firebase-auth'
 import { useAuth } from '@/hooks/use-auth'
 import { LOGIN } from '@/lib/authorization-api'
@@ -106,7 +108,7 @@ export default function LoginModal() {
         className="w-full "
         radius="none"
         color="primary"
-        endContent=<ArrowRight />
+        endContent=<HiArrowNarrowRight color="white" size={20} />
         onPress={() => {
           formRef.current?.requestSubmit()
         }}

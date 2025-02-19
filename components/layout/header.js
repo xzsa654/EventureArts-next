@@ -12,7 +12,7 @@ import RegisterStep1 from '@/components/common/login/register'
 import RegisterStep2 from '@/components/common/login/register2'
 import RegisterStep3 from '@/components/common/login/register3'
 import RegisterStep4 from '@/components/common/login/register4'
-import ResetPassword from '@/components/common/login/reset'
+import ResetPassword from '@/components/common/login/verify'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useAuth } from '@/hooks/use-auth'
 export default function Header(props) {
