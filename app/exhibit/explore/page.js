@@ -8,6 +8,7 @@ import { MdSort } from "react-icons/md"
 import useSWR from "swr"
 import "./styles.css"
 
+
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3001"
 
 // Fetcher function for useSWR
@@ -18,7 +19,8 @@ export default function ExploreExhibitions() {
   const [showAdvancedSearch, setShowAdvancedSearch] = useState(false)
 
   // 使用 SWR 獲取展覽資料，並從 MySQL 獲取資料
-  const { data: exhibitions, error } = useSWR(`${API_BASE_URL}/exhibit/?page=${currentPage}`, fetcher)
+  const { data: exhibitions, error } = useSWR(`${API_BASE_URL}/exhibit/?form=offline&page=${currentPage}`, fetcher)
+
 
   if (error) return <div>Error loading exhibitions</div>
   if (!exhibitions) return <div>Loading...</div>

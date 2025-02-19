@@ -1,5 +1,4 @@
-// app/layout-client.js
-"use client";  // ★ 告訴 Next.js 這是一個 Client Component
+"use client"; 
 
 import { usePathname } from 'next/navigation'
 import Header from '@/components/layout/header'

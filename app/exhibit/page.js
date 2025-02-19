@@ -109,12 +109,12 @@ export default function ExhibitPage() {
       {/* See more Exhibition Section */}
       <section className="mb-20 p-6">
         <div className="flex justify-between items-center mb-10">
-          <h1 className="text-2xl font-bold">Want to Explore More?</h1>
+          <h1 className="text-2xl font-bold">Want's new?</h1>
           <a
             href="/exhibit/online"
             className="text-xl font-bold flex items-center gap-2 hover:opacity-70 cursor-pointer"
           >
-            See All Exhibition →
+            Explore More Online Exhibition →
           </a>
         </div>
 
