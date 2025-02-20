@@ -1,26 +1,24 @@
 'use client'
 
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Input, Form } from '@heroui/react'
 import { Button } from '@heroui/button'
 import ModalLayout from './layout'
 import { useModal } from '@/contexts/modal-context'
-import { ArrowRight } from '@/public/Yao/icons'
 import { HiArrowNarrowRight } from 'react-icons/hi'
-
 import FirebaseAuthPage from '@/app/user/_components/firebase-auth'
 import { useAuth } from '@/hooks/use-auth'
 import { LOGIN } from '@/lib/authorization-api'
 import { motion } from 'framer-motion'
-
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
 export default function LoginModal() {
-  const formRef = useRef()
   const { firstLogin, loginhandle } = useAuth()
   const [logging, setLogging] = useState({
     email: '',
     password: '',
   })
+  const { executeRecaptcha } = useGoogleReCaptcha()
   const [errorMessage, setErrorMessage] = useState(null)
   const changeHandle = (e) => {
     const value = e.target.value
@@ -29,7 +27,12 @@ export default function LoginModal() {
   }
   const onSubmit = async (e) => {
     e.preventDefault()
+    if (!executeRecaptcha) {
+      return
+    }
+    const token = await executeRecaptcha('form_submit')
     const fm = new FormData(e.target)
+    fm.append('recaptcha', token)
     const res = await fetch(LOGIN, { method: 'POST', body: fm })
     const result = await res.json()
 
@@ -63,7 +66,6 @@ export default function LoginModal() {
   const formBody = (
     <Form
       onSubmit={onSubmit}
-      ref={formRef}
       className="gap-[10px] flex flex-wrap items-center justify-center text-center"
     >
       <Input
@@ -108,13 +110,12 @@ export default function LoginModal() {
         className="w-full "
         radius="none"
         color="primary"
+        type="submit"
         endContent=<HiArrowNarrowRight color="white" size={20} />
-        onPress={() => {
-          formRef.current?.requestSubmit()
-        }}
       >
         登入
       </Button>
+
       <Link
         href={'#'}
         onClick={() => {
