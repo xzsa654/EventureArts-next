@@ -28,9 +28,13 @@ export default function ModalLayout({
         placement="center"
         size="4xl"
         isKeyboardDismissDisabled={true}
+        classNames={{
+          backdrop: 'z-40',
+          wrapper: 'z-40',
+        }}
         className={`${
           size ? '' : 'w-[400]'
-        }  bg-[FFF2F2] backdrop-blur-[10px]   border border-2  rounded-sm `}
+        }  bg-[FFF2F2] backdrop-blur-[10px]    border-2  rounded-sm `}
         motionProps={{
           variants: {
             enter: {

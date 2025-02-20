@@ -27,7 +27,7 @@ export default function ResetPassword({ isVerify, formRef }) {
             return 0
           }
         })
-      }, 100)
+      }, 1000)
     }
   }, [isVerify])
 
@@ -43,7 +43,9 @@ export default function ResetPassword({ isVerify, formRef }) {
         },
       })
         .then((r) => r.json())
-        .then((result) => {})
+        .then((result) => {
+          
+        })
       setSecond(30) // 重置秒數
       let timer = setInterval(() => {
         setSecond((prev) => {

@@ -45,11 +45,19 @@ export default function VerifyEmail() {
       },
     })
     const result = await res.json()
-    // 後端驗證查無email
+    // 後端驗證查無 email
     if (!result.success) {
       return setErrorMessage(result.message)
     } else {
       setErrorMessage('')
+      addToast({
+        title: '驗證信已送出！',
+        radius: 'lg',
+        description: '請前往您的信箱查收',
+        promise: new Promise((resolve) => setTimeout(resolve, 3000)),
+        color: 'success',
+        timeout: 10000,
+      })
       setIsVerify(true)
       setDisabled(false)
     }
@@ -62,12 +70,6 @@ export default function VerifyEmail() {
     const result = await res.json()
     if (result.success) {
       onOpenChange(false)
-      addToast({
-        title: '重設密碼成功！',
-        description: '請重新登入',
-        status: 'success',
-        duration: 5000,
-      })
     } else {
       setErrorMessage(result.message)
     }
@@ -77,18 +79,8 @@ export default function VerifyEmail() {
       validationBehavior="native"
       onSubmit={onsubmitHandle}
       ref={formRef}
-      className="relative w-full h-full gap-[10px] flex flex-wrap justify-center items-center"
+      className="relative   w-full h-full gap-[10px] flex flex-wrap justify-center items-center"
     >
-      <Button
-        variant="flat"
-        onPress={() => {
-          addToast({
-            title: 'Toast Title',
-          })
-        }}
-      >
-        Default
-      </Button>
       <Input
         isRequired
         label="Email"
