@@ -12,7 +12,7 @@ import RegisterStep1 from '@/components/common/login/register'
 import RegisterStep2 from '@/components/common/login/register2'
 import RegisterStep3 from '@/components/common/login/register3'
 import RegisterStep4 from '@/components/common/login/register4'
-import ResetPassword from '@/components/common/login/verify'
+import VerifyEmail from '../common/login/verify'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useAuth } from '@/hooks/use-auth'
 export default function Header(props) {
@@ -214,7 +214,7 @@ export default function Header(props) {
             >
               <Link href="#" onPress={onOpen}>
                 {/* 已登入的 component */}
-                {auth.user_id !== 0 ? (
+                {auth?.user_id !== 0 ? (
                   <AVatarGroup />
                 ) : isOpen ? (
                   // 未登入狀態下的 icon
@@ -322,14 +322,14 @@ export default function Header(props) {
           )}
         </AnimatePresence>
         {/* 未登入才有註冊登入modal */}
-        {!auth.token && (
+        {!auth?.token && (
           <>
             <LoginModal />
             <RegisterStep1 />
             <RegisterStep2 />
             <RegisterStep3 />
             <RegisterStep4 />
-            <ResetPassword />
+            <VerifyEmail />
           </>
         )}
       </div>
