@@ -1,18 +1,21 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import ExhibitionSection from "./_components/ExhibitionSection"
 import Image from "next/image"
-import Excard from "./_components/Excard"
-import { ChevronLeftIcon, ChevronRightIcon, ArrowLongRightIcon } from "@heroicons/react/24/outline"
-import "./exhibit.css"
 import Link from "next/link"
-import CandidSection from "./_components/candid-section"
+import { ChevronLeftIcon, ChevronRightIcon, ArrowLongRightIcon } from "@heroicons/react/24/outline"
 import useSWR from "swr"
+
+import ExhibitionSection from "./_components/ExhibitionSection"
+import Excard from "./_components/Excard"
+import CandidSection from "./_components/candid-section"
+
+import "./exhibit.css"
+import OnlineExhibitionCard from "./_components/OnlineExhibitionCard"
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3001"
 
-// Fetcher function for useSWR
+// SWR 專用 fetcher
 const fetcher = (url) => fetch(url).then((res) => res.json())
 
 export default function ExhibitPage() {
@@ -20,6 +23,7 @@ export default function ExhibitPage() {
   const [isAnimating, setIsAnimating] = useState(false)
   const secondHeroRef = useRef(null)
 
+  // 點擊某展覽卡片時的動作
   const handleExhibitionSelect = (exhibition) => {
     setIsAnimating(true)
     setSelectedExhibition(exhibition)
@@ -28,6 +32,7 @@ export default function ExhibitPage() {
     }
   }
 
+  // 動畫效果的狀態管理
   useEffect(() => {
     if (isAnimating) {
       const timer = setTimeout(() => {
@@ -37,23 +42,42 @@ export default function ExhibitPage() {
     }
   }, [isAnimating])
 
-  // 使用 useSWR 獲取展覽資料，從後端拉取數據
-  const { data: exhibitions, error } = useSWR(`${API_BASE_URL}/exhibit/`, fetcher)
+  // 1) 撈取「線下展覽」資料 (form=offline)
+  const {
+    data: offlineData,
+    error: offlineError,
+  } = useSWR(`${API_BASE_URL}/exhibit?form=offline`, fetcher)
 
-  if (error) return <div>Error loading exhibitions</div>
-  if (!exhibitions) return <div>Loading...</div>
+  // 2) 撈取「線上展覽」資料 (form=online)
+  const {
+    data: onlineData,
+    error: onlineError,
+  } = useSWR(`${API_BASE_URL}/exhibit?form=online`, fetcher)
+
+  // 處理錯誤 / 載入狀態
+  if (offlineError || onlineError) return <div>Error loading exhibitions</div>
+  if (!offlineData || !onlineData) return <div>Loading...</div>
+
+  // 從後端回傳的物件中取出 data
+  // (若後端格式為 { success: true, data: [...], message: "..." }，則 offlineData.data / onlineData.data)
+  const offlineExhibitions = offlineData.data || []
+  const onlineExhibitions = onlineData.data || []
+
 
   return (
     <main className="min-h-screen mt-[80px]">
-      {/* Exhibition Section */}
-      <ExhibitionSection onExhibitionSelect={handleExhibitionSelect} exhibitions={exhibitions.data} />
+      {/* Offline Exhibition Section */}
+      {/* 原本的 ExhibitionSection：改成傳入 offlineExhibitions */}
+      <ExhibitionSection onExhibitionSelect={handleExhibitionSelect} exhibitions={offlineExhibitions} />
 
       {/* First Hero Section */}
       <section id="first-hero-section" className="relative h-[120px] w-full flex items-center justify-between px-20">
         <h1 className="text-xl md:text-xl text-black">Want to Explore More?</h1>
         <Link href="/exhibit/explore" className="group">
           <button className="text-xl px-6 py-4 text-black transition-all rounded-lg cursor-pointer group-hover:underline">
-            <span className="transition-all group-hover:text-[1.6em] group-hover:font-bold">See All Exhibition →</span>
+            <span className="transition-all group-hover:text-[1.6em] group-hover:font-bold">
+            See All Exhibition →
+            </span>
           </button>
         </Link>
       </section>
@@ -106,8 +130,8 @@ export default function ExhibitPage() {
 
       <CandidSection />
 
-      {/* See more Exhibition Section */}
-      <section className="mb-20 p-6">
+      {/* Explore more online Exhibition Section */}    
+      <section className="mb-20 p-6 bg-black/40">
         <div className="flex justify-between items-center mb-10">
           <h1 className="text-2xl font-bold">Want's new?</h1>
           <a
@@ -118,10 +142,12 @@ export default function ExhibitPage() {
           </a>
         </div>
 
+        {/* Make Sure to passing correct correct prop:{e_id} */}
         <div className="relative">
-          <div className="flex gap-6 justify-center">
-            {exhibitions?.data?.slice(0, 3).map((exhibition) => (
-              <Excard
+        <div className="flex gap-6 justify-center">
+            {/* 改成線上展覽 onlineExhibitions */}
+            {onlineExhibitions.slice(0, 3).map((exhibition) => (
+              <OnlineExhibitionCard
                 key={exhibition.e_id}
                 e_id={exhibition.e_id}
                 tag={exhibition.e_optionNames}
@@ -129,6 +155,7 @@ export default function ExhibitPage() {
                 date={`${exhibition.e_startdate} - ${exhibition.e_enddate}`}
                 title={exhibition.e_name}
                 description={exhibition.e_desc}
+                artist={exhibition.bd_id}
               />
             ))}
           </div>
