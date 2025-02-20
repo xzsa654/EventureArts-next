@@ -1,15 +1,18 @@
 .map-view {
   flex: 1;
   position: relative;
-  padding: 2rem;
+  max-width: 1150px;
+  max-height: 700px;
+  margin: 2rem auto;
 }
 
 .map-container {
   width: 100%;
   height: 100%;
-  border: 1px solid #000;
   border-radius: 12px;
   overflow: hidden;
+  z-index: 10;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
 }
 
 /* Custom styling for layer control */
@@ -33,7 +36,8 @@
 }
 
 /* Inline layout for layer control items */
-.leaflet-control-layers-base label {
+.leaflet-control-layers-base label,
+.leaflet-control-layers-overlays label {
   display: flex !important;
   align-items: center !important;
   gap: 8px !important;
@@ -41,13 +45,15 @@
   cursor: pointer !important;
 }
 
-.leaflet-control-layers-base label > span {
+.leaflet-control-layers-base label > span,
+.leaflet-control-layers-overlays label > span {
   display: flex !important;
   align-items: center !important;
   gap: 8px !important;
 }
 
-.leaflet-control-layers-base label input[type="radio"] {
+.leaflet-control-layers-base label input[type="radio"],
+.leaflet-control-layers-overlays label input[type="checkbox"] {
   margin: 0 !important;
   width: 16px !important;
   height: 16px !important;
@@ -98,5 +104,25 @@
 .leaflet-control-zoom-in:hover,
 .leaflet-control-zoom-out:hover {
   background-color: #f8f8f8 !important;
+}
+
+/* Style for MRT station popups */
+.leaflet-popup-content-wrapper {
+  border-radius: 8px !important;
+  padding: 8px !important;
+}
+
+.leaflet-popup-content {
+  margin: 8px !important;
+  font-size: 14px !important;
+}
+
+.leaflet-popup-tip-container {
+  margin-top: -1px !important;
+}
+
+/* Ensure GeoJSON layers are visible */
+.leaflet-overlay-pane {
+  z-index: 400 !important; /* Increase z-index to ensure visibility */
 }
 

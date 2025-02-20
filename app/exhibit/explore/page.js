@@ -5,23 +5,25 @@ import Excard from "../_components/Excard"
 import { Input, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button } from "@heroui/react"
 import { CiSearch } from "react-icons/ci"
 import { MdSort } from "react-icons/md"
+import useSWR from "swr"
 import "./styles.css"
+
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3001"
+
+// Fetcher function for useSWR
+const fetcher = (url) => fetch(url).then((res) => res.json())
 
 export default function ExploreExhibitions() {
   const [currentPage, setCurrentPage] = useState(1)
   const [showAdvancedSearch, setShowAdvancedSearch] = useState(false)
 
-  // Example exhibition data
-  const exhibitions = Array(6)
-    .fill()
-    .map((_, index) => ({
-      e_id: `ex-${index + 1}`,
-      tag: "NATURAL",
-      image: "/chu-images/img_9.jpg",
-      date: "2025 | Dec.12th -Dec.20th",
-      title: "Root your designs in earthy visuals that reflect the spirit of the",
-      description: "Root your designs in earthy visuals that reflect the spiri...",
-    }))
+  // 使用 SWR 獲取展覽資料，並從 MySQL 獲取資料
+  const { data: exhibitions, error } = useSWR(`${API_BASE_URL}/exhibit/?form=offline&page=${currentPage}`, fetcher)
+
+
+  if (error) return <div>Error loading exhibitions</div>
+  if (!exhibitions) return <div>Loading...</div>
 
   return (
     <div
@@ -97,14 +99,12 @@ export default function ExploreExhibitions() {
 
               {/* Search buttons */}
               <div className="flex justify-center gap-3 mb-8">
-                {/* Toggle advanced search button */}
                 <button
                   className="hero-btn text-[14px] px-4 py-1 rounded-full border border-white text-white"
                   onClick={() => setShowAdvancedSearch(!showAdvancedSearch)}
                 >
                   <span>{showAdvancedSearch ? "隱藏進階搜尋" : "進階搜尋"}</span>
                 </button>
-                {/* Main search button */}
                 <button className="hero-btn text-[14px] px-4 py-1 rounded-full border border-white text-white">
                   <span>搜尋</span>
                 </button>
@@ -134,21 +134,20 @@ export default function ExploreExhibitions() {
 
               {/* Exhibition grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
-                {exhibitions.map((exhibition) => (
+                {exhibitions?.data?.map((exhibition) => (
                   <Excard
                     key={exhibition.e_id}
                     e_id={exhibition.e_id}
-                    tag={exhibition.tag}
-                    image={exhibition.image}
-                    date={exhibition.date}
-                    title={exhibition.title}
-                    description={exhibition.description}
+                    tag={exhibition.e_optionNames}
+                    image={exhibition.imageUrl || "/chu-images/img_9.jpg"}
+                    date={`${exhibition.e_startdate} - ${exhibition.e_enddate}`}
+                    title={exhibition.e_name}
+                    description={exhibition.e_desc}
                   />
                 ))}
               </div>
 
               {/* Pagination placeholder */}
-              {/* TODO: Implement pagination component */}
               <div className="flex justify-center">{/* Pagination will be implemented here */}</div>
             </div>
           </div>

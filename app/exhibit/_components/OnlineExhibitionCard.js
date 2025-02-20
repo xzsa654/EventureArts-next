@@ -1,3 +1,5 @@
+"use client"
+
 import Link from "next/link"
 import Image from "next/image"
 import { motion } from "framer-motion"
@@ -11,7 +13,7 @@ const OnlineExhibitionCard = ({ id, title, description, thumbnail, type, artist,
     transition={{ duration: 0.3 }}
     className="group"
   >
-    <Link href={`/exhibit/online/${id}`}>
+    <Link href={`/exhibit/online-detail/${id}`}>
       <div className="bg-white bg-opacity-5 overflow-hidden relative p-4 rounded-lg border border-white border-opacity-10 transition-all duration-300 hover:bg-opacity-10 hover:shadow-lg">
         <div className="aspect-[16/9] relative mb-4 overflow-hidden rounded-md">
           <Image

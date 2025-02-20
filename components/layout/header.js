@@ -99,9 +99,9 @@ export default function Header(props) {
 
   const menuItems = [
     { title: 'Exhibit', href: '/exhibit' },
-    { title: 'Course', href: '' },
+    { title: 'Course', href: '/course' },
     { title: 'Map', href: '/map' },
-    { title: 'Event', href: '' },
+    { title: 'Event', href: '/event' },
   ]
 
   const qa = [

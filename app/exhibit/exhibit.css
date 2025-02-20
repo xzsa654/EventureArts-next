@@ -2,14 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
+/* @layer base {
   @font-face {
     font-family: "Editorial";
     src: url("/fonts/EditorialNew-Light.woff2") format("woff2");
     font-weight: 300;
     font-style: normal;
   }
-}
+} */
 
 @layer components {
   .animate-verticalScrollDown {
@@ -129,7 +129,7 @@
 
 /* ExhibitionSection.js CSS  */
 .carousel-column {
-  animation: scrollUp 40s linear infinite;
+  animation: scrollUp 130s linear infinite;
   will-change: transform;
 }
 
