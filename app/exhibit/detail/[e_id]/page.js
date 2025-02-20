@@ -5,6 +5,7 @@ import { BsCashCoin } from "react-icons/bs"
 import { RiBuildingLine } from "react-icons/ri"
 import { IoMdHeartEmpty } from "react-icons/io"
 import { IoShareOutline } from "react-icons/io5"
+import { RiStore2Line } from "react-icons/ri";
 import Image from "next/image"
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3001"
@@ -71,10 +72,10 @@ export default function ExhibitionDetail({ params }) {
                   <MdDateRange size={24} className="text-gray-900" />
                   <span>{`${exhibitionData.e_startdate} - ${exhibitionData.e_enddate}`}</span>
                 </div>
-                <div className="border-t border-gray-300 border-[1px]"></div>
+                <div className="border-t border-black border-[1.5px]"></div>
                 <div className="flex items-center gap-4 text-base">
                   <MdLocationOn size={24} className="text-gray-900" />
-                  <span>{`${exhibitionData.city} ${exhibitionData.district} ${exhibitionData.address}`}</span>
+                  <span>{`${exhibitionData.city}${exhibitionData.district}${exhibitionData.address}`}</span>
                 </div>
                 <div className="flex items-center gap-4 text-base">
                   <BsCashCoin size={24} className="text-gray-900" />
@@ -83,6 +84,10 @@ export default function ExhibitionDetail({ params }) {
                 <div className="flex items-center gap-4 text-base">
                   <RiBuildingLine size={24} className="text-gray-900" />
                   <span>{exhibitionData.locat_name}</span>
+                </div>
+                <div className="flex items-center gap-4 text-base">
+                  <RiStore2Line size={24} className="text-gray-900" />
+                  <span>{exhibitionData.bd_name}</span>
                 </div>
               </div>
             </div>
