@@ -5,6 +5,8 @@ import React from 'react'
 import { useSearchParams } from 'next/navigation'
 import { isDev } from '@/config'
 import Link from 'next/link'
+import { Button } from '@heroui/button'
+import { HiArrowRight } from 'react-icons/hi2'
 
 export default function ECPayCallback() {
   // 取得網址參數，例如: ?RtnCode=xxxxxx
@@ -14,18 +16,72 @@ export default function ECPayCallback() {
 
   return (
     <>
-      <h1>ECPay(綠界金流) - 已完成付款頁</h1>
-      <p>本頁利用next的api路由(/ecpay/api)來協助導向這頁。</p>
-      <Link href="/ecpay">連至ECPay(綠界金流)測試頁</Link>
-      <hr />
-      <p>以下為回傳資料:</p>
-      <p>交易編號: {searchParams?.get('MerchantTradeNo')}</p>
-      <p>交易金額: {searchParams?.get('TradeAmt')}</p>
-      <p>交易日期: {searchParams?.get('TradeDate')}</p>
-      <p>付款日期: {searchParams?.get('PaymentDate')}</p>
-      <p>付款方式: {searchParams?.get('PaymentType')}</p>
-      <p>回應碼: {searchParams?.get('RtnCode')}</p>
-      <p>回應訊息: {searchParams?.get('RtnMsg')}</p>
+      <div className=" w-full  h-screen bg-[#f7f5f1]">
+        <div className=" pt-40 px-16">
+          <h5 className="text-xl font-bold pb-4">
+            ECPay(綠界金流) - 已完成付款
+          </h5>
+          <div className="border-t-1  border-[#dadada]">
+            <dl className="flex justify-between text-16 mt-8">
+              <dt>交易編號｜MerchantTradeNo :</dt>
+              <dd>{searchParams?.get('MerchantTradeNo')}</dd>
+            </dl>
+            <dl className="flex justify-between text-16 mt-4">
+              <dt>交易金額｜TradeAmt :</dt>
+              <dd>＄ {searchParams?.get('TradeAmt')} NTD</dd>
+            </dl>
+            <dl className="flex justify-between text-16 mt-4">
+              <dt>交易時間｜TradeDate :</dt>
+              <dd>{searchParams?.get('TradeDate')?.replace(/\//g, '-')}</dd>
+            </dl>
+            <dl className="flex justify-between text-16 mt-4">
+              <dt>付款時間｜PaymentDate :</dt>
+              <dd>{searchParams?.get('TradeDate')?.replace(/\//g, '-')}</dd>
+            </dl>
+            <dl className="flex justify-between text-16 mt-4">
+              <dt>付款方式｜PaymentType :</dt>
+              <dd>
+                {searchParams?.get('PaymentType') === 'Credit_CreditCard'
+                  ? '信用卡付款'
+                  : searchParams?.get('PaymentType') === 'TWQR_OPAY'
+                  ? 'TWQR行動支付'
+                  : searchParams?.get('PaymentType')}
+              </dd>
+            </dl>
+            <dl className="flex justify-between text-16 mt-4">
+              <dt>回應訊息｜RtnMsg :</dt>
+              <dd>
+                {searchParams?.get('RtnMsg') === 'Succeeded'
+                  ? '付款成功'
+                  : searchParams?.get('RtnMsg')}
+              </dd>
+            </dl>
+            {/* 按鈕 */}
+            <div className="flex justify-center mt-40 gap-10">
+              <Button
+                size="sm"
+                radius="none"
+                classNames={{}}
+                variant="light"
+                className="text-base text-yellow-600 hover:text-yellow-300 hover:scale-110 transition-transform duration-200 cursor-pointer flex items-center group gap-x-2 mt-5 px-7  data-[hover=true]:bg-primary-300"
+              >
+                回到首頁
+                <HiArrowRight className="transition-transform duration-300 ease-out group-hover:translate-x-3" />
+              </Button>
+              <Button
+                size="sm"
+                radius="none"
+                classNames={{}}
+                variant="light"
+                className="text-base text-yellow-600 hover:text-yellow-300 hover:scale-110 transition-transform duration-200 cursor-pointer flex items-center group gap-x-2 mt-5 px-7  data-[hover=true]:bg-primary-300"
+              >
+                查看票券
+                <HiArrowRight className="transition-transform duration-300 ease-out group-hover:translate-x-3" />
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
     </>
   )
 }

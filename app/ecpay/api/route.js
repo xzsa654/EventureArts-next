@@ -1,3 +1,4 @@
+// 這裡是複製 React Eddy老師的檔案
 import { NextResponse } from 'next/server'
 import { redirect } from 'next/navigation'
 

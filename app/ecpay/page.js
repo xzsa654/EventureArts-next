@@ -1,3 +1,4 @@
+// 這裡是複製 React Eddy老師的檔案，目前沒用到
 'use client'
 
 import React, { useRef } from 'react'
