@@ -4,7 +4,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { motion } from "framer-motion"
 
-const OnlineExhibitionCard = ({ e_id, tag, thumbnail, date, title, description, artist }) => {
+const OnlineExhibitionCard = ({ e_id, tag, cover_image, date, title, description, artist, image }) => {
 
 return (
   <motion.div
@@ -19,8 +19,14 @@ return (
     <Link href={`/exhibit/online-detail/${e_id}`}>
       <div className="bg-white bg-opacity-5 overflow-hidden relative p-4 rounded-lg border border-white border-opacity-10 transition-all duration-300 hover:bg-opacity-10 hover:shadow-lg">
         <div className="aspect-[16/9] relative mb-4 overflow-hidden rounded-md">
-          <Image
-            src={thumbnail || "/placeholder.svg"}
+        <Image
+            src={
+              cover_image?.startsWith("http")
+                ? cover_image
+                : cover_image
+                ? `http://localhost:3001${cover_image}`
+                : "/chu-images/img_9.jpg"
+            }
             alt={title}
             layout="fill"
             objectFit="cover"

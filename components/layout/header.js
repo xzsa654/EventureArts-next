@@ -129,7 +129,7 @@ export default function Header(props) {
     };
   }, [isOpen]);
 
-  // **✅ 先確保 hooks 都執行完，然後 return null**
+  // **先確保 hooks 都執行完，然後 return null**
   if (isHidden) {
     return null;
   }

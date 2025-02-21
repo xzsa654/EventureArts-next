@@ -3,7 +3,7 @@
 import Image from "next/image"
 import Link from "next/link"
 
-const Excard = ({ e_id, tag, image, date, title, description }) => {
+const Excard = ({ e_id, tag, cover_image, date, title, description }) => {
   // Process tags to extract only English versions and limit length
   const tags = tag
     ? tag
@@ -43,7 +43,13 @@ const Excard = ({ e_id, tag, image, date, title, description }) => {
         </div>
         <div className="w-full aspect-[4/3] overflow-hidden mb-4">
           <Image
-            src={image || "/placeholder.svg"}
+            src={
+              cover_image?.startsWith("http")
+                ? cover_image
+                : cover_image
+                ? `http://localhost:3001${cover_image}`
+                : "/chu-images/img_5.jpg"
+            }
             alt={title}
             width={400}
             height={300}

@@ -38,6 +38,8 @@ export default function OnlineExhibitions({ e_id }) {
 
   // 使用 SWR 獲取展覽資料
   const { data: exhibitions, error } = useSWR(url, fetcher)
+  
+  console.log("Fetched Exhibition Data:", exhibitions?.data);
 
   if (error)
     return <div className="text-white">Error loading online exhibitions</div>
@@ -199,7 +201,7 @@ export default function OnlineExhibitions({ e_id }) {
                     key={exhibition.e_id}
                     e_id={exhibition.e_id}
                     tag={exhibition.e_optionNames}
-                    image={exhibition.imageUrl || '/chu-images/img_9.jpg'}
+                    cover_image={exhibition.cover_image}
                     date={`${exhibition.e_startdate} - ${exhibition.e_enddate}`}
                     title={exhibition.e_name}
                     description={exhibition.e_desc}
