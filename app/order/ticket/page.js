@@ -17,6 +17,13 @@ export default function TicketPage() {
   const defaultContent = (
     <p>這是預設內容，您可以在這裡提供問題解答或其他資訊。</p>
   )
+  useEffect(() => {
+    fetch('http://localhost:3001/order/ticket')
+      .then((response) => response.json())
+      .then((data) => console.log(data))
+      .catch((error) => console.error("API 請求錯誤", error));
+  }, [])
+ 
   return (
     <>
       <div className=" w-full h-auto mt-20">

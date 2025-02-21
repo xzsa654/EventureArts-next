@@ -11,6 +11,7 @@ import { HiArrowRight } from 'react-icons/hi2'
 export default function ECPayCallback() {
   // 取得網址參數，例如: ?RtnCode=xxxxxx
   const searchParams = useSearchParams()
+  // const rtnCode = searchParams.get('RtnCode');
 
   if (isDev) console.log('RtnCode', searchParams?.get('RtnCode'))
 
