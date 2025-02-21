@@ -14,8 +14,6 @@ import { PCDLoader } from "three/examples/jsm/loaders/PCDLoader"
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader"
 import { PLYLoader } from "three/examples/jsm/loaders/PLYLoader"
-import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader"
-import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader"
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3001"
 const fetcher = (url) => fetch(url).then((res) => res.json())
@@ -95,141 +93,300 @@ export default function OnlineExhibitionDetail({ params }) {
     const gridHelper = new THREE.GridHelper(10, 10, 0x888888, 0x444444)
     sceneRef.current.add(gridHelper)
 
-    // Initialize Draco loader for compressed models
-    const dracoLoader = new DRACOLoader()
-    dracoLoader.setDecoderPath("/draco/")
-
-    // Load 3D model based on type from e_media
-    const loadModel = async () => {
-      try {
-        let object3D = null
-
-        switch (media.media_type) {
-          case "3d-obj":
-            const objLoader = new OBJLoader()
-            object3D = await new Promise((resolve, reject) => {
-              objLoader.load(media.media_url, resolve, undefined, reject)
+    // Load 3D model based on type
+    switch (media.media_type) {
+      case "3d-obj":
+        const objLoader = new OBJLoader()
+        objLoader.load(
+          media.media_url,
+          (obj) => {
+            // Add material if the model doesn't have one
+            obj.traverse((child) => {
+              if (child instanceof THREE.Mesh) {
+                if (!child.material) {
+                  child.material = new THREE.MeshStandardMaterial({
+                    color: 0xcccccc,
+                    roughness: 0.8,
+                    metalness: 0.2,
+                  })
+                }
+              }
             })
-            break
 
-          case "3d-gltf":
-            const gltfLoader = new GLTFLoader()
-            gltfLoader.setDRACOLoader(dracoLoader)
-            const gltf = await new Promise((resolve, reject) => {
-              gltfLoader.load(media.media_url, resolve, undefined, reject)
-            })
-            object3D = gltf.scene
-            break
+            // Get the initial bounding box to check position
+            const initialBox = new THREE.Box3().setFromObject(obj)
+            console.log("Initial bounds:", initialBox.min, initialBox.max)
 
-          case "3d-fbx":
-            const fbxLoader = new FBXLoader()
-            object3D = await new Promise((resolve, reject) => {
-              fbxLoader.load(media.media_url, resolve, undefined, reject)
-            })
-            break
+            // Reset position and normalize coordinates
+            obj.position.set(0, 0, 0)
+            obj.updateMatrixWorld(true)
 
-          case "3d-ply":
-            const plyLoader = new PLYLoader()
-            const geometry = await new Promise((resolve, reject) => {
-              plyLoader.load(media.media_url, resolve, undefined, reject)
+            const box = new THREE.Box3().setFromObject(obj)
+            const center = box.getCenter(new THREE.Vector3())
+            const size = box.getSize(new THREE.Vector3())
+
+            // Normalize scale
+            const maxDim = Math.max(size.x, size.y, size.z)
+            const targetSize = 5
+            const scale = targetSize / maxDim
+            obj.scale.multiplyScalar(scale)
+
+            // Move to grid origin
+            obj.position.copy(center).multiplyScalar(-1)
+            obj.position.y = 0
+
+            sceneRef.current.add(obj)
+
+            // Frame the model in view
+            const boundingBox = new THREE.Box3().setFromObject(obj)
+            const boundingSphere = new THREE.Sphere()
+            boundingBox.getBoundingSphere(boundingSphere)
+
+            // Calculate optimal camera position
+            const fov = cameraRef.current.fov * (Math.PI / 180)
+            const horizontalFov = Math.atan(Math.tan(fov / 2) * cameraRef.current.aspect) * 2
+            const distance = boundingSphere.radius / Math.sin(Math.min(fov, horizontalFov) / 2)
+
+            // Position camera to view model
+            const offset = new THREE.Vector3(1, 0.5, 1).normalize().multiplyScalar(distance)
+            cameraRef.current.position.copy(boundingSphere.center).add(offset)
+            cameraRef.current.lookAt(boundingSphere.center)
+
+            // Update controls to look at model
+            controlsRef.current.target.copy(boundingSphere.center)
+            controlsRef.current.update()
+
+            console.log("Model loaded:", {
+              position: obj.position,
+              scale: obj.scale,
+              boundingSphere: boundingSphere,
+              cameraPosition: cameraRef.current.position,
             })
+          },
+          (xhr) => {
+            console.log(`Loading: ${(xhr.loaded / xhr.total) * 100}%`)
+          },
+          (error) => console.error("Error loading OBJ model:", error),
+        )
+        break
+      case "3d-ply":
+        const plyLoader = new PLYLoader()
+        plyLoader.load(
+          media.media_url,
+          (geometry) => {
+            // Add material to the geometry
             const material = new THREE.MeshStandardMaterial({
               color: 0xcccccc,
               roughness: 0.8,
               metalness: 0.2,
             })
-            object3D = new THREE.Mesh(geometry, material)
-            break
+            const mesh = new THREE.Mesh(geometry, material)
 
-          case "3d-pcd":
-            const pcdLoader = new PCDLoader()
-            object3D = await new Promise((resolve, reject) => {
-              pcdLoader.load(media.media_url, resolve, undefined, reject)
+            // Center the model
+            geometry.computeBoundingBox()
+            const box = geometry.boundingBox
+            const center = new THREE.Vector3()
+            box.getCenter(center)
+            geometry.translate(-center.x, -center.y, -center.z)
+
+            // Scale the model appropriately
+            const size = new THREE.Vector3()
+            box.getSize(size)
+            const maxDim = Math.max(size.x, size.y, size.z)
+            const scale = 5 / maxDim
+            mesh.scale.multiplyScalar(scale)
+
+            // Add to scene
+            sceneRef.current.add(mesh)
+
+            // Position camera
+            const boundingSphere = new THREE.Sphere()
+            box.getBoundingSphere(boundingSphere)
+
+            // Set camera position
+            cameraRef.current.position.set(5, 5, 5)
+            cameraRef.current.lookAt(0, 0, 0)
+
+            // Update controls
+            controlsRef.current.target.set(0, 0, 0)
+            controlsRef.current.update()
+
+            console.log("PLY Model loaded with:", {
+              position: mesh.position,
+              scale: mesh.scale,
+              boundingSphere: boundingSphere,
+              cameraPosition: cameraRef.current.position,
             })
-            break
 
-          default:
-            throw new Error(`Unsupported media type: ${media.media_type}`)
-        }
-
-        if (!object3D) throw new Error("Failed to load 3D object")
-
-        // Add material if the model doesn't have one
-        object3D.traverse((child) => {
-          if (child instanceof THREE.Mesh) {
-            if (!child.material) {
-              child.material = new THREE.MeshStandardMaterial({
+            // Add axes helper for debugging
+            const axesHelper = new THREE.AxesHelper(5)
+            sceneRef.current.add(axesHelper)
+          },
+          (progress) => {
+            console.log(`Loading progress: ${(progress.loaded / progress.total) * 100}%`)
+          },
+          (error) => {
+            console.error("Error loading PLY model:", error)
+            setLoadingError("Failed to load PLY model")
+          },
+        )
+        break
+      case "3d-model":
+        // Check if it's a PLY file
+        if (media.media_url.toLowerCase().endsWith(".ply")) {
+          const plyLoader = new PLYLoader()
+          plyLoader.load(
+            media.media_url,
+            (geometry) => {
+              // Add material to the geometry
+              const material = new THREE.MeshStandardMaterial({
                 color: 0xcccccc,
                 roughness: 0.8,
                 metalness: 0.2,
               })
-            }
-          }
-        })
+              const mesh = new THREE.Mesh(geometry, material)
 
-        // Reset position and normalize coordinates
-        object3D.position.set(0, 0, 0)
-        object3D.updateMatrixWorld(true)
+              // Center the model
+              geometry.computeBoundingBox()
+              const box = geometry.boundingBox
+              const center = new THREE.Vector3()
+              box.getCenter(center)
+              geometry.translate(-center.x, -center.y, -center.z)
 
-        const box = new THREE.Box3().setFromObject(object3D)
-        const center = box.getCenter(new THREE.Vector3())
-        const size = box.getSize(new THREE.Vector3())
+              // Scale the model appropriately
+              const size = new THREE.Vector3()
+              box.getSize(size)
+              const maxDim = Math.max(size.x, size.y, size.z)
+              const scale = 5 / maxDim
+              mesh.scale.multiplyScalar(scale)
 
-        // Normalize scale
-        const maxDim = Math.max(size.x, size.y, size.z)
-        const targetSize = 5
-        const scale = targetSize / maxDim
-        object3D.scale.multiplyScalar(scale)
+              // Add to scene
+              sceneRef.current.add(mesh)
 
-        // Move to grid origin
-        object3D.position.copy(center).multiplyScalar(-1)
-        object3D.position.y = 0
+              // Position camera
+              const boundingSphere = new THREE.Sphere()
+              box.getBoundingSphere(boundingSphere)
 
-        sceneRef.current.add(object3D)
+              // Set camera position
+              cameraRef.current.position.set(5, 5, 5)
+              cameraRef.current.lookAt(0, 0, 0)
 
-        // Frame the model in view
-        const boundingBox = new THREE.Box3().setFromObject(object3D)
-        const boundingSphere = new THREE.Sphere()
-        boundingBox.getBoundingSphere(boundingSphere)
+              // Update controls
+              controlsRef.current.target.set(0, 0, 0)
+              controlsRef.current.update()
 
-        // Calculate optimal camera position
-        const fov = cameraRef.current.fov * (Math.PI / 180)
-        const horizontalFov = Math.atan(Math.tan(fov / 2) * cameraRef.current.aspect) * 2
-        const distance = boundingSphere.radius / Math.sin(Math.min(fov, horizontalFov) / 2)
+              console.log("PLY Model loaded with:", {
+                position: mesh.position,
+                scale: mesh.scale,
+                boundingSphere: boundingSphere,
+                cameraPosition: cameraRef.current.position,
+              })
 
-        // Position camera to view model
-        const offset = new THREE.Vector3(1, 0.5, 1).normalize().multiplyScalar(distance)
-        cameraRef.current.position.copy(boundingSphere.center).add(offset)
-        cameraRef.current.lookAt(boundingSphere.center)
+              // Add axes helper for debugging
+              const axesHelper = new THREE.AxesHelper(5)
+              sceneRef.current.add(axesHelper)
+            },
+            (progress) => {
+              console.log(`Loading progress: ${(progress.loaded / progress.total) * 100}%`)
+            },
+            (error) => {
+              console.error("Error loading PLY model:", error)
+              setLoadingError("Failed to load PLY model")
+            },
+          )
+        } else {
+          const gltfLoader = new GLTFLoader()
+          gltfLoader.load(
+            media.media_url,
+            (gltf) => {
+              const model = gltf.scene
 
-        // Update controls to look at model
-        controlsRef.current.target.copy(boundingSphere.center)
-        controlsRef.current.update()
+              // Debug initial state
+              console.log("Initial model position:", model.position)
+              console.log("Initial model scale:", model.scale)
 
-        // Apply animation config if provided
-        if (media.animation_config) {
-          try {
-            const config = JSON.parse(media.animation_config)
-            // Apply animation settings here
-            console.log("Animation config:", config)
-          } catch (err) {
-            console.error("Error parsing animation config:", err)
-          }
+              // Center the model
+              const box = new THREE.Box3().setFromObject(model)
+              const center = box.getCenter(new THREE.Vector3())
+              const size = box.getSize(new THREE.Vector3())
+
+              console.log("Model bounds:", {
+                center: center,
+                size: size,
+                min: box.min,
+                max: box.max,
+              })
+
+              // Reset position to center
+              model.position.set(0, 0, 0)
+
+              // Scale the model appropriately
+              const maxDim = Math.max(size.x, size.y, size.z)
+              const scale = 5 / maxDim
+              model.scale.multiplyScalar(scale)
+
+              // Add model to scene
+              sceneRef.current.add(model)
+
+              // Position camera to view model
+              const boundingSphere = new THREE.Sphere()
+              box.getBoundingSphere(boundingSphere)
+
+              // Set camera position
+              cameraRef.current.position.set(5, 5, 5)
+              cameraRef.current.lookAt(0, 0, 0)
+
+              // Update controls
+              controlsRef.current.target.set(0, 0, 0)
+              controlsRef.current.update()
+
+              console.log("Model loaded with:", {
+                finalPosition: model.position,
+                finalScale: model.scale,
+                cameraPosition: cameraRef.current.position,
+                controlsTarget: controlsRef.current.target,
+              })
+
+              // Add axes helper for debugging
+              const axesHelper = new THREE.AxesHelper(5)
+              sceneRef.current.add(axesHelper)
+            },
+            (progress) => {
+              console.log(`Loading progress: ${(progress.loaded / progress.total) * 100}%`)
+            },
+            (error) => {
+              console.error("Error loading GLTF model:", error)
+              setLoadingError("Failed to load 3D model")
+            },
+          )
         }
+        break
 
-        console.log("Model loaded successfully:", {
-          type: media.media_type,
-          position: object3D.position,
-          scale: object3D.scale,
-          boundingSphere: boundingSphere,
-        })
-      } catch (error) {
-        console.error("Error loading model:", error)
-        setLoadingError(`Failed to load model: ${error.message}`)
-      }
+      case "3d-pointcloud":
+        const pcdLoader = new PCDLoader()
+        pcdLoader.load(
+          media.media_url,
+          (points) => {
+            const box = new THREE.Box3().setFromObject(points)
+            const center = box.getCenter(new THREE.Vector3())
+            points.position.sub(center)
+
+            const size = box.getSize(new THREE.Vector3())
+            const maxDim = Math.max(size.x, size.y, size.z)
+            const scale = 5 / maxDim
+            points.scale.multiplyScalar(scale)
+
+            sceneRef.current.add(points)
+            console.log("Point Cloud Loaded Successfully!")
+          },
+          undefined,
+          (error) => console.error("Error loading Point Cloud:", error),
+        )
+        break
+
+      default:
+        console.warn("Unsupported media type:", media.media_type)
     }
-
-    loadModel()
 
     // Animation loop
     const animate = () => {
@@ -257,7 +414,6 @@ export default function OnlineExhibitionDetail({ params }) {
       window.removeEventListener("resize", handleResize)
       rendererRef.current?.dispose()
       controlsRef.current?.dispose()
-      dracoLoader.dispose()
     }
   }, [exhibitionData])
 

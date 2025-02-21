@@ -1,14 +1,18 @@
-"use client"
-import useSWR from "swr"
-import { MdLocationOn, MdDateRange } from "react-icons/md"
-import { BsCashCoin } from "react-icons/bs"
-import { RiBuildingLine } from "react-icons/ri"
-import { IoMdHeartEmpty } from "react-icons/io"
-import { IoShareOutline } from "react-icons/io5"
-import { RiStore2Line } from "react-icons/ri";
-import Image from "next/image"
+'use client'
+import useSWR from 'swr'
+import { MdLocationOn, MdDateRange } from 'react-icons/md'
+import { BsCashCoin } from 'react-icons/bs'
+import { RiBuildingLine } from 'react-icons/ri'
+import { IoMdHeartEmpty } from 'react-icons/io'
+import { IoShareOutline } from 'react-icons/io5'
+import { RiStore2Line } from 'react-icons/ri'
+import Image from 'next/image'
+import { useRouter } from 'next/navigation' // for buy ticket btn
+import Link from 'next/link'
+import { Button } from '@heroui/button'
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3001"
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3001'
 
 // Fetcher function for useSWR
 const fetcher = (url) => fetch(url).then((res) => res.json())
@@ -16,11 +20,17 @@ const fetcher = (url) => fetch(url).then((res) => res.json())
 export default function ExhibitionDetail({ params }) {
   const { e_id } = params
 
+  // ---for buy ticket btn start---
+  const router = useRouter() // ✅ 使用 Next.js App Router 的 useRouter
+  // ---for buy ticket btn end---
+
   // Use SWR to fetch exhibition data
-  const { data , error } = useSWR(`${API_BASE_URL}/exhibit/api/${e_id}`, fetcher)
-  const exhibitionData = data?.data;
+  const { data, error } = useSWR(`${API_BASE_URL}/exhibit/api/${e_id}`, fetcher)
+  const exhibitionData = data?.data
+
+  console.log(exhibitionData)
   // exhibitionData?.data[0];
-  console.log(error);
+  console.log(error)
   if (error) return <div>Error loading exhibition data</div>
   if (!exhibitionData) return <div>Loading...</div>
 
@@ -30,12 +40,17 @@ export default function ExhibitionDetail({ params }) {
         <div className="max-w-6xl mx-auto px-4 py-8">
           {/* Header Section */}
           <div className="space-y-4 mb-8">
-            <h1 className="text-5xl font-bold text-gray-900">{exhibitionData.e_name}</h1>
+            <h1 className="text-5xl font-bold text-gray-900">
+              {exhibitionData.e_name}
+            </h1>
 
             {/* Tags */}
             <div className="flex flex-wrap gap-2 items-center">
-              {exhibitionData.e_optionNames?.split(",").map((option, index) => (
-                <span key={index} className="px-4 py-2 border border-gray-900 rounded-full">
+              {exhibitionData.e_optionNames?.split(',').map((option, index) => (
+                <span
+                  key={index}
+                  className="px-4 py-2 border border-gray-900 rounded-full"
+                >
                   {option.trim()}
                 </span>
               ))}
@@ -59,7 +74,13 @@ export default function ExhibitionDetail({ params }) {
               {/* Image Section */}
               <div className="relative aspect-[4/3] bg-gray-100">
                 <Image
-                  src={exhibitionData.e_img || "/chu-images/img_9.jpg"}
+                  src={
+                    exhibitionData.cover_image?.startsWith('http')
+                      ? exhibitionData.cover_image
+                      : exhibitionData.cover_image
+                      ? `http://localhost:3001${exhibitionData.cover_image}`
+                      : '/chu-images/img_9.jpg'
+                  }
                   alt={exhibitionData.e_name}
                   fill
                   className="rounded-lg object-cover"
@@ -95,7 +116,9 @@ export default function ExhibitionDetail({ params }) {
             {/* Right Column - Content Section */}
             <div className="space-y-6">
               <div className="space-y-4">
-                <h3 className="text-2xl font-bold text-gray-900">{exhibitionData.e_abstract}</h3>
+                <h3 className="text-2xl font-bold text-gray-900">
+                  {exhibitionData.e_abstract}
+                </h3>
                 <p className="text-gray-700">{exhibitionData.e_desc}</p>
               </div>
 
@@ -108,13 +131,14 @@ export default function ExhibitionDetail({ params }) {
                   <IoMdHeartEmpty size={20} className="mr-2" />
                   add like
                 </a>
-                <a
-                  href="#"
+                <Button
+                  // href={`/order?e_id=${e_id}`} // 這行是配用"Link"
                   className="flex-1 py-3 px-4 flex items-center justify-center text-gray-900 hover:underline border border-gray-900 rounded-md"
+                  onClick={() => router.push(`/order?e_id=${e_id}`)} // 改成用 button buy ticket to order page
                 >
                   buy ticket
                   <span className="ml-2">→</span>
-                </a>
+                </Button>
               </div>
             </div>
           </div>
@@ -123,4 +147,3 @@ export default function ExhibitionDetail({ params }) {
     </div>
   )
 }
-

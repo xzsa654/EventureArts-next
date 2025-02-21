@@ -4,7 +4,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { motion } from "framer-motion"
 
-const OnlineExhibitionCard = ({ e_id, tag, cover_image, date, title, description, artist, image }) => {
+const OnlineExhibitionCard = ({ e_id, tag, cover_image, date, title, description, artist }) => {
 
 return (
   <motion.div
