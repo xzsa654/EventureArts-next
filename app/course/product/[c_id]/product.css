@@ -1,0 +1,63 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Megrim&family=Noto+Sans+TC&family=Noto+Serif+TC:wght@200..900&family=Unna:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+
+body {
+    margin: 0;
+    margin-top: 80px;
+    padding: 0;
+    height: 100%;
+    background-color: #f7f5f1;
+}
+
+/* 頁面Section 的上下左右margin */
+.section1, .section2, .section3, .section4, .section5 {
+    margin: 80px 64px;
+}
+
+.PTitle {
+    border-bottom: 2px solid black;
+    margin-bottom: 30px;
+    padding-bottom: 30px;
+}
+
+.PTitle p {
+    font-size: 30px;
+    font-weight: bold;
+    font-family: "Kanit", serif;
+    text-align: left;
+}
+
+/* 課程3特點 */
+.Special {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    width: 350px;
+    height: 300px;
+}
+
+/* 課程介紹細項 */
+.items {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Noto sans tc', serif ;
+    font-size: 1rem;
+}
+
+.content {
+    padding: 0px 60px;
+    padding-bottom: 60px;
+    line-height: 2rem;
+}
+
+.subtitle {
+    font-size: 16px;
+    color: grey;
+    padding-bottom: 10px;
+    margin-bottom: 30px;
+    border-bottom: 1px grey solid;
+}

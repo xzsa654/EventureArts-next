@@ -27,9 +27,9 @@ export default function Header(props) {
   const { onOpen } = login
   const menuItems = [
     { title: 'Exhibit', href: '/exhibit' },
-    { title: 'Course', href: '' },
+    { title: 'Course', href: '/course' },
     { title: 'Map', href: '/map' },
-    { title: 'Event', href: '' },
+    { title: 'Event', href: '/event' },
   ]
   const qa = [
     { title: '常見問題', href: '' },

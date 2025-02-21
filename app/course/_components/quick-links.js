@@ -4,7 +4,7 @@ import React from 'react'
 
 const links = [
   {
-    src: "Blair/links/r5.png",
+    src: "Blair/links/flower.png",
     text: "花藝植栽",
     href: "https://google.com.tw",
   },
@@ -19,7 +19,7 @@ const links = [
     href: "#",
   },
   {
-    src: "Blair/links/r6.png",
+    src: "Blair/links/piano.png",
     text: "音樂舞蹈",
     href: "#",
   },
@@ -34,7 +34,7 @@ const links = [
     href: "#",
   },
   {
-    src: "Blair/links/r5.png",
+    src: "Blair/links/outdoor.png",
     text: "戶外踏青",
     href: "#",
   },
@@ -47,12 +47,19 @@ const links = [
 
 const LinkList = () => {
     return (
-      <div className="LinkArea flex justify-between flex-wrap text-center">
+      // 整條Quick-links
+      <div className="LinkArea flex flex-wrap justify-evenly text-center my-4">
         {links.map((link, index) => (
-          <a key={index} href={link.href} className="imgbox w-[90px] h-[90px]">
-            <div className="link flex justify-center items-center flex-col w-full h-full gap-2">
+
+          // 整個含連結的分類框：icon + text
+          <a key={index} href={link.href} className="w-[100px] h-[100px]">
+            <div className="linkbox flex justify-end items-center flex-col w-full h-full gap-8">
+
+              {/* icon */}
               <img src={link.src} className="w-[70%] h-[70%]" alt={`icon-${index}`} />
-              {link.text}
+              {/* text */}
+              <p>{link.text}</p>
+
             </div>
           </a>
         ))}

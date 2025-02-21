@@ -10,7 +10,7 @@ import {Button} from "@heroui/react";
         <>
         <div className="flex gap-4 items-center">
 
-          <Button radius="none" className="bg-[#000000] text-white h-full">
+          <Button radius="full" className="bg-[#000000] text-white text-[15px] h-[50px]">
             <span>{text}</span>
             <BsArrowRight />
           </Button>

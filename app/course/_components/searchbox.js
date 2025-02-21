@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Select, SelectItem } from "@heroui/react";
 import { DateRangePicker } from "@heroui/react";
-import { Input } from "@heroui/react"; // 假設這是正確的路徑，原來的路徑錯誤
+import { Input } from "@heroui/react";
 import BtnCTA from './btnCTA';
 
 // import 自定義樣式
@@ -28,14 +28,13 @@ const regions = [
 export default function Searchbox() {
   return (
     <>
-    <div className="bar w-full">
-        <div className="leftbar flex items-center">
+    <div className="Searchbar w-full flex flex-row justify-between my-4">
+        <div className="leftbar flex flex-row">
             {/* SelectRegion 選擇地區 */}
-            <div className="flex-1 SelectRegion px-4">
+            <div className="SelectRegion w-[330px] px-4">
             <Select
                 isRequired
-                className="w-full"
-                size="sm"
+                className=""
                 label="行政區域"
                 variant="underlined"
                 radius="none"
@@ -43,15 +42,13 @@ export default function Searchbox() {
             >
                 {regions.map((region) => (
                 <SelectItem key={region.key}>{region.label}</SelectItem>
-                ))}
-            </Select>
+            ))}</Select>
             </div>
 
             {/* SelectDate 選擇日期 */}
-            <div className="flex-1 SelectDate px-4">
+            <div className="SelectDate w-[330px] px-4">
             <DateRangePicker
-                className="w-full"
-                size="sm"
+                className=""
                 label="日期區間"
                 variant="underlined"
                 radius="none"
@@ -59,10 +56,9 @@ export default function Searchbox() {
             </div>
 
             {/* Keywords 關鍵字搜索 */}
-            <div className="flex-1 Keywords px-4">
+            <div className="Keywords w-[330px] px-4">
             <Input 
-            className="w-full"
-            size="sm"
+            className=""
             label="關鍵字搜尋" 
             placeholder="搜尋課程名稱、品牌名稱"  
             type="text" 
