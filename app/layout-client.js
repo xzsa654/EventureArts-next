@@ -1,16 +1,22 @@
 "use client"; 
 
 import { usePathname } from 'next/navigation'
+import { useEffect, useState } from 'react';
 import Header from '@/components/layout/header'
 import Footer from '@/components/layout/footer'
 
 export default function LayoutClient({ children }) {
-  // 取得當前路徑
-  const pathname = usePathname();
+  const [currentPath, setCurrentPath] = useState(null);
+
+  useEffect(() => {
+    setCurrentPath(window.location.pathname);
+  }, []);
+
+  if (currentPath === null) return null; // 🚀 避免 SSR 時執行錯誤
 
   // 判斷條件 (可按照需求更改)
-  const isOnlineDetail = pathname.startsWith('/exhibit/online-detail');
-  const isMap = pathname.startsWith('/map');
+  const isOnlineDetail = currentPath.startsWith('/exhibit/online-detail');
+  const isMap = currentPath.startsWith('/map');
 
   return (
     <>
