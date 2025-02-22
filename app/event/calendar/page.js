@@ -24,9 +24,9 @@ export default function CalendarPage(props) {
         <div className=" relative bg-primary w-1/3 h-full pt-10 pb-5 flex flex-col px-10  gap-18 ">
           {/* title */}
           <div
-            className="relative text-white text-6xl text-center 
-              after:absolute after:content-[''] 
-              after:w-9/12 after:h-4 
+            className="relative text-white text-6xl text-center
+              after:absolute after:content-['']
+              after:w-9/12 after:h-4
               after:border-t after:border-white
               after:-bottom-10 after:left-10"
           >

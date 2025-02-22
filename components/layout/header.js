@@ -3,7 +3,8 @@
 import React, { useState, useEffect } from 'react'
 import { HiMenuAlt4, HiOutlineX, HiUser } from 'react-icons/hi'
 import { Navbar, NavbarBrand, NavbarContent, NavbarItem } from '@heroui/navbar'
-import { Link, Image, AvatarGroup } from '@heroui/react'
+import { Image } from '@heroui/react'
+import Link from 'next/link'
 import AVatarGroup from '../common/avatar-group'
 import { usePathname } from 'next/navigation'
 import { useModal } from '@/contexts/modal-context'
@@ -114,24 +115,24 @@ export default function Header(props) {
   // const pathName = usePathname();
 
   // **黑名單路徑**（這些頁面不渲染 Header）
-  const noHeaderPages = ["/exhibit/online-detail/"];
-  const isHidden = noHeaderPages.some((path) => pathName.startsWith(path));
+  const noHeaderPages = ['/exhibit/online-detail/']
+  const isHidden = noHeaderPages.some((path) => pathName.startsWith(path))
 
   // 🚀 **這樣確保 hooks 不會在條件語句內**
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = "hidden";
+      document.body.style.overflow = 'hidden'
     } else {
-      document.body.style.overflow = "unset";
+      document.body.style.overflow = 'unset'
     }
     return () => {
-      document.body.style.overflow = "unset";
-    };
-  }, [isOpen]);
+      document.body.style.overflow = 'unset'
+    }
+  }, [isOpen])
 
   // **先確保 hooks 都執行完，然後 return null**
   if (isHidden) {
-    return null;
+    return null
   }
 
   return (
@@ -235,7 +236,7 @@ export default function Header(props) {
                 isOpen ? 'flex' : 'hidden'
               } lg:flex  justify-center text-small `}
             >
-              <Link href="#" onPress={onOpen}>
+              <Link href="#" onClick={onOpen}>
                 {/* 已登入的 component */}
                 {auth?.user_id !== 0 ? (
                   <AVatarGroup />
@@ -248,7 +249,7 @@ export default function Header(props) {
               </Link>
             </NavbarItem>
             <NavbarItem>
-              <Link href="#" onPress={toggleMenu}>
+              <Link href="#" onClick={toggleMenu}>
                 {isOpen ? (
                   <HiOutlineX size={35} color="white" />
                 ) : (
@@ -321,7 +322,7 @@ export default function Header(props) {
                   {menuItems.map((item, i) => (
                     <li key={i} className="p-2">
                       <Link
-                        className="text-white sm:text-xl lg:text-4xl font-serif after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-white hover:after:w-full after:transition-all after:duration-300"
+                        className="text-white relative sm:text-xl lg:text-4xl font-serif after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-white hover:after:w-full after:transition-all after:duration-300"
                         href={item.href}
                       >
                         {item.title}

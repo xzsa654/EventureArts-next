@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react'
 import { Select, SelectItem, Button } from '@heroui/react'
-import { useRouter } from 'next/navigation'
 export default function UserPageSelect({ type }) {
   return (
     <>

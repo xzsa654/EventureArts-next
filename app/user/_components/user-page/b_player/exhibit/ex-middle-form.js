@@ -10,7 +10,7 @@ import {
   CheckboxGroup,
   Textarea,
 } from '@heroui/react'
-import { CustomCheckbox } from './custom-checkbox'
+import { CustomCheckbox } from '../custom-checkbox'
 
 export default function ExMiddleForm(props) {
   const [groupSelected, setGroupSelected] = React.useState([])
