@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react'
 
 import { ScrollShadow } from '@heroui/react'
-import UserAddForm from './add-form'
+import UserAddForm from '../add-form'
 export default function ExAdd({ online }) {
   return (
     <>

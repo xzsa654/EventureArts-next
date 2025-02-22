@@ -2,8 +2,8 @@
 
 import React from 'react'
 
-import UserPageCard from './user-page/card'
-import UserPageSelect from './user-page/select'
+import UserPageCard from './card'
+import UserPageSelect from '../select'
 import OurPagination from '@/components/common/pagination'
 import { Tabs, Tab } from '@heroui/tabs'
 

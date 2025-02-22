@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import ExMiddleForm from './ex-middle-form'
+import ExMiddleForm from './exhibit/ex-middle-form'
 import UserFile from './user-file'
 import { Button } from '@heroui/react'
 import { Image } from '@heroui/react'

@@ -2,14 +2,15 @@
 
 import React, { useState, useEffect } from 'react'
 import { usePathname } from 'next/navigation'
-import { Link, Image, ScrollShadow, Button } from '@heroui/react'
-import Mang from './mang'
-import ExAdd from './ex-add'
-import CoAdd from './co-add'
-import LikedEvents from '../LikedEvents'
-
+import { Image } from '@heroui/react'
+import Link from 'next/link'
+import Mang from './b_player/mang'
+import ExAdd from './b_player/exhibit/ex-add'
+import CoAdd from './b_player/course/co-add'
+import LikedEvents from './c_player/LikedEvents'
+import CPlayerProfile from './c_player/profile'
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules'
-
+import BPlayerProfile from './b_player/profile'
 import { Swiper, SwiperSlide } from 'swiper/react'
 
 // Import Swiper styles
@@ -21,9 +22,14 @@ import 'swiper/css/scrollbar'
 export default function UserPageFrame(props) {
   // 當前路由
   const pathName = usePathname().split('/user')[1]
+  console.log(pathName)
 
   // 路由對應的 title 和 components
   const routing = {
+    '/b/profile': {
+      title: 'Brand PROFILE.',
+      components: <BPlayerProfile />,
+    },
     '/b/ex-mang': {
       title: '#EXHIBIT MANG.',
       components: <Mang />,
@@ -41,6 +47,10 @@ export default function UserPageFrame(props) {
     '/b/co-mang/add': {
       title: '#COURSE MANG.',
       components: <CoAdd />,
+    },
+    '/c/profile': {
+      title: 'MY PROFILE.',
+      components: <CPlayerProfile />,
     },
   }
 
@@ -69,8 +79,7 @@ export default function UserPageFrame(props) {
           >
             <SwiperSlide>
               <Link
-                href="#"
-                size="md"
+                href="/user/c/profile"
                 className={`hover:text-yellow-600 ${
                   pathName == 'profile' ? isActive.c : ''
                 }   text-[14px] mb-5`}
@@ -158,10 +167,10 @@ export default function UserPageFrame(props) {
             <ul className="border-black border-b-1 h-1/2">
               <li className=" font-cn border-black border-b-1 flex items-center justify-center  w-full h-[50px] ">
                 <Link
-                  href="#"
+                  href="/user/c/profile"
                   size="md"
-                  className={`hover:text-yellow-600 ${
-                    pathName == 'profile' ? isActive.c : ''
+                  className={` text-16 hover:text-yellow-600 ${
+                    pathName == '/c/profile' ? isActive.c : ''
                   }`}
                 >
                   我的檔案
@@ -171,7 +180,7 @@ export default function UserPageFrame(props) {
                 <Link
                   href="#"
                   size="md"
-                  className={`hover:text-yellow-600 ${
+                  className={` text-16 hover:text-yellow-600 ${
                     pathName == 'order' ? isActive.c : ''
                   }`}
                 >
@@ -180,10 +189,10 @@ export default function UserPageFrame(props) {
               </li>
               <li className=" font-cn border-black border-b-1 w-full h-[50px] flex items-center justify-center ">
                 <Link
-                  href="#"
+                  href="/user/c/liked"
                   size="md"
-                  className={`hover:text-yellow-600 ${
-                    pathName == 'liked' ? isActive.c : ''
+                  className={`text-16 hover:text-yellow-600 ${
+                    pathName == '/c/liked' ? isActive.c : ''
                   }`}
                 >
                   收藏
@@ -195,10 +204,10 @@ export default function UserPageFrame(props) {
             <ul className="w-[150px] border-black border-b-1 h-1/2 flex flex-col ">
               <li className=" border-b-1 font-cn  border-black flex items-center justify-center  w-full h-[50px] ">
                 <Link
-                  href="#"
+                  href="/user/b/profile"
                   size="md"
-                  className={`hover:text-green-600 ${
-                    pathName == 'profile' ? isActive.b : ''
+                  className={` text-16 hover:text-green-600 ${
+                    pathName == '/b/profile' ? isActive.b : ''
                   }`}
                 >
                   我的品牌
@@ -208,7 +217,7 @@ export default function UserPageFrame(props) {
                 <Link
                   href="/user/b/co-mang"
                   size="md"
-                  className={`hover:text-green-600 ${
+                  className={`text-16 hover:text-green-600 ${
                     pathName.split('/')[2] == 'co-mang' ? isActive.b : ''
                   }`}
                 >
@@ -219,7 +228,7 @@ export default function UserPageFrame(props) {
                 <Link
                   href="/user/b/ex-mang"
                   size="md"
-                  className={`hover:text-green-600 ${
+                  className={`text-16 hover:text-green-600 ${
                     pathName.split('/')[2] == 'ex-mang' ? isActive.b : ''
                   }`}
                 >
@@ -230,7 +239,7 @@ export default function UserPageFrame(props) {
                 <Link
                   href="#"
                   size="md"
-                  className={`hover:text-green-600 ${
+                  className={`text-16 hover:text-green-600 ${
                     pathName == 'order' ? isActive.b : ''
                   }`}
                 >
@@ -247,7 +256,13 @@ export default function UserPageFrame(props) {
           </div>
 
           {/* content */}
-          <div className="w-full flex flex-col h-auto gap-5 mx-12 my-6 max-sm:my-2 max-sm:mx-0   ">
+          <div
+            className={`w-full flex flex-col h-auto gap-5 ${
+              pathName.includes('profile')
+                ? ''
+                : 'mx-12 my-6 max-sm:my-2 max-sm:mx-0'
+            }`}
+          >
             {routing[pathName]?.components}
           </div>
         </div>
