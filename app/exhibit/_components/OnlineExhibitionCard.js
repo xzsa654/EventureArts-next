@@ -28,8 +28,10 @@ return (
                 : "/chu-images/img_9.jpg"
             }
             alt={title}
-            layout="fill"
-            objectFit="cover"
+            height={300}
+              width={400}
+              priority
+            // objectFit="cover"
             className="transition-transform duration-300 group-hover:scale-105"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-0 group-hover:opacity-60 transition-opacity duration-300"></div>

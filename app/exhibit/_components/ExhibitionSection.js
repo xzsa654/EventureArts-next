@@ -31,10 +31,13 @@ export default function ExhibitionSection({ onExhibitionSelect, exhibitions = []
             onClick={() => onExhibitionSelect(exhibition)}
           >
             <Image
-              src={exhibition.cover_image || exhibition.imageUrl || getDefaultImage(columnIndex * items.length + index)}
+              src={exhibition.cover_image || getDefaultImage(columnIndex * items.length + index)}
               alt={exhibition.e_name || "Exhibition image"}
               fill
-              sizes="(max-width: 768px) 150vw, (max-width: 1200px) 33vw"
+              // height={400}
+              // width={300}
+              priority
+              // sizes="(max-width: 768px) 150vw, (max-width: 1200px) 33vw"
               className="object-cover transition-transform duration-500 group-hover:scale-105"
             />
           </div>
@@ -43,27 +46,7 @@ export default function ExhibitionSection({ onExhibitionSelect, exhibitions = []
           </div>
         </div>
       ))}
-      {/* Duplicated items for seamless loop */}
-      {items.map((exhibition, index) => (
-        <div key={`${exhibition.e_id}-duplicate`} className="mb-8 space-y-1">
-          <span className="block text-7xl font-light">{exhibition.e_id}</span>
-          <div
-            className="relative aspect-[3/4] cursor-pointer group overflow-hidden w-[300px]"
-            onClick={() => onExhibitionSelect(exhibition)}
-          >
-            <Image
-              src={exhibition.cover_image || exhibition.imageUrl || getDefaultImage(columnIndex * items.length + index)}
-              alt={exhibition.e_name || "Exhibition image"}
-              fill
-              sizes="(max-width: 768px) 150vw, (max-width: 1200px) 100vw"
-              className="object-cover transition-transform duration-500 group-hover:scale-105"
-            />
-          </div>
-          <div className="space-y-1">
-            <h3 className="font-serif text-lg">{exhibition.e_name}</h3>
-          </div>
-        </div>
-      ))}
+      {/* Duplicated items for seamless loop is not need anymore */}
     </div>
   )
 
@@ -71,7 +54,7 @@ export default function ExhibitionSection({ onExhibitionSelect, exhibitions = []
     <section className="relative h-[700px]">
       {/* Background Image */}
       <div className="fixed inset-0 -z-10">
-        <Image src="/chu-images/img-bg.jpg" alt="Background" fill className="object-cover" priority />
+        <Image src="/chu-images/img-bg.jpg" alt="Background" fill priority className="object-cover"/>
       </div>
 
       {/* this is Left text + carousel area  */}

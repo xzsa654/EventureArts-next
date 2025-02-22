@@ -75,14 +75,14 @@ export default function ExhibitPage() {
       </section>
 
       {/* Second Hero Section */}
-      <section id="second-hero-section" ref={secondHeroRef} className="relative h-[560px] w-full overflow-hidden">
-        <Image
+      <section id="second-hero-section" ref={secondHeroRef} className="relative h-[560px] w-full overflow-hidden ">
+        {/* <Image
           src="/chu-images/img-bg.jpg"
           alt="Art gallery interior"
           fill
           className="object-cover brightness-75"
           priority
-        />
+        /> */}
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="container mx-auto px-4 flex items-stretch h-full">
             {selectedExhibition ? (
@@ -90,10 +90,11 @@ export default function ExhibitPage() {
                 <div className="w-1/2 pr-8 flex items-center justify-center">
                   <div className="relative w-full h-[400px]">
                     <Image
-                      src={selectedExhibition.imageUrl || "/placeholder.svg"}
+                      src={selectedExhibition.imageUrl || "/chu-images/img_9.jpg"}
                       alt={selectedExhibition.e_name}
                       fill
                       className="object-contain"
+                      priority
                     />
                   </div>
                 </div>
@@ -182,13 +183,13 @@ export default function ExhibitPage() {
         <div className="relative">
           <div className="grid grid-cols-3 gap-6">
             <div className="aspect-[4/3] relative">
-              <Image src="/chu-images/img_9.jpg" alt="Vinyl record player" fill className="object-cover" />
+              <Image src="/chu-images/img_9.jpg" alt="Vinyl record player" width={500} height={300} priority className="object-cover" />
             </div>
             <div className="aspect-[4/3] relative">
-              <Image src="/chu-images/img_9.jpg" alt="Neon ART sign" fill className="object-cover" />
+              <Image src="/chu-images/img_9.jpg" alt="Neon ART sign" width={500} height={300} priority className="object-cover" />
             </div>
             <div className="aspect-[4/3] relative">
-              <Image src="/chu-images/img_9.jpg" alt="Album covers collection" fill className="object-cover" />
+              <Image src="/chu-images/img_9.jpg" alt="Album covers collection" width={500} height={300} priority className="object-cover" />
             </div>
           </div>
 
