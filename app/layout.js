@@ -26,8 +26,9 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         <Provider>
-          {/* 用自訂義的 Client Wrapper 包住 children */}
+          <Header/>
           {children}
+          <Footer/>
         </Provider>
       </body>
     </html>
