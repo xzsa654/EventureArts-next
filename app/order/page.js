@@ -15,22 +15,8 @@ export default function Orderpage(props) {
   const e_id = searchParams.get('e_id')
   const c_id = searchParams.get('c_id')
   const router = useRouter()
-  const [orderData, setOrderData] = useState(null)
+  const { orderData, setOrderData } = useOrder() // 使用 my hook 'useOrder' 存放訂單資料
   const [loading, setLoading] = useState(true)
-
-  // useEffect(() => {
-  //   const data = Object.fromEntries(search) // I'll get an url :localhost:3000:order/e_id=10&c_id=20
-
-  //   //    get this from course and exhibit page.
-  //   // console.log(data);
-  //   // const {eId,cId} =data
-  //   // if(eId){
-  //   //     router.push(`/user?eId=${eId}`)
-  //   // }else{
-  //   //     router.push(`/user?cId=${cId}`)
-  //   // }
-  //   // titleCB(data)
-  // }, [])
 
   useEffect(() => {
     if ((e_id || c_id) && !orderData) {
@@ -42,7 +28,7 @@ export default function Orderpage(props) {
       )
         .then((res) => res.json())
         .then((data) => {
-          setOrderData(data) // 存入 useContext
+          setOrderData(data) // 把訂單資訊存進 my hook 'useOrder'
         })
         .catch((err) => {
           console.error('Error fetching order details:', err)
@@ -51,7 +37,7 @@ export default function Orderpage(props) {
     } else {
       setLoading(false)
     }
-  }, [e_id, c_id, orderData])
+  }, [e_id, c_id, orderData, setOrderData])
 
   if (loading) return <p>載入中...</p>
   if (!orderData) return <p>無法生成訂單，請再試一遍</p>
@@ -67,18 +53,18 @@ export default function Orderpage(props) {
         {/* 1. 活動名稱 */}
         <div className="flex flex-row justify-between">
           <p>活動名稱</p>
-          <p>{orderData.name}</p>
+          <p>{orderData.eventName}</p>
         </div>
         {/* 2. 活動價格 */}
         <div className="flex flex-row justify-between">
           <p>活動票價</p>
-          <p>$ {orderData.price} NTD</p>
+          <p>$ {orderData.eventPrice} NTD</p>
         </div>
         {/* 3. 活動時間 */}
         <div className="flex flex-row justify-between">
           <p>活動時間</p>
           <p>
-            {orderData.startdate}~{orderData.enddate}
+            {orderData.startDate} ~ {orderData.endDate}
           </p>
         </div>
         {/* 4. 活動地址 */}
