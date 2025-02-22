@@ -2,11 +2,11 @@
 
 import React, { useState, useEffect } from 'react'
 import { Button } from '@heroui/react'
-import UserPageSelect from './select'
+import UserPageSelect from '../select'
 import OurPagination from '@/components/common/pagination'
 import { ArrowRight } from '@/public/Yao/icons'
-import ExMangContent from './co-content'
-import CourseMangContent from './ex-content'
+import COMangContent from './course/co-content'
+import ExMangContent from './exhibit/ex-content'
 import { useRouter } from 'next/navigation'
 export default function Mang({ type }) {
   const router = useRouter()
@@ -14,7 +14,7 @@ export default function Mang({ type }) {
     <>
       <UserPageSelect type={type} />
       <div className="flex-auto ">
-        {type == 'course' ? <CourseMangContent /> : <ExMangContent />}
+        {type == 'course' ? <COMangContent /> : <ExMangContent />}
       </div>
       <div className="flex flex-col gap-8 items-center justify-center">
         <OurPagination />

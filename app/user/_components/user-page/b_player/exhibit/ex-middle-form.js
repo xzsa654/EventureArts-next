@@ -10,15 +10,15 @@ import {
   CheckboxGroup,
   Textarea,
 } from '@heroui/react'
-import { CustomCheckbox } from './custom-checkbox'
+import { CustomCheckbox } from '../custom-checkbox'
 
-export default function CoMiddleForm(props) {
+export default function ExMiddleForm(props) {
   const [groupSelected, setGroupSelected] = React.useState([])
   return (
     <>
-      <Form className="flex flex-row gap-16">
+      <Form className="flex flex-row max-sm:flex-col gap-16 max-sm:gap-8">
         {/* left */}
-        <div className="w-6/12 px-3 py-6 flex gap-8 flex-col">
+        <div className="w-6/12 max-sm:w-full px-3 py-6 flex gap-8 flex-col">
           <div className="text-red-500 text-2xl font-semibold ">* 為必填</div>
           <div>
             <Input
@@ -38,9 +38,9 @@ export default function CoMiddleForm(props) {
           </div>
           <div>
             <DateRangePicker
-              size="lg"
               label="展覽日期"
-              radius="full"
+              radius="lg"
+              size="lg"
               isRequired
               classNames={{
                 inputWrapper: 'bg-white border-1 border-black shadow-none ',
@@ -48,7 +48,7 @@ export default function CoMiddleForm(props) {
               }}
             />
           </div>
-          <div className="w-6/12 ">
+          <div className="w-6/12 max-sm:w-full ">
             <Select
               aria-label="status"
               size="lg"
@@ -63,7 +63,7 @@ export default function CoMiddleForm(props) {
               }}
             ></Select>
           </div>
-          <div className="w-6/12 ">
+          <div className="w-6/12 max-sm:w-full max-sm:flex max-sm:gap-2 ">
             <Select
               aria-label="place"
               size="lg"
@@ -85,13 +85,14 @@ export default function CoMiddleForm(props) {
               variant="underlined"
               placeholder="請選擇地點"
               classNames={{
+                base: 'data-[has-label=true]:mt-0 mt-1 justify-center',
                 label: 'after:text-red group-data-[filled=true]:text-black ',
                 value: 'text-black',
                 trigger: 'border-black',
               }}
             ></Select>
           </div>
-          <div className="w-3/12">
+          <div className="w-3/12 max-sm:w-5/12">
             <Input
               size="lg"
               label="價格"
@@ -108,7 +109,7 @@ export default function CoMiddleForm(props) {
           </div>
         </div>
         {/* right */}
-        <div className="w-6/12 h-full flex flex-col gap-8">
+        <div className="w-6/12 h-full flex flex-col gap-8 max-sm:w-full">
           <Textarea
             label="展覽摘要"
             size="lg"

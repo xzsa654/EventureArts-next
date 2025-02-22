@@ -1,11 +1,11 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { UserIcon } from '@/public/Yao/header'
 import { HiMenuAlt4, HiOutlineX, HiUser } from 'react-icons/hi'
-
 import { Navbar, NavbarBrand, NavbarContent, NavbarItem } from '@heroui/navbar'
-import { Link, Image } from '@heroui/react'
+import { Image } from '@heroui/react'
+import Link from 'next/link'
+import AVatarGroup from '../common/avatar-group'
 import { usePathname } from 'next/navigation'
 import { useModal } from '@/contexts/modal-context'
 import LoginModal from '@/components/common/login/login'
@@ -13,11 +13,12 @@ import RegisterStep1 from '@/components/common/login/register'
 import RegisterStep2 from '@/components/common/login/register2'
 import RegisterStep3 from '@/components/common/login/register3'
 import RegisterStep4 from '@/components/common/login/register4'
-import ResetPassword from '@/components/common/login/reset'
+import VerifyEmail from '../common/login/verify'
 import { motion, AnimatePresence } from 'framer-motion'
-
+import { useAuth } from '@/hooks/use-auth'
 export default function Header(props) {
   const [isOpen, setIsOpen] = useState(false)
+  const { auth } = useAuth()
 
   const menuVariants = {
     initial: {
@@ -111,6 +112,29 @@ export default function Header(props) {
     { title: '隱私權政策', href: '' },
   ]
 
+  // const pathName = usePathname();
+
+  // **黑名單路徑**（這些頁面不渲染 Header）
+  const noHeaderPages = ['/exhibit/online-detail/']
+  const isHidden = noHeaderPages.some((path) => pathName.startsWith(path))
+
+  // 🚀 **這樣確保 hooks 不會在條件語句內**
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'unset'
+    }
+    return () => {
+      document.body.style.overflow = 'unset'
+    }
+  }, [isOpen])
+
+  // **先確保 hooks 都執行完，然後 return null**
+  if (isHidden) {
+    return null
+  }
+
   return (
     <>
       <div className="w-full h-full overflow-hidden">
@@ -133,7 +157,7 @@ export default function Header(props) {
               'data-[active=true]:after:bg-primary',
             ],
           }}
-          className={` overflow-hidden fixed w-full h-[80] flex justify-between max-lg:px-0 px-16 py-4 bg-white/30   `}
+          className={` overflow-hidden fixed w-full h-[80] flex justify-between  max-lg:px-0 px-16 py-4 bg-white/30   `}
           height="5rem"
           maxWidth="full"
         >
@@ -207,9 +231,17 @@ export default function Header(props) {
           )}
 
           <NavbarContent justify="end">
-            <NavbarItem className="hidden lg:flex">
-              <Link href="#" onPress={onOpen}>
-                {isOpen ? (
+            <NavbarItem
+              className={` ${
+                isOpen ? 'flex' : 'hidden'
+              } lg:flex  justify-center text-small `}
+            >
+              <Link href="#" onClick={onOpen}>
+                {/* 已登入的 component */}
+                {auth?.user_id !== 0 ? (
+                  <AVatarGroup />
+                ) : isOpen ? (
+                  // 未登入狀態下的 icon
                   <HiUser size={35} color="white" />
                 ) : (
                   <HiUser size={35} />
@@ -217,7 +249,7 @@ export default function Header(props) {
               </Link>
             </NavbarItem>
             <NavbarItem>
-              <Link href="#" onPress={toggleMenu}>
+              <Link href="#" onClick={toggleMenu}>
                 {isOpen ? (
                   <HiOutlineX size={35} color="white" />
                 ) : (
@@ -290,7 +322,7 @@ export default function Header(props) {
                   {menuItems.map((item, i) => (
                     <li key={i} className="p-2">
                       <Link
-                        className="text-white sm:text-xl lg:text-4xl font-serif after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-white hover:after:w-full after:transition-all after:duration-300"
+                        className="text-white relative sm:text-xl lg:text-4xl font-serif after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-white hover:after:w-full after:transition-all after:duration-300"
                         href={item.href}
                       >
                         {item.title}
@@ -313,13 +345,17 @@ export default function Header(props) {
             </motion.div>
           )}
         </AnimatePresence>
-
-        <LoginModal />
-        <RegisterStep1 />
-        <RegisterStep2 />
-        <RegisterStep3 />
-        <RegisterStep4 />
-        <ResetPassword />
+        {/* 未登入才有註冊登入modal */}
+        {!auth?.token && (
+          <>
+            <LoginModal />
+            <RegisterStep1 />
+            <RegisterStep2 />
+            <RegisterStep3 />
+            <RegisterStep4 />
+            <VerifyEmail />
+          </>
+        )}
       </div>
     </>
   )

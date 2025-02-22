@@ -2,9 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import styles from './homepage.module.css'
-import Image from 'next/image'
-import { px } from 'framer-motion'
-
+import Link from 'next/link'
 export default function AppPage() {
   return (
     <>
@@ -36,7 +34,7 @@ export default function AppPage() {
         {/* 背景 end */}
 
         {/* courseButton start */}
-        <a href="#" className={`${styles.courseButton} ${styles.btn}`}>
+        <Link href="#" className={`${styles.courseButton} ${styles.btn}`}>
           <div className="h-[178px] flex-col justify-start items-start gap-2 inline-flex">
             <div data-svg-wrapper>
               <svg
@@ -62,11 +60,11 @@ export default function AppPage() {
               Course
             </div>
           </div>
-        </a>
+        </Link>
         {/* courseButton end */}
 
         {/* eventButton start */}
-        <a href="#" className={`${styles.eventButton} ${styles.btn}`}>
+        <Link href="#" className={`${styles.eventButton} ${styles.btn}`}>
           <div className="h-[184.50px] flex-col justify-start items-start gap-2 inline-flex">
             <div data-svg-wrapper>
               <svg
@@ -100,11 +98,11 @@ export default function AppPage() {
               Event
             </div>
           </div>
-        </a>
+        </Link>
         {/* eventButton end */}
 
         {/* exhibitButton start */}
-        <a href="#" className={`${styles.exhibitButton} ${styles.btn}`}>
+        <Link href="#" className={`${styles.exhibitButton} ${styles.btn}`}>
           <div className="h-[184.71px] flex-col justify-start items-start gap-2 inline-flex">
             <div data-svg-wrapper>
               <svg
@@ -130,11 +128,11 @@ export default function AppPage() {
               Exhibit
             </div>
           </div>
-        </a>
+        </Link>
         {/* exhibitButton end */}
 
         {/* mapButton start */}
-        <a href="#" className={`${styles.mapButton} ${styles.btn}`}>
+        <Link href="#" className={`${styles.mapButton} ${styles.btn}`}>
           <div className="h-[176.91px] flex-col justify-start items-start gap-2 inline-flex">
             <div data-svg-wrapper>
               <svg
@@ -160,7 +158,7 @@ export default function AppPage() {
               Map
             </div>
           </div>
-        </a>
+        </Link>
         {/* mapButton end */}
         <div className="w-[1920px] h-[29px] px-16 py-1 justify-end items-center inline-flex overflow-hidden absolute bottom-0 left-0 right-0">
           <div className="text-white text-base font-normal font-['IBM Plex Mono'] tracking-wider">

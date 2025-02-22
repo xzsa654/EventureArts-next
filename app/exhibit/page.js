@@ -3,12 +3,13 @@
 import { useState, useEffect, useRef } from "react"
 import ExhibitionSection from "./_components/ExhibitionSection"
 import Image from "next/image"
-import Excard from "./_components/Excard"
 import { ChevronLeftIcon, ChevronRightIcon, ArrowLongRightIcon } from "@heroicons/react/24/outline"
 import "./exhibit.css"
 import Link from "next/link"
 import CandidSection from "./_components/candid-section"
 import useSWR from "swr"
+import OnlineExhibitionCard from "./_components/OnlineExhibitionCard"
+import Loading from "./loading"
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3001"
 
@@ -37,16 +38,31 @@ export default function ExhibitPage() {
     }
   }, [isAnimating])
 
-  // 使用 useSWR 獲取展覽資料，從後端拉取數據
-  const { data: exhibitions, error } = useSWR(`${API_BASE_URL}/exhibit/`, fetcher)
+  // Fetch offline and online exhibitions
+  const { data: offlineData, error: offlineError } = useSWR(`${API_BASE_URL}/exhibit?form=offline`, fetcher)
+  const { data: onlineData, error: onlineError } = useSWR(`${API_BASE_URL}/exhibit?form=online`, fetcher)
 
-  if (error) return <div>Error loading exhibitions</div>
-  if (!exhibitions) return <div>Loading...</div>
+  // Handle loading and error states with better UI
+  if (offlineError || onlineError) {
+    return (
+      <div className="min-h-[calc(100vh-80px)] mt-[80px] flex items-center justify-center bg-white">
+        <div className="text-xl font-medium text-red-600">Error loading exhibitions. Please try again later.</div>
+      </div>
+    )
+  }
+
+  if (!offlineData || !onlineData) {
+    return <Loading />
+  }
+
+  // Get the actual arrays from the response
+  const offlineExhibitions = offlineData.data || []
+  const onlineExhibitions = onlineData.data || []
 
   return (
     <main className="min-h-screen mt-[80px]">
       {/* Exhibition Section */}
-      <ExhibitionSection onExhibitionSelect={handleExhibitionSelect} exhibitions={exhibitions.data} />
+      <ExhibitionSection onExhibitionSelect={handleExhibitionSelect} exhibitions={offlineExhibitions} />
 
       {/* First Hero Section */}
       <section id="first-hero-section" className="relative h-[120px] w-full flex items-center justify-between px-20">
@@ -59,14 +75,14 @@ export default function ExhibitPage() {
       </section>
 
       {/* Second Hero Section */}
-      <section id="second-hero-section" ref={secondHeroRef} className="relative h-[560px] w-full overflow-hidden">
-        <Image
+      <section id="second-hero-section" ref={secondHeroRef} className="relative h-[560px] w-full overflow-hidden ">
+        {/* <Image
           src="/chu-images/img-bg.jpg"
           alt="Art gallery interior"
           fill
           className="object-cover brightness-75"
           priority
-        />
+        /> */}
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="container mx-auto px-4 flex items-stretch h-full">
             {selectedExhibition ? (
@@ -74,10 +90,11 @@ export default function ExhibitPage() {
                 <div className="w-1/2 pr-8 flex items-center justify-center">
                   <div className="relative w-full h-[400px]">
                     <Image
-                      src={selectedExhibition.imageUrl || "/placeholder.svg"}
+                      src={selectedExhibition.imageUrl || "/chu-images/img_9.jpg"}
                       alt={selectedExhibition.e_name}
                       fill
                       className="object-contain"
+                      priority
                     />
                   </div>
                 </div>
@@ -106,31 +123,36 @@ export default function ExhibitPage() {
 
       <CandidSection />
 
-      {/* See more Exhibition Section */}
-      <section className="mb-20 p-6">
+      {/* Explore more online Exhibition Section */}
+      <section className="py-8 bg-black/40">
         <div className="flex justify-between items-center mb-10">
           <h1 className="text-2xl font-bold">Want's new?</h1>
-          <a
-            href="/exhibit/online"
-            className="text-xl font-bold flex items-center gap-2 hover:opacity-70 cursor-pointer"
-          >
-            Explore More Online Exhibition →
-          </a>
+          <Link href="/exhibit/online" className="group">
+            <button className="text-xl px-6 py-4 text-white transition-all rounded-lg cursor-pointer group-hover:underline">
+              <span className="transition-all group-hover:text-[1.6em] group-hover:font-bold">
+                Explore More Online Exhibition →
+              </span>
+            </button>
+          </Link>
         </div>
 
         <div className="relative">
           <div className="flex gap-6 justify-center">
-            {exhibitions?.data?.slice(0, 3).map((exhibition) => (
-              <Excard
-                key={exhibition.e_id}
-                e_id={exhibition.e_id}
-                tag={exhibition.e_optionNames}
-                image={exhibition.imageUrl || "/chu-images/img_9.jpg"}
-                date={`${exhibition.e_startdate} - ${exhibition.e_enddate}`}
-                title={exhibition.e_name}
-                description={exhibition.e_desc}
-              />
-            ))}
+            {Array.isArray(onlineExhibitions) &&
+              onlineExhibitions
+                .slice(0, 3)
+                .map((exhibition) => (
+                  <OnlineExhibitionCard
+                    key={exhibition.e_id}
+                    e_id={exhibition.e_id}
+                    tag={exhibition.e_optionNames}
+                    cover_image={exhibition.cover_image || exhibition.imageUrl || `/placeholder.svg`}
+                    date={`${exhibition.e_startdate} - ${exhibition.e_enddate}`}
+                    title={exhibition.e_name}
+                    description={exhibition.e_desc}
+                    artist={exhibition.bd_id}
+                  />
+                ))}
           </div>
         </div>
       </section>
@@ -161,13 +183,13 @@ export default function ExhibitPage() {
         <div className="relative">
           <div className="grid grid-cols-3 gap-6">
             <div className="aspect-[4/3] relative">
-              <Image src="/chu-images/img_9.jpg" alt="Vinyl record player" fill className="object-cover" priority/>
+              <Image src="/chu-images/img_9.jpg" alt="Vinyl record player" width={500} height={300} priority className="object-cover" />
             </div>
             <div className="aspect-[4/3] relative">
-              <Image src="/chu-images/img_9.jpg" alt="Neon ART sign" fill className="object-cover"  priority/>
+              <Image src="/chu-images/img_9.jpg" alt="Neon ART sign" width={500} height={300} priority className="object-cover" />
             </div>
             <div className="aspect-[4/3] relative">
-              <Image src="/chu-images/img_9.jpg" alt="Album covers collection" fill className="object-cover"  priority/>
+              <Image src="/chu-images/img_9.jpg" alt="Album covers collection" width={500} height={300} priority className="object-cover" />
             </div>
           </div>
 

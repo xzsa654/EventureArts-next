@@ -16,7 +16,6 @@ export default function RegisterSection({
     now: { color: '#FFC45C', text: 'yellow' },
     complete: { color: '#91D9CE', text: 'green' },
   }
-  console.log(test.second)
 
   const { text: f1t, color: f1c } = st[test.first || 'complete']
   const { text: f2t, color: f2c } = st[test.second || 'normal']

@@ -54,7 +54,7 @@ export const StatusIcon = ({color='#FFC45C',line='#FFFFFF'}) => {
  }
 
 // 箭頭向右 SVG
-export  function ArrowRight(props) {
+export  function ArrowRight({disabled=true}) {
   return (
     <>
       <svg
@@ -66,7 +66,7 @@ export  function ArrowRight(props) {
   >
     <path
       d="M15.3057 6.43652L21.3757 12.5065L15.3057 18.5765"
-      stroke="white"
+      stroke={`${disabled?"#585858":"white"}`}
       strokeWidth="1.5"
       strokeMiterlimit={10}
       strokeLinecap="round"
@@ -74,7 +74,7 @@ export  function ArrowRight(props) {
     />
     <path
       d="M4.37598 12.5063H21.206"
-      stroke="white"
+      stroke={`${disabled?"#585858":"white"}`}
       strokeWidth="1.5"
       strokeMiterlimit={10}
       strokeLinecap="round"

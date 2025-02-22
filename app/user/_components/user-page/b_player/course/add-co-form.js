@@ -6,14 +6,14 @@ import { Button } from '@heroui/react'
 import CoUserFile from './co-files'
 import { Image } from '@heroui/react'
 import { useRouter } from 'next/navigation'
-
+import { HiArrowNarrowRight } from 'react-icons/hi'
 export default function UserCoAddForm() {
   const router = useRouter()
   return (
     <>
-      <header className="w-full px-[78px] py-7">
+      <header className="w-full px-[78px] max-sm:px-2 py-7">
         <div className="w-full border-b-5 border-black ">
-          <h1 className="w-full font-kanit text-6xl font-extrabold text-center ">
+          <h1 className="w-full font-kanit max-sm:text-3xl text-6xl font-extrabold text-center ">
             Add new Course
           </h1>
         </div>
@@ -35,9 +35,7 @@ export default function UserCoAddForm() {
           className="bg-green  px-8 py-1 w-auto border border-black"
           radius="large"
           size="lg"
-          endContent={
-            <Image src="/Yao/user/arrow-right.svg" alt="arrow-right" />
-          }
+          endContent={<HiArrowNarrowRight size={20} color="white" />}
         >
           立即添加
         </Button>

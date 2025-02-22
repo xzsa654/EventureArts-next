@@ -6,6 +6,7 @@ import {
   ModalFooter,
 } from '@heroui/react'
 import { useEffect } from 'react'
+import { useAuth } from '@/hooks/use-auth'
 import { BracketsIcon, TipsIcon } from '@/public/Yao/icons'
 export default function ModalLayout({
   formBody = <></>,
@@ -16,15 +17,24 @@ export default function ModalLayout({
   prompt = '',
   isOpen,
   onOpenChange,
+  size,
 }) {
+  const { auth } = useAuth()
   return (
     <>
       <Modal
         // 禁止向外點擊關閉
         isDismissable={false}
         placement="center"
+        size="4xl"
         isKeyboardDismissDisabled={true}
-        className="w-[400]  bg-[FFF2F2] backdrop-blur-[10px]   border border-2  rounded-sm "
+        classNames={{
+          backdrop: 'z-40',
+          wrapper: 'z-40',
+        }}
+        className={`${
+          size ? '' : 'w-[400]'
+        }  bg-[FFF2F2] backdrop-blur-[10px]    border-2  rounded-sm `}
         motionProps={{
           variants: {
             enter: {
@@ -50,6 +60,7 @@ export default function ModalLayout({
       >
         <ModalContent>
           {(onClose) => {
+            if (auth.user_id !== 0) return onClose()
             return (
               <>
                 <ModalHeader className="flex  gap-2 item-center ">

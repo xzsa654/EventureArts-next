@@ -10,8 +10,19 @@ export default function Footer(props) {
     { title: '了解EventureArts', href: '#' },
     { title: '隱私權政策', href: '#' },
   ]
-  const pathname = usePathname()
-  if (pathname === '/') return null // 如果是首頁，就不渲染 Footer
+
+  //  **黑名單頁面（不顯示 Footer）**
+  const pathName = usePathname();
+  const noFooterPages = ["/", "/map"]; //  隱藏首頁/map Footer
+
+  // **條件判斷**
+  const isHidden = noFooterPages.includes(pathName) || pathName.startsWith("/exhibit/online-detail/");
+
+  //  **確保 Hook 一致後才 return null**
+  if (isHidden) {
+    return null;
+  }
+
   return (
     <>
       <div className="w-full   bg-black text-white flex  max-sm:p-0 p-10 flex-col  justify-center items-center gap-10   bottom-0">

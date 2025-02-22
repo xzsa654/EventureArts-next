@@ -7,6 +7,7 @@ import { CiSearch } from "react-icons/ci"
 import { MdSort } from "react-icons/md"
 import useSWR from "swr"
 import "./styles.css"
+import Loading from "../loading"
 
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3001"
@@ -17,13 +18,17 @@ const fetcher = (url) => fetch(url).then((res) => res.json())
 export default function ExploreExhibitions() {
   const [currentPage, setCurrentPage] = useState(1)
   const [showAdvancedSearch, setShowAdvancedSearch] = useState(false)
+  const [loading, setLoading] = useState(true);
+
 
   // 使用 SWR 獲取展覽資料，並從 MySQL 獲取資料
   const { data: exhibitions, error } = useSWR(`${API_BASE_URL}/exhibit/?form=offline&page=${currentPage}`, fetcher)
 
+  console.log("Cover Image in List:", exhibitions?.data);
+
 
   if (error) return <div>Error loading exhibitions</div>
-  if (!exhibitions) return <div>Loading...</div>
+  if (!exhibitions) return <Loading />
 
   return (
     <div
@@ -139,7 +144,7 @@ export default function ExploreExhibitions() {
                     key={exhibition.e_id}
                     e_id={exhibition.e_id}
                     tag={exhibition.e_optionNames}
-                    image={exhibition.imageUrl || "/chu-images/img_9.jpg"}
+                    cover_image={exhibition.cover_image}
                     date={`${exhibition.e_startdate} - ${exhibition.e_enddate}`}
                     title={exhibition.e_name}
                     description={exhibition.e_desc}

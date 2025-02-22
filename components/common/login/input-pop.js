@@ -31,25 +31,79 @@ export default function InputPop({
   type = '',
   name = '',
   popContent = '',
+
+  isRequired = false,
   popTitle = '',
+  validateItem = () => {},
+  realTimeValid = false,
+  onChange = () => {},
 }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
+  const errors = []
+  const [password, setPassword] = React.useState('')
+
+  if (realTimeValid) {
+    if (password.length < 8) {
+      errors.push('密碼至少需要八位元')
+    }
+    if (!/[A-Z]/.test(password)) {
+      errors.push('密碼至少需要包含一個大寫英文字母')
+    }
+
+    if (!/[a-z]/.test(password)) {
+      errors.push('密碼至少需要包含一個小寫英文字母')
+    }
+  }
 
   return (
     <>
       <div className={className}>
-        <Input
-          label={label}
-          type={type}
-          name={name}
-          onClick={onOpen}
-          variant="underlined"
-          classNames={{
-            label: 'text-white group-data-[focus=true]:text-white',
-            input:
-              'group-data-[focus=true]:text-white group-data-[has-value=true]:text-white',
-          }}
-        />
+        {realTimeValid ? (
+          <Input
+            isInvalid={errors.length > 0}
+            label={label}
+            isRequired
+            type={type}
+            name={name}
+            onValueChange={setPassword}
+            onChange={onChange}
+            onClick={onOpen}
+            errorMessage={() => (
+              <ul>
+                {errors.map((error, i) => (
+                  <li key={i}>{error}</li>
+                ))}
+              </ul>
+            )}
+            variant="underlined"
+            classNames={{
+              label:
+                'text-white group-data-[focus=true]:text-white after:text-red-500 group-data-[filled-within=true]:text-white',
+              input:
+                'group-data-[focus=true]:text-white group-data-[has-value=true]:text-white ',
+              errorMessage: 'text-red-500',
+            }}
+          />
+        ) : (
+          <Input
+            label={label}
+            type={type}
+            validate={(value) => validateItem(value)}
+            name={name}
+            onValueChange={setPassword}
+            onChange={onChange}
+            onClick={onOpen}
+            isRequired={isRequired}
+            variant="underlined"
+            classNames={{
+              label:
+                'text-white group-data-[focus=true]:text-white after:text-red-500 group-data-[filled-within=true]:text-white',
+              input:
+                'group-data-[focus=true]:text-white group-data-[has-value=true]:text-white ',
+              errorMessage: 'text-red-500',
+            }}
+          />
+        )}
         {isPop && (
           <Popover
             showArrow

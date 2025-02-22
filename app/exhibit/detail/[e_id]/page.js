@@ -5,9 +5,13 @@ import { BsCashCoin } from 'react-icons/bs'
 import { RiBuildingLine } from 'react-icons/ri'
 import { IoMdHeartEmpty } from 'react-icons/io'
 import { IoShareOutline } from 'react-icons/io5'
+import { RiStore2Line } from 'react-icons/ri'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation' // for buy ticket btn
+import Link from 'next/link'
 import { Button } from '@heroui/button'
+import Loading from "../../loading"
+
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3001'
@@ -24,10 +28,12 @@ export default function ExhibitionDetail({ params }) {
   // Use SWR to fetch exhibition data
   const { data, error } = useSWR(`${API_BASE_URL}/exhibit/api/${e_id}`, fetcher)
   const exhibitionData = data?.data
+
+  console.log(exhibitionData)
   // exhibitionData?.data[0];
   console.log(error)
   if (error) return <div>Error loading exhibition data</div>
-  if (!exhibitionData) return <div>Loading...</div>
+  if (!exhibitionData) return <Loading />
 
   return (
     <div className="min-h-screen bg-[url('/chu-images/img-bg.jpg')] bg-cover bg-fixed">
@@ -69,7 +75,13 @@ export default function ExhibitionDetail({ params }) {
               {/* Image Section */}
               <div className="relative aspect-[4/3] bg-gray-100">
                 <Image
-                  src={exhibitionData.e_img || '/chu-images/img_9.jpg'}
+                  src={
+                    exhibitionData.cover_image?.startsWith('http')
+                      ? exhibitionData.cover_image
+                      : exhibitionData.cover_image
+                      ? `http://localhost:3001${exhibitionData.cover_image}`
+                      : '/chu-images/img_9.jpg'
+                  }
                   alt={exhibitionData.e_name}
                   fill
                   className="rounded-lg object-cover"
@@ -82,10 +94,10 @@ export default function ExhibitionDetail({ params }) {
                   <MdDateRange size={24} className="text-gray-900" />
                   <span>{`${exhibitionData.e_startdate} - ${exhibitionData.e_enddate}`}</span>
                 </div>
-                <div className="border-t border-gray-300 border-[1px]"></div>
+                <div className="border-t border-black border-[1.5px]"></div>
                 <div className="flex items-center gap-4 text-base">
                   <MdLocationOn size={24} className="text-gray-900" />
-                  <span>{`${exhibitionData.city} ${exhibitionData.district} ${exhibitionData.address}`}</span>
+                  <span>{`${exhibitionData.city}${exhibitionData.district}${exhibitionData.address}`}</span>
                 </div>
                 <div className="flex items-center gap-4 text-base">
                   <BsCashCoin size={24} className="text-gray-900" />
@@ -94,6 +106,10 @@ export default function ExhibitionDetail({ params }) {
                 <div className="flex items-center gap-4 text-base">
                   <RiBuildingLine size={24} className="text-gray-900" />
                   <span>{exhibitionData.locat_name}</span>
+                </div>
+                <div className="flex items-center gap-4 text-base">
+                  <RiStore2Line size={24} className="text-gray-900" />
+                  <span>{exhibitionData.bd_name}</span>
                 </div>
               </div>
             </div>
