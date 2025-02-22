@@ -14,8 +14,8 @@ import {
   Link,
 } from '@heroui/react'
 import { PiUploadSimple } from 'react-icons/pi'
+import { HiArrowNarrowRight } from 'react-icons/hi'
 
-import { ArrowRight } from '@/public/Yao/icons'
 export default function ComponentsJoinUsModal(props) {
   const title = '成為品牌'
   const tips = '成為品牌'
@@ -162,7 +162,7 @@ export default function ComponentsJoinUsModal(props) {
       >
         完成註冊
         <div className="">
-          <ArrowRight />
+          <HiArrowNarrowRight size={20} color="white" />
         </div>
       </Link>
     </div>

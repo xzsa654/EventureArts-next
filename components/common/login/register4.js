@@ -3,8 +3,9 @@ import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import ModalLayout from './layout'
 import { Select, Chip, SelectItem } from '@heroui/react'
-import { ArrowRight, CheckIcon } from '@/public/Yao/icons'
+import { CheckIcon } from '@/public/Yao/icons'
 import { useModal } from '@/contexts/modal-context'
+import { HiArrowNarrowRight } from 'react-icons/hi'
 import RegisterSection from './section'
 import { useAuth } from '@/hooks/use-auth'
 import { ALLOPTIONS } from '@/lib/authorization-api'
@@ -139,7 +140,7 @@ export default function RegisterStep4(props) {
       >
         完成註冊
         <div className="">
-          <ArrowRight />
+          <HiArrowNarrowRight size={20} color="white" />
         </div>
       </Link>
     </div>

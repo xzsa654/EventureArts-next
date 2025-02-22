@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react'
 import { Button } from '@heroui/react'
 import UserPageSelect from './select'
 import OurPagination from '@/components/common/pagination'
-import { ArrowRight } from '@/public/Yao/icons'
+import { HiArrowNarrowRight } from 'react-icons/hi'
 import ExMangContent from './ex-content'
 import CourseMangContent from './co-content'
 import { useRouter } from 'next/navigation'
@@ -31,7 +31,7 @@ export default function Mang({ type }) {
             color="primary"
             radius="none"
             className="text-16 text-white w-full max-sm:px-2 "
-            endContent=<ArrowRight />
+            endContent=<HiArrowNarrowRight size={20} color="white" />
           >
             {type == 'course' ? '新增課程' : '新增線上展覽'}
           </Button>
@@ -43,7 +43,7 @@ export default function Mang({ type }) {
             className={`${
               type == 'course' ? 'hidden' : ''
             } w-full text-16 text-white max-sm:px-2`}
-            endContent=<ArrowRight />
+            endContent=<HiArrowNarrowRight size={20} color="white" />
           >
             新增線下展覽
           </Button>

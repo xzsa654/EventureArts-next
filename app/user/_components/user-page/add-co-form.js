@@ -6,7 +6,7 @@ import { Button } from '@heroui/react'
 import CoUserFile from './co-files'
 import { Image } from '@heroui/react'
 import { useRouter } from 'next/navigation'
-
+import { HiArrowNarrowRight } from 'react-icons/hi'
 export default function UserCoAddForm() {
   const router = useRouter()
   return (
@@ -35,9 +35,7 @@ export default function UserCoAddForm() {
           className="bg-green  px-8 py-1 w-auto border border-black"
           radius="large"
           size="lg"
-          endContent={
-            <Image src="/Yao/user/arrow-right.svg" alt="arrow-right" />
-          }
+          endContent={<HiArrowNarrowRight size={20} color="white" />}
         >
           立即添加
         </Button>

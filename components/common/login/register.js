@@ -9,7 +9,6 @@ import { useModal } from '@/contexts/modal-context'
 import RegisterSection from './section'
 import { useAuth } from '@/hooks/use-auth'
 import { HiArrowNarrowRight } from 'react-icons/hi'
-
 import { EMAIL_CHECKING } from '@/lib/authorization-api'
 
 export default function RegisterStep1() {
