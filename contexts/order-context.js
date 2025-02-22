@@ -1,16 +1,21 @@
 'use client'
-import { createContext } from 'react'
-import React, { useState, useEffect } from 'react'
+import { createContext, useState } from 'react'
 
+// 創建 OrderContext
 const OrderContext = createContext()
 
+// 提供 Context 的 Provider 組件
 export function OrderContextProvider({ children }) {
-  const [title,setTitle]=useState('')
-  const titleCB=(string)=>{
-    setTitle(string)
-  }
+  // const [title, setTitle] = useState('')
+  // const titleCB = (string) => {
+  //   setTitle(string)
+
+  const [orderData, setOrderData] = useState(null);
+  
   return (
-    <OrderContext.Provider value={{ titleCB,title }}>{children}</OrderContext.Provider>
+    <OrderContext.Provider value={{ orderData, setOrderData }}>
+      {children}
+    </OrderContext.Provider>
   )
 }
 export default OrderContext

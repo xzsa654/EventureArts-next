@@ -7,7 +7,6 @@ import { IoMdHeartEmpty } from 'react-icons/io'
 import { IoShareOutline } from 'react-icons/io5'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation' // for buy ticket btn
-import Link from 'next/link'
 import { Button } from '@heroui/button'
 
 const API_BASE_URL =
@@ -120,7 +119,7 @@ export default function ExhibitionDetail({ params }) {
                 <Button
                   // href={`/order?e_id=${e_id}`} // 這行是配用"Link"
                   className="flex-1 py-3 px-4 flex items-center justify-center text-gray-900 hover:underline border border-gray-900 rounded-md"
-                  onClick={() => router.push(`/order?e_id=${e_id}`)} // 改成用 button buy ticket to order page
+                  onPress={() => router.push(`/order?e_id=${e_id}`)} // 改成用 button buy ticket to order page
                 >
                   buy ticket
                   <span className="ml-2">→</span>

@@ -1,34 +1,60 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
-import { Checkbox } from '@heroui/react'
-import BtnCTA from '../course/_components/btnCTA'
+import { useState, useEffect } from 'react'
+import { useSearchParams, useRouter } from 'next/navigation'
 import { useOrder } from '@/hooks/use-order'
-import { useSearchParams } from 'next/navigation'
-import { useRouter } from 'next/navigation'
 import './order.css'
 import { Button } from '@heroui/button'
-import { HiArrowRight, HiXMark } from 'react-icons/hi2'
+import { HiArrowRight } from 'react-icons/hi2'
 
-export default function Order(props) {
-  const { title, titleCB } = useOrder()
-  const search = useSearchParams()
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3001'
+
+export default function Orderpage(props) {
+  const searchParams = useSearchParams() // 使用 useSearchParams 取 query
+  const e_id = searchParams.get('e_id')
+  const c_id = searchParams.get('c_id')
   const router = useRouter()
+  const [orderData, setOrderData] = useState(null)
+  const [loading, setLoading] = useState(true)
+
+  // useEffect(() => {
+  //   const data = Object.fromEntries(search) // I'll get an url :localhost:3000:order/e_id=10&c_id=20
+
+  //   //    get this from course and exhibit page.
+  //   // console.log(data);
+  //   // const {eId,cId} =data
+  //   // if(eId){
+  //   //     router.push(`/user?eId=${eId}`)
+  //   // }else{
+  //   //     router.push(`/user?cId=${cId}`)
+  //   // }
+  //   // titleCB(data)
+  // }, [])
 
   useEffect(() => {
-    const data = Object.fromEntries(search) // I'll get an url :localhost:3000:order/e_id=10&c_id=20
+    if ((e_id || c_id) && !orderData) {
+      // 向 API 取得訂單資訊
+      fetch(
+        `${API_BASE_URL}/order/api/getOrderDetails?e_id=${e_id || ''}&c_id=${
+          c_id || ''
+        }`
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          setOrderData(data) // 存入 useContext
+        })
+        .catch((err) => {
+          console.error('Error fetching order details:', err)
+          setLoading(false)
+        })
+    } else {
+      setLoading(false)
+    }
+  }, [e_id, c_id, orderData])
 
-    //    get this from course and exhibit page.
-    // console.log(data);
-    // const {eId,cId} =data
-    // if(eId){
-    //     router.push(`/user?eId=${eId}`)
-    // }else{
-    //     router.push(`/user?cId=${cId}`)
-    // }
-    // titleCB(data)
-  }, [])
-  console.log(title)
+  if (loading) return <p>載入中...</p>
+  if (!orderData) return <p>無法生成訂單，請再試一遍</p>
 
   return (
     <>
@@ -38,20 +64,31 @@ export default function Order(props) {
           <p>商品明細</p>
         </div>
         <hr />
-        {/* 1. 課程名稱&價格 */}
+        {/* 1. 活動名稱 */}
         <div className="flex flex-row justify-between">
-          <p>生活裡的花與器｜風格美感花藝選搭課｜floral design.</p>
-          <p>$ 1,688 NTD</p>
+          <p>活動名稱</p>
+          <p>{orderData.name}</p>
         </div>
-        {/* 2. 課程時間 */}
+        {/* 2. 活動價格 */}
+        <div className="flex flex-row justify-between">
+          <p>活動票價</p>
+          <p>$ {orderData.price} NTD</p>
+        </div>
+        {/* 3. 活動時間 */}
         <div className="flex flex-row justify-between">
           <p>活動時間</p>
-          <p>2025-01-11~2025-01-11</p>
+          <p>
+            {orderData.startdate}~{orderData.enddate}
+          </p>
         </div>
-        {/* 3. 課程地址 */}
+        {/* 4. 活動地址 */}
         <div className="flex flex-row justify-between">
           <p>活動地址</p>
-          <p>台北市內湖區文德路10號</p>
+          <p>
+            {orderData.city}
+            {orderData.district}
+            {orderData.address}
+          </p>
         </div>
         {/* 4. 課程備註 */}
         <div className="flex flex-row justify-between">
@@ -68,17 +105,17 @@ export default function Order(props) {
         {/* 1. 課程名稱&價格 */}
         <div className="flex flex-row justify-between">
           <p>商家名稱</p>
-          <p>迷花島嶼</p>
+          <p>{orderData.bd_name}</p>
         </div>
         {/* 2. 課程時間 */}
         <div className="flex flex-row justify-between">
           <p>聯絡電話</p>
-          <p>02-39100200</p>
+          <p>{orderData.bd_tel}</p>
         </div>
         {/* 3. 課程地址 */}
         <div className="flex flex-row justify-between">
           <p>聯絡信箱</p>
-          <p>bonfrogbf@gmail.com</p>
+          <p>{orderData.bd_email}</p>
         </div>
       </div>
 
@@ -105,6 +142,7 @@ export default function Order(props) {
             classNames={{}}
             variant="light"
             className="text-base text-gray-600 hover:text-gray-300 hover:scale-110 transition-transform duration-200 cursor-pointer flex items-center group gap-x-2 mt-5 px-7  data-[hover=true]:bg-primary-300"
+            onPress={() => router.push('/')}
           >
             取消本次購買
             <HiArrowRight className="transition-transform duration-300 ease-out group-hover:translate-x-3" />
@@ -115,6 +153,9 @@ export default function Order(props) {
             classNames={{}}
             variant="light"
             className="text-base text-yellow-600 hover:text-yellow-300 hover:scale-110 transition-transform duration-200 cursor-pointer flex items-center group gap-x-2 mt-5 px-7  data-[hover=true]:bg-primary-300"
+            onPress={() =>
+              (window.location.href = `http://localhost:3001/ecpay-test?amount=${orderData.price}`)
+            }
           >
             綠界金流付款
             <HiArrowRight className="transition-transform duration-300 ease-out group-hover:translate-x-3" />
