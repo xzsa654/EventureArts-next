@@ -111,6 +111,29 @@ export default function Header(props) {
     { title: '隱私權政策', href: '' },
   ]
 
+  // const pathName = usePathname();
+
+  // **黑名單路徑**（這些頁面不渲染 Header）
+  const noHeaderPages = ["/exhibit/online-detail/"];
+  const isHidden = noHeaderPages.some((path) => pathName.startsWith(path));
+
+  // 🚀 **這樣確保 hooks 不會在條件語句內**
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isOpen]);
+
+  // **先確保 hooks 都執行完，然後 return null**
+  if (isHidden) {
+    return null;
+  }
+
   return (
     <>
       <div className="w-full h-full overflow-hidden">

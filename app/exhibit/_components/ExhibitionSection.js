@@ -1,5 +1,4 @@
 "use client"
-
 import Image from "next/image"
 import "../exhibit.css"
 
@@ -32,8 +31,8 @@ export default function ExhibitionSection({ onExhibitionSelect, exhibitions = []
             onClick={() => onExhibitionSelect(exhibition)}
           >
             <Image
-              src={exhibition.e_images?.[0] || getDefaultImage(columnIndex * items.length + index)}
-              alt={exhibition.e_name}
+              src={exhibition.cover_image || exhibition.imageUrl || getDefaultImage(columnIndex * items.length + index)}
+              alt={exhibition.e_name || "Exhibition image"}
               fill
               sizes="(max-width: 768px) 150vw, (max-width: 1200px) 33vw"
               className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -53,8 +52,8 @@ export default function ExhibitionSection({ onExhibitionSelect, exhibitions = []
             onClick={() => onExhibitionSelect(exhibition)}
           >
             <Image
-              src={exhibition.e_images?.[0] || getDefaultImage(columnIndex * items.length + index)}
-              alt={exhibition.e_name}
+              src={exhibition.cover_image || exhibition.imageUrl || getDefaultImage(columnIndex * items.length + index)}
+              alt={exhibition.e_name || "Exhibition image"}
               fill
               sizes="(max-width: 768px) 150vw, (max-width: 1200px) 100vw"
               className="object-cover transition-transform duration-500 group-hover:scale-105"
