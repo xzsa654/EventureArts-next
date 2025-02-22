@@ -1,14 +1,15 @@
 //這是/course/product頁面
 
 'use client'
-
 import React, { useState, useEffect } from 'react'
 
 // 引入專案組件
 import BtnCTA from '../../_components/btnCTA'
+import GoogleMap from '../../_components/map2';
 
-// 引入react組件
+// 引入react / Next組件
 import {Button} from "@heroui/react";
+import Link from 'next/link';
 
 // 引入React icon
 import { PiTicketDuotone } from "react-icons/pi";
@@ -21,30 +22,40 @@ import { AiOutlineHeart } from "react-icons/ai";
 import { FaRegSmileWink } from "react-icons/fa";
 import { BsArrowRight } from "react-icons/bs";
 
-// 引入專案css
+// 引入css
 import './product.css';
 
 // 引入路由
 import { PRODUCT } from '@/lib/course-api';
 
-
 export default function Product(props) {
-  const [courseData, setCourseData] = useState("Loading...");
 
-  const params =useParams()
-  console.log(params);
-  const {c_id}=params
-   useEffect(() => {
-      fetch(PRODUCT+c_id
-      ) // 後端 API URL
-        .then((response) => response.json())
-        .then((data) => {
-          console.log(data);
-          setCourseData(data)
-   })
-          // setCourseTitle(data.c_name )})
-        .catch((error) => console.error("Error fetching course title:", error));
-    }, []);
+// ------ 動態路由設置 START ------
+  const [courseData, setCourseData] = useState(null);
+  const params = useParams();
+  const { c_id } = params; // 獲取動態路由參數 c_id
+// ------ 動態路由設置 END ------
+
+
+
+// ------ 串接資料庫 START ------
+// useEffect (() => {}, []); 
+// 元件完成後，會執行一次。
+
+  useEffect(() => {
+    if (c_id) {
+      fetch(`${PRODUCT}${c_id}`) // 後端 API URL
+        .then((response) => response.json())  //箱子
+        .then((data) => {   //包裝紙：解析箱子（後台送來的物件們）  
+          console.log("API回應:", data);
+          setCourseData(data);
+        })
+        .catch((error) => console.error("fetch課程資料失敗:", error));
+    }
+  }, [c_id]);
+
+  if (!courseData) return <p>Loading...</p>; // 等待 API 回應
+// ------ 串接資料庫 END------
 
   return (
     <>
@@ -70,22 +81,22 @@ export default function Product(props) {
             {/* A.日期 */}
               <div className="items">
                 <IoCalendarNumberOutline />
-                <p>{courseData?.c_startdate} 到 {courseData?.c_enddate}</p>
+                <p>{courseData?.c_startdate.split('T')[0]} 至 {courseData?.c_enddate.split('T')[0]}</p>
               </div>
             {/* B.名稱 */}
                 <div className="items">
                   <PiTicketDuotone />
-                  <div className=""><p>Noémie Fleurs 迷花島嶼 </p>
+                  <div className=""><p>{courseData?.bd_name}</p>
                   </div>
                 </div>
             {/* C.地址 */}
                 <div className="items">
                   <GrLocation />
-                  <div className=""><p>台北市大安區復興南路一段390號3樓</p>
+                  <div className=""><p>{courseData?.address}</p>
                   </div>
                 </div>          
             {/* D.價格 */}
-                <div><p className="text-2xl">${courseData?.c_price} NTD</p>               
+                <div><p className="text-2xl">$ {courseData?.c_price} NTD</p>               
                 </div>          
             </div>
         
@@ -93,8 +104,11 @@ export default function Product(props) {
           <Button radius="none" className="bg-[#f7f5f1] text-black text-[15px] w-[200px] h-[50px] border-black border-2">LIKE<GoHeart />
           </Button>
 
+      {/* NEXT link 到訂單頁面 */}
+        <Link href="/order">
           <Button radius="none" className="bg-[#000000] text-white text-[15px] w-[200px] h-[50px]">BUY<BsArrowRight />
           </Button>
+        </Link>
         </div>
 
           </div>
@@ -108,20 +122,20 @@ export default function Product(props) {
       {/* 特點一 */}
       <div className="Special">
         <FiCheckCircle size={40} color="#F17C80" />
-        <p className='text-2xl font-bold'>送禮首選</p>
-        <p>花藝課程送禮首選！心意，親手打造專屬花藝作品，提升生活品味。適合生日、節日、紀念日，送禮不只是一份驚喜，更是一場創意與美感的饗宴！</p>
+        <p className='text-2xl font-bold'>{courseData?.c_v1}</p>
+        <p>{courseData?.c_vdes1}</p>
       </div>
       {/* 特點二 */}
       <div className="Special">
         <AiOutlineHeart size={40} color="#F17C80" />
-        <p className='text-2xl font-bold'>送禮首選</p>
-        <p>花友在美學體驗中感受滿滿心意，親手打造專屬花藝作品，提升生活品味。適合生日、節日、紀念日，送禮不只是一份驚喜，更是一場創意與美感的饗宴！</p>
+        <p className='text-2xl font-bold'>{courseData?.c_v2}</p>
+        <p>{courseData?.c_vdes2}</p>
       </div>
       {/* 特點三 */}
       <div className="Special">
         <FaRegSmileWink size={40} color="#F17C80" />
-        <p className='text-2xl font-bold'>送禮首選</p>
-        <p>花藝課程送禮首選！讓親友在美學體，親手打造專屬花藝作品，提升生活品味。適合生日、節日、紀念日更是一場創意與美感的饗宴！</p>
+        <p className='text-2xl font-bold'>{courseData?.c_v3}</p>
+        <p>{courseData?.c_vdes3}</p>
       </div>
 
     </div>
@@ -129,8 +143,7 @@ export default function Product(props) {
 {/* ------ Section3: 課程介紹 ------ */}
     <div className="section3 flex flex-col gap-4 h-1/2">
       <p className="subtitle">課程介紹｜Introduction</p>
-      <p className='content'>愛花、愛生活的你，怎能錯過這場專屬於浪漫的下午時光？在專業花藝老師的引導下，學習如何搭配色彩、挑選花材，親手設計一份充滿春日氣息的花藝作品。不論是想裝飾家中一角，或是送給特別的他/她，都能在這裡找到滿滿靈感。
-      讓我們在美麗的花朵中，放慢生活的步調，一起享受創作的樂趣與優雅！讓我們在美麗的花朵中，放慢生活的步調，一起享受創作的樂趣與優雅！讓我們在美麗的花朵中，放慢生活的步調，一起享受創作的樂趣與優雅！讓我們在美麗的花朵中，放慢生活的步調，一起享受創作的樂趣與優雅！讓我們在美麗的花朵中，放慢生活的步調，一起享受創作的樂</p>
+      <p className='content'>{courseData?.c_desc}</p>
     </div>
 
 
@@ -138,15 +151,17 @@ export default function Product(props) {
     <div className="section4 flex flex-row gap-4">
       <div className="Locate flex flex-col gap-4 w-1/2">
         <p className="subtitle">課程地點｜Location</p>
-        <img src="https://fakeimg.pl/500x200" />
+        <div className="map500x400"></div>
+        <GoogleMap address={courseData?.address}/>
       </div>
 
       <div className="Contact flex flex-col gap-4 w-1/2">
       <p className="subtitle">聯繫方式｜Contact</p>
         <div className="address h-full flex items-center">
-          <div className='addressinner flex flex-col w-1/2 gap-8'>
-            <p>地址：台灣台北市沅陵街1-1號</p>
-            <p>電話：0975636458</p>
+          <div className='addressinner flex flex-col w-2/3 gap-8'>
+            <p>場地名稱：{courseData?.locat_name}</p>
+            <p>場地地址：{courseData?.address}</p>
+            <p>品牌電話：{courseData?.bd_tel}</p>
           </div>
         </div>
       </div>
@@ -157,22 +172,24 @@ export default function Product(props) {
 {/* ------ Section5: 品牌名片 ------ */}
     <div className="section5 flex flex-col">
       <p className="subtitle">關於品牌｜About Us</p>
-
+    {/* <div className="bg-[url('https://images.unsplash.com/photo-1547322617-3f783b07f999?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] bg-fixed"> */}
+    
       <div className="flex flex-row gap-4 justify-center items-center">
-      {/* 左邊Logo */}
+      {/* 左邊Logo 300*300 */}
         <div className="BLogo w-1/2">
-          <img src="https://fakeimg.pl/300x300" />
+          <img className='w-[300px] h-[300px]' src="https://i.pinimg.com/736x/ba/30/a8/ba30a87feda549c25f258e66eb0b8aa0.jpg" />
         </div>
         
       {/* 右Info */}
         <div className="BInfo w-1/2">
         <div className="BInfoinner flex flex-col w-1/2 gap-8">
-          <p>Noémie Fleurs 迷花島嶼</p>
-          <p>以花為語言，探索自然之美與心靈的連結。透過創意花藝設計，感受藝術與生活的優雅交融，打造屬於您的獨特花語故事。</p>
+          <p>{courseData?.bd_name}</p>
+          <p>{courseData?.bd_info}</p>
           <BtnCTA text={"去探索"} />
         </div>
         </div>
     </div>
+    {/* </div> */}
 
     </div>
 
