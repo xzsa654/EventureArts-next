@@ -11,14 +11,23 @@ import {
   Textarea,
 } from '@heroui/react'
 import { CustomCheckbox } from './custom-checkbox'
+import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules'
 
-export default function ExMiddleForm(props) {
+import { Swiper, SwiperSlide } from 'swiper/react'
+
+// Import Swiper styles
+import 'swiper/css'
+import 'swiper/css/navigation'
+import 'swiper/css/pagination'
+import 'swiper/css/scrollbar'
+
+export default function CoMiddleForm(props) {
   const [groupSelected, setGroupSelected] = React.useState([])
   return (
     <>
-      <Form className="flex flex-row gap-16">
+      <Form className="flex flex-row max-sm:flex-col max-sm:gap-8 gap-16">
         {/* left */}
-        <div className="w-6/12 px-3 py-6 flex gap-8 flex-col">
+        <div className="w-6/12 max-sm:w-full px-3 py-6 flex gap-8 flex-col">
           <div className="text-red-500 text-2xl font-semibold ">* 為必填</div>
           <div>
             <Input
@@ -48,7 +57,7 @@ export default function ExMiddleForm(props) {
               }}
             />
           </div>
-          <div className="w-6/12 ">
+          <div className="w-6/12 max-sm:w-full ">
             <Select
               aria-label="status"
               size="lg"
@@ -63,7 +72,7 @@ export default function ExMiddleForm(props) {
               }}
             ></Select>
           </div>
-          <div className="w-6/12 ">
+          <div className="w-6/12 max-sm:w-full ">
             <Select
               aria-label="place"
               size="lg"
@@ -79,7 +88,7 @@ export default function ExMiddleForm(props) {
               className="mb-3"
             ></Select>
           </div>
-          <div className="w-3/12">
+          <div className="w-3/12 max-sm:w-4/12">
             <Input
               size="lg"
               label="價格"
@@ -96,80 +105,171 @@ export default function ExMiddleForm(props) {
           </div>
         </div>
         {/* right */}
-        <div className="w-6/12 h-full flex flex-col  gap-8 text-16">
-          <div className="flex justify-center gap-4 ">
-            <Textarea
-              label="標題"
-              size="lg"
-              labelPlacement="outside-left"
-              minRows={1}
-              className="w-2/3"
-              classNames={{
-                inputWrapper: 'bg-white border-1 border-black',
-                label: 'text-black',
-              }}
-            />
-            <Textarea
-              label="敘述"
-              size="lg"
-              labelPlacement="outside-left"
-              minRows={3}
-              className="w-2/3"
-              classNames={{
-                inputWrapper: 'bg-white border-1 border-black',
-                label: 'text-black',
-              }}
-            />
-          </div>
-          <div className="flex justify-center gap-4 ">
-            <Textarea
-              label="標題"
-              size="lg"
-              labelPlacement="outside-left"
-              minRows={1}
-              className="w-2/3"
-              classNames={{
-                inputWrapper: 'bg-white border-1 border-black',
-                label: 'text-black',
-              }}
-            />
-            <Textarea
-              label="敘述"
-              size="lg"
-              labelPlacement="outside-left"
-              minRows={3}
-              className="w-2/3"
-              classNames={{
-                inputWrapper: 'bg-white border-1 border-black',
-                label: 'text-black',
-              }}
-            />
-          </div>
-          <div className="flex justify-center gap-4 ">
-            <Textarea
-              label="標題"
-              size="lg"
-              labelPlacement="outside-left"
-              minRows={1}
-              className="w-2/3"
-              classNames={{
-                inputWrapper: 'bg-white border-1 border-black',
-                label: 'text-black',
-              }}
-            />
-            <Textarea
-              label="敘述"
-              size="lg"
-              labelPlacement="outside-left"
-              minRows={3}
-              className="w-2/3"
-              classNames={{
-                inputWrapper: 'bg-white border-1 border-black',
-                label: 'text-black',
-              }}
-            />
-          </div>
 
+        <div className="w-6/12 h-full flex flex-col  max-sm:w-full    gap-8 text-16">
+          產品價值點
+          {/* PC */}
+          <div className="max-sm:hidden  flex flex-col gap-8 text-16">
+            <div className="  max-sm:py-6 flex justify-center max-sm:flex-col gap-4 max-sm:border-1 max-sm:border-black max-sm:p-2 max-sm:rounded-md max-sm:w-full ">
+              <Textarea
+                label="標題"
+                size="lg"
+                labelPlacement="outside-left"
+                minRows={1}
+                className="w-2/3 max-sm:w-full"
+                classNames={{
+                  inputWrapper: 'bg-white border-1 border-black',
+                  label: 'text-black',
+                }}
+              />
+              <Textarea
+                label="敘述"
+                size="lg"
+                labelPlacement="outside-left"
+                minRows={3}
+                className="w-2/3 max-sm:w-full"
+                classNames={{
+                  inputWrapper: 'bg-white border-1 border-black',
+                  label: 'text-black',
+                }}
+              />
+            </div>
+            <div className=" max-sm:py-6 flex justify-center max-sm:flex-col gap-4 max-sm:border-1 max-sm:border-black max-sm:p-2 max-sm:rounded-md max-sm:w-full ">
+              <Textarea
+                label="標題"
+                size="lg"
+                labelPlacement="outside-left"
+                minRows={1}
+                className="w-2/3 max-sm:w-full"
+                classNames={{
+                  inputWrapper: 'bg-white border-1 border-black',
+                  label: 'text-black',
+                }}
+              />
+              <Textarea
+                label="敘述"
+                size="lg"
+                labelPlacement="outside-left"
+                minRows={3}
+                className="w-2/3 max-sm:w-full"
+                classNames={{
+                  inputWrapper: 'bg-white border-1 border-black',
+                  label: 'text-black',
+                }}
+              />
+            </div>
+            <div className=" max-sm:py-6 flex justify-center max-sm:flex-col gap-4 max-sm:border-1 max-sm:border-black max-sm:p-2 max-sm:rounded-md max-sm:w-full ">
+              <Textarea
+                label="標題"
+                size="lg"
+                labelPlacement="outside-left"
+                minRows={1}
+                className="w-2/3 max-sm:w-full"
+                classNames={{
+                  inputWrapper: 'bg-white border-1 border-black',
+                  label: 'text-black',
+                }}
+              />
+              <Textarea
+                label="敘述"
+                size="lg"
+                labelPlacement="outside-left"
+                minRows={3}
+                className="w-2/3 max-sm:w-full"
+                classNames={{
+                  inputWrapper: 'bg-white border-1 border-black',
+                  label: 'text-black',
+                }}
+              />
+            </div>
+          </div>
+          {/* 手機版 */}
+          <div className="max-sm:flex-row text-16 flex max-sm:my-4 md:hidden   ">
+            <Swiper
+              modules={[Navigation, Pagination, Scrollbar, A11y]}
+              spaceBetween={30}
+              slidesPerView={1.2}
+            >
+              <SwiperSlide>
+                <div className="max-sm:py-6 flex justify-center max-sm:flex-col gap-4 max-sm:border-1 max-sm:border-black max-sm:p-2 max-sm:rounded-md max-sm:w-full ">
+                  <Textarea
+                    label="標題"
+                    size="lg"
+                    labelPlacement="outside-left"
+                    minRows={1}
+                    className="w-2/3 max-sm:w-full"
+                    classNames={{
+                      inputWrapper: 'bg-white border-1 border-black',
+                      label: 'text-black',
+                    }}
+                  />
+                  <Textarea
+                    label="敘述"
+                    size="lg"
+                    labelPlacement="outside-left"
+                    minRows={3}
+                    className="w-2/3 max-sm:w-full"
+                    classNames={{
+                      inputWrapper: 'bg-white border-1 border-black',
+                      label: 'text-black',
+                    }}
+                  />
+                </div>
+              </SwiperSlide>
+              <SwiperSlide>
+                <div className=" max-sm:py-6 flex justify-center max-sm:flex-col gap-4 max-sm:border-1 max-sm:border-black max-sm:p-2 max-sm:rounded-md max-sm:w-full ">
+                  <Textarea
+                    label="標題"
+                    size="lg"
+                    labelPlacement="outside-left"
+                    minRows={1}
+                    className="w-2/3 max-sm:w-full"
+                    classNames={{
+                      inputWrapper: 'bg-white border-1 border-black',
+                      label: 'text-black',
+                    }}
+                  />
+                  <Textarea
+                    label="敘述"
+                    size="lg"
+                    labelPlacement="outside-left"
+                    minRows={3}
+                    className="w-2/3 max-sm:w-full"
+                    classNames={{
+                      inputWrapper: 'bg-white border-1 border-black',
+                      label: 'text-black',
+                    }}
+                  />
+                </div>
+              </SwiperSlide>
+              <SwiperSlide>
+                <div className=" max-sm:py-6 max-sm:w-full flex justify-center max-sm:flex-col gap-4 max-sm:border-1 max-sm:border-black max-sm:p-2 max-sm:rounded-md  ">
+                  <Textarea
+                    label="標題"
+                    size="lg"
+                    labelPlacement="outside-left"
+                    minRows={1}
+                    className="w-2/3 max-sm:w-full"
+                    classNames={{
+                      inputWrapper: 'bg-white border-1 border-black',
+                      label: 'text-black',
+                    }}
+                  />
+                  <Textarea
+                    label="敘述"
+                    size="lg"
+                    labelPlacement="outside-left"
+                    minRows={3}
+                    className="w-2/3 max-sm:w-full"
+                    classNames={{
+                      inputWrapper: 'bg-white border-1 border-black',
+                      label: 'text-black',
+                    }}
+                  />
+                </div>
+              </SwiperSlide>
+            </Swiper>
+          </div>
           <Textarea
             label="課程簡介"
             labelPlacement="outside"

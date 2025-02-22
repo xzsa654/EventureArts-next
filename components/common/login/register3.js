@@ -1,13 +1,35 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import ModalLayout from './layout'
-import { Button } from '@heroui/react'
-import { ArrowRight, AvatarIcon } from '@/public/Yao/icons'
+import { Button, Image } from '@heroui/react'
+import { AvatarIcon } from '@/public/Yao/icons'
 import { useModal } from '@/contexts/modal-context'
+import { HiArrowNarrowRight } from 'react-icons/hi'
+
 import RegisterSection from './section'
+import { useAuth } from '@/hooks/use-auth'
 export default function RegisterStep3(props) {
+  const fileRef = useRef()
+  const { registerDataHandler } = useAuth()
+
+  const [avatar, setAvatar] = useState('')
+  const fileHandle = (e) => {
+    // 取得 file 檔案
+    const file = fileRef.current.files[0]
+    if (file) {
+      // 如果確認有檔案 , 建立新的 fileReader 物件
+      const reader = new FileReader(file)
+      reader.onload = () => {
+        // 讀取到 url 後寫入狀態內
+        setAvatar(reader.result)
+        registerDataHandler({ avatar: reader.result })
+        // TODO: 缺少了傳入firstLogin的狀態
+      }
+      reader.readAsDataURL(file)
+    }
+  }
   const { register3, register4 } = useModal()
   const { onOpen } = register4
   const { isOpen, onOpenChange } = register3
@@ -22,15 +44,41 @@ export default function RegisterStep3(props) {
     </p>
   )
   const formBody = (
-    <Button
-      isIconOnly
-      radius="none"
-      className="w-[250] h-[250] bg-gray-800 flex flex-col items-center justify-center "
-    >
-      <AvatarIcon />
-      <span className="text-white text-xl">點我</span>
-      <input type="file" className="hidden" />
-    </Button>
+    <>
+      {avatar ? (
+        <button
+          onClick={() => {
+            fileRef.current.click()
+          }}
+        >
+          <Image
+            src={avatar}
+            alt="avatar"
+            radius="none"
+            className="w-full aspect-square "
+          ></Image>
+        </button>
+      ) : (
+        <Button
+          isIconOnly
+          radius="none"
+          onPress={() => {
+            fileRef.current.click()
+          }}
+          className="w-[250] h-[250] bg-gray-800 flex flex-col items-center justify-center "
+        >
+          <AvatarIcon />
+          <span className="text-white text-xl">點我</span>
+        </Button>
+      )}
+
+      <input
+        type="file"
+        ref={fileRef}
+        onChange={fileHandle}
+        className="hidden"
+      />
+    </>
   )
   const footer = (
     <div className="w-full justify-between text-white flex gap-1">
@@ -54,7 +102,7 @@ export default function RegisterStep3(props) {
       >
         下一步
         <div className="">
-          <ArrowRight />
+          <HiArrowNarrowRight size={20} color="white" />
         </div>
       </Link>
     </div>

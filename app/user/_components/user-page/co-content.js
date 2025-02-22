@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import { Image, Link } from '@heroui/react'
 
-export default function ExMangContent(props) {
+export default function COMangContent(props) {
   const tableData = [
     {
       id: 24,
@@ -45,31 +45,31 @@ export default function ExMangContent(props) {
     <>
       <div className="w-full h-[21px]   border-t-[6px] border-black"></div>
       <div className=" flex justify-center items-center  h-12 border-t-1 border-b-1 border-black">
-        <h6 className=" font-cn  font-medium text-xl">所有展覽</h6>
+        <h6 className=" font-cn  font-medium text-xl">所有課程</h6>
       </div>
       {/* 表格 */}
-      <table className="w-full h-5/6">
-        <thead>
+      <table className="w-full h-5/6 max-sm:px-5">
+        <thead className=" max-sm:hidden">
           <tr className="w-full ">
-            <th className="text-start  text-16 font-cn  border-b-3 border-black p-[10px] font-regular">
-              展覽ID
+            <th className="text-start hidden  text-16 font-cn  border-b-3 border-black p-[10px] font-regular">
+              課程ID
             </th>
-            <th className="text-start  text-16 font-cn  border-b-3 border-black p-[10px] font-regular">
-              展覽名稱
+            <th className="text-start max-sm:text-center  text-16 font-cn  border-b-3 border-black p-[10px] font-regular">
+              課程名稱
             </th>
-            <th className="text-start  text-16 font-cn  border-b-3 border-black p-[10px] font-regular">
-              展覽日期
+            <th className="text-start max-sm:hidden  text-16 font-cn  border-b-3 border-black p-[10px] font-regular">
+              課程日期
             </th>
-            <th className="text-start  text-16 font-cn  border-b-3 border-black p-[10px] font-regular">
-              展覽地點
+            <th className="text-start  max-sm:hidden text-16 font-cn  border-b-3 border-black p-[10px] font-regular">
+              課程地點
             </th>
-            <th className="text-start  text-16 font-cn  border-b-3 border-black p-[10px] font-regular">
+            <th className="text-start max-sm:hidden  text-16 font-cn  border-b-3 border-black p-[10px] font-regular">
               價格
             </th>
-            <th className="text-start  text-16 font-cn  border-b-3 border-black p-[10px] font-regular">
+            <th className="text-start  min-w-[59px]  text-16 font-cn  border-b-3 border-black p-[10px] font-regular">
               編輯
             </th>
-            <th className="text-start  text-16 font-cn  border-b-3 border-black p-[10px] font-regular">
+            <th className="text-start min-w-[59px]  text-16 font-cn  border-b-3 border-black p-[10px] font-regular">
               刪除
             </th>
           </tr>
@@ -78,19 +78,19 @@ export default function ExMangContent(props) {
           {tableData.map((v, i) => {
             return (
               <tr key={i}>
-                <td className=" py-4 border-b-1 border-black text-12 ">
+                <td className=" hidden py-4 border-b-1 border-black text-12 ">
                   {v.id}
                 </td>
-                <td className=" py-4 border-b-1 border-black text-12 ">
+                <td className="  py-4 border-b-1 border-black text-12 ">
                   {v.name}
                 </td>
-                <td className=" py-4 border-b-1 border-black text-12 ">
+                <td className=" max-sm:hidden py-4 border-b-1 border-black text-12 ">
                   {v.date}
                 </td>
-                <td className=" py-4 border-b-1 border-black text-12 ">
+                <td className=" max-sm:hidden py-4 border-b-1 border-black text-12 ">
                   {v.price}
                 </td>
-                <td className=" py-4 border-b-1 border-black text-12 ">
+                <td className=" max-sm:hidden max-sm:hidden py-4 border-b-1 border-black text-12 ">
                   {v.address}
                 </td>
                 <td className=" py-4 border-b-1 border-black text-12 text-center ">
