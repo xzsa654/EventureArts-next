@@ -16,6 +16,7 @@ import useSWR from 'swr'
 import OnlineExhibitionCard from '../_components/OnlineExhibitionCard'
 import AnimationLike from '../_components/AnimationLike'
 import '../exhibit.css'
+import Loading from "../loading"
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3001'
@@ -43,7 +44,7 @@ export default function OnlineExhibitions({ e_id }) {
 
   if (error)
     return <div className="text-white">Error loading online exhibitions</div>
-  if (!exhibitions) return <div className="text-white">Loading...</div>
+  if (!exhibitions) return <Loading />
 
   return (
     <div className="pt-[80px] min-h-screen bg-[url('/chu-images/img-bg.jpg')] bg-cover bg-fixed">

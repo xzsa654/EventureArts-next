@@ -7,6 +7,7 @@ import { CiSearch } from "react-icons/ci"
 import { MdSort } from "react-icons/md"
 import useSWR from "swr"
 import "./styles.css"
+import Loading from "../loading"
 
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3001"
@@ -17,6 +18,8 @@ const fetcher = (url) => fetch(url).then((res) => res.json())
 export default function ExploreExhibitions() {
   const [currentPage, setCurrentPage] = useState(1)
   const [showAdvancedSearch, setShowAdvancedSearch] = useState(false)
+  const [loading, setLoading] = useState(true);
+
 
   // 使用 SWR 獲取展覽資料，並從 MySQL 獲取資料
   const { data: exhibitions, error } = useSWR(`${API_BASE_URL}/exhibit/?form=offline&page=${currentPage}`, fetcher)
@@ -25,7 +28,7 @@ export default function ExploreExhibitions() {
 
 
   if (error) return <div>Error loading exhibitions</div>
-  if (!exhibitions) return <div>Loading...</div>
+  if (!exhibitions) return <Loading />
 
   return (
     <div

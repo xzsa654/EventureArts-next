@@ -14,6 +14,9 @@ import { PCDLoader } from "three/examples/jsm/loaders/PCDLoader"
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader"
 import { PLYLoader } from "three/examples/jsm/loaders/PLYLoader"
+import Loading from "../../loading"
+
+
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3001"
 const fetcher = (url) => fetch(url).then((res) => res.json())
@@ -442,7 +445,7 @@ export default function OnlineExhibitionDetail({ params }) {
   }
 
   if (error) return <div className="text-white">Error loading exhibition data</div>
-  if (!exhibitionData) return <div className="text-white">Loading...</div>
+  if (!exhibitionData) return <Loading />
   if (loadingError) return <div className="text-white">{loadingError}</div>
 
   return (

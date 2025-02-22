@@ -10,6 +10,8 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation' // for buy ticket btn
 import Link from 'next/link'
 import { Button } from '@heroui/button'
+import Loading from "../../loading"
+
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3001'
@@ -32,7 +34,7 @@ export default function ExhibitionDetail({ params }) {
   // exhibitionData?.data[0];
   console.log(error)
   if (error) return <div>Error loading exhibition data</div>
-  if (!exhibitionData) return <div>Loading...</div>
+  if (!exhibitionData) return <Loading />
 
   return (
     <div className="min-h-screen bg-[url('/chu-images/img-bg.jpg')] bg-cover bg-fixed">

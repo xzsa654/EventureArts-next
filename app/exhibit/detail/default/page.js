@@ -1,3 +1,4 @@
+"use client"
 export default function DefaultExhibitionDetail() {
   return (
     <div className="min-h-screen bg-[url('/chu-images/img-bg.jpg')] bg-cover bg-fixed">
