@@ -18,6 +18,8 @@
     "@heroui/system": "^2.4.7",
     "@heroui/theme": "^2.4.6",
     "@hookform/resolvers": "^3.9.1",
+    "@react-three/drei": "^9.122.0",
+    "@react-three/fiber": "^8.18.0",
     "@types/three": "^0.173.0",
     "dotenv": "^16.4.7",
     "firebase": "^11.1.0",
