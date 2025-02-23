@@ -8,32 +8,17 @@ import L from "leaflet"
 
 export default function MapView({
   mrtRoutes,
+  // mrtStations,
   taipeiDistricts,
   selectedMRT,
   selectedDistrict,
   selectedStation,
   shortestPaths,
-  filteredLocations,
-  selectedLineStations,
+  filteredLocations, 
+  selectedLineStations  // Add this prop to include the dynamically loaded stations
 }) {
   const mapRef = useRef(null)
   const center = [25.033, 121.5654]
-
-  // Debug logging
-  useEffect(() => {
-    console.log("Selected MRT Line:", selectedMRT)
-    console.log("Selected Station:", selectedStation)
-    console.log("Selected Line Stations:", selectedLineStations)
-    if (mrtRoutes && mrtRoutes.features) {
-      console.log(
-        "Available MRT Routes:",
-        mrtRoutes.features.map((f) => ({
-          code: f.properties.MRTCODE,
-          selected: f.properties.MRTCODE === selectedMRT,
-        })),
-      )
-    }
-  }, [selectedMRT, selectedStation, selectedLineStations, mrtRoutes])
 
   useEffect(() => {
     if (!mapRef.current) {
@@ -46,6 +31,7 @@ export default function MapView({
     }
   }, [])
 
+  // Existing styles...
   const routeStyle = {
     color: "#666666",
     weight: 3,
@@ -73,15 +59,6 @@ export default function MapView({
     fillOpacity: 1,
   }
 
-  const selectedStationStyle = {
-    radius: 8,
-    fillColor: "#ff7800",
-    color: "#000",
-    weight: 2,
-    opacity: 1,
-    fillOpacity: 0.8,
-  }
-
   const districtStyle = (feature) => {
     return {
       color: "#ff7800",
@@ -98,73 +75,24 @@ export default function MapView({
     opacity: 0.8,
   }
 
-  // Function to check if a route should be highlighted
-  const shouldHighlightRoute = (feature) => {
-    if (!selectedMRT || !feature.properties) return false
-
-    // Direct comparison between selected line and MRTCODE
-    const match = feature.properties.MRTCODE === selectedMRT
-
-    console.log("Comparing route:", {
-      selected: selectedMRT,
-      routeCode: feature.properties.MRTCODE,
-      match: match,
-    })
-
-    return match
+  // Existing handlers...
+  const pointToLayer = (feature, latlng) => {
+    return L.circleMarker(latlng, stationStyle)
   }
 
-  const styleRoutes = (feature) => {
-    const isHighlighted = shouldHighlightRoute(feature)
-
-    console.log("Styling route:", {
-      code: feature.properties.MRTCODE,
-      isHighlighted,
-      selectedMRT,
-    })
-
-    if (isHighlighted) {
-      return {
-        ...selectedStyle,
-        color: getLineColor(feature.properties.MRTCODE),
-      }
-    }
-    return routeStyle
-  }
-
-  // Get line color based on line name
-  const getLineColor = (lineName) => {
-    const colorMap = {
-      淡水信義線: "#ff0000", // Red
-      松山新店線: "#008000", // Green
-      中和新蘆線: "#ff6600", // Orange
-      板南線: "#0000ff", // Blue
-      文湖線: "#825200", // Brown
-      環狀線: "#ffff00", // Yellow
-    }
-    return colorMap[lineName] || "#666666"
-  }
-
-  const onEachRoute = (feature, layer) => {
+  const onEachRouteFeature = (feature, layer) => {
     layer.on({
       mouseover: () => {
-        if (shouldHighlightRoute(feature)) {
-          layer.setStyle({
-            ...hoverStyle,
-            color: getLineColor(feature.properties.MRTCODE),
-          })
+        if (!selectedMRT || feature.properties.MRTCODE === selectedMRT) {
+          layer.setStyle(hoverStyle)
         }
       },
       mouseout: () => {
-        layer.setStyle(styleRoutes(feature))
-      },
-      click: () => {
-        console.log("Clicked route:", feature.properties)
+        if (!selectedMRT || feature.properties.MRTCODE === selectedMRT) {
+          layer.setStyle(selectedMRT === feature.properties.MRTCODE ? selectedStyle : routeStyle)
+        }
       },
     })
-
-    // Add popup with line name
-    layer.bindPopup(feature.properties.MRTCODE)
   }
 
   const onEachDistrict = (feature, layer) => {
@@ -186,27 +114,29 @@ export default function MapView({
     })
   }
 
-  // Create GeoJSON for stations
+  const filterRoutes = (feature) => {
+    return !selectedMRT || feature.properties.MRTCODE === selectedMRT
+  }
+
+  const styleRoutes = (feature) => {
+    return selectedMRT === feature.properties.MRTCODE ? selectedStyle : routeStyle
+  }
+
+    // Function to convert the selected line's station data to GeoJSON format
   const stationGeoJSON = {
     type: "FeatureCollection",
-    features: selectedLineStations.map((station) => ({
+    features: selectedLineStations.map(station => ({
       type: "Feature",
       properties: {
         name: station.name_chinese,
-        name_english: station.name_english,
-        id: station.station_id,
+        id: station.station_id
       },
       geometry: {
         type: "Point",
-        coordinates: [station.coordinates.longitude, station.coordinates.latitude],
-      },
-    })),
-  }
-
-  // Function to check if a station should be highlighted
-  const shouldHighlightStation = (stationId) => {
-    return selectedStation === stationId
-  }
+        coordinates: [station.coordinates.longitude, station.coordinates.latitude]
+      }
+    }))
+  };
 
   return (
     <div className="map-view">
@@ -238,26 +168,23 @@ export default function MapView({
             <LayerGroup>
               {mrtRoutes && (
                 <GeoJSON
-                  key={`routes-${selectedMRT || "all"}`}
+                  key={selectedMRT || "all"}
                   data={mrtRoutes}
-                  style={styleRoutes}
-                  onEachFeature={onEachRoute}
+                  style={(feature) => (selectedMRT === feature.properties.MRTCODE ? { color: "#ff0000", weight: 5 } : { color: "#666", weight: 3 })}
+                  filter={(feature) => !selectedMRT || feature.properties.MRTCODE === selectedMRT}
                 />
               )}
-              {selectedLineStations && selectedLineStations.length > 0 && (
+              {selectedLineStations.length > 0 && (
                 <GeoJSON
-                  key={`stations-${selectedStation || "all"}`}
                   data={stationGeoJSON}
-                  pointToLayer={(feature, latlng) => {
-                    const isSelected = shouldHighlightStation(feature.properties.id)
-                    const style = isSelected ? selectedStationStyle : stationStyle
-                    const marker = L.circleMarker(latlng, style)
-
-                    // Add popup with both Chinese and English names
-                    marker.bindPopup(`${feature.properties.name}<br>${feature.properties.name_english}`)
-
-                    return marker
-                  }}
+                  pointToLayer={(feature, latlng) => L.circleMarker(latlng, {
+                    radius: 6,
+                    fillColor: "#ff7800",
+                    color: "#000",
+                    weight: 1.5,
+                    opacity: 1,
+                    fillOpacity: 0.8
+                  })}
                 />
               )}
             </LayerGroup>

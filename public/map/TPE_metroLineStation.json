@@ -765,7 +765,10 @@
                     "station_id": "O08",
                     "name_chinese": "松江南京",
                     "name_english": "Songjiang Nanjing",
-                    "coordinates": null
+                    "coordinates": {
+                        "longitude": 121.53304925954893,
+                        "latitude": 25.052024514344147
+                    }
                 },
                 {
                     "station_id": "O07",

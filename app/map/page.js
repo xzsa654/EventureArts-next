@@ -15,12 +15,13 @@ export default function Page() {
   const [selectedDistrict, setSelectedDistrict] = useState("")
   const [selectedMRT, setSelectedMRT] = useState("")
   const [selectedStation, setSelectedStation] = useState("")
+  const [selectedLineStations, setSelectedLineStations] = useState([])
   const [mapData, setMapData] = useState({
     mrtRoutes: null,
-    mrtStations: null,
     taipeiDistricts: null,
     shortestPaths: null,
   })
+  const [metroData, setMetroData] = useState({ mrt_lines: [] })
   const [dbLocations, setDbLocations] = useState([])
   const [filteredLocations, setFilteredLocations] = useState([])
   const [isLoading, setIsLoading] = useState(true)
@@ -30,24 +31,25 @@ export default function Page() {
     const fetchData = async () => {
       try {
         setIsLoading(true)
-        const [routesRes, stationsRes, districtsRes, pathsRes] = await Promise.all([
+        const [routesRes, districtsRes, pathsRes, lineStationsRes] = await Promise.all([
           fetch("/map/TPE_MRT_ROUTE_4326.geojson"),
-          fetch("/map/TPE_MRT_STATION_4326.geojson"),
           fetch("/map/TPE_Dist_4326.geojson"),
           fetch("/map/shortPath_wgs84.geojson"),
+          fetch("/map/TPE_metroLineStation.json"),
         ])
 
         const routesData = await routesRes.json()
-        const stationsData = await stationsRes.json()
         const districtsData = await districtsRes.json()
         const pathsData = await pathsRes.json()
+        const metroLineData = await lineStationsRes.json()
 
         setMapData({
           mrtRoutes: routesData,
-          mrtStations: stationsData,
           taipeiDistricts: districtsData,
           shortestPaths: pathsData,
         })
+        setMetroData(metroLineData)
+
         setIsLoading(false)
       } catch (err) {
         console.error("Error loading data:", err)
@@ -58,6 +60,19 @@ export default function Page() {
 
     fetchData()
   }, [])
+
+  useEffect(() => {
+    if (selectedMRT && metroData.mrt_lines) {
+      const selectedLine = metroData.mrt_lines.find((line) => line.line === selectedMRT)
+      if (selectedLine && !selectedLineStations.length) {
+        // Only update if stations aren't already set
+        setSelectedLineStations(selectedLine.stations)
+      }
+    } else if (!selectedMRT) {
+      // Only clear stations if no line is selected
+      setSelectedLineStations([])
+    }
+  }, [selectedMRT, metroData, selectedLineStations.length])
 
   useEffect(() => {
     fetch(`${API_BASE_URL}/map`)
@@ -76,17 +91,58 @@ export default function Page() {
     setSelectedDistrict(district)
     setSelectedMRT("")
     setSelectedStation("")
+    setSelectedLineStations([])
   }, [])
 
-  const handleLineSelect = useCallback((line) => {
-    setSelectedMRT(line)
-    setSelectedStation("")
-    setSelectedDistrict("")
-  }, [])
+  const handleLineSelect = useCallback(
+    (e) => {
+      // Handle both event objects and direct values
+      const value = e?.target?.value ?? e
+      console.log("Raw line value:", value)
 
-  const handleStationSelect = useCallback((station) => {
-    setSelectedStation(station)
-  }, [])
+      // If "all" is selected, clear the selection
+      if (value === "all") {
+        setSelectedMRT("")
+        setSelectedStation("")
+        setSelectedDistrict("")
+        return
+      }
+
+      // Find the matching line in the metro data
+      const selectedLine = metroData.mrt_lines?.find((line) => line.line === value)
+      if (selectedLine) {
+        console.log("Found matching line:", selectedLine.line)
+        // Use the line name directly as it matches the MRTCODE
+        setSelectedMRT(selectedLine.line)
+        setSelectedStation("")
+        setSelectedDistrict("")
+        // Set the stations for this line
+        setSelectedLineStations(selectedLine.stations)
+      }
+    },
+    [metroData.mrt_lines],
+  )
+
+  const handleStationSelect = useCallback(
+    (station) => {
+      console.log("Selected station:", station)
+      if (station && station !== "all") {
+        // Find the line that contains this station
+        const line = metroData.mrt_lines?.find((line) => line.stations.some((s) => s.station_id === station))
+
+        if (line) {
+          console.log("Found line for station:", line.line)
+          // Use the line name directly as it matches the MRTCODE
+          setSelectedMRT(line.line)
+          setSelectedStation(station)
+          setSelectedLineStations(line.stations)
+        }
+      } else {
+        setSelectedStation("")
+      }
+    },
+    [metroData.mrt_lines],
+  )
 
   const handleApplyFilter = useCallback(
     (searchCriteria) => {
@@ -96,11 +152,9 @@ export default function Page() {
       }
 
       if (searchCriteria.type === "district") {
-        // Filter locations by district
         const locations = dbLocations.filter((loc) => loc.district === searchCriteria.value)
         setFilteredLocations(locations)
       } else if (searchCriteria.type === "mrt") {
-        // Filter locations by station proximity using shortestPaths
         const paths = mapData.shortestPaths.features.filter(
           (path) => path.properties.start_name === searchCriteria.value,
         )
@@ -115,29 +169,31 @@ export default function Page() {
   const memoizedFilterPanel = useMemo(
     () => (
       <FilterPanel
+        metroData={metroData}
         onDistrictSelect={handleDistrictSelect}
         onLineSelect={handleLineSelect}
         onStationSelect={handleStationSelect}
         onApplyFilter={handleApplyFilter}
+        selectedMRT={selectedMRT}
       />
     ),
-    [handleDistrictSelect, handleLineSelect, handleStationSelect, handleApplyFilter],
+    [handleDistrictSelect, handleLineSelect, handleStationSelect, handleApplyFilter, metroData, selectedMRT],
   )
 
   const memoizedMapView = useMemo(
     () => (
       <MapView
         mrtRoutes={mapData.mrtRoutes}
-        mrtStations={mapData.mrtStations}
         taipeiDistricts={mapData.taipeiDistricts}
         shortestPaths={mapData.shortestPaths}
         selectedDistrict={selectedDistrict}
         selectedMRT={selectedMRT}
         selectedStation={selectedStation}
         filteredLocations={filteredLocations}
+        selectedLineStations={selectedLineStations}
       />
     ),
-    [mapData, selectedDistrict, selectedMRT, selectedStation, filteredLocations],
+    [mapData, selectedDistrict, selectedMRT, selectedStation, filteredLocations, selectedLineStations],
   )
 
   if (isLoading) {

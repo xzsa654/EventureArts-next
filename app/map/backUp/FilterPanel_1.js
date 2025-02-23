@@ -5,16 +5,14 @@ import { DatePicker, Select, SelectItem, RadioGroup, Radio } from "@heroui/react
 import "./FilterPanel.css"
 
 export default function FilterPanel({
-  metroData,
   onLineSelect = () => {},
   onDistrictSelect = () => {},
   onStationSelect = () => {},
   onApplyFilter = () => {},
-  selectedMRT,
 }) {
   const [filters, setFilters] = useState({
     type: "",
-    searchBy: "district",
+    searchBy: "district", // 'district' or 'mrt'
     district: "",
     metro: "",
     station: "",
@@ -22,10 +20,11 @@ export default function FilterPanel({
     price: "",
   })
   const [districts, setDistricts] = useState([])
+  const [metroData, setMetroData] = useState({ mrt_lines: [] })
   const [availableStations, setAvailableStations] = useState([])
 
-  // Load districts data
   useEffect(() => {
+    // Load districts
     fetch("/map/TPE_Dist_4326.geojson")
       .then((response) => response.json())
       .then((data) => {
@@ -33,85 +32,68 @@ export default function FilterPanel({
         setDistricts(districtNames)
       })
       .catch((error) => console.error("Error loading districts:", error))
+
+    // Load metro lines and stations
+    fetch("/map/TPE_metroLineStation.json")
+      .then((response) => response.json())
+      .then((data) => {
+        setMetroData(data)
+      })
+      .catch((error) => console.error("Error loading metro lines:", error))
   }, [])
 
   // Update available stations when metro line changes
   useEffect(() => {
-    if (filters.metro && filters.metro !== "all" && metroData.mrt_lines) {
+    if (filters.metro && filters.metro !== "all") {
       const selectedLine = metroData.mrt_lines.find((line) => line.line === filters.metro)
       if (selectedLine) {
         setAvailableStations(selectedLine.stations)
+        // Reset station selection if current selection is not in the new line
+        if (filters.station && !selectedLine.stations.some((station) => station.station_id === filters.station)) {
+          handleFilterChange("station", { target: { value: "all" } })
+        }
       }
     } else {
       setAvailableStations([])
     }
-  }, [filters.metro, metroData])
-
-  const handleFilterChange = (key, e) => {
-    const value = e.target.value
-    console.log(`Filter ${key} changed:`, value)
-
-    if (key === "metro") {
-      const newValue = value === "all" ? "" : value
-      console.log("Setting metro line to:", newValue) // Debug log
-      setFilters((prev) => ({
-        ...prev,
-        [key]: newValue,
-        station: "", // Reset station when changing line
-        searchBy: "mrt", // Switch to MRT mode when selecting a line
-      }))
-      onLineSelect(newValue)
-      onDistrictSelect("") // Clear district selection
-      return
-    }
-
-    if (key === "station") {
-      const newValue = value === "all" ? "" : value
-      setFilters((prev) => ({
-        ...prev,
-        [key]: newValue,
-        searchBy: "mrt", // Ensure we stay in MRT mode
-      }))
-      onStationSelect(newValue)
-      // Don't clear the line selection here
-      return
-    }
-
-    if (key === "district") {
-      setFilters((prev) => ({
-        ...prev,
-        [key]: value,
-        metro: "", // Reset metro when selecting district
-        station: "", // Reset station when selecting district
-        searchBy: "district", // Switch to district mode
-      }))
-      onDistrictSelect(value === "all" ? "" : value)
-      onLineSelect("")
-      onStationSelect("")
-      return
-    }
-
-    setFilters((prev) => ({ ...prev, [key]: value }))
-  }
+  }, [filters.metro, metroData, filters.station])
 
   const handleSearchByChange = (value) => {
     setFilters((prev) => ({
       ...prev,
       searchBy: value,
-      district: value === "district" ? prev.district : "",
-      metro: value === "mrt" ? prev.metro : "",
-      station: value === "mrt" ? prev.station : "",
+      district: "",
+      metro: "",
+      station: "",
     }))
+    onDistrictSelect("")
+    onLineSelect("")
+    onStationSelect("")
+  }
 
-    if (value === "district") {
-      onLineSelect("")
+  const handleFilterChange = (key, e) => {
+    const value = e.target.value
+    console.log(`Filter ${key} changed:`, value)
+    setFilters((prev) => ({ ...prev, [key]: value }))
+
+    // Immediate updates for highlighting
+    if (key === "district" && filters.searchBy === "district") {
+      onDistrictSelect(value === "all" ? "" : value)
+    }
+    if (key === "metro" && filters.searchBy === "mrt") {
+      onLineSelect(value === "all" ? "" : value)
+      // Reset station when line changes
+      setFilters((prev) => ({ ...prev, station: "" }))
       onStationSelect("")
-    } else {
-      onDistrictSelect("")
+    }
+    if (key === "station" && filters.searchBy === "mrt") {
+      // Don't trigger location display until Apply is clicked
+      onStationSelect(value === "all" ? "" : value)
     }
   }
 
   const handleApply = () => {
+    // Only send the relevant search criteria
     const searchCriteria = {
       type: filters.searchBy,
       value: filters.searchBy === "district" ? filters.district : filters.station,
@@ -187,11 +169,9 @@ export default function FilterPanel({
               classNames={{ trigger: "border-1.5 border-black" }}
               aria-label="Select district"
             >
-              <SelectItem key="all" value="all" textValue="All Districts">
-                All Districts
-              </SelectItem>
+              <SelectItem value="all">All Districts</SelectItem>
               {districts.map((district) => (
-                <SelectItem key={district} value={district} textValue={district}>
+                <SelectItem key={district} value={district}>
                   {district}
                 </SelectItem>
               ))}
@@ -207,11 +187,9 @@ export default function FilterPanel({
                 classNames={{ trigger: "border-1.5 border-black" }}
                 aria-label="Select metro line"
               >
-                <SelectItem key="all" value="all" textValue="All Lines">
-                  All Lines
-                </SelectItem>
+                <SelectItem value="all">All Lines</SelectItem>
                 {metroData.mrt_lines.map((line) => (
-                  <SelectItem key={line.line} value={line.line} textValue={line.line}>
+                  <SelectItem key={line.line} value={line.line}>
                     {line.line}
                   </SelectItem>
                 ))}
@@ -227,15 +205,9 @@ export default function FilterPanel({
                 aria-label="Select station"
                 isDisabled={!filters.metro || filters.metro === "all"}
               >
-                <SelectItem key="all" value="all" textValue="All Stations">
-                  All Stations
-                </SelectItem>
+                <SelectItem value="all">All Stations</SelectItem>
                 {availableStations.map((station) => (
-                  <SelectItem
-                    key={station.station_id}
-                    value={station.station_id}
-                    textValue={`${station.name_chinese} ${station.name_english}`}
-                  >
+                  <SelectItem key={station.station_id} value={station.station_id}>
                     {station.name_chinese} {station.name_english}
                   </SelectItem>
                 ))}
@@ -262,7 +234,7 @@ export default function FilterPanel({
           aria-label="Select price range"
         >
           {priceRanges.map((range) => (
-            <SelectItem key={range} value={range} textValue={range}>
+            <SelectItem key={range} value={range}>
               {range}
             </SelectItem>
           ))}
