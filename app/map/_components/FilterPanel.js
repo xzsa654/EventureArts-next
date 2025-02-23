@@ -1,93 +1,125 @@
-'use client'
+"use client"
 
-import { useState, useEffect } from 'react'
-import { DatePicker, Select, SelectItem } from '@heroui/react'
-import './FilterPanel.css'
+import { useState, useEffect } from "react"
+import { DatePicker, Select, SelectItem, RadioGroup, Radio } from "@heroui/react"
+import "./FilterPanel.css"
 
 export default function FilterPanel({
   onLineSelect = () => {},
   onDistrictSelect = () => {},
+  onStationSelect = () => {},
+  onApplyFilter = () => {},
 }) {
-  // 初始過濾條件設定
   const [filters, setFilters] = useState({
-    type: '',
-    district: '',
-    metro: '',
-    station: '',
-    date: '',
-    price: '',
+    type: "",
+    searchBy: "district", // 'district' or 'mrt'
+    district: "",
+    metro: "",
+    station: "",
+    date: "",
+    price: "",
   })
-  // MRT 路線與行政區選項
-  const [mrtLines, setMrtLines] = useState([])
   const [districts, setDistricts] = useState([])
+  const [metroData, setMetroData] = useState({ mrt_lines: [] })
+  const [availableStations, setAvailableStations] = useState([])
 
-  // 載入 MRT 路線與行政區資料（GeoJSON）
   useEffect(() => {
-    // 取得 MRT 路線資料
-    fetch('/map/TPE_MRT_ROUTE_4326.geojson')
+    // Load districts
+    fetch("/map/TPE_Dist_4326.geojson")
       .then((response) => response.json())
       .then((data) => {
-        const lines = [
-          ...new Set(
-            data.features.map((feature) => feature.properties.MRTCODE)
-          ),
-        ]
-        setMrtLines(lines)
-      })
-      .catch((error) => console.error('Error loading MRT routes:', error))
-
-    // 取得行政區資料
-    fetch('/map/TPE_Dist_4326.geojson')
-      .then((response) => response.json())
-      .then((data) => {
-        const districtNames = [
-          ...new Set(data.features.map((feature) => feature.properties.TNAME)),
-        ]
+        const districtNames = [...new Set(data.features.map((feature) => feature.properties.TNAME))]
         setDistricts(districtNames)
       })
-      .catch((error) => console.error('Error loading districts:', error))
+      .catch((error) => console.error("Error loading districts:", error))
+
+    // Load metro lines and stations
+    fetch("/map/TPE_metroLineStation.json")
+      .then((response) => response.json())
+      .then((data) => {
+        setMetroData(data)
+      })
+      .catch((error) => console.error("Error loading metro lines:", error))
   }, [])
 
-  // 當過濾條件變更時更新 state 並呼叫外部 callback
-  const handleFilterChange = (key, value) => {
+  // Update available stations when metro line changes
+  useEffect(() => {
+    if (filters.metro && filters.metro !== "all") {
+      const selectedLine = metroData.mrt_lines.find((line) => line.line === filters.metro)
+      if (selectedLine) {
+        setAvailableStations(selectedLine.stations)
+        // Reset station selection if current selection is not in the new line
+        if (filters.station && !selectedLine.stations.some((station) => station.station_id === filters.station)) {
+          handleFilterChange("station", { target: { value: "all" } })
+        }
+      }
+    } else {
+      setAvailableStations([])
+    }
+  }, [filters.metro, metroData, filters.station])
+
+  const handleSearchByChange = (value) => {
+    setFilters((prev) => ({
+      ...prev,
+      searchBy: value,
+      district: "",
+      metro: "",
+      station: "",
+    }))
+    onDistrictSelect("")
+    onLineSelect("")
+    onStationSelect("")
+  }
+
+  const handleFilterChange = (key, e) => {
+    const value = e.target.value
     console.log(`Filter ${key} changed:`, value)
     setFilters((prev) => ({ ...prev, [key]: value }))
 
-    // 當選取 metro 或 district 時，通知父層
-    if (key === 'metro') {
-      onLineSelect(value)
+    // Immediate updates for highlighting
+    if (key === "district" && filters.searchBy === "district") {
+      onDistrictSelect(value === "all" ? "" : value)
     }
-    if (key === 'district') {
-      onDistrictSelect(value)
+    if (key === "metro" && filters.searchBy === "mrt") {
+      onLineSelect(value === "all" ? "" : value)
+      // Reset station when line changes
+      setFilters((prev) => ({ ...prev, station: "" }))
+      onStationSelect("")
+    }
+    if (key === "station" && filters.searchBy === "mrt") {
+      // Don't trigger location display until Apply is clicked
+      onStationSelect(value === "all" ? "" : value)
     }
   }
 
-  // 清除所有過濾條件並通知父層重置
+  const handleApply = () => {
+    // Only send the relevant search criteria
+    const searchCriteria = {
+      type: filters.searchBy,
+      value: filters.searchBy === "district" ? filters.district : filters.station,
+      line: filters.metro,
+    }
+    onApplyFilter(searchCriteria)
+  }
+
   const clearAll = () => {
     const defaultFilters = {
-      type: '',
-      district: '',
-      metro: '',
-      station: '',
-      date: '',
-      price: '',
+      type: "",
+      searchBy: "district",
+      district: "",
+      metro: "",
+      station: "",
+      date: "",
+      price: "",
     }
     setFilters(defaultFilters)
-    onLineSelect('')
-    onDistrictSelect('')
+    onLineSelect("")
+    onDistrictSelect("")
+    onStationSelect("")
+    onApplyFilter(null)
   }
 
-  // 預設站點與價格範圍資料（可依需求改成從後端取得）
-  const stations = [
-    '台北車站',
-    '中山站',
-    '西門站',
-    '東門站',
-    '忠孝復興站',
-    '南京復興站',
-    '中正紀念堂站',
-  ]
-  const priceRanges = ['Free', '$ 0-100', '$ 100-500', 'No price filter']
+  const priceRanges = ["Free", "$ 0-100", "$ 100-500", "No price filter"]
 
   return (
     <div className="filter-panel">
@@ -98,98 +130,98 @@ export default function FilterPanel({
         </button>
       </div>
 
-      {/* 篩選類型區塊 */}
       <div className="filter-section">
         <p>Find</p>
         <div className="filter-buttons">
           <button
-            className={`filter-button border-1.5 ${filters.type === 'courses' ? 'active' : ''}`}
-            onClick={() => handleFilterChange('type', 'courses')}
+            className={`filter-button border-1.5 ${filters.type === "courses" ? "active" : ""}`}
+            onClick={() => handleFilterChange("type", { target: { value: "courses" } })}
           >
             Courses
           </button>
           <button
-            className={`filter-button border-1.5 ${filters.type === 'exhibitions' ? 'active' : ''}`}
-            onClick={() => handleFilterChange('type', 'exhibitions')}
+            className={`filter-button border-1.5 ${filters.type === "exhibitions" ? "active" : ""}`}
+            onClick={() => handleFilterChange("type", { target: { value: "exhibitions" } })}
           >
             Exhibitions
           </button>
         </div>
       </div>
 
-      {/* 篩選地點區塊 */}
+      <div className="filter-section">
+        <p>Search By</p>
+        <RadioGroup value={filters.searchBy} onValueChange={handleSearchByChange} className="flex flex-col gap-2">
+          <Radio value="district">District</Radio>
+          <Radio value="mrt">MRT Station</Radio>
+        </RadioGroup>
+      </div>
+
       <div className="filter-section">
         <p>Location</p>
         <div className="dropdown-group">
-          {/* 行政區選擇 */}
-          <Select
-            placeholder="Select district"
-            variant="bordered"
-            radius="full"
-            value={filters.district}
-            onChange={(e) => handleFilterChange("district", e.target.value)}
-            classNames={{ trigger: 'border-1.5 border-black' }}
-            aria-label="Select district"
-          >
-            <SelectItem value="All Districts">All Districts</SelectItem>
-            {districts.map((district) => (
-              <SelectItem key={district} value={district}>
-                {district}
-              </SelectItem>
-            ))}
-          </Select>
+          {filters.searchBy === "district" ? (
+            <Select
+              placeholder="Select district"
+              variant="bordered"
+              radius="full"
+              value={filters.district}
+              onChange={(e) => handleFilterChange("district", e)}
+              classNames={{ trigger: "border-1.5 border-black" }}
+              aria-label="Select district"
+            >
+              <SelectItem value="all">All Districts</SelectItem>
+              {districts.map((district) => (
+                <SelectItem key={district} value={district}>
+                  {district}
+                </SelectItem>
+              ))}
+            </Select>
+          ) : (
+            <>
+              <Select
+                placeholder="Select metro line"
+                variant="bordered"
+                radius="full"
+                value={filters.metro}
+                onChange={(e) => handleFilterChange("metro", e)}
+                classNames={{ trigger: "border-1.5 border-black" }}
+                aria-label="Select metro line"
+              >
+                <SelectItem value="all">All Lines</SelectItem>
+                {metroData.mrt_lines.map((line) => (
+                  <SelectItem key={line.line} value={line.line}>
+                    {line.line}
+                  </SelectItem>
+                ))}
+              </Select>
 
-          {/* 地鐵線路選擇 */}
-          <Select
-            placeholder="Select metro line"
-            variant="bordered"
-            radius="full"
-            value={filters.metro}
-            onChange={(e) => handleFilterChange("metro", e.target.value)}
-            classNames={{ trigger: 'border-1.5 border-black' }}
-            aria-label="Select metro line"
-          >
-            <SelectItem value="All Lines">All Lines</SelectItem>
-            {mrtLines.map((line) => (
-              <SelectItem key={line} value={line}>
-                {line}
-              </SelectItem>
-            ))}
-          </Select>
-
-          {/* 車站選擇 */}
-          <Select
-            placeholder="Select station"
-            variant="bordered"
-            radius="full"
-            value={filters.station}
-            onChange={(e) => handleFilterChange("station", e.target.value)}
-            classNames={{ trigger: 'border-1.5 border-black' }}
-            aria-label="Select station"
-          >
-            {stations.map((station) => (
-              <SelectItem key={station} value={station}>
-                {station}
-              </SelectItem>
-            ))}
-          </Select>
+              <Select
+                placeholder="Select station"
+                variant="bordered"
+                radius="full"
+                value={filters.station}
+                onChange={(e) => handleFilterChange("station", e)}
+                classNames={{ trigger: "border-1.5 border-black" }}
+                aria-label="Select station"
+                isDisabled={!filters.metro || filters.metro === "all"}
+              >
+                <SelectItem value="all">All Stations</SelectItem>
+                {availableStations.map((station) => (
+                  <SelectItem key={station.station_id} value={station.station_id}>
+                    {station.name_chinese} {station.name_english}
+                  </SelectItem>
+                ))}
+              </Select>
+            </>
+          )}
         </div>
       </div>
 
-      {/* 篩選日期區塊 */}
       <div className="filter-section">
         <p>Date</p>
-        <DatePicker
-          placeholder="YY/MM/DD"
-          variant="underlined"
-          // radius="full"
-          // value={filters.date}
-          // inputWrapper="border-1.5 border-black bg-transparent"
-          aria-label="Select date"
-        />
+        <DatePicker placeholder="YY/MM/DD" variant="underlined" aria-label="Select date" />
       </div>
 
-      {/* 篩選價格區塊 */}
       <div className="filter-section">
         <p>Price Range</p>
         <Select
@@ -197,8 +229,8 @@ export default function FilterPanel({
           variant="bordered"
           radius="full"
           value={filters.price}
-          onChange={(e) => handleFilterChange("price", e.target.value)}
-          classNames={{ trigger: 'border-1.5 border-black' }}
+          onChange={(e) => handleFilterChange("price", e)}
+          classNames={{ trigger: "border-1.5 border-black" }}
           aria-label="Select price range"
         >
           {priceRanges.map((range) => (
@@ -209,10 +241,10 @@ export default function FilterPanel({
         </Select>
       </div>
 
-      {/* Apply 按鈕（保留原本功能，可視需求觸發額外行為） */}
-      <button className="apply-button border-1.5">
+      <button className="apply-button border-1.5" onClick={handleApply}>
         Apply <span>→</span>
       </button>
     </div>
   )
 }
+
