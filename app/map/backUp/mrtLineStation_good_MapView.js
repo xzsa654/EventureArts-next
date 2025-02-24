@@ -1,65 +1,69 @@
-'use client'
+"use client"
 
-import { useRef, useState } from 'react'
-import {
-  MapContainer,
-  TileLayer,
-  LayersControl,
-  ZoomControl,
-  GeoJSON,
-  LayerGroup,
-  Marker,
-  Popup,
-} from 'react-leaflet'
-import L from 'leaflet'
-import 'leaflet/dist/leaflet.css'
-import './MapView.css'
-
+import { useRef, useState } from "react"
+import { MapContainer, TileLayer, LayersControl, ZoomControl, GeoJSON, LayerGroup, Marker, Popup } from "react-leaflet"
+import "leaflet/dist/leaflet.css"
+import "./MapView.css"
+import L from "leaflet"
 // Fix Leaflet's default icon issue
-L.Icon.Default.imagePath = 'https://unpkg.com/leaflet@1.7.1/dist/images/'
+// Add this code right after the imports
+L.Icon.Default.imagePath = "https://unpkg.com/leaflet@1.7.1/dist/images/"
+
+// Create custom icon
+const customIcon = new L.Icon({
+  iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
+  iconRetinaUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png",
+  shadowUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41],
+})
+
+// In your Marker components, use the custom icon:
+const lat = 51.505 // Example latitude
+const lng = -0.09 // Example longitude
 
 export default function MapView({
   mrtRoutes,
   taipeiDistricts,
   selectedMRT,
   selectedStation,
-  selectedDistrict,
   selectedLineStations,
   shortestPaths,
   filteredLocations,
   onRouteClick,
   onStationClick,
-  activeFilterType,
 }) {
   const mapRef = useRef(null)
   const center = [25.033, 121.5654]
+  const [selectedDistrict, setSelectedDistrict] = useState(null)
   const [hoveredRoute, setHoveredRoute] = useState(null)
-  const [hoveredDistrict, setHoveredDistrict] = useState(null)
 
   // Base styles
   const routeStyle = {
-    color: '#666666',
+    color: "#666666",
     weight: 3,
     opacity: 0.8,
   }
 
   const selectedStyle = {
-    color: '#ff0000',
+    color: "#ff0000",
     weight: 5,
     opacity: 1,
   }
 
   const hoverStyle = {
-    color: '#0000ff',
+    color: "#0000ff",
     weight: 5,
     opacity: 1,
   }
 
   const shortestPathStyle = {
-    color: '#00ff00',
+    color: "#00ff00",
     weight: 4,
     opacity: 0.8,
-    dashArray: '5, 10', // Dashed line style
+    dashArray: "5, 10", // Dashed line style
   }
 
   // Format distance helper function
@@ -72,36 +76,37 @@ export default function MapView({
 
   // Add buffer around routes for easier interaction
   const routeBuffer = {
-    weight: 15,
-    color: '#000',
+    weight: 15, // Adjusted buffer size
+    color: "#000",
     opacity: 0,
   }
 
   const getLineColor = (lineName) => {
     const colorMap = {
-      淡水信義線: '#e3002c', // Red
-      松山新店線: '#008659', // Green
-      中和新蘆線: '#f8b61c', // Orange
-      板南線: '#0070bd', // Blue
-      文湖線: '#c48c31', // Brown
+      淡水信義線: "#ff0000", // Red
+      松山新店線: "#008000", // Green
+      中和新蘆線: "#ff6600", // Orange
+      板南線: "#0000ff", // Blue
+      文湖線: "#825200", // Brown
+      環狀線: "#ffff00", // Yellow
     }
-    return colorMap[lineName] || '#666666'
+    return colorMap[lineName] || "#666666"
   }
 
   // Update station styles
   const stationStyle = {
-    radius: 6,
-    fillColor: '#ffffff',
-    color: selectedMRT ? getLineColor(selectedMRT) : '#000000',
+    radius: 6, // Slightly larger base size
+    fillColor: "#ffffff",
+    color: selectedMRT ? getLineColor(selectedMRT) : "#000000",
     weight: 2,
     opacity: 1,
     fillOpacity: 1,
   }
 
   const selectedStationStyle = {
-    radius: 10,
-    fillColor: getLineColor(selectedMRT) || '#ff7800',
-    color: '#000',
+    radius: 10, // Larger radius for selected station
+    fillColor: getLineColor(selectedMRT) || "#ff7800", // Use line color for fill
+    color: "#000",
     weight: 3,
     opacity: 1,
     fillOpacity: 0.8,
@@ -109,25 +114,26 @@ export default function MapView({
 
   const hoverStationStyle = {
     radius: 8,
-    fillColor: '#ffffff',
-    color: getLineColor(selectedMRT) || '#000000',
+    fillColor: "#ffffff",
+    color: getLineColor(selectedMRT) || "#000000",
     weight: 3,
     opacity: 1,
     fillOpacity: 0.9,
   }
 
   const districtStyle = (feature) => {
-    const isSelected = feature.properties.TNAME === selectedDistrict
-    const isHovered = feature.properties.TNAME === hoveredDistrict
-
     return {
-      color: '#ff7800',
-      weight: isSelected || isHovered ? 3 : 1,
+      color: "#ff7800",
+      weight: 2,
       opacity: 0.65,
-      fillOpacity: isSelected ? 0.7 : isHovered ? 0.5 : 0.2,
-      fillColor: isSelected ? '#ff7800' : '#ffb380',
+      fillOpacity: feature.properties.TNAME === selectedDistrict ? 0.7 : 0.2,
+      fillColor: feature.properties.TNAME === selectedDistrict ? "#ff7800" : "#ffb380",
     }
   }
+
+  // Update the shortestPathStyle and add popup content
+
+  // Add function to format distance
 
   // Function to check if a route should be highlighted
   const shouldHighlightRoute = (feature) => {
@@ -176,7 +182,7 @@ export default function MapView({
         layer.setStyle(styleRoutes(feature))
       },
       click: () => {
-        console.log('Clicked route:', feature.properties.MRTCODE)
+        console.log("Clicked route:", feature.properties.MRTCODE)
         onRouteClick(feature.properties.MRTCODE)
       },
     })
@@ -189,7 +195,7 @@ export default function MapView({
         setHoveredRoute(null)
       },
       click: () => {
-        console.log('Clicked route:', feature.properties.MRTCODE)
+        console.log("Clicked route:", feature.properties.MRTCODE)
         onRouteClick(feature.properties.MRTCODE)
       },
     })
@@ -200,20 +206,17 @@ export default function MapView({
 
   // Create GeoJSON for stations
   const stationGeoJSON = {
-    type: 'FeatureCollection',
+    type: "FeatureCollection",
     features: selectedLineStations.map((station) => ({
-      type: 'Feature',
+      type: "Feature",
       properties: {
         name: station.name_chinese,
         name_english: station.name_english,
         id: station.station_id,
       },
       geometry: {
-        type: 'Point',
-        coordinates: [
-          station.coordinates.longitude,
-          station.coordinates.latitude,
-        ],
+        type: "Point",
+        coordinates: [station.coordinates.longitude, station.coordinates.latitude],
       },
     })),
   }
@@ -234,25 +237,12 @@ export default function MapView({
   const onEachDistrict = (feature, layer) => {
     layer.on({
       mouseover: (e) => {
-        setHoveredDistrict(feature.properties.TNAME)
-        layer.setStyle({
-          ...districtStyle(feature),
-          fillOpacity: 0.5,
-          weight: 3,
-        })
+        setSelectedDistrict(feature.properties.TNAME)
       },
       mouseout: (e) => {
-        setHoveredDistrict(null)
-        layer.setStyle(districtStyle(feature))
-      },
-      click: (e) => {
-        // You can add click handling for districts if needed
-        console.log('Clicked district:', feature.properties.TNAME)
+        setSelectedDistrict(null)
       },
     })
-
-    // Add popup with district name
-    layer.bindPopup(feature.properties.TNAME)
   }
 
   // Create separate LayerGroups for routes and stations
@@ -260,7 +250,7 @@ export default function MapView({
     <LayerGroup>
       {mrtRoutes && (
         <GeoJSON
-          key={`routes-${selectedMRT || 'all'}-${hoveredRoute}`}
+          key={`routes-${selectedMRT || "all"}-${hoveredRoute}`}
           data={mrtRoutes}
           style={styleRoutes}
           onEachFeature={onEachRoute}
@@ -273,17 +263,16 @@ export default function MapView({
     <LayerGroup>
       {selectedLineStations && selectedLineStations.length > 0 && (
         <GeoJSON
-          key={`stations-${selectedMRT}-${JSON.stringify(
-            selectedLineStations
-          )}`}
+          key={`stations-${selectedMRT}-${JSON.stringify(selectedLineStations)}`} // Force remount when stations change
           data={stationGeoJSON}
           pointToLayer={(feature, latlng) => {
             const style = getStationStyle(feature.properties.id)
             const marker = L.circleMarker(latlng, {
               ...style,
-              zIndexOffset: 1000,
+              zIndexOffset: 1, // Ensure stations appear above lines
             })
 
+            // Add hover effect
             marker.on({
               mouseover: () => {
                 if (!shouldHighlightStation(feature.properties.id)) {
@@ -297,19 +286,18 @@ export default function MapView({
                 if (!shouldHighlightStation(feature.properties.id)) {
                   marker.setStyle({
                     ...style,
-                    zIndexOffset: 1000,
+                    zIndexOffset: 1,
                   })
                 }
               },
               click: () => {
-                console.log('Clicked station:', feature.properties.id)
+                console.log("Clicked station:", feature.properties.id)
                 onStationClick(feature.properties.id)
               },
             })
 
-            marker.bindPopup(
-              `${feature.properties.name}<br>${feature.properties.name_english}`
-            )
+            // Add popup with both Chinese and English names
+            marker.bindPopup(`${feature.properties.name}<br>${feature.properties.name_english}`)
 
             return marker
           }}
@@ -345,32 +333,20 @@ export default function MapView({
             />
           </LayersControl.BaseLayer>
 
-          {/* MRT layers - only visible when activeFilterType is "mrt" */}
-          <LayersControl.Overlay
-            checked={activeFilterType === 'mrt'}
-            name="MRT Lines"
-          >
+          {/* MRT lines and stations in separate layers */}
+          <LayersControl.Overlay checked name="MRT Lines">
             {renderRoutes()}
           </LayersControl.Overlay>
 
-          <LayersControl.Overlay
-            checked={activeFilterType === 'mrt'}
-            name="MRT Stations"
-          >
+          <LayersControl.Overlay checked name="MRT Stations">
             {renderStations()}
           </LayersControl.Overlay>
 
-          {/* District layer - only visible when activeFilterType is "district" */}
-          <LayersControl.Overlay
-            checked={activeFilterType === 'district'}
-            name="Taipei Districts"
-          >
+          <LayersControl.Overlay checked name="Taipei Districts">
             <LayerGroup>
               {taipeiDistricts && (
                 <GeoJSON
-                  key={`districts-${
-                    selectedDistrict || 'all'
-                  }-${hoveredDistrict}`}
+                  key={selectedDistrict || "all-districts"}
                   data={taipeiDistricts}
                   style={districtStyle}
                   onEachFeature={onEachDistrict}
@@ -379,39 +355,25 @@ export default function MapView({
             </LayerGroup>
           </LayersControl.Overlay>
 
-          {/* Filtered Locations overlay to match the database fields */}
           <LayersControl.Overlay checked name="Filtered Locations">
             <LayerGroup>
-              {Array.isArray(filteredLocations) &&
-                filteredLocations.map((loc) => {
-                  // Only show locations that match the selected district
-                  if (
-                    loc.latitude &&
-                    loc.longitude &&
-                    loc.district === selectedDistrict
-                  ) {
-                    return (
-                      <Marker
-                        key={loc.locat_id}
-                        position={[+loc.latitude, +loc.longitude]}
-                      >
-                        <Popup>
-                          <div className="space-y-1">
-                            <p>
-                              <b>ID: {loc.locat_id}</b>
-                            </p>
-                            <p>
-                              <b>{loc.locat_name}</b>
-                            </p>
-                            <p>{loc.district}</p>
-                            <p>{loc.address}</p>
-                          </div>
-                        </Popup>
-                      </Marker>
-                    )
-                  }
-                  return null
-                })}
+              {filteredLocations?.map((loc) => {
+                if (loc.latitude && loc.longitude) {
+                  return (
+                    <Marker key={loc.locat_id} position={[+loc.latitude, +loc.longitude]}>
+                      <Popup>
+                        <b>ID: {loc.locat_id}</b>
+                        <br />
+                        <b>{loc.locat_name}</b>
+                        <br />
+                        {loc.district}
+                        {loc.address}
+                      </Popup>
+                    </Marker>
+                  )
+                }
+                return null
+              })}
             </LayerGroup>
           </LayersControl.Overlay>
 
@@ -423,9 +385,8 @@ export default function MapView({
                     data={path}
                     style={shortestPathStyle}
                     onEachFeature={(feature, layer) => {
-                      const distance = formatDistance(
-                        feature.properties.distance
-                      )
+                      // Add popup with path information
+                      const distance = formatDistance(feature.properties.distance)
                       layer.bindPopup(`
                         <div>
                           <strong>End Location:</strong> ${feature.properties.end_name}<br/>
@@ -434,22 +395,18 @@ export default function MapView({
                       `)
                     }}
                   />
+                  {/* Add marker at the end point of the path */}
                   <Marker
                     position={[
-                      path.geometry.coordinates[0][
-                        path.geometry.coordinates[0].length - 1
-                      ][1],
-                      path.geometry.coordinates[0][
-                        path.geometry.coordinates[0].length - 1
-                      ][0],
+                      path.geometry.coordinates[0][path.geometry.coordinates[0].length - 1][1],
+                      path.geometry.coordinates[0][path.geometry.coordinates[0].length - 1][0],
                     ]}
                   >
                     <Popup>
                       <div>
                         <strong>Location ID:</strong> {path.properties.end_name}
                         <br />
-                        <strong>Distance:</strong>{' '}
-                        {formatDistance(path.properties.distance)}
+                        <strong>Distance:</strong> {formatDistance(path.properties.distance)}
                       </div>
                     </Popup>
                   </Marker>

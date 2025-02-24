@@ -25,12 +25,6 @@ export default function Page() {
   const [error, setError] = useState(null)
   const [filteredPaths, setFilteredPaths] = useState(null)
 
-  // Add these new state variables
-  const [selectedDistrict, setSelectedDistrict] = useState("")
-  const [activeFilterType, setActiveFilterType] = useState("mrt") // "mrt" or "district"
-  // Add a new state for filtered locations
-  const [filteredLocations, setFilteredLocations] = useState([])
-
   // Load map data
   useEffect(() => {
     const fetchData = async () => {
@@ -166,135 +160,63 @@ export default function Page() {
     [handleStationSelect],
   )
 
-  // Add new handler for district selection
-  const handleDistrictSelect = useCallback((districtName) => {
-    console.log("🏙️ District select:", districtName)
-    const newValue = districtName === "all" ? "" : districtName
-    setSelectedDistrict(newValue)
-    setFilteredPaths(null) // Clear any existing paths
-  }, [])
+  const handleApplyFilter = useCallback(() => {
+    console.log("🎯 Applying filter for station:", selectedStation)
+    if (!selectedStation || !mapData.shortestPaths) return
 
-  // Modify handleApplyFilter to handle both MRT and district filtering
-  const handleApplyFilter = useCallback(async () => {
-    if (activeFilterType === "mrt") {
-      console.log("🎯 Applying MRT filter for station:", selectedStation)
-      if (!selectedStation || !mapData.shortestPaths) return
-
-      setIsLoading(true)
-      try {
-        const station = selectedLineStations.find((s) => s.station_id === selectedStation)
-        if (!station) {
-          console.error("❌ Selected station not found in line stations")
-          return
-        }
-
-        const stationName = `${station.name_chinese}`
-        console.log("🔍 Searching for paths from:", stationName)
-
-        const paths = mapData.shortestPaths.features.filter((feature) => feature.properties.start_name === stationName)
-
-        console.log(`✅ Found ${paths.length} paths from ${stationName}`)
-        setFilteredPaths({
-          type: "FeatureCollection",
-          features: paths,
-        })
-        setFilteredLocations([]) // Clear any existing locations
-      } catch (err) {
-        console.error("Error filtering paths:", err)
-        setError("Failed to filter paths")
-      } finally {
-        setIsLoading(false)
+    setIsLoading(true)
+    try {
+      // Find the selected station's name
+      const station = selectedLineStations.find((s) => s.station_id === selectedStation)
+      if (!station) {
+        console.error("❌ Selected station not found in line stations")
+        return
       }
-    } else {
-      // District filtering logic
-      console.log("🎯 Applying district filter for:", selectedDistrict)
-      if (!selectedDistrict || selectedDistrict === "all") return
 
-      setIsLoading(true)
-      try {
-        // Fetch all locations
-        const response = await fetch(`${API_BASE_URL}/map`)
+      const stationName = `${station.name_chinese}` // Using Chinese name for matching
+      console.log("🔍 Searching for paths from:", stationName)
 
-        if (!response.ok) {
-          throw new Error("Failed to fetch locations")
-        }
+      // Filter paths that start from the selected station
+      const paths = mapData.shortestPaths.features.filter((feature) => feature.properties.start_name === stationName)
 
-        const result = await response.json()
-
-        // Check if the API call was successful and filter the data by district
-        if (result.success && Array.isArray(result.data)) {
-          const filteredData = result.data.filter((location) => location.district === selectedDistrict)
-
-          console.log(`✅ Found ${filteredData.length} locations in ${selectedDistrict}:`, filteredData)
-          setFilteredLocations(filteredData)
-        } else {
-          console.warn("API call successful but no valid data:", result.message)
-          setFilteredLocations([])
-        }
-
-        setFilteredPaths(null) // Clear any existing paths
-      } catch (err) {
-        console.error("Error fetching locations:", err)
-        setError("Failed to fetch locations")
-        setFilteredLocations([])
-      } finally {
-        setIsLoading(false)
-      }
+      console.log(`✅ Found ${paths.length} paths from ${stationName}`)
+      setFilteredPaths({
+        type: "FeatureCollection",
+        features: paths,
+      })
+    } catch (err) {
+      console.error("Error filtering paths:", err)
+      setError("Failed to filter paths")
+    } finally {
+      setIsLoading(false)
     }
-  }, [activeFilterType, selectedStation, selectedDistrict, mapData.shortestPaths, selectedLineStations])
+  }, [selectedStation, mapData.shortestPaths, selectedLineStations])
 
-  // Add handler for filter type change
-  const handleFilterTypeChange = useCallback((type) => {
-    console.log("🔄 Changing filter type to:", type)
-    setActiveFilterType(type)
-    // Clear selections when switching filter types
-    if (type === "mrt") {
-      setSelectedDistrict("")
-    } else {
-      setSelectedMRT("")
-      setSelectedStation("")
-      setSelectedLineStations([])
-    }
-    setFilteredPaths(null)
-  }, [])
-
-  // Update the memoized components to include new props
   const memoizedFilterPanel = useMemo(
     () => (
       <FilterPanel
         metroData={metroData}
-        districtData={mapData.taipeiDistricts}
         onLineSelect={handleLineSelect}
         onStationSelect={handleStationSelect}
-        onDistrictSelect={handleDistrictSelect}
         onApplyFilter={handleApplyFilter}
         selectedMRT={selectedMRT}
         selectedStation={selectedStation}
-        selectedDistrict={selectedDistrict}
         selectedLineStations={selectedLineStations}
         isLoading={isLoading}
-        activeFilterType={activeFilterType}
-        onFilterTypeChange={handleFilterTypeChange}
       />
     ),
     [
       handleLineSelect,
       handleStationSelect,
-      handleDistrictSelect,
       handleApplyFilter,
       metroData,
-      mapData.taipeiDistricts,
       selectedMRT,
       selectedStation,
-      selectedDistrict,
       selectedLineStations,
       isLoading,
-      activeFilterType,
-      handleFilterTypeChange,
     ],
   )
 
-  // Update the memoizedMapView to include filteredLocations
   const memoizedMapView = useMemo(
     () => (
       <MapView
@@ -302,13 +224,11 @@ export default function Page() {
         taipeiDistricts={mapData.taipeiDistricts}
         selectedMRT={selectedMRT}
         selectedStation={selectedStation}
-        selectedDistrict={selectedDistrict}
         selectedLineStations={selectedLineStations}
         shortestPaths={filteredPaths}
-        filteredLocations={filteredLocations} // Pass the filtered locations
+        filteredLocations={[]} // Add your filtered locations here if needed
         onRouteClick={handleRouteClick}
         onStationClick={handleStationClick}
-        activeFilterType={activeFilterType}
       />
     ),
     [
@@ -316,13 +236,10 @@ export default function Page() {
       mapData.taipeiDistricts,
       selectedMRT,
       selectedStation,
-      selectedDistrict,
       selectedLineStations,
       filteredPaths,
-      filteredLocations, // Add to dependencies
       handleRouteClick,
       handleStationClick,
-      activeFilterType,
     ],
   )
 
@@ -340,4 +257,3 @@ export default function Page() {
     </div>
   )
 }
-
