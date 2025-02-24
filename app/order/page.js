@@ -140,35 +140,38 @@ export default function Orderpage(props) {
             variant="light"
             className="text-base text-yellow-600 hover:text-yellow-300 hover:scale-110 transition-transform duration-200 cursor-pointer flex items-center group gap-x-2 mt-5 px-7  data-[hover=true]:bg-primary-300"
             onPress={() => {
-              // const data = {
-              //   user_id: 3,
-              //   user_name: "測試者",
-              //   e_id: e_id,
-              //   c_id: c_id,
-              //   event_name: orderData.event_name,
-              //   event_price: orderData.event_price,
-              //   event_startdate: orderData.event_startdate,
-              //   event_enddate: orderData.event_enddate,
-              //   city: orderData.city,
-
-              //   amount: orderData.event_price, 
-
-              // }
+              const data = {
+                user_id: 3,
+                user_name: '測試者',
+                e_id: e_id,
+                c_id: c_id,
+                event_name: orderData.event_name,
+                event_price: orderData.event_price,
+                event_startdate: orderData.event_startdate,
+                event_enddate: orderData.event_enddate,
+                locat_id: orderData.locat_id,
+                locat_name: orderData.locat_name,
+                city: orderData.city,
+                district: orderData.district,
+                address: orderData.address,
+                bd_id: orderData.bd_id,
+                bd_name: orderData.bd_name,
+                bd_tel: orderData.bd_tel,
+                bd_email: orderData.bd_email,
+                amount: orderData.event_price,
+              }
 
               window.location.href = `http://localhost:3001/ecpay-test?${new URLSearchParams(
                 data
               )}`
             }}
           >
- {/* const { 
+            {/* const { 
       user_id, user_name, ticket_code, merchant_trade_no, trade_amt, trade_date, 
       payment_date, payment_type, e_id, c_id, event_name, event_price, 
       event_startdate, event_enddate, locat_id, locat_name, city, district, address, 
       bd_id, bd_name, bd_tel, bd_email 
     } = req.body; */}
-
-
-
             綠界金流付款
             <HiArrowRight className="transition-transform duration-300 ease-out group-hover:translate-x-3" />
           </Button>
