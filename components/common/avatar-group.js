@@ -27,7 +27,7 @@ export default function AVatarGroup() {
             as="button"
             avatarProps={{
               isBordered: true,
-              src: `http://localhost:3001/uploads/avatar/${auth.avatar}`,
+              src: `http://localhost:3001/uploads/avatar/${auth?.avatar}`,
             }}
             className="transition-transform"
           />

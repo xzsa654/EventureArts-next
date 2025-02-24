@@ -15,7 +15,7 @@ export default function Orderpage(props) {
   const e_id = searchParams.get('e_id')
   const c_id = searchParams.get('c_id')
   const router = useRouter()
-  const { orderData, setOrderData } = useOrder() // 使用 my hook 'useOrder' 存放訂單資料
+  const { orderData, setOrderData } = useOrder() // 使用 my hook 'useOrder' 存放完整的活動 & 商家資料
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -53,18 +53,18 @@ export default function Orderpage(props) {
         {/* 1. 活動名稱 */}
         <div className="flex flex-row justify-between">
           <p>活動名稱</p>
-          <p>{orderData.eventName}</p>
+          <p>{orderData.event_name}</p>
         </div>
         {/* 2. 活動價格 */}
         <div className="flex flex-row justify-between">
           <p>活動票價</p>
-          <p>$ {orderData.eventPrice} NTD</p>
+          <p>$ {orderData.event_price} NTD</p>
         </div>
         {/* 3. 活動時間 */}
         <div className="flex flex-row justify-between">
           <p>活動時間</p>
           <p>
-            {orderData.startDate} ~ {orderData.endDate}
+            {orderData.event_startdate} ~ {orderData.event_enddate}
           </p>
         </div>
         {/* 4. 活動地址 */}
@@ -139,10 +139,36 @@ export default function Orderpage(props) {
             classNames={{}}
             variant="light"
             className="text-base text-yellow-600 hover:text-yellow-300 hover:scale-110 transition-transform duration-200 cursor-pointer flex items-center group gap-x-2 mt-5 px-7  data-[hover=true]:bg-primary-300"
-            onPress={() =>
-              (window.location.href = `http://localhost:3001/ecpay-test?amount=${orderData.price}`)
-            }
+            onPress={() => {
+              // const data = {
+              //   user_id: 3,
+              //   user_name: "測試者",
+              //   e_id: e_id,
+              //   c_id: c_id,
+              //   event_name: orderData.event_name,
+              //   event_price: orderData.event_price,
+              //   event_startdate: orderData.event_startdate,
+              //   event_enddate: orderData.event_enddate,
+              //   city: orderData.city,
+
+              //   amount: orderData.event_price, 
+
+              // }
+
+              window.location.href = `http://localhost:3001/ecpay-test?${new URLSearchParams(
+                data
+              )}`
+            }}
           >
+ {/* const { 
+      user_id, user_name, ticket_code, merchant_trade_no, trade_amt, trade_date, 
+      payment_date, payment_type, e_id, c_id, event_name, event_price, 
+      event_startdate, event_enddate, locat_id, locat_name, city, district, address, 
+      bd_id, bd_name, bd_tel, bd_email 
+    } = req.body; */}
+
+
+
             綠界金流付款
             <HiArrowRight className="transition-transform duration-300 ease-out group-hover:translate-x-3" />
           </Button>

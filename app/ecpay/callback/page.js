@@ -23,49 +23,82 @@ export default function ECPayCallback() {
   const RtnCode = searchParams.get('RtnCode') // 綠界回傳碼
   const MerchantTradeNo = searchParams.get('MerchantTradeNo') // 訂單號
   const TradeAmt = searchParams.get('TradeAmt') // 交易金額
-  const TradeDate = searchParams.get('PaymentDate') // 交易時間
+  const TradeDate = searchParams.get('TradeDate') // 交易時間
   const PaymentDate = searchParams.get('PaymentDate') // 付款時間
   const PaymentType = searchParams.get('PaymentType') // 付款方式
   const RtnMsg = searchParams.get('RtnMsg') // 回應訊息
-  const user_id = 12 // 這裡應該要從登入狀態取得用戶 ID
-  const user_name = '張嘉航' // 這裡應該要從登入狀態取得用戶名稱
+  const user_id = 3 // 這裡應該要從登入狀態取得用戶 ID
+  const user_name = '訪客' // 這裡應該要從登入狀態取得用戶名稱
 
   useEffect(() => {
-    if (RtnCode === '1' && orderData) {
-      // 交易成功，準備寫入資料庫
-      const ticket_code = MerchantTradeNo.replace(/^od/, '') // 去掉 "od"
+    console.log('orderData in callback:', orderData) // 檢查 orderData 是否正確
 
-      fetch(`${API_BASE_URL}/order/api/createOrder`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          user_id,
-          user_name,
-          ticket_code,
-          merchant_trade_no: MerchantTradeNo,
-          trade_amt: TradeAmt,
-          trade_date: TradeDate,
-          payment_date: PaymentDate,
-          payment_type: PaymentType,
-          ...orderData, // 把商品明細一起送出
-        }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          console.log('訂單儲存成功:', data)
-          setOrderData(null) // 清空 useOrder
-          setOrderResult(data) // 存入結果
-          setLoading(false) // 關閉 Loading
-        })
-        .catch((err) => {
-          console.error('訂單儲存失敗:', err)
-          setError('無法儲存訂單，請聯繫客服')
-          setLoading(false)
-        })
-    } else {
-      setLoading(false)
+    if (RtnCode === '1') {
+      console.log('🔍 orderData in callback.js:', orderData)
+
+      // 如果 orderData 丟失，重新從 API 取得
+      if (!orderData) {
+        console.log('⚠️ orderData 丟失，重新從 API 取得資料...')
+        fetch(
+          `${API_BASE_URL}/order/api/getOrderDetails?merchant_trade_no=${MerchantTradeNo}`
+        )
+          .then((res) => res.json())
+          .then((data) => {
+            console.log('重新獲取 orderData:', data)
+            setOrderData(data)
+            sendOrderToDatabase(data)
+          })
+          .catch((err) => {
+            console.error('無法取得 orderData:', err)
+            setError('無法取得訂單資訊，請聯繫客服')
+            setLoading(false)
+          })
+      } else {
+        console.log('orderData 已存在，直接送到資料庫:', orderData)
+        sendOrderToDatabase(orderData)
+      }
     }
   }, [RtnCode])
+
+  const sendOrderToDatabase = (data) => {
+    const ticket_code = MerchantTradeNo.replace(/^od/, '')
+
+    fetch(`${API_BASE_URL}/order/api/createOrder`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        user_id,
+        user_name,
+        ticket_code,
+        merchant_trade_no: MerchantTradeNo,
+        trade_amt: TradeAmt,
+        trade_date: TradeDate,
+        payment_date: PaymentDate,
+        payment_type: PaymentType,
+        event_name: data.event_name || data.name, // 確保對應 key
+        event_price: data.event_price || data.price,
+        locat_name: data.locat_name,
+        city: data.city,
+        district: data.district,
+        address: data.address,
+        bd_name: data.bd_name,
+        bd_tel: data.bd_tel,
+        bd_email: data.bd_email,
+      }),
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        console.log('✅ 訂單儲存成功:', result)
+        setOrderData(null)
+        setOrderResult(result)
+        setLoading(false)
+      })
+      .catch((err) => {
+        console.error('訂單儲存失敗:', err)
+        setError('無法儲存訂單，請聯繫客服')
+        setLoading(false)
+      })
+  }
 
   if (loading) {
     return (
