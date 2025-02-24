@@ -12,17 +12,31 @@ import CPlayerProfile from './c_player/profile'
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules'
 import BPlayerProfile from './b_player/profile'
 import { Swiper, SwiperSlide } from 'swiper/react'
-
+import { useAuth } from '@/hooks/use-auth'
 // Import Swiper styles
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 import 'swiper/css/scrollbar'
+import Loading from '@/components/common/loading'
 
 export default function UserPageFrame(props) {
+  const { auth } = useAuth()
   // 當前路由
   const pathName = usePathname().split('/user')[1]
-  console.log(pathName)
+
+  const [loading, setLoading] = useState(!auth.token)
+  // onload 還沒載完前的 loading
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        if ((await auth.token) !== '') setLoading(false)
+      } finally {
+        setLoading(false)
+      }
+    }
+    loadData()
+  }, [])
 
   // 路由對應的 title 和 components
   const routing = {
@@ -55,7 +69,13 @@ export default function UserPageFrame(props) {
   }
 
   const isActive = { c: 'text-yellow-600', b: 'text-green-600' }
-
+  if (loading) return <Loading />
+  if (!auth?.token)
+    return (
+      <div className="h-screen mt-20 flex text-3xl items-center justify-center text-center  text-black">
+        請先登入EventureArts，查看更多
+      </div>
+    )
   return (
     <>
       {/* layout */}

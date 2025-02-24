@@ -4,7 +4,9 @@ const AuthContext = createContext()
 import { FIREBASE_LOGIN, REGISTER } from '@/lib/authorization-api'
 import React, { useState, useEffect } from 'react'
 import { addToast } from '@heroui/react'
+import { useRouter } from 'next/navigation'
 export function AuthContextProvider({ children }) {
+  const router = useRouter()
   const storageKey = 'EventureArts-auth'
   const defaultAuth = {
     user_id: 0,
@@ -105,10 +107,8 @@ export function AuthContextProvider({ children }) {
     setAuth(obj)
     localStorage.setItem(storageKey, JSON.stringify(obj))
     addToast({
-      title: '驗證信已送出！',
       radius: 'lg',
-      description: '請前往您的信箱查收',
-      promise: new Promise((resolve) => setTimeout(resolve, 3000)),
+      description: '成功登入！',
       color: 'success',
       timeout: 10000,
     })
@@ -116,6 +116,7 @@ export function AuthContextProvider({ children }) {
 
   // 登出
   const logOut = () => {
+    router.push('/')
     localStorage.removeItem(storageKey)
     setAuth({ ...defaultAuth })
   }
@@ -140,6 +141,7 @@ export function AuthContextProvider({ children }) {
           firstLogin,
           registerDataHandler,
           register,
+          getAuthHeader,
         }}
       >
         {children}

@@ -49,3 +49,8 @@
     background-clip: padding-box; /* 確保背景只在邊框內顯示 */
   }
 }
+
+/* 隱藏reCAPTCHA */
+.grecaptcha-badge {
+  visibility: hidden;
+}

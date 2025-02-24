@@ -60,7 +60,9 @@ export default function ModalLayout({
       >
         <ModalContent>
           {(onClose) => {
-            if (auth.user_id !== 0) return onClose()
+            {
+              /* if (auth.user_id !== 0) return onClose() */
+            }
             return (
               <>
                 <ModalHeader className="flex  gap-2 item-center ">

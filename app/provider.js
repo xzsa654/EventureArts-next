@@ -11,8 +11,8 @@ export default function Provider({ children }) {
         reCaptchaKey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
         language="zh-TW"
       >
+        <ToastProvider placement="top-right" />
         <AuthContextProvider>
-          <ToastProvider placement="top-right" />
           <ModalProvider>{children}</ModalProvider>
         </AuthContextProvider>
       </GoogleReCaptchaProvider>

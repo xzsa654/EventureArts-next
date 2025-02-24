@@ -1,23 +1,18 @@
 'use client'
+
 import React, { useState, useEffect } from 'react'
-import Link from 'next/link'
-import ModalLayout from './layout'
 import { Select, Chip, SelectItem } from '@heroui/react'
 import { CheckIcon } from '@/public/Yao/icons'
-import { useModal } from '@/contexts/modal-context'
-import { HiArrowNarrowRight } from 'react-icons/hi'
-import RegisterSection from './section'
-import { useAuth } from '@/hooks/use-auth'
 import { ALLOPTIONS } from '@/lib/authorization-api'
-
-export default function RegisterStep4(props) {
-  const { register } = useAuth()
+export default function CPlayerEditSelect({
+  prev_c_interest,
+  prev_e_interest,
+}) {
   // 控制選項的狀態
   const [options, setOptions] = useState([])
   // 選中的狀態
-  const [c_interest, setCInterest] = useState([])
-  const [e_interest, setEInterest] = useState([])
-  const [shouldSend, setShouldSend] = useState(false)
+  const [c_interest, setCInterest] = useState(new Set(prev_c_interest))
+  const [e_interest, setEInterest] = useState(new Set(prev_e_interest))
   // 1. 取得options
   useEffect(() => {
     fetch(ALLOPTIONS)
@@ -26,22 +21,13 @@ export default function RegisterStep4(props) {
         setOptions(result)
       })
   }, [])
-  useEffect(() => {
-    if (shouldSend) register(c_interest, e_interest)
-  }, [shouldSend])
-  const { register4 } = useModal()
-  const { isOpen, onOpenChange } = register4
+  // 在資料載入前不渲染 Select 或顯示載入中狀態
+  if (!options[1]?.course || !options[0]?.exhibition) {
+    return null // 或顯示 loading
+  }
 
-  const tips = '註冊帳號(4/4)'
-
-  const title = '興趣列表'
-
-  const section = (
-    <RegisterSection test={{ second: 'complete', third: 'now' }} />
-  )
-
-  const formBody = (
-    <div className="flex flex-col gap-[20]">
+  return (
+    <>
       <Select
         classNames={{
           base: 'max-w-xs',
@@ -56,6 +42,7 @@ export default function RegisterStep4(props) {
         labelPlacement="outside"
         placeholder="請挑選感興趣的課程分類"
         selectionMode="multiple"
+        defaultSelectedKeys={[prev_c_interest]}
         variant="bordered"
         onSelectionChange={setCInterest}
         renderValue={(items) => {
@@ -92,8 +79,8 @@ export default function RegisterStep4(props) {
         items={options[0]?.exhibition}
         isMultiline={true}
         label="展覽類型"
+        defaultSelectedKeys={[e_interest]}
         labelPlacement="outside"
-        defaultSelectedKeys={''}
         onSelectionChange={setEInterest}
         placeholder="請挑選感興趣的展覽分類"
         selectionMode="multiple"
@@ -105,7 +92,7 @@ export default function RegisterStep4(props) {
                 <Chip
                   color="primary"
                   radius="lg"
-                  key={item?.data.e_optionID}
+                  key={item?.data.e_optionName}
                   startContent=<CheckIcon />
                 >
                   {item?.data.e_optionName.split('(')[0]}
@@ -117,7 +104,7 @@ export default function RegisterStep4(props) {
       >
         {(exhibition) => (
           <SelectItem
-            key={exhibition?.e_optionID}
+            key={exhibition?.e_optionName}
             textValue={exhibition?.e_optionName}
           >
             <span className="text-small">
@@ -126,30 +113,6 @@ export default function RegisterStep4(props) {
           </SelectItem>
         )}
       </Select>
-    </div>
-  )
-  const footer = (
-    <div className="w-full justify-end text-white flex gap-1">
-      <Link
-        onClick={() => {
-          onOpenChange(false)
-          setShouldSend(true)
-        }}
-        href={'#'}
-        className=" flex justify-center items-center "
-      >
-        完成註冊
-        <div className="">
-          <HiArrowNarrowRight size={20} color="white" />
-        </div>
-      </Link>
-    </div>
-  )
-  return (
-    <>
-      <ModalLayout
-        {...{ formBody, footer, tips, title, section, isOpen, onOpenChange }}
-      />
     </>
   )
 }

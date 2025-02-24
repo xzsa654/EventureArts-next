@@ -9,9 +9,11 @@ import {
   Image,
 } from '@heroui/react'
 import { CiUser, CiLogout, CiShoppingCart, CiStar } from 'react-icons/ci'
+import { useRouter } from 'next/navigation'
 import { useAuth } from '@/hooks/use-auth'
 import Link from 'next/link'
 export default function AVatarGroup() {
+  const router = useRouter()
   const { auth, logOut } = useAuth()
 
   return (
@@ -34,8 +36,14 @@ export default function AVatarGroup() {
         </DropdownTrigger>
         <DropdownMenu aria-label="User Actions" variant="flat">
           <DropdownSection title={auth.nickname} showDivider>
-            <DropdownItem key="profile" startContent=<CiUser size={20} />>
-              <Link href={'/user/c/profile'}>個人檔案</Link>
+            <DropdownItem
+              onPress={() => {
+                router.push('/user/c/profile')
+              }}
+              key="profile"
+              startContent=<CiUser size={20} />
+            >
+              個人檔案
             </DropdownItem>
 
             <DropdownItem
