@@ -23,30 +23,23 @@ export default function Page() {
   const [metroData, setMetroData] = useState({ mrt_lines: [] })
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(null)
-  const [filteredPaths, setFilteredPaths] = useState(null)
 
   // Load map data
   useEffect(() => {
     const fetchData = async () => {
       try {
         setIsLoading(true)
-        const [routesRes, lineStationsRes, shortestPathsRes, districtsRes] = await Promise.all([
+        const [routesRes, lineStationsRes] = await Promise.all([
           fetch("/map/TPE_MRT_ROUTE_4326.geojson"),
           fetch("/map/TPE_metroLineStation.json"),
-          fetch("/map/shortestPath_wgs84.geojson"),
-          fetch("/map/TPE_Dist_4326.geojson"),
         ])
 
         const routesData = await routesRes.json()
         const metroLineData = await lineStationsRes.json()
-        const shortestPathsData = await shortestPathsRes.json()
-        const districtsData = await districtsRes.json()
 
         setMapData((prev) => ({
           ...prev,
           mrtRoutes: routesData,
-          shortestPaths: shortestPathsData,
-          taipeiDistricts: districtsData,
         }))
         setMetroData(metroLineData)
         setIsLoading(false)
@@ -69,10 +62,7 @@ export default function Page() {
       if (selectedLine) {
         console.log("✅ Found line:", selectedLine.line)
         console.log("📍 Station count:", selectedLine.stations.length)
-        setSelectedLineStations([])
-        setTimeout(() => {
-          setSelectedLineStations(selectedLine.stations)
-        }, 0)
+        setSelectedLineStations(selectedLine.stations)
       } else {
         console.log("❌ No matching line found for:", selectedMRT)
         setSelectedLineStations([])
@@ -81,13 +71,13 @@ export default function Page() {
       console.log("⚪ Clearing stations - no line selected")
       setSelectedLineStations([])
     }
+    // Clear selected station when line changes
     setSelectedStation("")
-    // Clear filtered paths when changing lines
-    setFilteredPaths(null)
   }, [selectedMRT, metroData.mrt_lines])
 
   const handleLineSelect = useCallback(
     (e) => {
+      // Handle both event objects and direct values
       const value = e?.target?.value ?? e
       console.log("🚇 Line select value:", value)
 
@@ -96,10 +86,10 @@ export default function Page() {
         setSelectedMRT("")
         setSelectedStation("")
         setSelectedLineStations([])
-        setFilteredPaths(null)
         return
       }
 
+      // Verify the line exists in both data sources
       const lineInMetroData = metroData.mrt_lines?.find((line) => line.line === value)
       const lineInRoutes = mapData.mrtRoutes?.features.find((feature) => feature.properties.MRTCODE === value)
 
@@ -108,6 +98,7 @@ export default function Page() {
 
       if (lineInMetroData && lineInRoutes) {
         setSelectedMRT(value)
+        // Trigger a custom event to update the dropdown
         const event = new CustomEvent("metroLineSelected", { detail: value })
         window.dispatchEvent(event)
       } else {
@@ -117,33 +108,19 @@ export default function Page() {
     [metroData.mrt_lines, mapData.mrtRoutes],
   )
 
-  const handleStationSelect = useCallback(
-    (stationId) => {
-      console.log("🚉 Station select:", stationId)
-      const newValue = stationId === "all" ? "" : stationId
-      setSelectedStation(newValue)
-      // Clear filtered paths when changing stations
-      setFilteredPaths(null)
-
-      if (newValue && metroData.mrt_lines) {
-        const line = metroData.mrt_lines.find((line) =>
-          line.stations.some((station) => station.station_id === newValue),
-        )
-        if (line && line.line !== selectedMRT) {
-          handleLineSelect(line.line)
-        }
-      }
-    },
-    [metroData.mrt_lines, selectedMRT, handleLineSelect],
-  )
+  const handleStationSelect = useCallback((stationId) => {
+    console.log("🚉 Station select:", stationId)
+    setSelectedStation(stationId === "all" ? "" : stationId)
+  }, [])
 
   // Handle map route click
   const handleRouteClick = useCallback(
     (mrtCode) => {
       console.log("🗺️ Map route clicked:", mrtCode)
+      // Ensure the line exists in the metro data
       const lineExists = metroData.mrt_lines?.some((line) => line.line === mrtCode)
       if (lineExists) {
-        handleLineSelect(mrtCode)
+        handleLineSelect(mrtCode) // Use the same handler for consistency
       } else {
         console.error("❌ Clicked route not found in metro data:", mrtCode)
       }
@@ -151,99 +128,34 @@ export default function Page() {
     [metroData.mrt_lines, handleLineSelect],
   )
 
-  // Handle map station click
-  const handleStationClick = useCallback(
-    (stationId) => {
-      console.log("🗺️ Map station clicked:", stationId)
-      handleStationSelect(stationId)
-    },
-    [handleStationSelect],
-  )
-
-  const handleApplyFilter = useCallback(() => {
-    console.log("🎯 Applying filter for station:", selectedStation)
-    if (!selectedStation || !mapData.shortestPaths) return
-
-    setIsLoading(true)
-    try {
-      // Find the selected station's name
-      const station = selectedLineStations.find((s) => s.station_id === selectedStation)
-      if (!station) {
-        console.error("❌ Selected station not found in line stations")
-        return
-      }
-
-      const stationName = `${station.name_chinese}` // Using Chinese name for matching
-      console.log("🔍 Searching for paths from:", stationName)
-
-      // Filter paths that start from the selected station
-      const paths = mapData.shortestPaths.features.filter((feature) => feature.properties.start_name === stationName)
-
-      console.log(`✅ Found ${paths.length} paths from ${stationName}`)
-      setFilteredPaths({
-        type: "FeatureCollection",
-        features: paths,
-      })
-    } catch (err) {
-      console.error("Error filtering paths:", err)
-      setError("Failed to filter paths")
-    } finally {
-      setIsLoading(false)
-    }
-  }, [selectedStation, mapData.shortestPaths, selectedLineStations])
-
   const memoizedFilterPanel = useMemo(
     () => (
       <FilterPanel
         metroData={metroData}
         onLineSelect={handleLineSelect}
         onStationSelect={handleStationSelect}
-        onApplyFilter={handleApplyFilter}
         selectedMRT={selectedMRT}
         selectedStation={selectedStation}
         selectedLineStations={selectedLineStations}
-        isLoading={isLoading}
       />
     ),
-    [
-      handleLineSelect,
-      handleStationSelect,
-      handleApplyFilter,
-      metroData,
-      selectedMRT,
-      selectedStation,
-      selectedLineStations,
-      isLoading,
-    ],
+    [handleLineSelect, handleStationSelect, metroData, selectedMRT, selectedStation, selectedLineStations],
   )
 
   const memoizedMapView = useMemo(
     () => (
       <MapView
         mrtRoutes={mapData.mrtRoutes}
-        taipeiDistricts={mapData.taipeiDistricts}
         selectedMRT={selectedMRT}
         selectedStation={selectedStation}
         selectedLineStations={selectedLineStations}
-        shortestPaths={filteredPaths}
-        filteredLocations={[]} // Add your filtered locations here if needed
         onRouteClick={handleRouteClick}
-        onStationClick={handleStationClick}
       />
     ),
-    [
-      mapData.mrtRoutes,
-      mapData.taipeiDistricts,
-      selectedMRT,
-      selectedStation,
-      selectedLineStations,
-      filteredPaths,
-      handleRouteClick,
-      handleStationClick,
-    ],
+    [mapData.mrtRoutes, selectedMRT, selectedStation, selectedLineStations, handleRouteClick],
   )
 
-  if (isLoading && !mapData.mrtRoutes) return <div>Loading map data...</div>
+  if (isLoading) return <div>Loading map data...</div>
   if (error) return <div>{error}</div>
 
   return (

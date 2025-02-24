@@ -1,18 +1,16 @@
 "use client"
 
 import { useEffect, useRef } from "react"
-import { Button, Select, SelectItem } from "@heroui/react"
+import { Select, SelectItem } from "@heroui/react"
 import "./FilterPanel.css"
 
 export default function FilterPanel({
   metroData,
   onLineSelect,
   onStationSelect,
-  onApplyFilter,
   selectedMRT,
   selectedStation,
   selectedLineStations,
-  isLoading,
 }) {
   const lineSelectRef = useRef(null)
 
@@ -20,6 +18,7 @@ export default function FilterPanel({
   useEffect(() => {
     console.log("🔄 Updating dropdown value to:", selectedMRT)
     if (lineSelectRef.current) {
+      // Force the Select component to update its value
       lineSelectRef.current.value = selectedMRT || ""
     }
   }, [selectedMRT])
@@ -77,14 +76,6 @@ export default function FilterPanel({
               ))}
             </Select>
           )}
-
-          <Button
-            onClick={onApplyFilter}
-            disabled={!selectedStation || selectedStation === "all" || isLoading}
-            className="w-full mt-2"
-          >
-            {isLoading ? "Loading..." : "Apply Filter"}
-          </Button>
         </div>
       </div>
     </div>
