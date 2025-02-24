@@ -10,7 +10,7 @@ import {
   CheckboxGroup,
   Textarea,
 } from '@heroui/react'
-import { CustomCheckbox } from './custom-checkbox'
+import { CustomCheckbox } from '../custom-checkbox'
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules'
 
 import { Swiper, SwiperSlide } from 'swiper/react'

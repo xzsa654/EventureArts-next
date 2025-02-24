@@ -10,6 +10,7 @@ import {
 } from '@heroui/react'
 import { CiUser, CiLogout, CiShoppingCart, CiStar } from 'react-icons/ci'
 import { useAuth } from '@/hooks/use-auth'
+import Link from 'next/link'
 export default function AVatarGroup() {
   const { auth, logOut } = useAuth()
 
@@ -33,27 +34,18 @@ export default function AVatarGroup() {
         </DropdownTrigger>
         <DropdownMenu aria-label="User Actions" variant="flat">
           <DropdownSection title={auth.nickname} showDivider>
-            <DropdownItem
-              key="profile"
-              href="/"
-              startContent=<CiUser size={20} />
-            >
-              個人檔案
+            <DropdownItem key="profile" startContent=<CiUser size={20} />>
+              <Link href={'/user/c/profile'}>個人檔案</Link>
             </DropdownItem>
 
             <DropdownItem
               key="tickets"
-              href="/"
               startContent=<CiShoppingCart size={20} />
             >
-              我的訂單
+              <Link href={'/user'}>我的訂單</Link>
             </DropdownItem>
-            <DropdownItem
-              key="liked"
-              href="/"
-              startContent=<CiStar size={20} />
-            >
-              收藏清單
+            <DropdownItem key="liked" startContent=<CiStar size={20} />>
+              <Link href={'/user'}>收藏清單</Link>
             </DropdownItem>
           </DropdownSection>
           {/* 品牌方會員才會顯示 */}
@@ -69,7 +61,7 @@ export default function AVatarGroup() {
                   className="mr-3"
                 ></Image>
               >
-                Brand
+                <Link href={'/user/b/ex-mang'}>Brand</Link>
               </DropdownItem>
             </DropdownSection>
           ) : (
