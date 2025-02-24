@@ -88,6 +88,12 @@ export function AuthContextProvider({ children }) {
       const { user_id, user_email, nickname, avatar, token } = result
 
       setAuth({ user_id, user_email, nickname, avatar, token })
+      addToast({
+        radius: 'lg',
+        description: '成功登入！',
+        color: 'success',
+        timeout: 10000,
+      })
     } else {
       setFirstLogin(result.data)
     }

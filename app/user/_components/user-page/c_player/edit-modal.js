@@ -1,43 +1,68 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import ModalLayout from '@/components/common/login/layout'
 import CPlayerEditSelect from './edit-select'
+import { UPDATED } from '@/lib/user-api'
+import { useAuth } from '@/hooks/use-auth'
 import {
   Form,
   Input,
   ScrollShadow,
   Textarea,
-  Button,
-  Chip,
   DatePicker,
   Select,
   SelectItem,
   Link,
 } from '@heroui/react'
-import { CheckIcon } from '@/public/Yao/icons'
 
 import { HiArrowNarrowRight } from 'react-icons/hi'
 
 export default function EditModal({ data, isOpen, onOpenChange = () => {} }) {
+  const { getAuthHeader } = useAuth()
   const gender = [
     { label: '男性', key: 'male' },
     { label: '女性', key: 'female' },
     { label: '不願透漏', key: 'not provided' },
   ]
-  const title = '成為品牌'
-  const tips = '成為品牌'
-
+  const [e_interest, setEInterest] = useState([])
+  const [c_interest, setCInterest] = useState([])
+  const title = '編輯資料'
+  const tips = '會員編輯'
+  const formRef = useRef()
+  // 將傳回的興趣做成作為陣列
+  const liked = (e, c) => {
+    setCInterest(Array.from(c))
+    setEInterest(Array.from(e))
+  }
+  const onSubmit = async (e) => {
+    e.preventDefault()
+    const data = new FormData(e.target)
+    data.set('e_interest', e_interest)
+    data.set('c_interest', c_interest)
+    const r = await fetch(UPDATED, {
+      method: 'put',
+      body: data,
+      headers: { ...getAuthHeader() },
+    })
+    const res = await r.json()
+    console.log(res)
+  }
   const prompt = <div className="text-red text-16">* 為必填欄位</div>
-  // 必填:name email info logo type
   const formBody = (
     <ScrollShadow className=" w-full max-h-[300px]">
-      <Form className='className="w-full h-full flex-row gap-10  flex  justify-between items-center"'>
+      <Form
+        ref={formRef}
+        onSubmit={onSubmit}
+        className='className="w-full h-full flex-row gap-10  flex  justify-between items-center"'
+      >
         <div className="w-1/2 h-full flex flex-col gap-4">
+          <Input className="hidden" name="user_id" value={data.user_id}></Input>
           <Input
             isRequired
             label="真實姓名"
             variant="underlined"
+            name="user_name"
             type="text"
             className="w-full"
             defaultValue={data.user_name}
@@ -53,6 +78,7 @@ export default function EditModal({ data, isOpen, onOpenChange = () => {} }) {
             label="手機號碼"
             variant="underlined"
             type="text"
+            name="mobile"
             className="w-full"
             defaultValue={data.mobile}
             classNames={{
@@ -66,6 +92,7 @@ export default function EditModal({ data, isOpen, onOpenChange = () => {} }) {
             label="暱稱"
             variant="underlined"
             type="text"
+            name="nickname"
             className="w-full"
             defaultValue={data.nickname}
             classNames={{
@@ -115,6 +142,7 @@ export default function EditModal({ data, isOpen, onOpenChange = () => {} }) {
             radius="none"
             name="profile"
             variant="bordered"
+            defaultValue={data.profile}
             className="max-w-xs focus:text-white  group-data-[focus=true]:text-white"
             label="個人簡介"
             classNames={{
@@ -126,9 +154,8 @@ export default function EditModal({ data, isOpen, onOpenChange = () => {} }) {
           />
           <CPlayerEditSelect
             prev_c_interest={data.c_interest}
-            prev_e_interest={data.e_interest
-              ?.replace(/\s*\([^)]*\)/g, '')
-              .split(',')}
+            prev_e_interest={data.e_interest}
+            liked={liked}
           />
         </div>
       </Form>
@@ -138,9 +165,12 @@ export default function EditModal({ data, isOpen, onOpenChange = () => {} }) {
     <div className="w-full justify-end text-white flex gap-1">
       <Link
         href={'#'}
+        onPress={() => {
+          formRef.current.requestSubmit()
+        }}
         className=" text-white flex justify-center items-center "
       >
-        完成註冊
+        完成編輯
         <div className="">
           <HiArrowNarrowRight size={20} color="white" />
         </div>
