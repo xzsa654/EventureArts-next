@@ -61,18 +61,15 @@ export default function Page() {
     fetchData()
   }, [])
 
-  useEffect(() => {
-    if (selectedMRT && metroData.mrt_lines) {
-      const selectedLine = metroData.mrt_lines.find((line) => line.line === selectedMRT)
-      if (selectedLine && !selectedLineStations.length) {
-        // Only update if stations aren't already set
-        setSelectedLineStations(selectedLine.stations)
-      }
-    } else if (!selectedMRT) {
-      // Only clear stations if no line is selected
-      setSelectedLineStations([])
-    }
-  }, [selectedMRT, metroData, selectedLineStations.length])
+useEffect(() => {
+  if (selectedMRT && metroData.mrt_lines) {
+    const selectedLine = metroData.mrt_lines.find(line => line.line === selectedMRT);
+    setSelectedLineStations(selectedLine ? selectedLine.stations : []);
+  } else {
+    setSelectedLineStations([]);
+  }
+}, [selectedMRT, metroData]);
+
 
   useEffect(() => {
     fetch(`${API_BASE_URL}/map`)

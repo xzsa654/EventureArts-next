@@ -64,11 +64,24 @@ export default function MapView({
     opacity: 1,
   }
 
+  const getLineColor = (lineName) => {
+    const colorMap = {
+      淡水信義線: "#ff0000", // Red
+      松山新店線: "#008000", // Green
+      中和新蘆線: "#ff6600", // Orange
+      板南線: "#0000ff", // Blue
+      文湖線: "#825200", // Brown
+      環狀線: "#ffff00", // Yellow
+    }
+    return colorMap[lineName] || "#666666"
+  }
+
+  // Update station styles to use line colors
   const stationStyle = {
-    radius: 6,
+    radius: 5,
     fillColor: "#ffffff",
-    color: "#000000",
-    weight: 1.5,
+    color: selectedMRT ? getLineColor(selectedMRT) : "#000000",
+    weight: 2,
     opacity: 1,
     fillOpacity: 1,
   }
@@ -77,7 +90,7 @@ export default function MapView({
     radius: 8,
     fillColor: "#ff7800",
     color: "#000",
-    weight: 2,
+    weight: 3,
     opacity: 1,
     fillOpacity: 0.8,
   }
@@ -132,19 +145,6 @@ export default function MapView({
     return routeStyle
   }
 
-  // Get line color based on line name
-  const getLineColor = (lineName) => {
-    const colorMap = {
-      淡水信義線: "#ff0000", // Red
-      松山新店線: "#008000", // Green
-      中和新蘆線: "#ff6600", // Orange
-      板南線: "#0000ff", // Blue
-      文湖線: "#825200", // Brown
-      環狀線: "#ffff00", // Yellow
-    }
-    return colorMap[lineName] || "#666666"
-  }
-
   const onEachRoute = (feature, layer) => {
     layer.on({
       mouseover: () => {
@@ -186,7 +186,7 @@ export default function MapView({
     })
   }
 
-  // Create GeoJSON for stations
+  // Create GeoJSON for stations with line-colored markers
   const stationGeoJSON = {
     type: "FeatureCollection",
     features: selectedLineStations.map((station) => ({
@@ -206,6 +206,18 @@ export default function MapView({
   // Function to check if a station should be highlighted
   const shouldHighlightStation = (stationId) => {
     return selectedStation === stationId
+  }
+
+  // Function to get station style based on selection state
+  const getStationStyle = (stationId) => {
+    if (shouldHighlightStation(stationId)) {
+      return selectedStationStyle
+    }
+    return {
+      ...stationStyle,
+      // Make unselected stations slightly smaller when one is selected
+      radius: selectedStation ? 4 : 5,
+    }
   }
 
   return (
@@ -249,12 +261,29 @@ export default function MapView({
                   key={`stations-${selectedStation || "all"}`}
                   data={stationGeoJSON}
                   pointToLayer={(feature, latlng) => {
-                    const isSelected = shouldHighlightStation(feature.properties.id)
-                    const style = isSelected ? selectedStationStyle : stationStyle
+                    const style = getStationStyle(feature.properties.id)
                     const marker = L.circleMarker(latlng, style)
 
                     // Add popup with both Chinese and English names
                     marker.bindPopup(`${feature.properties.name}<br>${feature.properties.name_english}`)
+
+                    // Add hover effect
+                    marker.on({
+                      mouseover: () => {
+                        if (!shouldHighlightStation(feature.properties.id)) {
+                          marker.setStyle({
+                            ...style,
+                            radius: style.radius + 2,
+                            fillOpacity: 0.8,
+                          })
+                        }
+                      },
+                      mouseout: () => {
+                        if (!shouldHighlightStation(feature.properties.id)) {
+                          marker.setStyle(style)
+                        }
+                      },
+                    })
 
                     return marker
                   }}

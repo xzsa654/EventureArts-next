@@ -52,18 +52,26 @@ export default function FilterPanel({
     console.log(`Filter ${key} changed:`, value)
 
     if (key === "metro") {
-      const newValue = value === "all" ? "" : value
-      console.log("Setting metro line to:", newValue) // Debug log
-      setFilters((prev) => ({
+      const newValue = value === "all" ? "" : value;
+      console.log("Setting metro line to:", newValue); // Debug log
+    
+      // 檢查是否存在選擇的線路，如果不存在，則不進行設置
+      const lineExists = metroData.mrt_lines.some(line => line.line === newValue);
+      if (!lineExists && newValue !== "") {
+        console.error("Selected line not found in the collection.");
+        return; // 如果線路不存在，直接返回，不更新任何狀態
+      }
+    
+      setFilters(prev => ({
         ...prev,
-        [key]: newValue,
+        metro: newValue,
         station: "", // Reset station when changing line
         searchBy: "mrt", // Switch to MRT mode when selecting a line
-      }))
-      onLineSelect(newValue)
-      onDistrictSelect("") // Clear district selection
-      return
+      }));
+      onLineSelect(newValue);
+      onDistrictSelect(""); // Clear district selection
     }
+    
 
     if (key === "station") {
       const newValue = value === "all" ? "" : value
