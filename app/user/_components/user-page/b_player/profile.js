@@ -5,6 +5,7 @@ import { Button } from '@heroui/react'
 import { HiArrowRight } from 'react-icons/hi'
 import Image from 'next/image'
 export default function BPlayerProfile(props) {
+  
   return (
     <>
       <div className="flex">
