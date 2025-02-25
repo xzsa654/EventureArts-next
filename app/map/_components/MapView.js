@@ -255,25 +255,45 @@ export default function MapView({
     layer.bindPopup(feature.properties.TNAME)
   }
 
-  // Fit map to bounds when shortest paths are loaded
+
+  // FitBounds happens when shortestPaths, filteredLocations, or selectedDistrict changes
   useEffect(() => {
-    if (shortestPaths && shortestPaths.features && shortestPaths.features.length > 0) {
-      const map = mapRef.current;
+    const map = mapRef.current // 獲取地圖
+    if (!map) return // 如果地圖未加載，則不執行後續操作
 
-      let bounds = L.latLngBounds();
+    let bounds = L.latLngBounds() // 初始化邊界
 
+    // 處理 shortestPaths 圖層
+    if (
+      shortestPaths &&
+      shortestPaths.features &&
+      shortestPaths.features.length > 0
+    ) {
       shortestPaths.features.forEach((path) => {
-        const endCoordinates = path.geometry.coordinates[0][
-          path.geometry.coordinates[0].length - 1
-        ];
-        bounds = bounds.extend([endCoordinates[1], endCoordinates[0]]);
-      });
-
-      if (map) {
-        map.fitBounds(bounds, { padding: [20, 20] });
-      }
+        const endCoordinates =
+          path.geometry.coordinates[0][path.geometry.coordinates[0].length - 1]
+        bounds = bounds.extend([endCoordinates[1], endCoordinates[0]])
+      })
     }
-  }, [shortestPaths]);
+
+    // 處理 filteredLocations 圖層
+    if (Array.isArray(filteredLocations) && filteredLocations.length > 0) {
+      filteredLocations.forEach((loc) => {
+        if (
+          loc.latitude &&
+          loc.longitude &&
+          loc.district === selectedDistrict
+        ) {
+          bounds = bounds.extend([+loc.latitude, +loc.longitude])
+        }
+      })
+    }
+
+    // 如果邊界有效，更新地圖範圍
+    if (bounds.isValid()) {
+      map.fitBounds(bounds, { padding: [20, 20] })
+    }
+  }, [shortestPaths, filteredLocations, selectedDistrict]) // 依據圖層和篩選條件變化觸發
 
   // Create separate LayerGroups for routes and stations
   const renderRoutes = () => (
