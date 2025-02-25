@@ -72,7 +72,7 @@ export default function MapView({
 
   // Add buffer around routes for easier interaction
   const routeBuffer = {
-    weight: 15,
+    weight: 30,
     color: '#000',
     opacity: 0,
   }
