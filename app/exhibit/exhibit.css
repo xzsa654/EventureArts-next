@@ -129,7 +129,7 @@
 
 /* ExhibitionSection.js CSS  */
 .carousel-column {
-  animation: scrollUp 130s linear infinite;
+  animation: scrollUp 30s linear infinite;
   will-change: transform;
 }
 
@@ -149,4 +149,19 @@
   bottom: 0;
   width: 1px;
   background-color: #d1d5db;
+}
+
+/* Add these CSS classes for the advanced search animation */
+.advanced-search-closed {
+  max-height: 0;
+  opacity: 0;
+}
+
+.advanced-search-open {
+  max-height: 500px;
+  opacity: 1;
+}
+
+.advanced-search {
+  transform-origin: top;
 }

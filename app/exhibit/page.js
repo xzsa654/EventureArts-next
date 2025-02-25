@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useCallback } from "react"
 import ExhibitionSection from "./_components/ExhibitionSection"
 import Image from "next/image"
 import { ChevronLeftIcon, ChevronRightIcon, ArrowLongRightIcon } from "@heroicons/react/24/outline"
@@ -21,6 +21,36 @@ export default function ExhibitPage() {
   const [isAnimating, setIsAnimating] = useState(false)
   const secondHeroRef = useRef(null)
 
+  // Create query string for fetching exhibitions
+  const createQueryString = useCallback((params) => {
+    const queryParams = { ...params }
+    return Object.entries(queryParams)
+      .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
+      .join("&")
+  }, [])
+
+  // Fetch offline exhibitions with filters
+  const { data: offlineData, error: offlineError } = useSWR(
+    `${API_BASE_URL}/exhibit?${createQueryString({
+      exhibition_form: "offline",
+      sort: "asc",
+      page: 1,
+      perPage: 10,
+    })}`,
+    fetcher,
+  )
+
+  // Fetch online exhibitions with filters
+  const { data: onlineData, error: onlineError } = useSWR(
+    `${API_BASE_URL}/exhibit?${createQueryString({
+      exhibition_form: "online",
+      sort: "asc",
+      page: 1,
+      perPage: 3, // Only fetch 3 for the preview section
+    })}`,
+    fetcher,
+  )
+
   const handleExhibitionSelect = (exhibition) => {
     setIsAnimating(true)
     setSelectedExhibition(exhibition)
@@ -37,10 +67,6 @@ export default function ExhibitPage() {
       return () => clearTimeout(timer)
     }
   }, [isAnimating])
-
-  // Fetch offline and online exhibitions
-  const { data: offlineData, error: offlineError } = useSWR(`${API_BASE_URL}/exhibit?form=offline`, fetcher)
-  const { data: onlineData, error: onlineError } = useSWR(`${API_BASE_URL}/exhibit?form=online`, fetcher)
 
   // Handle loading and error states with better UI
   if (offlineError || onlineError) {
@@ -75,14 +101,7 @@ export default function ExhibitPage() {
       </section>
 
       {/* Second Hero Section */}
-      <section id="second-hero-section" ref={secondHeroRef} className="relative h-[560px] w-full overflow-hidden ">
-        {/* <Image
-          src="/chu-images/img-bg.jpg"
-          alt="Art gallery interior"
-          fill
-          className="object-cover brightness-75"
-          priority
-        /> */}
+      <section id="second-hero-section" ref={secondHeroRef} className="relative h-[560px] w-full overflow-hidden">
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="container mx-auto px-4 flex items-stretch h-full">
             {selectedExhibition ? (
@@ -139,20 +158,18 @@ export default function ExhibitPage() {
         <div className="relative">
           <div className="flex gap-6 justify-center">
             {Array.isArray(onlineExhibitions) &&
-              onlineExhibitions
-                .slice(0, 3)
-                .map((exhibition) => (
-                  <OnlineExhibitionCard
-                    key={exhibition.e_id}
-                    e_id={exhibition.e_id}
-                    tag={exhibition.e_optionNames}
-                    cover_image={exhibition.cover_image || exhibition.imageUrl || `/placeholder.svg`}
-                    date={`${exhibition.e_startdate} - ${exhibition.e_enddate}`}
-                    title={exhibition.e_name}
-                    description={exhibition.e_desc}
-                    artist={exhibition.bd_id}
-                  />
-                ))}
+              onlineExhibitions.map((exhibition) => (
+                <OnlineExhibitionCard
+                  key={exhibition.e_id}
+                  e_id={exhibition.e_id}
+                  tag={exhibition.e_optionNames}
+                  cover_image={exhibition.cover_image || exhibition.imageUrl || `/placeholder.svg`}
+                  date={`${exhibition.e_startdate} - ${exhibition.e_enddate}`}
+                  title={exhibition.e_name}
+                  description={exhibition.e_desc}
+                  artist={exhibition.bd_name}
+                />
+              ))}
           </div>
         </div>
       </section>
@@ -183,13 +200,34 @@ export default function ExhibitPage() {
         <div className="relative">
           <div className="grid grid-cols-3 gap-6">
             <div className="aspect-[4/3] relative">
-              <Image src="/chu-images/img_9.jpg" alt="Vinyl record player" width={500} height={300} priority className="object-cover" />
+              <Image
+                src="/chu-images/img_9.jpg"
+                alt="Vinyl record player"
+                width={500}
+                height={300}
+                priority
+                className="object-cover"
+              />
             </div>
             <div className="aspect-[4/3] relative">
-              <Image src="/chu-images/img_9.jpg" alt="Neon ART sign" width={500} height={300} priority className="object-cover" />
+              <Image
+                src="/chu-images/img_9.jpg"
+                alt="Neon ART sign"
+                width={500}
+                height={300}
+                priority
+                className="object-cover"
+              />
             </div>
             <div className="aspect-[4/3] relative">
-              <Image src="/chu-images/img_9.jpg" alt="Album covers collection" width={500} height={300} priority className="object-cover" />
+              <Image
+                src="/chu-images/img_9.jpg"
+                alt="Album covers collection"
+                width={500}
+                height={300}
+                priority
+                className="object-cover"
+              />
             </div>
           </div>
 
