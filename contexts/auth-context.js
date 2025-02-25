@@ -85,9 +85,9 @@ export function AuthContextProvider({ children }) {
 
     const result = await res.json()
     if (result.success && result.code == 200) {
-      const { user_id, user_email, nickname, avatar, token } = result
+      const { user_id, user_email, nickname, avatar, token, user_role } = result
 
-      setAuth({ user_id, user_email, nickname, avatar, token })
+      setAuth({ user_id, user_email, nickname, avatar, token, user_role })
       addToast({
         radius: 'lg',
         description: '成功登入！',

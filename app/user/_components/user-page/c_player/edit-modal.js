@@ -34,7 +34,9 @@ export default function EditModal({
   const [birthday, setBirthday] = useState()
   // 取完資料了在進行解碼
   useEffect(() => {
-    if (data.birthday) {
+    // 判斷生日欄位 因為後端取過來的可能是暫無 所以用型別判斷
+    if (data.birthday instanceof Date) {
+      // 若是正確的 DATA 物件就用套件解析日期
       setBirthday(parseDate(data.birthday))
     }
   }, [data])
