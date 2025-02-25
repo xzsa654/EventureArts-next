@@ -14,30 +14,46 @@ import {
   Select,
   SelectItem,
   Link,
+  addToast,
 } from '@heroui/react'
-
+import { parseDate } from '@internationalized/date'
 import { HiArrowNarrowRight } from 'react-icons/hi'
 
-export default function EditModal({ data, isOpen, onOpenChange = () => {} }) {
+export default function EditModal({
+  data,
+  isOpen,
+  onOpenChange = () => {},
+  onReSend = () => {},
+}) {
   const { getAuthHeader } = useAuth()
   const gender = [
     { label: '男性', key: 'male' },
     { label: '女性', key: 'female' },
     { label: '不願透漏', key: 'not provided' },
   ]
+  const [birthday, setBirthday] = useState()
+  // 取完資料了在進行解碼
+  useEffect(() => {
+    if (data.birthday) {
+      setBirthday(parseDate(data.birthday))
+    }
+  }, [data])
   const [e_interest, setEInterest] = useState([])
   const [c_interest, setCInterest] = useState([])
   const title = '編輯資料'
   const tips = '會員編輯'
   const formRef = useRef()
+
   // 將傳回的興趣做成作為陣列
   const liked = (e, c) => {
     setCInterest(Array.from(c))
     setEInterest(Array.from(e))
   }
+  // 處理表單
   const onSubmit = async (e) => {
     e.preventDefault()
     const data = new FormData(e.target)
+
     data.set('e_interest', e_interest)
     data.set('c_interest', c_interest)
     const r = await fetch(UPDATED, {
@@ -46,7 +62,26 @@ export default function EditModal({ data, isOpen, onOpenChange = () => {} }) {
       headers: { ...getAuthHeader() },
     })
     const res = await r.json()
-    console.log(res)
+
+    if (res.success) {
+      addToast({
+        radius: 'lg',
+        title: '編輯成功',
+        description: res.message,
+        color: 'success',
+        timeout: 5000,
+      })
+      onReSend(true)
+      onOpenChange(false)
+    } else {
+      addToast({
+        radius: 'lg',
+        title: '編輯失敗',
+        description: res.message,
+        color: 'warning',
+        timeout: 5000,
+      })
+    }
   }
   const prompt = <div className="text-red text-16">* 為必填欄位</div>
   const formBody = (
@@ -128,7 +163,7 @@ export default function EditModal({ data, isOpen, onOpenChange = () => {} }) {
             showMonthAndYearPickers
             label="生日"
             color="danger"
-            defaultValue={data.birthday}
+            defaultValue={birthday}
             variant="underlined"
             classNames={{
               base: 'w-full pb-2',

@@ -12,7 +12,8 @@ export default function CPlayerProfile(props) {
   const { auth, getAuthHeader } = useAuth()
   const [data, setData] = useState({})
   const { isOpen, onOpenChange } = useDisclosure()
-
+  const gender = { male: '男性', female: '女性', 'not provided': '未透露' }
+  const [reSend, onReSend] = useState(false)
   useEffect(() => {
     if (auth?.token) {
       fetch(USERDATA, {
@@ -23,9 +24,10 @@ export default function CPlayerProfile(props) {
         .then((r) => r.json())
         .then((result) => {
           setData(result)
+          onReSend(false)
         })
     }
-  }, [auth.token])
+  }, [auth.token, reSend])
   return (
     <>
       <div className="flex w-full ">
@@ -79,7 +81,7 @@ export default function CPlayerProfile(props) {
                 </dl>
                 <dl className="text-base flex font-sans justify-between">
                   <dt>性別：</dt>
-                  <dt>{data?.gender == 'not provided' && '未透露'}</dt>
+                  <dt>{gender[data.gender]}</dt>
                 </dl>
                 <dl className="text-base flex font-sans justify-between">
                   <dt>email：</dt>
@@ -160,7 +162,7 @@ export default function CPlayerProfile(props) {
           </div>
         </div>
       </div>
-      <EditModal {...{ data, isOpen, onOpenChange }} />
+      <EditModal {...{ data, isOpen, onOpenChange, onReSend }} />
     </>
   )
 }

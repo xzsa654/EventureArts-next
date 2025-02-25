@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect, use } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Select, Chip, SelectItem } from '@heroui/react'
 import { CheckIcon } from '@/public/Yao/icons'
 import { ALLOPTIONS } from '@/lib/authorization-api'
@@ -15,30 +15,10 @@ export default function CPlayerEditSelect({
   // 控制選項的狀態
   const [options, setOptions] = useState([])
 
-  // 將prev_c_interest 和 prev_e_interest 的值添加原本的 key
-  const defaultSelectC = new Set(
-    options[1]?.course
-      .filter((v) => {
-        if (prev_c_interest.indexOf(v.c_optionName) !== -1) {
-          return v
-        }
-      })
-      .map((i) => i.c_optionID.toString())
-  )
-
-  const defaultSelectE = new Set(
-    options[0]?.exhibition
-      .filter((v) => {
-        if (prev_e_interest.indexOf(v.e_optionName) !== -1) {
-          return v
-        }
-      })
-      .map((i) => i.e_optionID.toString())
-  )
   // 選中的狀態
-  const [c_interest, setCInterest] = useState(defaultSelectC)
+  const [c_interest, setCInterest] = useState(['1', '2'])
 
-  const [e_interest, setEInterest] = useState(defaultSelectE)
+  const [e_interest, setEInterest] = useState([])
 
   // 1. 取得options
   useEffect(() => {
@@ -48,6 +28,32 @@ export default function CPlayerEditSelect({
         setOptions(result)
       })
   }, [])
+  useEffect(() => {
+    if (options.length) {
+      // 將prev_c_interest 和 prev_e_interest 的值添加原本的 key
+      const defaultSelectC = new Set(
+        options[1]?.course
+          .filter((v) => {
+            if (prev_c_interest.indexOf(v.c_optionName) !== -1) {
+              return v
+            }
+          })
+          .map((i) => i.c_optionID.toString())
+      )
+
+      const defaultSelectE = new Set(
+        options[0]?.exhibition
+          .filter((v) => {
+            if (prev_e_interest.indexOf(v.e_optionName) !== -1) {
+              return v
+            }
+          })
+          .map((i) => i.e_optionID.toString())
+      )
+      setEInterest(defaultSelectE)
+      setCInterest(defaultSelectC)
+    }
+  }, [options])
 
   useEffect(() => {
     liked(e_interest, c_interest)
@@ -74,7 +80,7 @@ export default function CPlayerEditSelect({
         labelPlacement="outside"
         placeholder="請挑選感興趣的課程分類"
         selectionMode="multiple"
-        defaultSelectedKeys={defaultSelectC}
+        selectedKeys={c_interest}
         variant="bordered"
         onSelectionChange={(item) => {
           setCInterest(item)
@@ -113,11 +119,10 @@ export default function CPlayerEditSelect({
         items={options[0]?.exhibition}
         isMultiline={true}
         label="展覽類型"
-        defaultSelectedKeys={defaultSelectE}
+        selectedKeys={e_interest}
         labelPlacement="outside"
         onSelectionChange={(item) => {
           setEInterest(item)
-          return liked(e_interest, c_interest)
         }}
         placeholder="請挑選感興趣的展覽分類"
         selectionMode="multiple"
