@@ -21,7 +21,7 @@ export default function Headline(props) {
 
         {/* Headline右邊 */}
         <div className="headSide flex flex-col text-center basis-1/3">
-            <h2>EventureArts</h2>
+            <h2>EventureArts 1.0</h2>
             <p>for Arts and Events adventures.</p>
         </div>
 

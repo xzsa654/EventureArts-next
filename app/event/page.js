@@ -8,6 +8,8 @@ import CardB1 from '../course/_components/card-b1';
 import { Accordion as HerouiAccordion, AccordionItem as HerouiAccordionItem } from "@heroui/accordion";
 import Compareimg from '../course/_components/compareimg';
 import ReactPageScroller from 'react-page-scroller';
+import './event.css';
+
 
 // 引用React icon
 import { FaPeopleRobbery } from "react-icons/fa6";
@@ -15,8 +17,6 @@ import { RiStore2Fill } from "react-icons/ri";
 import { FaUsers } from "react-icons/fa";
 import { GiPartyFlags } from "react-icons/gi";
 
-// 引用樣式表
-import './event.css';
 
 export default function Event(props) {
   // 使用Full page Scroll
@@ -47,8 +47,7 @@ export default function Event(props) {
           </div>
 
           {/* 1.2 平台四特點 */}
-          <div className="flex flex-row w-full justify-evenly items-center h-2/3">
-
+          <div className="flex flex-row w-full justify-evenly items-center h-3/5">
             <div className="Special h-[70%] flex flex-col items-center">
               <div className='py-12'><RiStore2Fill size={40} color="#000000" /></div>
               <div className="2title gap-2 flex flex-col text-center justify-between">
