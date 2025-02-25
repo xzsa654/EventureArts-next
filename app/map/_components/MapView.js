@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import {
   MapContainer,
   TileLayer,
@@ -254,6 +254,26 @@ export default function MapView({
     // Add popup with district name
     layer.bindPopup(feature.properties.TNAME)
   }
+
+  // Fit map to bounds when shortest paths are loaded
+  useEffect(() => {
+    if (shortestPaths && shortestPaths.features && shortestPaths.features.length > 0) {
+      const map = mapRef.current;
+
+      let bounds = L.latLngBounds();
+
+      shortestPaths.features.forEach((path) => {
+        const endCoordinates = path.geometry.coordinates[0][
+          path.geometry.coordinates[0].length - 1
+        ];
+        bounds = bounds.extend([endCoordinates[1], endCoordinates[0]]);
+      });
+
+      if (map) {
+        map.fitBounds(bounds, { padding: [20, 20] });
+      }
+    }
+  }, [shortestPaths]);
 
   // Create separate LayerGroups for routes and stations
   const renderRoutes = () => (
