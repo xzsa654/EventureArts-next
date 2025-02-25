@@ -1,12 +1,14 @@
 "use client"
 
-import { useState, useCallback } from "react"
+import { useState, useCallback, useEffect } from "react"
 import Excard from "../_components/Excard"
-import { Input, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button, Pagination } from "@heroui/react"
+import { Input, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button } from "@heroui/react"
 import { CiSearch } from "react-icons/ci"
 import { MdSort } from "react-icons/md"
 import useSWR from "swr"
 import "./styles.css"
+import PaginationAdapter from "../PaginationAdapter"
+import Loading from "../loading"
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3001"
 
@@ -34,6 +36,7 @@ export default function ExploreExhibitions() {
     sort: "asc",
     page: 1,
     perPage: 9,
+    exhibition_form: "offline", // Add this line to always show offline exhibitions
   })
   const [showAdvancedSearch, setShowAdvancedSearch] = useState(false)
 
@@ -46,6 +49,8 @@ export default function ExploreExhibitions() {
     if (!queryParams.exhibitionStatus) delete queryParams.exhibitionStatus
     if (!queryParams.e_optionID && queryParams.e_optionID !== 0) delete queryParams.e_optionID
     if (queryParams.sort === "asc") delete queryParams.sort
+    // Always include exhibition_form
+    queryParams.exhibition_form = "offline"
 
     console.log("Query params:", queryParams) // Debug log
 
@@ -104,9 +109,25 @@ export default function ExploreExhibitions() {
 
   // Handle page change
   const handlePageChange = (page) => {
-    setSearchParams((prev) => ({ ...prev, page }))
+    console.log("handlePageChange called with page:", page)
+    setSearchParams((prev) => {
+      console.log("Previous search params:", prev)
+      const newParams = { ...prev, page }
+      console.log("New search params:", newParams)
+      return newParams
+    })
     window.scrollTo({ top: 0, behavior: "smooth" })
   }
+
+  // Log when searchParams changes
+  useEffect(() => {
+    console.log("searchParams updated:", searchParams)
+  }, [searchParams])
+
+  // Log when response changes
+  useEffect(() => {
+    console.log("Response data:", response)
+  }, [response])
 
   // Reset filters
   const handleResetFilters = () => {
@@ -117,6 +138,7 @@ export default function ExploreExhibitions() {
       sort: "asc",
       page: 1,
       perPage: 9,
+      exhibition_form: "offline", // Maintain the offline filter when resetting
     })
   }
 
@@ -135,7 +157,7 @@ export default function ExploreExhibitions() {
   }
 
   if (error) return <div className="text-white text-center pt-[200px]">Error loading exhibitions</div>
-  if (isLoading) return <div className="text-white text-center pt-[200px]">Loading...</div>
+  if (isLoading) return <Loading />
 
   return (
     <div
@@ -293,15 +315,10 @@ export default function ExploreExhibitions() {
             {/* Pagination */}
             {response?.totalPages > 1 && (
               <div className="flex justify-center mt-8">
-                <Pagination
-                  total={response.totalPages}
-                  page={searchParams.page}
-                  onChange={handlePageChange}
-                  classNames={{
-                    wrapper: "gap-2",
-                    item: "text-white bg-transparent border border-white/30 hover:bg-white/10",
-                    active: "bg-white/20",
-                  }}
+                <PaginationAdapter
+                  totalPages={response.totalPages}
+                  onPageChange={handlePageChange}
+                  currentPage={searchParams.page}
                 />
               </div>
             )}
