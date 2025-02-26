@@ -2,8 +2,10 @@
 
 import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
+import { QRCode } from 'react-qrcode-logo'
 
-export default function TicketPageTicketFront() {
+export default function TicketPageTicketFront({ ticketData }) {
+  if (!ticketData) return null
   return (
     <div className="relative w-[350px] h-[750px]">
       {/* SVG 票券背景 */}
@@ -28,6 +30,7 @@ export default function TicketPageTicketFront() {
             className="w-[286px] h-[286px] "
             width={286}
             height={286}
+            priority
           />
         </div>
         <>
@@ -35,26 +38,30 @@ export default function TicketPageTicketFront() {
             <div className="border-t-1 border-black pt-4 pb-10 flex-col self-stretch justify-center items-start gap-2">
               {/* 活動名稱 */}
               <h6 className="text-12 text-primary-300">活動名稱</h6>
-              <h5 className="text-16  font-medium">
-                生活裡的花與器｜風格美感花藝選搭課｜floral design
-              </h5>
+              <h5 className="text-16  font-medium">{ticketData.event_name}</h5>
             </div>
             {/* 活動細節 */}
 
             <div className="border-t-1 border-black pt-4 pb-10 flex-col self-stretch justify-center items-start gap-2">
               <dl className="self-stretch justify-start items-start gap-1 inline-flex basis-0">
                 <dd className="w-[68px] text-primary-300">地點</dd>
-                <dt className=" text-black">台北市內湖區文德路10號</dt>
+                <dt className=" text-black break-words text-wrap w-[200px]">
+                  {ticketData.city}
+                  {ticketData.district}
+                  {ticketData.address}
+                </dt>
               </dl>
               <dl className="self-stretch justify-start items-start gap-1 inline-flex basis-0">
                 <dd className="w-[68px] text-primary-300">時間</dd>
-                <dt className=" text-black tracking-widest">
-                  2025-01-11 ~ 2025-01-11
+                <dt className=" text-black break-words text-wrap w-[200px] tracking-widest">
+                  {ticketData.event_startdate} ~ {ticketData.event_enddate}
                 </dt>
               </dl>
               <dl className=" self-stretch justify-start items-start gap-1 inline-flex basis-0">
                 <dd className="w-[68px] text-primary-300">票價</dd>
-                <dt className="  text-black break-after-auto">$ 1,200 NTD</dt>
+                <dt className="  text-black break-words text-wrap w-[200px] break-after-auto">
+                  $ {ticketData.event_price} NTD
+                </dt>
               </dl>
             </div>
 
@@ -64,27 +71,35 @@ export default function TicketPageTicketFront() {
               <div className=" pb-4 flex-col self-stretch justify-center items-start gap-2 inline-flex">
                 <dl className="self-stretch justify-start items-start gap-1 inline-flex basis-0">
                   <dd className="w-[68px] text-primary-300">參加者</dd>
-                  <dt className=" w-[128px] text-black">馬宜庭</dt>
+                  <dt className=" w-[96px] text-black">
+                    {ticketData.user_name}
+                  </dt>
                 </dl>
                 <dl className="self-stretch justify-start items-start gap-1 inline-flex basis-0">
-                  <dd className="w-[68px] text-primary-300">訂單編號</dd>
-                  <dt className="w-[120px] basis-0 text-black break-words ">
-                    2412071627409658038150
+                  <dd className="w-[68px] text-primary-300">票券編號</dd>
+                  <dt className="w-[110px] basis-0 text-black break-words  text-wrap">
+                    {ticketData.ticket_code}
                   </dt>
                 </dl>
                 <dl className=" self-stretch justify-start items-start gap-1 inline-flex basis-0">
                   <dd className="w-[68px] text-primary-300">購買時間</dd>
-                  <dt className="w-[120px]  text-black  ">2025-01-11 09:00</dt>
+                  <dt className="w-[110px]  text-black break-words text-wrap  ">
+                    {ticketData.trade_date}
+                  </dt>
                 </dl>
               </div>
-              <div className="w-[88px] h-[88px] overflow-hidden">
-                <Image
-                  src="https://as1.ftcdn.net/v2/jpg/05/29/71/50/1000_F_529715063_RiB20Skm9T4qYoltG6VHkgLenfnP09Jl.jpg"
-                  alt="ticket qrcode"
-                  className="w-auto h-auto "
-                  width={88}
-                  height={88}
-                />
+              {/* 生成 QR Code */}
+              <div className="flex items-center justify-center w-[90px] h-[90px] p-2 ">
+                {ticketData?.ticket_code && (
+                  <QRCode
+                    value={ticketData.ticket_code} // QR Code 內容
+                    size={88} // ✅ 設定適當大小，避免超出
+                    bgColor="#E5E4E4" // 背景顏色
+                    fgColor="#3B4163" // 前景顏色
+                    level="H" // 容錯等級
+                    style={{ maxWidth: '100%', height: 'auto' }} // ✅ 防止裁切
+                  />
+                )}
               </div>
             </div>
           </div>

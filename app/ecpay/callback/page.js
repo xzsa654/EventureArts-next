@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
-import { useOrder } from '@/hooks/use-order' // 取得 useOrder
+// import { useOrder } from '@/hooks/use-order' // 取得 useOrder
 import { Button } from '@heroui/button'
 import { HiArrowRight } from 'react-icons/hi2'
 
@@ -14,103 +14,146 @@ export default function ECPayCallback() {
   const searchParams = useSearchParams()
   // const rtnCode = searchParams.get('RtnCode');
   const router = useRouter()
-  const { orderData, setOrderData } = useOrder() // 取出商品資訊
+  // const { orderData, setOrderData } = useOrder() // 取出商品資訊
   const [loading, setLoading] = useState(true) // 顯示 Loading 畫面
   const [error, setError] = useState(null)
-  const [orderResult, setOrderResult] = useState(null)
+  const [updateSuccess, setUpdateSuccess] = useState(false)
+  // const [orderResult, setOrderResult] = useState(null)
 
   // 取得付款資訊
   const RtnCode = searchParams.get('RtnCode') // 綠界回傳碼
   const MerchantTradeNo = searchParams.get('MerchantTradeNo') // 訂單號
+  const ticket_code = MerchantTradeNo.replace(/^od/, '') // 去掉 "od"
   const TradeAmt = searchParams.get('TradeAmt') // 交易金額
   const TradeDate = searchParams.get('TradeDate') // 交易時間
   const PaymentDate = searchParams.get('PaymentDate') // 付款時間
   const PaymentType = searchParams.get('PaymentType') // 付款方式
   const RtnMsg = searchParams.get('RtnMsg') // 回應訊息
-  const user_id = 3 // 這裡應該要從登入狀態取得用戶 ID
-  const user_name = '訪客' // 這裡應該要從登入狀態取得用戶名稱
 
+  // ===== 舊寫法用useOrder這個自定義hook(useContext)不行，因為去綠界會刷頁面所以資料會不見。 start =====
+  // useEffect(() => {
+  //   console.log('orderData in callback:', orderData) // 檢查 orderData 是否正確
+
+  //   if (RtnCode === '1') {
+  //     console.log('🔍 orderData in callback.js:', orderData)
+
+  // 如果 orderData 丟失，重新從 API 取得
+  //     if (!orderData) {
+  //       console.log('⚠️ orderData 丟失，重新從 API 取得資料...')
+  //       fetch(
+  //         `${API_BASE_URL}/order/api/getOrderDetails?merchant_trade_no=${MerchantTradeNo}`
+  //       )
+  //         .then((res) => res.json())
+  //         .then((data) => {
+  //           console.log('重新獲取 orderData:', data)
+  //           setOrderData(data)
+  //           sendOrderToDatabase(data)
+  //         })
+  //         .catch((err) => {
+  //           console.error('無法取得 orderData:', err)
+  //           setError('無法取得訂單資訊，請聯繫客服')
+  //           setLoading(false)
+  //         })
+  //     } else {
+  //       console.log('orderData 已存在，直接送到資料庫:', orderData)
+  //       sendOrderToDatabase(orderData)
+  //     }
+  //   }
+  // }, [RtnCode])
+
+  // const sendOrderToDatabase = (data) => {
+  //   const ticket_code = MerchantTradeNo.replace(/^od/, '')
+
+  //   fetch(`${API_BASE_URL}/order/api/createOrder`, {
+  //     method: 'POST',
+  //     headers: { 'Content-Type': 'application/json' },
+  //     body: JSON.stringify({
+  //       user_id,
+  //       user_name,
+  //       ticket_code,
+  //       merchant_trade_no: MerchantTradeNo,
+  //       trade_amt: TradeAmt,
+  //       trade_date: TradeDate,
+  //       payment_date: PaymentDate,
+  //       payment_type: PaymentType,
+  //       event_name: data.event_name || data.name, // 確保對應 key
+  //       event_price: data.event_price || data.price,
+  //       locat_name: data.locat_name,
+  //       city: data.city,
+  //       district: data.district,
+  //       address: data.address,
+  //       bd_name: data.bd_name,
+  //       bd_tel: data.bd_tel,
+  //       bd_email: data.bd_email,
+  //     }),
+  //   })
+  //     .then((res) => res.json())
+  //     .then((result) => {
+  //       console.log('✅ 訂單儲存成功:', result)
+  //       setOrderData(null)
+  //       setOrderResult(result)
+  //       setLoading(false)
+  //     })
+  //     .catch((err) => {
+  //       console.error('訂單儲存失敗:', err)
+  //       setError('無法儲存訂單，請聯繫客服')
+  //       setLoading(false)
+  //     })
+  // }
+  // ===== 舊寫法用useOrder這個自定義hook(useContext)不行，因為去綠界會刷頁面所以資料會不見。 end =====
+
+  // 當 `RtnCode=1`（付款成功），發送更新 API
   useEffect(() => {
-    console.log('orderData in callback:', orderData) // 檢查 orderData 是否正確
-
-    if (RtnCode === '1') {
-      console.log('🔍 orderData in callback.js:', orderData)
-
-      // 如果 orderData 丟失，重新從 API 取得
-      if (!orderData) {
-        console.log('⚠️ orderData 丟失，重新從 API 取得資料...')
-        fetch(
-          `${API_BASE_URL}/order/api/getOrderDetails?merchant_trade_no=${MerchantTradeNo}`
-        )
-          .then((res) => res.json())
-          .then((data) => {
-            console.log('重新獲取 orderData:', data)
-            setOrderData(data)
-            sendOrderToDatabase(data)
-          })
-          .catch((err) => {
-            console.error('無法取得 orderData:', err)
-            setError('無法取得訂單資訊，請聯繫客服')
-            setLoading(false)
-          })
-      } else {
-        console.log('orderData 已存在，直接送到資料庫:', orderData)
-        sendOrderToDatabase(orderData)
-      }
+    if (RtnCode === '1' && MerchantTradeNo) {
+      console.log(`付款成功，更新訂單 ${MerchantTradeNo}`)
+      updateOrderStatus()
     }
-  }, [RtnCode])
+  }, [RtnCode, MerchantTradeNo])
 
-  const sendOrderToDatabase = (data) => {
-    const ticket_code = MerchantTradeNo.replace(/^od/, '')
+  const updateOrderStatus = async () => {
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/order/api/updatePaymentStatus`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            merchant_trade_no: MerchantTradeNo,
+            trade_date: TradeDate,
+            payment_date: PaymentDate,
+            payment_type: PaymentType,
+          }),
+        }
+      )
 
-    fetch(`${API_BASE_URL}/order/api/createOrder`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        user_id,
-        user_name,
-        ticket_code,
-        merchant_trade_no: MerchantTradeNo,
-        trade_amt: TradeAmt,
-        trade_date: TradeDate,
-        payment_date: PaymentDate,
-        payment_type: PaymentType,
-        event_name: data.event_name || data.name, // 確保對應 key
-        event_price: data.event_price || data.price,
-        locat_name: data.locat_name,
-        city: data.city,
-        district: data.district,
-        address: data.address,
-        bd_name: data.bd_name,
-        bd_tel: data.bd_tel,
-        bd_email: data.bd_email,
-      }),
-    })
-      .then((res) => res.json())
-      .then((result) => {
-        console.log('✅ 訂單儲存成功:', result)
-        setOrderData(null)
-        setOrderResult(result)
-        setLoading(false)
-      })
-      .catch((err) => {
-        console.error('訂單儲存失敗:', err)
-        setError('無法儲存訂單，請聯繫客服')
-        setLoading(false)
-      })
+      const data = await response.json()
+
+      if (response.ok) {
+        console.log('訂單更新成功:', data)
+        setUpdateSuccess(true)
+      } else {
+        console.error('訂單更新失敗:', data)
+        setError(data.error || '更新失敗')
+      }
+    } catch (err) {
+      console.error('無法更新訂單:', err)
+      setError('伺服器錯誤，請稍後再試')
+    } finally {
+      setLoading(false)
+    }
   }
 
   if (loading) {
     return (
       <div className="w-full h-screen flex items-center justify-center bg-[#f7f5f1]">
-        <p className="text-lg font-bold">正在處理訂單，請勿關閉視窗...</p>
+        <p className="text-lg font-bold">正在更新訂單，請勿關閉視窗...</p>
       </div>
     )
   }
 
   if (error) {
     return (
-      <div className="w-full h-screen flex items-center justify-center bg-red-100 text-red-600">
+      <div className="w-full h-screen flex items-center justify-center text-red-600">
         <p className="text-lg font-bold">{error}</p>
       </div>
     )
@@ -171,9 +214,7 @@ export default function ECPayCallback() {
                 classNames={{}}
                 variant="light"
                 className="text-base text-yellow-600 hover:text-yellow-300 hover:scale-110 transition-transform duration-200 cursor-pointer flex items-center group gap-x-2 mt-5 px-7  data-[hover=true]:bg-primary-300"
-                onPress={() =>
-                  router.push(`/order/ticket?page=${orderResult?.ticket_code}`)
-                }
+                onPress={() => router.push(`/order/ticket/${ticket_code}`)}
               >
                 查看票券
                 <HiArrowRight className="transition-transform duration-300 ease-out group-hover:translate-x-3" />

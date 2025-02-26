@@ -3,7 +3,8 @@
 import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 
-export default function TicketPageTicketBack() {
+export default function TicketPageTicketBack({ ticketData }) {
+  if (!ticketData) return null
   return (
     <div className="relative w-[350px] h-[750px]">
       {/* SVG 票券背景 */}
@@ -30,19 +31,19 @@ export default function TicketPageTicketBack() {
             <div className="border-t-1 border-black pt-4 pb-10 flex-col self-stretch justify-center items-start gap-2">
               {/* 商家名稱 */}
               <h6 className="text-12 text-primary-300">商家名稱</h6>
-              <p className="text-16  font-medium">Noémie Fleurs 迷花島嶼</p>
+              <p className="text-16  font-medium">{ticketData.bd_name}</p>
             </div>
             {/* 商家聯絡資訊 */}
             <div className="border-t-1 border-black pt-4 pb-10 flex-col self-stretch justify-center items-start gap-2">
               <h6 className="text-12 text-primary-300">聯絡資訊</h6>
               <dl className="self-stretch justify-start items-start gap-1 inline-flex basis-0">
                 <dd className="w-[68px] text-primary-500">電話</dd>
-                <dt className=" text-black">0975636458</dt>
+                <dt className=" text-black">{ticketData.bd_tel}</dt>
               </dl>
               <dl className=" self-stretch justify-start items-start gap-1 inline-flex basis-0">
                 <dd className="w-[68px] text-primary-500">email</dd>
-                <dt className="  text-black break-after-auto">
-                  emglijlakis@test.com
+                <dt className="text-black break-words text-wrap w-[200px] tracking-widest">
+                  {ticketData.bd_email}
                 </dt>
               </dl>
             </div>
