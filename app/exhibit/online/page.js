@@ -38,11 +38,14 @@ export default function OnlineExhibitions() {
     sort: "asc",
     page: 1,
     perPage: 9,
-    exhibition_form: "online", // Always show online exhibitions
+    exhibition_form: "online",
   })
+
+  // Separate state for search input to prevent API calls on every keystroke
+  const [searchInput, setSearchInput] = useState("")
   const [showAdvancedSearch, setShowAdvancedSearch] = useState(false)
 
-  // Create query string from search params
+  // Update createQueryString to handle "asc" as default
   const createQueryString = useCallback((params) => {
     const queryParams = { ...params }
 
@@ -50,7 +53,7 @@ export default function OnlineExhibitions() {
     if (!queryParams.keyword) delete queryParams.keyword
     if (!queryParams.exhibitionStatus) delete queryParams.exhibitionStatus
     if (!queryParams.e_optionID && queryParams.e_optionID !== 0) delete queryParams.e_optionID
-    if (queryParams.sort === "asc") delete queryParams.sort
+    if (queryParams.sort === "asc") delete queryParams.sort // Changed from "desc" to "asc"
     // Always include exhibition_form=online
     queryParams.exhibition_form = "online"
 
@@ -68,9 +71,20 @@ export default function OnlineExhibitions() {
     isLoading,
   } = useSWR(`${API_BASE_URL}/exhibit?${createQueryString(searchParams)}`, fetcher)
 
-  // Handle search
+  // Handle search - now updates searchParams.keyword from searchInput
   const handleSearch = () => {
-    setSearchParams((prev) => ({ ...prev, page: 1 }))
+    setSearchParams((prev) => ({
+      ...prev,
+      keyword: searchInput, // Use the searchInput value
+      page: 1,
+    }))
+  }
+
+  // Handle Enter key press
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleSearch()
+    }
   }
 
   // Handle status change
@@ -113,8 +127,9 @@ export default function OnlineExhibitions() {
     window.scrollTo({ top: 0, behavior: "smooth" })
   }
 
-  // Reset filters
+  // Update reset filters to use "asc" as default sort
   const handleResetFilters = () => {
+    setSearchInput("") // Reset the search input
     setSearchParams({
       keyword: "",
       exhibitionStatus: "",
@@ -122,11 +137,11 @@ export default function OnlineExhibitions() {
       sort: "asc",
       page: 1,
       perPage: 9,
-      exhibition_form: "online", // Maintain the online filter when resetting
+      exhibition_form: "online",
     })
   }
 
-  // Check if any filters are active
+  // Update hasActiveFilters to check against "asc"
   const hasActiveFilters =
     searchParams.keyword !== "" ||
     searchParams.exhibitionStatus !== "" ||
@@ -151,12 +166,12 @@ export default function OnlineExhibitions() {
           >
             <h1 className="text-5xl font-black text-center mb-12 text-white">Online Exhibitions</h1>
 
-            {/* Search Section */}
+            {/* Search Section - Updated to use searchInput */}
             <div className="max-w-xl mx-auto mb-8">
               <Input
-                value={searchParams.keyword}
-                onChange={(e) => setSearchParams((prev) => ({ ...prev, keyword: e.target.value }))}
-                onKeyPress={(e) => e.key === "Enter" && handleSearch()}
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                onKeyPress={handleKeyPress}
                 classNames={{
                   label: "text-white/90",
                   input: ["bg-transparent", "text-white", "placeholder:text-white/60", "text-[13px]", "py-1", "h-9"],
@@ -174,7 +189,7 @@ export default function OnlineExhibitions() {
               />
             </div>
 
-            {/* Advanced search area */}
+            {/* Advanced search area - Updated with transition styles */}
             <div
               className={`max-w-xl mx-auto mb-8 overflow-hidden transition-all duration-300 ease-in-out ${
                 showAdvancedSearch ? "advanced-search-open" : "advanced-search-closed"
@@ -258,7 +273,7 @@ export default function OnlineExhibitions() {
               )}
             </div>
 
-            {/* Sort By dropdown */}
+            {/* Sort By dropdown - Updated default sort options */}
             <div className="flex justify-end mb-6">
               <Dropdown>
                 <DropdownTrigger>
@@ -270,8 +285,8 @@ export default function OnlineExhibitions() {
                   </Button>
                 </DropdownTrigger>
                 <DropdownMenu aria-label="Sort By" onAction={handleSortChange}>
-                  <DropdownItem key="desc">Newest to Oldest</DropdownItem>
                   <DropdownItem key="asc">Oldest to Newest</DropdownItem>
+                  <DropdownItem key="desc">Newest to Oldest</DropdownItem>
                 </DropdownMenu>
               </Dropdown>
             </div>

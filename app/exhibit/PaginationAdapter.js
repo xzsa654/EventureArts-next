@@ -11,6 +11,8 @@ export default function PaginationAdapter({ totalPages, onPageChange, currentPag
       classNames={{
           cursor:
             'bg-transparent text-black outline outline-3 outline-primary ',
+          item: 
+          '[&[data-hover=true]:not([data-active=true])]:bg-transparent ',
         }}
       radius="none"      
       showControls

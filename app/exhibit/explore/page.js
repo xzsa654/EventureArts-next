@@ -8,7 +8,6 @@ import { MdSort } from "react-icons/md"
 import useSWR from "swr"
 import "./styles.css"
 import PaginationAdapter from "../PaginationAdapter"
-import Loading from "../loading"
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3001"
 
@@ -38,6 +37,9 @@ export default function ExploreExhibitions() {
     perPage: 9,
     exhibition_form: "offline", // Add this line to always show offline exhibitions
   })
+
+  // Separate state for search input to prevent API calls on every keystroke
+  const [searchInput, setSearchInput] = useState("")
   const [showAdvancedSearch, setShowAdvancedSearch] = useState(false)
 
   // Create query string from search params
@@ -66,9 +68,20 @@ export default function ExploreExhibitions() {
     isLoading,
   } = useSWR(`${API_BASE_URL}/exhibit?${createQueryString(searchParams)}`, fetcher)
 
-  // Handle search
+  // Handle search - now updates searchParams.keyword from searchInput
   const handleSearch = () => {
-    setSearchParams((prev) => ({ ...prev, page: 1 }))
+    setSearchParams((prev) => ({
+      ...prev,
+      keyword: searchInput, // Use the searchInput value
+      page: 1,
+    }))
+  }
+
+  // Handle Enter key press
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleSearch()
+    }
   }
 
   // Handle status change
@@ -131,6 +144,7 @@ export default function ExploreExhibitions() {
 
   // Reset filters
   const handleResetFilters = () => {
+    setSearchInput("") // Reset the search input
     setSearchParams({
       keyword: "",
       exhibitionStatus: "",
@@ -157,7 +171,7 @@ export default function ExploreExhibitions() {
   }
 
   if (error) return <div className="text-white text-center pt-[200px]">Error loading exhibitions</div>
-  if (isLoading) return <Loading />
+  if (isLoading) return <div className="text-white text-center pt-[200px]">Loading...</div>
 
   return (
     <div
@@ -166,15 +180,15 @@ export default function ExploreExhibitions() {
     >
       <div className="min-h-screen bg-black bg-opacity-50">
         <div className="pt-[120px] px-4 py-8">
-          <div className="max-w-4xl mx-auto mb-16">
+          <div className="max-w-4xl mx-auto mb-2">
             <h1 className="text-4xl font-black text-center mb-12 text-white">Explore your exhibition</h1>
 
-            {/* Main search input */}
+            {/* Main search input - Updated to use searchInput */}
             <div className="max-w-xl mx-auto mb-8">
               <Input
-                value={searchParams.keyword}
-                onChange={(e) => setSearchParams((prev) => ({ ...prev, keyword: e.target.value }))}
-                onKeyPress={(e) => e.key === "Enter" && handleSearch()}
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                onKeyPress={handleKeyPress}
                 classNames={{
                   label: "text-white/90",
                   input: ["bg-transparent", "text-white", "placeholder:text-white/60", "text-[13px]", "py-1", "h-9"],
@@ -247,7 +261,7 @@ export default function ExploreExhibitions() {
             </div>
 
             {/* Search buttons */}
-            <div className="flex justify-center gap-3 mb-8">
+            <div className="flex justify-center gap-3 mb-3">
               <button
                 className="hero-btn text-[14px] px-4 py-1 rounded-full border border-white text-white"
                 onClick={() => setShowAdvancedSearch(!showAdvancedSearch)}
