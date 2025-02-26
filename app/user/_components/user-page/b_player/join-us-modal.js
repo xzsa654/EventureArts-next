@@ -8,8 +8,6 @@ import {
   Input,
   ScrollShadow,
   Textarea,
-  Select,
-  SelectItem,
   Link,
 } from '@heroui/react'
 import BPlayerJoinUsFiles from './join-us-files'
@@ -17,9 +15,22 @@ import { HiArrowNarrowRight } from 'react-icons/hi'
 import { useAuth } from '@/hooks/use-auth'
 import { ADDBRAND } from '@/lib/brands-api'
 
-export default function JoinUsModal(props) {
+export default function JoinUsModal() {
   const [logoImg, setLogoImg] = useState('')
   const [errorMessage, setErrorMessage] = useState(false)
+
+  const [errorMsg, setErrorMsg] = useState({
+    bd_address: '',
+    bd_email: '',
+    bd_img: '',
+    bd_info: '',
+    bd_logo: '',
+    bd_name: '',
+    bd_tel: '',
+    bd_website: '',
+    user_id: '',
+  })
+
   const formRef = useRef()
   const { getAuthHeader, auth } = useAuth()
   const { user_id } = auth
@@ -33,7 +44,6 @@ export default function JoinUsModal(props) {
   const mySubmit = async (e) => {
     e.preventDefault()
     const fm = new FormData(e.target)
-    // console.log(Object.fromEntries(fm))
 
     const r = await fetch(ADDBRAND, {
       method: 'POST',
@@ -43,7 +53,13 @@ export default function JoinUsModal(props) {
       },
     })
     const res = await r.json()
-    console.log(res)
+    if (!res.success) {
+      // 展開錯誤的陣列將值丟到一個物件內
+      const mergedObject = Object.assign({}, ...res.message)
+      setErrorMsg((prev) => {
+        return { ...prev, ...mergedObject }
+      })
+    }
   }
 
   const prompt = <div className="text-red-500 text-16">* 為必填欄位</div>
@@ -73,10 +89,10 @@ export default function JoinUsModal(props) {
                 'text-white group-data-[focus=true]:text-white group-data-[filled-within=true]:text-white after:text-red-500',
               input:
                 'group-data-[focus=true]:text-white group-data-[has-value=true]:text-white',
-              errorMessage: 'text-red-500',
+              errorMsg: 'text-red-500',
             }}
           ></Input>
-
+          <div className="text-red ">{errorMsg.bd_name}</div>
           <Input
             isRequired
             label="品牌email"
@@ -95,13 +111,14 @@ export default function JoinUsModal(props) {
                 'text-white group-data-[focus=true]:text-white group-data-[filled-within=true]:text-white after:text-red-500',
               input:
                 'group-data-[focus=true]:text-white group-data-[has-value=true]:text-white',
-              errorMessage: 'text-red-500',
+              errorMsg: 'text-red-500',
             }}
           ></Input>
-
+          <div className="text-red ">{errorMsg.bd_email}</div>
           <Textarea
             radius="none"
             name="bd_info"
+            isRequired
             variant="bordered"
             className="w-full focus:text-white  group-data-[focus=true]:text-white"
             label="品牌資訊"
@@ -112,7 +129,7 @@ export default function JoinUsModal(props) {
                 'group-data-[focus=true]:text-white group-data-[has-value=true]:text-white',
             }}
           />
-
+          <div className="text-red ">{errorMsg.bd_info}</div>
           <Input
             label="聯絡電話"
             variant="underlined"
@@ -126,7 +143,7 @@ export default function JoinUsModal(props) {
                 'group-data-[focus=true]:text-white group-data-[has-value=true]:text-white',
             }}
           ></Input>
-
+          <div className="text-red ">{errorMsg.bd_tel}</div>
           <Input
             label="地址"
             variant="underlined"
@@ -140,7 +157,7 @@ export default function JoinUsModal(props) {
                 'group-data-[focus=true]:text-white group-data-[has-value=true]:text-white',
             }}
           ></Input>
-
+          <div className="text-red ">{errorMsg.bd_address}</div>
           <Input
             label="網站URL"
             variant="underlined"
@@ -154,6 +171,7 @@ export default function JoinUsModal(props) {
                 'group-data-[focus=true]:text-white group-data-[has-value=true]:text-white',
             }}
           ></Input>
+          <div className="text-red ">{errorMsg.bd_website}</div>
         </div>
       </Form>
     </ScrollShadow>
