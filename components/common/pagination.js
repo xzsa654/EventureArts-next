@@ -9,6 +9,7 @@ export default function OurPagination({ total = 15 }) {
         classNames={{
           cursor:
             'bg-transparent text-black outline outline-3 outline-primary ',
+          item: '[&[data-hover=true]:not([data-active=true])]:bg-transparent ',
         }}
         radius="none"
         total={total}

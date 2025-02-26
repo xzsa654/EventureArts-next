@@ -18,7 +18,7 @@ export default function Mang({ type }) {
       <div className="flex-auto ">
         {type == 'course' ? <COMangContent /> : <ExMangContent />}
       </div>
-      <div className="flex flex-col gap-8 items-center justify-center">
+      <div className="flex flex-col gap-8 items-center justify-center ">
         <OurPagination />
         <div className="flex gap-4">
           <Button

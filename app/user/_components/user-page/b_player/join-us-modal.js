@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import ModalLayout from '@/components/common/login/layout'
 import {
   useDisclosure,
@@ -8,62 +8,72 @@ import {
   Input,
   ScrollShadow,
   Textarea,
-  Button,
   Select,
   SelectItem,
   Link,
 } from '@heroui/react'
-import { PiUploadSimple } from 'react-icons/pi'
+import BPlayerJoinUsFiles from './join-us-files'
 import { HiArrowNarrowRight } from 'react-icons/hi'
+import { useAuth } from '@/hooks/use-auth'
+import { ADDBRAND } from '@/lib/brands-api'
 
-export default function ComponentsJoinUsModal(props) {
+export default function JoinUsModal(props) {
+  const [logoImg, setLogoImg] = useState('')
+  const [errorMessage, setErrorMessage] = useState(false)
+  const formRef = useRef()
+  const { getAuthHeader, auth } = useAuth()
+  const { user_id } = auth
   const title = '成為品牌'
   const tips = '成為品牌'
   const { isOpen, onOpenChange } = useDisclosure()
   useEffect(() => {
     onOpenChange()
   }, [])
-  const prompt = <div className="text-yellow text-16">* 為必填欄位</div>
+
+  const mySubmit = async (e) => {
+    e.preventDefault()
+    const fm = new FormData(e.target)
+    // console.log(Object.fromEntries(fm))
+
+    const r = await fetch(ADDBRAND, {
+      method: 'POST',
+      body: fm,
+      headers: {
+        ...getAuthHeader(),
+      },
+    })
+    const res = await r.json()
+    console.log(res)
+  }
+
+  const prompt = <div className="text-red-500 text-16">* 為必填欄位</div>
   // 必填:name email info logo type
   const formBody = (
     <ScrollShadow className=" w-full max-h-[300px]">
-      <Form className='className="w-full h-full flex-row gap-5  flex  justify-between items-center"'>
+      <Form
+        onSubmit={mySubmit}
+        ref={formRef}
+        validationBehavior="native"
+        className='className="w-full h-full flex-row gap-5  flex  justify-between items-center"'
+      >
         <div className="w-1/2 h-full  ">
-          <div className="text-16 text-yellow mb-3">
-            ‼️限制(JPG/各檔案最大1mb )
-          </div>
-          <div className='mb-2 text-white after:content-["*"] after:text-red '>
-            品牌LOGO
-          </div>
-          <div className=" w-full h-1/2 flex items-center gap-5  ">
-            <div className=" w-[100px] flex justify-center items-center aspect-square ">
-              <Button isIconOnly className="w-full h-full" radius="none">
-                <PiUploadSimple size={20} />
-                上傳照片
-              </Button>
-            </div>
-          </div>
-          <div className="text-white my-4">品牌圖片</div>
-          <div className=" w-full h-[100px]">
-            <Button radius="none" isIconOnly className="h-full w-full">
-              <PiUploadSimple size={20} />
-              上傳照片
-            </Button>
-          </div>
+          <BPlayerJoinUsFiles {...{ logoImg, setLogoImg, errorMessage }} />
         </div>
         <div className="w-1/2 flex flex-col gap-3">
-          <Input name="member_id" className="hidden"></Input>
+          <Input name="user_id" className="hidden" value={user_id}></Input>
           <Input
             isRequired
             label="品牌名稱"
             variant="underlined"
             type="text"
+            name="bd_name"
             className="w-full"
             classNames={{
               label:
                 'text-white group-data-[focus=true]:text-white group-data-[filled-within=true]:text-white after:text-red-500',
               input:
                 'group-data-[focus=true]:text-white group-data-[has-value=true]:text-white',
+              errorMessage: 'text-red-500',
             }}
           ></Input>
 
@@ -71,51 +81,43 @@ export default function ComponentsJoinUsModal(props) {
             isRequired
             label="品牌email"
             variant="underlined"
-            type="email"
+            name="bd_email"
+            validate={(value) => {
+              const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+              if (!regex.test(value)) {
+                return '請輸入有效的 Email 格式'
+              }
+            }}
+            type="text"
             className="w-full"
             classNames={{
               label:
                 'text-white group-data-[focus=true]:text-white group-data-[filled-within=true]:text-white after:text-red-500',
               input:
                 'group-data-[focus=true]:text-white group-data-[has-value=true]:text-white',
+              errorMessage: 'text-red-500',
             }}
           ></Input>
 
           <Textarea
             radius="none"
-            isRequired
-            name="profile"
+            name="bd_info"
             variant="bordered"
-            className="max-w-full focus:text-white  group-data-[focus=true]:text-white"
+            className="w-full focus:text-white  group-data-[focus=true]:text-white"
             label="品牌資訊"
             classNames={{
               label:
-                'text-white group-data-[focus=true]:text-white group-data-[filled-within=true]:text-white after:text-red-500',
+                'text-white group-data-[focus=true]:text-white group-data-[filled-within=true]:text-white',
               input:
                 'group-data-[focus=true]:text-white group-data-[has-value=true]:text-white',
             }}
           />
 
-          <Select
-            isRequired
-            label="品牌類型"
-            variant="underlined"
-            className="w-full"
-            classNames={{
-              label:
-                'text-white group-data-[focus=true]:text-white group-data-[filled-within=true]:text-white after:text-red-500',
-              input:
-                'group-data-[focus=true]:text-white group-data-[has-value=true]:text-white',
-            }}
-          >
-            <SelectItem value={'exhibition'}>展覽</SelectItem>
-            <SelectItem value={'course'}>課程</SelectItem>
-          </Select>
-
           <Input
             label="聯絡電話"
             variant="underlined"
             type="text"
+            name="bd_tel"
             className="w-full"
             classNames={{
               label:
@@ -129,6 +131,7 @@ export default function ComponentsJoinUsModal(props) {
             label="地址"
             variant="underlined"
             type="text"
+            name="bd_address"
             className="w-full"
             classNames={{
               label:
@@ -142,6 +145,7 @@ export default function ComponentsJoinUsModal(props) {
             label="網站URL"
             variant="underlined"
             type="text"
+            name="bd_website"
             className="w-full"
             classNames={{
               label:
@@ -157,11 +161,15 @@ export default function ComponentsJoinUsModal(props) {
   const footer = (
     <div className="w-full justify-end text-white flex gap-1">
       <Link
+        onPress={() => {
+          formRef.current.requestSubmit()
+          if (!logoImg) setErrorMessage(true)
+        }}
         href={'#'}
         className=" text-white flex justify-center items-center "
       >
         完成註冊
-        <div className="">
+        <div>
           <HiArrowNarrowRight size={20} color="white" />
         </div>
       </Link>
@@ -169,8 +177,6 @@ export default function ComponentsJoinUsModal(props) {
   )
   return (
     <>
-      <div>Components JoinUsModal</div>
-
       <ModalLayout
         {...{
           footer,
