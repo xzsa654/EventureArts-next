@@ -127,6 +127,13 @@ export function AuthContextProvider({ children }) {
     setAuth({ ...defaultAuth })
   }
 
+  // 變成品牌後更新setAuth
+  const beginBrand = () => {
+    setAuth((prev) => {
+      return { ...prev, user_role: 'brand' }
+    })
+  }
+
   // 驗證登入狀態憑證
   const getAuthHeader = () => {
     if (!auth.token) {
@@ -148,6 +155,7 @@ export function AuthContextProvider({ children }) {
           registerDataHandler,
           register,
           getAuthHeader,
+          beginBrand,
         }}
       >
         {children}

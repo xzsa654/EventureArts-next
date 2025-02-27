@@ -8,17 +8,19 @@ import {
   Input,
   ScrollShadow,
   Textarea,
+  addToast,
   Link,
 } from '@heroui/react'
 import BPlayerJoinUsFiles from './join-us-files'
 import { HiArrowNarrowRight } from 'react-icons/hi'
 import { useAuth } from '@/hooks/use-auth'
 import { ADDBRAND } from '@/lib/brands-api'
+import { useRouter } from 'next/navigation'
 
 export default function JoinUsModal() {
   const [logoImg, setLogoImg] = useState('')
   const [errorMessage, setErrorMessage] = useState(false)
-
+  const router = useRouter()
   const [errorMsg, setErrorMsg] = useState({
     bd_address: '',
     bd_email: '',
@@ -32,13 +34,13 @@ export default function JoinUsModal() {
   })
 
   const formRef = useRef()
-  const { getAuthHeader, auth } = useAuth()
-  const { user_id } = auth
+  const { getAuthHeader, auth, beginBrand } = useAuth()
+  const { user_id, user_role } = auth
   const title = '成為品牌'
   const tips = '成為品牌'
   const { isOpen, onOpenChange } = useDisclosure()
   useEffect(() => {
-    onOpenChange()
+    if (user_role == 'customer') onOpenChange()
   }, [])
 
   const mySubmit = async (e) => {
@@ -54,11 +56,29 @@ export default function JoinUsModal() {
     })
     const res = await r.json()
     if (!res.success) {
+      addToast({
+        radius: 'lg',
+        description: '註冊失敗',
+        color: 'danger',
+        timeout: 10000,
+      })
+      console.log(res)
+
       // 展開錯誤的陣列將值丟到一個物件內
       const mergedObject = Object.assign({}, ...res.message)
       setErrorMsg((prev) => {
         return { ...prev, ...mergedObject }
       })
+    } else {
+      addToast({
+        radius: 'lg',
+        description: '註冊成功！',
+        color: 'success',
+        timeout: 10000,
+      })
+      onOpenChange(false)
+      // 將 auth 的 role 更改
+      beginBrand()
     }
   }
 
@@ -73,7 +93,9 @@ export default function JoinUsModal() {
         className='className="w-full h-full flex-row gap-5  flex  justify-between items-center"'
       >
         <div className="w-1/2 h-full  ">
-          <BPlayerJoinUsFiles {...{ logoImg, setLogoImg, errorMessage }} />
+          <BPlayerJoinUsFiles
+            {...{ logoImg, setLogoImg, errorMessage, errorMsg }}
+          />
         </div>
         <div className="w-1/2 flex flex-col gap-3">
           <Input name="user_id" className="hidden" value={user_id}></Input>
@@ -89,7 +111,7 @@ export default function JoinUsModal() {
                 'text-white group-data-[focus=true]:text-white group-data-[filled-within=true]:text-white after:text-red-500',
               input:
                 'group-data-[focus=true]:text-white group-data-[has-value=true]:text-white',
-              errorMsg: 'text-red-500',
+              errorMessage: 'text-red-500',
             }}
           ></Input>
           <div className="text-red ">{errorMsg.bd_name}</div>
@@ -111,7 +133,7 @@ export default function JoinUsModal() {
                 'text-white group-data-[focus=true]:text-white group-data-[filled-within=true]:text-white after:text-red-500',
               input:
                 'group-data-[focus=true]:text-white group-data-[has-value=true]:text-white',
-              errorMsg: 'text-red-500',
+              errorMessage: 'text-red-500',
             }}
           ></Input>
           <div className="text-red ">{errorMsg.bd_email}</div>
@@ -124,9 +146,10 @@ export default function JoinUsModal() {
             label="品牌資訊"
             classNames={{
               label:
-                'text-white group-data-[focus=true]:text-white group-data-[filled-within=true]:text-white',
+                'text-white group-data-[focus=true]:text-white group-data-[filled-within=true]:text-white after:text-red-500',
               input:
                 'group-data-[focus=true]:text-white group-data-[has-value=true]:text-white',
+              errorMessage: 'text-red-500',
             }}
           />
           <div className="text-red ">{errorMsg.bd_info}</div>
@@ -134,6 +157,14 @@ export default function JoinUsModal() {
             label="聯絡電話"
             variant="underlined"
             type="text"
+            validate={(value) => {
+              // 選填欄位所以如果沒有填寫則跳過驗證
+              if (!value) return
+              const regex = /^(02|09)(-?\d{4})(-?\d{4})$/
+              if (!regex.test(value)) {
+                return '請輸入正確的電話號碼( 02 / 09 開頭)'
+              }
+            }}
             name="bd_tel"
             className="w-full"
             classNames={{
@@ -141,6 +172,7 @@ export default function JoinUsModal() {
                 'text-white group-data-[focus=true]:text-white group-data-[filled-within=true]:text-white',
               input:
                 'group-data-[focus=true]:text-white group-data-[has-value=true]:text-white',
+              errorMessage: 'text-red-500',
             }}
           ></Input>
           <div className="text-red ">{errorMsg.bd_tel}</div>
@@ -149,12 +181,19 @@ export default function JoinUsModal() {
             variant="underlined"
             type="text"
             name="bd_address"
+            validate={(value) => {
+              if (!value) return
+              const regex =
+                /^(台|臺)北市(中正區|大同區|中山區|松山區|大安區|萬華區|信義區|士林區|北投區|內湖區|南港區|文山區).+/
+              if (!regex.test(value)) return '地址限制於台北市'
+            }}
             className="w-full"
             classNames={{
               label:
                 'text-white group-data-[focus=true]:text-white group-data-[filled-within=true]:text-white',
               input:
                 'group-data-[focus=true]:text-white group-data-[has-value=true]:text-white',
+              errorMessage: 'text-red-500',
             }}
           ></Input>
           <div className="text-red ">{errorMsg.bd_address}</div>
@@ -163,12 +202,18 @@ export default function JoinUsModal() {
             variant="underlined"
             type="text"
             name="bd_website"
+            validate={(value) => {
+              if (!value) return
+              const regex = /^https?:\/\/([\w-]+\.)*example\.com/
+              if (!regex.test(value)) return '無效的 URL'
+            }}
             className="w-full"
             classNames={{
               label:
                 'text-white group-data-[focus=true]:text-white group-data-[filled-within=true]:text-white',
               input:
                 'group-data-[focus=true]:text-white group-data-[has-value=true]:text-white',
+              errorMessage: 'text-red-500',
             }}
           ></Input>
           <div className="text-red ">{errorMsg.bd_website}</div>

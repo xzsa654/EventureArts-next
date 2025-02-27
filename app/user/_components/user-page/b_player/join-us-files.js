@@ -7,6 +7,7 @@ export default function BPlayerJoinUsFiles({
   logoImg,
   setLogoImg,
   errorMessage,
+  errorMsg,
 }) {
   const [bdImg, setBdImg] = useState('')
 
@@ -38,25 +39,28 @@ export default function BPlayerJoinUsFiles({
       >
         品牌LOGO
       </div>
+      <div className="text-red">{errorMsg.bd_logo}</div>
       <span className="text-red mb-2">{errorMessage}</span>
       <div className=" w-full h-1/2 flex items-center gap-5  ">
         <div className=" w-[100px] flex justify-center items-center aspect-square ">
           {logoImg ? (
-            <Button
-              radius="none"
-              className="w-full h-full p-0"
-              onPress={() => {
-                logoRef.current.click()
-              }}
-            >
-              <Image
-                src={logoImg}
-                alt="logo"
-                width={100}
-                height={100}
+            <>
+              <Button
                 radius="none"
-              />
-            </Button>
+                className="w-full h-full p-0"
+                onPress={() => {
+                  logoRef.current.click()
+                }}
+              >
+                <Image
+                  src={logoImg}
+                  alt="logo"
+                  width={100}
+                  height={100}
+                  radius="none"
+                />
+              </Button>
+            </>
           ) : (
             <Button
               isIconOnly
@@ -74,6 +78,7 @@ export default function BPlayerJoinUsFiles({
             isRequired
             name="bd_logo"
             type="file"
+            accept="image/jpeg"
             className="hidden"
             onChange={uploadsHandle}
             ref={logoRef}
@@ -81,29 +86,33 @@ export default function BPlayerJoinUsFiles({
         </div>
       </div>
       <div className="text-white my-4">品牌圖片</div>
+      <div className="text-red">{errorMsg.bd_img}</div>
       <div className=" w-full h-[100px]">
         <Input
           name="bd_img"
           type="file"
           className="hidden"
+          accept="image/jpeg"
           onChange={uploadsHandle}
           ref={imgRef}
         ></Input>
         {bdImg ? (
-          <Button
-            onPress={() => {
-              imgRef.current.click()
-            }}
-            className="w-full h-full p-0 flex-none"
-            radius="none"
-          >
-            <Image
-              src={bdImg}
+          <>
+            <Button
+              onPress={() => {
+                imgRef.current.click()
+              }}
+              className="w-full h-full p-0 flex-none"
               radius="none"
-              alt="bd_img"
-              className="w-full h-full"
-            />
-          </Button>
+            >
+              <Image
+                src={bdImg}
+                radius="none"
+                alt="bd_img"
+                className="w-full h-full"
+              />
+            </Button>
+          </>
         ) : (
           <Button
             radius="none"
