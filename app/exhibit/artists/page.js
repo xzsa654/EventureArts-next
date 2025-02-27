@@ -1,7 +1,6 @@
 "use client"
-
-import { useState } from "react"
 import Image from "next/image"
+import Link from "next/link"
 import { motion } from "framer-motion"
 import useSWR from "swr"
 
@@ -13,15 +12,21 @@ const fetcher = (url) => fetch(url).then((res) => res.json())
 
 export default function ArtistsPage() {
   const { data, error, isLoading } = useSWR(API_ENDPOINT, fetcher)
-  const [selectedArtist, setSelectedArtist] = useState(null)
+  const artists = data?.success ? data.data : []
 
   if (isLoading) {
     return (
       <div className="min-h-screen p-6 mt-[80px]">
-        <h1 className="text-4xl font-bold mb-8">Artists</h1>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="text-center mb-16">
+          <p className="text-sm mb-2">(アーティスト)</p>
+          <h1 className="text-4xl font-bold">Artist</h1>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
           {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-            <div key={i} className="aspect-square bg-gray-100 rounded-lg animate-pulse"></div>
+            <div key={i} className="space-y-4">
+              <div className="aspect-[4/5] bg-gray-100 animate-pulse" />
+              <div className="h-4 bg-gray-100 animate-pulse w-24" />
+            </div>
           ))}
         </div>
       </div>
@@ -31,76 +36,53 @@ export default function ArtistsPage() {
   if (error) {
     return (
       <div className="min-h-screen p-6 mt-[80px]">
-        <h1 className="text-4xl font-bold mb-8">Artists</h1>
-        <div className="text-red-500">Failed to load artists. Please try again later.</div>
+        <div className="text-center mb-16">
+          <p className="text-sm mb-2">(アーティスト)</p>
+          <h1 className="text-4xl font-bold">Artist</h1>
+        </div>
+        <div className="text-red-500 text-center">Failed to load artists. Please try again later.</div>
       </div>
     )
   }
 
-  const artists = data?.success ? data.data : []
-
   return (
     <div className="min-h-screen p-6 mt-[80px]">
-      <h1 className="text-4xl font-bold mb-8">Artists</h1>
+      <div className="text-center mb-16">
+        <p className="text-sm mb-2">(アーティスト)</p>
+        <h1 className="text-4xl font-bold">Artist</h1>
+      </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
         {artists.map((artist) => (
           <motion.div
             key={artist.bd_id}
-            className="group relative aspect-square cursor-pointer"
-            whileHover={{ scale: 1.05 }}
-            onClick={() => setSelectedArtist(artist)}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="group space-y-4"
           >
-            <div className="relative w-full h-full overflow-hidden rounded-lg shadow-lg">
+            <div className="relative aspect-[4/5] overflow-hidden bg-gray-50">
               <Image
                 src={artist.bd_logo ? `${IMAGE_BASE_URL}/${artist.bd_logo}` : "/placeholder.svg"}
                 alt={artist.bd_name}
                 fill
-                className="object-cover transition-transform duration-500 group-hover:scale-110"
+                className="object-cover transition-all duration-700 group-hover:scale-105"
                 priority
                 unoptimized={true}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <div className="absolute bottom-0 left-0 p-6 w-full">
-                  <h2 className="text-white text-xl font-bold">{artist.bd_name}</h2>
-                </div>
+              <div className="absolute inset-0 bg-black/0 transition-all duration-700 group-hover:bg-black/20" />
+              <div className="absolute bottom-0 left-0 w-full p-4 flex justify-end opacity-0 transform translate-y-full transition-all duration-500 group-hover:opacity-100 group-hover:translate-y-0">
+                <motion.span className="text-white flex items-center gap-2" whileHover={{ x: 5 }}>
+                  View More →
+                </motion.span>
               </div>
             </div>
+            <Link href={`/artist/${artist.bd_id}`} className="block text-lg hover:opacity-70 transition-opacity">
+              {artist.bd_name}
+            </Link>
           </motion.div>
         ))}
       </div>
-
-      {/* Artist Modal */}
-      {selectedArtist && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50"
-          onClick={() => setSelectedArtist(null)}
-        >
-          <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.9, opacity: 0 }}
-            className="bg-white rounded-xl p-6 max-w-2xl w-full"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="relative aspect-video mb-4 rounded-lg overflow-hidden">
-              <Image
-                src={selectedArtist.bd_logo ? `${IMAGE_BASE_URL}/${selectedArtist.bd_logo}` : "/placeholder.svg"}
-                alt={selectedArtist.bd_name}
-                fill
-                className="object-cover"
-                priority
-                unoptimized={true}
-              />
-            </div>
-            <h2 className="text-2xl font-bold mb-4">{selectedArtist.bd_name}</h2>
-            {/* Add more artist details here */}
-          </motion.div>
-        </motion.div>
-      )}
     </div>
   )
 }
