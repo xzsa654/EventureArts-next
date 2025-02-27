@@ -2,7 +2,7 @@
 
 import { Pagination } from "@heroui/react"
 
-export default function PaginationAdapter({ totalPages, onPageChange, currentPage }) {
+export default function OurPagination({ totalPages, onPageChange, currentPage }) {
   return (
     <Pagination
       total={totalPages}
