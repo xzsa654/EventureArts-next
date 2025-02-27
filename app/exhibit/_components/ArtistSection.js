@@ -1,85 +1,134 @@
 "use client"
 
-import { useState, useEffect, useRef, useCallback } from "react"
+import { useState } from "react"
 import Image from "next/image"
-import { ChevronLeftIcon, ChevronRightIcon, ArrowLongRightIcon } from "@heroicons/react/24/outline"
-import { motion, AnimatePresence } from "framer-motion"
+import { ArrowLongRightIcon } from "@heroicons/react/24/outline"
+import { motion } from "framer-motion"
 import Link from "next/link"
 import useSWR from "swr"
 
 // Base URLs for API and images
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3001"
-const API_ENDPOINT = `${API_BASE_URL}/exhibit/artists` // Full API endpoint
-const IMAGE_BASE_URL = `${API_BASE_URL}/uploads/chu-uploads` // Full image base URL
+const API_ENDPOINT = `${API_BASE_URL}/exhibit/artists`
+const IMAGE_BASE_URL = `${API_BASE_URL}/uploads/chu-uploads`
 
 // Fetcher function for useSWR
 const fetcher = (url) => fetch(url).then((res) => res.json())
 
+// Animation variants for cards
+const cardVariants = {
+  hidden: {
+    opacity: 0,
+    y: 20,
+  },
+  visible: (i) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      delay: i * 0.05,
+      duration: 0.4,
+      ease: [0.16, 1, 0.3, 1],
+    },
+  }),
+}
+
+// Define different card sizes with varying widths and heights
+const cardSizes = [
+  { width: "w-[180px]", height: "h-[220px]" }, // Normal
+  { width: "w-[240px]", height: "h-[180px]" }, // Wide
+  { width: "w-[200px]", height: "h-[260px]" }, // Tall
+  { width: "w-[220px]", height: "h-[200px]" }, // Medium
+  { width: "w-[160px]", height: "h-[240px]" }, // Narrow tall
+]
+
+function ArtistCard({ artist, index, size }) {
+  const [isFlipped, setIsFlipped] = useState(false)
+
+  return (
+    <motion.div
+      className={`relative cursor-pointer perspective ${size.width} ${size.height}`}
+      variants={cardVariants}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "-50px" }}
+      custom={index}
+      style={{
+        margin: `${Math.random() * 10}px`, // Random margin for staggered effect
+      }}
+    >
+      <motion.div
+        className="w-full h-full relative preserve-3d"
+        animate={{ rotateY: isFlipped ? 180 : 0 }}
+        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        onHoverStart={() => setIsFlipped(true)}
+        onHoverEnd={() => setIsFlipped(false)}
+      >
+        {/* Front of card */}
+        <div className="absolute w-full h-full backface-hidden">
+          <div className="relative w-full h-full overflow-hidden rounded-lg shadow-lg">
+            <Image
+              src={artist.bd_logo ? `${IMAGE_BASE_URL}/${artist.bd_logo}` : "/placeholder.svg"}
+              alt={artist.bd_name}
+              fill
+              className="object-cover"
+              priority
+              unoptimized={true}
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent">
+              <div className="absolute bottom-0 left-0 p-4 w-full">
+                <h3 className="text-white text-lg font-bold leading-tight">{artist.bd_name}</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Back of card */}
+        <div className="absolute w-full h-full backface-hidden rotate-y-180 bg-white rounded-lg shadow-lg overflow-hidden">
+          <div className="p-4 flex flex-col h-full">
+            <h3 className="text-lg font-bold mb-2">{artist.bd_name}</h3>
+            <Link
+              href={`/artist/${artist.bd_id}`}
+              className="mt-auto inline-flex items-center text-sm text-blue-600 hover:text-blue-800"
+            >
+              View Profile
+              <ArrowLongRightIcon className="w-4 h-4 ml-1" />
+            </Link>
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
+  )
+}
+
 export default function ArtistSection() {
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const [direction, setDirection] = useState(0)
-  const carouselRef = useRef(null)
-
-  // Fetch artists from the backend using the full API endpoint
   const { data, error, isLoading } = useSWR(API_ENDPOINT, fetcher)
-
-  // Extract artists from the response using the correct data structure
   const artists = data?.success ? data.data : []
 
-  const visibleArtists = 3 // Number of visible artists at once
-  const maxIndex = Math.max(0, artists.length - visibleArtists)
-
-  const nextSlide = useCallback(() => {
-    setDirection(1)
-    if (currentIndex < maxIndex) {
-      setCurrentIndex((prevIndex) => prevIndex + 1)
-    } else {
-      setCurrentIndex(0) // Loop back to start
-    }
-  }, [currentIndex, maxIndex])
-
-  const prevSlide = useCallback(() => {
-    setDirection(-1)
-    if (currentIndex > 0) {
-      setCurrentIndex((prevIndex) => prevIndex - 1)
-    } else {
-      setCurrentIndex(maxIndex) // Loop to end
-    }
-  }, [currentIndex, maxIndex])
-
-  // Auto rotate carousel
-  useEffect(() => {
-    if (artists.length <= visibleArtists) return // Don't auto-rotate if all artists are visible
-
-    const interval = setInterval(() => {
-      nextSlide()
-    }, 5000)
-
-    return () => clearInterval(interval)
-  }, [nextSlide, artists.length])
+  // Limit the number of displayed artists and assign random sizes
+  const displayLimit = 8 // Show max 8 artists
+  const displayedArtists = artists.slice(0, displayLimit).map((artist, index) => ({
+    ...artist,
+    size: cardSizes[Math.floor(Math.random() * cardSizes.length)], // Random size
+  }))
 
   // Handle loading state
   if (isLoading) {
     return (
       <section className="p-6">
-        <div className="flex justify-between items-center mb-10">
+        <div className="flex justify-between items-center mb-6">
           <h2 className="text-3xl font-bold">Artists</h2>
         </div>
-        <div className="grid grid-cols-3 gap-6">
-          {[1, 2, 3].map((i) => (
-            <div key={i} className="aspect-[4/3] bg-gray-100 animate-pulse rounded-lg"></div>
-          ))}
+        <div className="masonry-grid h-[750px] bg-gray-50 rounded-lg animate-pulse">
+          <div className="flex items-center justify-center h-full text-gray-400">Loading artists...</div>
         </div>
       </section>
     )
   }
 
-  // Handle error state
   if (error) {
-    console.error("Error loading artists:", error)
     return (
       <section className="p-6">
-        <div className="flex justify-between items-center mb-10">
+        <div className="flex justify-between items-center mb-6">
           <h2 className="text-3xl font-bold">Artists</h2>
         </div>
         <div className="text-red-500">Failed to load artists. Please try again later.</div>
@@ -87,11 +136,10 @@ export default function ArtistSection() {
     )
   }
 
-  // If no artists found
   if (!artists.length) {
     return (
       <section className="p-6">
-        <div className="flex justify-between items-center mb-10">
+        <div className="flex justify-between items-center mb-6">
           <h2 className="text-3xl font-bold">Artists</h2>
         </div>
         <div className="text-gray-500">No artists found.</div>
@@ -101,77 +149,21 @@ export default function ArtistSection() {
 
   return (
     <section className="p-6">
-      <div className="flex justify-between items-center mb-10">
+      <div className="flex justify-between items-center mb-6">
         <h2 className="text-3xl font-bold">Artists</h2>
-        <Link href="/artists" className="text-xl font-bold flex items-center gap-2 hover:opacity-70 cursor-pointer">
+        <Link
+          href="/exhibit/artists"
+          className="text-xl font-bold flex items-center gap-2 hover:opacity-70 cursor-pointer"
+        >
           See MORE
           <ArrowLongRightIcon className="w-5 h-5" />
         </Link>
       </div>
 
-      <div className="relative overflow-hidden" ref={carouselRef}>
-        <AnimatePresence initial={false} custom={direction}>
-          <motion.div
-            className="grid grid-cols-3 gap-6"
-            key={currentIndex}
-            custom={direction}
-            initial={{ opacity: 0, x: direction > 0 ? 300 : -300 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: direction < 0 ? 300 : -300 }}
-            transition={{ duration: 0.5 }}
-          >
-            {artists.slice(currentIndex, currentIndex + visibleArtists).map((artist) => {
-              // Construct the full image URL with the base URL
-              const imageUrl = artist.bd_logo
-                ? `${IMAGE_BASE_URL}/${artist.bd_logo}`
-                : "/placeholder.svg?height=300&width=400"
-
-              return (
-                <motion.div
-                  key={artist.bd_id}
-                  className="relative group cursor-pointer"
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <Link href={`/artist/${artist.bd_id}`}>
-                    <div className="aspect-[4/3] relative overflow-hidden rounded-lg shadow-lg">
-                      <Image
-                        src={imageUrl || "/placeholder.svg"}
-                        alt={artist.bd_name}
-                        fill
-                        className="object-cover transition-transform duration-500 group-hover:scale-110"
-                        priority
-                        unoptimized={true} // Skip Next.js image optimization for external URLs
-                      />
-                      <div className="absolute inset-0 bg-black bg-opacity-30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
-                        <div className="p-4 w-full">
-                          <h3 className="text-white text-xl font-bold">{artist.bd_name}</h3>
-                        </div>
-                      </div>
-                    </div>
-                  </Link>
-                </motion.div>
-              )
-            })}
-          </motion.div>
-        </AnimatePresence>
-
-        {artists.length > visibleArtists && (
-          <div className="flex justify-end gap-4 mt-6">
-            <button
-              className="p-2 border border-black cursor-pointer hover:bg-black hover:text-white transition-colors"
-              onClick={prevSlide}
-            >
-              <ChevronLeftIcon className="w-6 h-6" />
-            </button>
-            <button
-              className="p-2 border border-black cursor-pointer hover:bg-black hover:text-white transition-colors"
-              onClick={nextSlide}
-            >
-              <ChevronRightIcon className="w-6 h-6" />
-            </button>
-          </div>
-        )}
+      <div className="masonry-grid max-h-[750px] overflow-hidden">
+        {displayedArtists.map((artist, index) => (
+          <ArtistCard key={artist.bd_id} artist={artist} index={index} size={artist.size} />
+        ))}
       </div>
     </section>
   )
