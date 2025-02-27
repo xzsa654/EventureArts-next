@@ -34,8 +34,8 @@ export function AuthContextProvider({ children }) {
     const str = localStorage.getItem(storageKey)
     try {
       const data = JSON.parse(str)
-
-      setAuth(data)
+      
+      if(data) setAuth(data)
     } catch (error) {
       console.log(error)
     }
@@ -122,11 +122,11 @@ export function AuthContextProvider({ children }) {
 
   // 驗證登入狀態憑證
   const getAuthHeader = () => {
-    if (!auth.token) {
+    if (!auth?.token) {
       return {}
     } else {
       // 設置到需要驗證登入狀態的 headers
-      return { Authorization: 'Bearer ' + auth.token }
+      return { Authorization: 'Bearer ' + auth?.token }
     }
   }
   return (

@@ -6,13 +6,12 @@ import {CheckboxGroup, Checkbox} from "@heroui/react";
 import { Select, SelectItem } from "@heroui/react";
 import { DateRangePicker } from "@heroui/react";
 import { Input } from "@heroui/react";
-import CateSelect from '../_components/cate-select';
-
+import CateSelect from '../_components/cate-select'
+import PaginationAdapter from '../_components/PaginationAdapter';
 
 // import 自定義樣式
 import '../_components/style.css'
 import './explore.css';
-
 
 // 行政區域選項
 const regions = [
@@ -80,20 +79,7 @@ export default function Explore(props) {
               />
             </div>
           </div>        
-        
-          {/* 2. 時間 */}
-          <div className="flex flex-col gap-4 w-full">
-            <p className='condition'>時間</p>
-            <div className="flex flex-col gap-4 w-[90%]">
-            <DateRangePicker
-                className=""
-                // label="日期區間"
-                variant="underlined"
-                radius="none"
-            />
-            </div>
-          </div>        
-        
+                
           {/* 3. 地點 */}
           <div className="flex flex-col gap-4 w-full">
             <p className='condition'>地點</p>
@@ -130,6 +116,12 @@ export default function Explore(props) {
           <Card1 />
           <Card1 />
         </div>
+
+          {/* <PaginationAdapter
+          totalPages={response.totalPages}
+          onPageChange={handlePageChange}
+          currentPage={searchParams.page}
+          /> */}
 
       </div>
 

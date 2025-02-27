@@ -33,7 +33,7 @@ export default function AVatarGroup() {
           />
         </DropdownTrigger>
         <DropdownMenu aria-label="User Actions" variant="flat">
-          <DropdownSection title={auth.nickname} showDivider>
+          <DropdownSection title={auth?.nickname} showDivider>
             <DropdownItem key="profile" startContent=<CiUser size={20} />>
               <Link href={'/user/c/profile'}>個人檔案</Link>
             </DropdownItem>
@@ -49,7 +49,7 @@ export default function AVatarGroup() {
             </DropdownItem>
           </DropdownSection>
           {/* 品牌方會員才會顯示 */}
-          {auth.role == 'brand' ? (
+          {auth?.role == 'brand' ? (
             <DropdownSection showDivider title="我的品牌">
               <DropdownItem
                 key="brand"
