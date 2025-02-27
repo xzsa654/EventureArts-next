@@ -45,7 +45,7 @@ export default function TicketPageTicketFront({ ticketData }) {
             <div className="border-t-1 border-black pt-4 pb-10 flex-col self-stretch justify-center items-start gap-2">
               <dl className="self-stretch justify-start items-start gap-1 inline-flex basis-0">
                 <dd className="w-[68px] text-primary-300">地點</dd>
-                <dt className=" text-black break-words text-wrap w-[200px]">
+                <dt className=" text-black break-words text-wrap w-[200px] ">
                   {ticketData.city}
                   {ticketData.district}
                   {ticketData.address}
