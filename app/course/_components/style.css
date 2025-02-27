@@ -1,5 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Megrim&family=Noto+Sans+TC&family=Noto+Serif+TC:wght@200..900&family=Unna:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 
-@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Unna:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 
 
 #app {
@@ -7,26 +7,78 @@
   }
   
   body {
-    font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
     margin: 0;
     padding: 0;
     position: relative;
     height: 100%;
-    background-image: url('https://i.imgur.com/EM2tRJ6.jpeg');
-    background-repeat: repeat-y;
+    /* background-image: url('/chu-images/img-bg.jpg'); */
+    /* background-repeat: repeat-y; */
+    /* object-fit: fill; */
+    /* width: 100%;
+    height: 100%; */
+  }
+
+
+/* --------- headline START --------- */
+/* 設定主標題邊框 */
+.headMain {
+  border-left: 1px rgb(185, 185, 185) solid;
+  border-right: 1px rgb(185, 185, 185) solid;
+}
+
+/* 主大標題 */
+.headMain h2 {
+  font-family: 'Noto serif tc', serif ;
+  font-size: 30px;
+  font-weight: bold;
+  line-height: auto;
+}
+
+/* 側大標題 */
+  .headSide h2 {
+    font-family: 'Noto serif tc', serif ;
+    font-weight: bold;
+    font-size: 23px;
+    line-height: 3rem;
+    letter-spacing: 1px;
+    font-style: italic;
+    color:#736c69
   }
   
-  /* 元件：carousel */
+/* 主小標題 */
+.headMain p {
+  font-family: 'Noto serif tc', serif ;
+  font-size: 16px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  color:#3d3d3d;
+  text-align:center;
+}
+
+
+/* 側小標題 */
+  .headSide p {
+    font-family: 'Noto serif tc', serif ;
+    font-size: 16px;
+    letter-spacing: 2px;
+    color:#736c69
+  }
+/* --------- headline END --------- */
+
+
+/* --------- Carousel START --------- */
   .swiper {
     width: 100%;
     height: 25%;
   }
   
   .swiper-slide {
+    /* padding:  */
     text-align: center;
     font-size: 18px;
-    background: #fff;
-    border: #000000 2px solid;
+    border-top: #000000 2px solid;
+    border-bottom: #000000 2px solid;
+    padding: 12px 0px;
   
     /* Center slide text vertically */
     display: flex;
@@ -47,27 +99,36 @@
   .mySwiper .swiper-pagination-bullet-active {
     background-color: #F0686C;
   }
+/* --------- Carousel END --------- */
 
-/* 元件：bar */
-  .bar{
-    width: 100%;
-    display: flex;
-    height: 66px;
-    display: flex;
-    justify-content: space-between;
-    background-color: white;
-    border: #000000 2px solid;
-  }
 
-  .SelectDate{
-    border-left: #dadada 1px solid;
-    border-right: #dadada 1px solid;
-  }
+/* 分類文字 */
+.linkbox p {
+  font-family: 'Noto serif tc', serif ;
+  font-weight: bold;
+  font-size: 16px;
+}
 
-/* card1 */
+
+/* --------- 卡片 card1 START --------- */
 .card1 {
-  border: #000000 2px solid;
+  border: #000000 1px solid;
   background-color: #F7F5F1;
+  width: 370px;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.card1:hover {
+  background-color: transparent;
+  transform: scale(1.03);
+  border: 2px #f08e91 solid;
+}
+
+.chip {
+  border: 1px black solid;
+  border-radius: 20px;
+  text-align: center;
+  padding: 5px 10px;
 }
 
 .pdate {
@@ -85,6 +146,8 @@
   font-family: 'unna';
   font-size: 16px;
 }
+/* --------- 卡片 card1 END --------- */
+
 
 /* card2 */
 .rankNum {
@@ -111,3 +174,20 @@
   background-color: #FFFFFF;
   padding: 8px 8px;
 }
+
+
+/* --------- paraTitle START --------- */
+.paraLeft {
+  font-size: 18px;
+  font-weight: bold;
+  color: #7f7f7f;
+  font-family: 'Noto serif tc', serif ;
+
+}
+
+.paraRight {
+  font-size: 18px;
+  color: #F0686C;
+  font-family: 'Noto serif tc', serif ;
+}
+/* --------- paraTitle END --------- */

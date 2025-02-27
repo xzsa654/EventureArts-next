@@ -41,7 +41,7 @@ export default function Order(props) {
         <hr />
         {/* 1. 信用卡 */}
         <div className="paymentTitle flex flex-row justify-between">
-            <Checkbox defaultSelected color="danger">信用卡一次付清</Checkbox>
+            <Checkbox defaultSelected color="default">信用卡一次付清</Checkbox>
             <div className="credit flex flex-row">
                 <img className="paymentImg" src="https://logos-world.net/wp-content/uploads/2020/06/Visa-Logo-2006.png" alt="" />
                 <img className="paymentImg" src="https://pngimg.com/d/mastercard_PNG16.png" alt="" />
@@ -49,25 +49,17 @@ export default function Order(props) {
         </div>
             {/* 信用卡內容（白底） */}
             <div className="paymentContent">
-                <div className="creditNum">
-                    <p>信用卡卡號</p>
-                </div>
-                <div className="creditLimit">
-                    <p>信用卡有效期限</p>
-                </div>
-                <div className="creditCVV">
-                    <p>安全識別碼</p>
-                </div>
+            <p className='px-16'>本公司採用綠界科技（ECPay）金流交易系統，當您選擇信用卡付款時，將會跳轉至綠界的安全支付頁面進行交易。本公司不會儲存您的信用卡資訊，以確保您的隱私與安全，請安心付款。</p>               
             </div>
         {/* 2. linePay */}
         <div className="paymentTitle flex flex-row justify-between">
-            <Checkbox defaultSelected color="danger">Line Pay</Checkbox>
+            <Checkbox color="default">Line Pay</Checkbox>
             <img className="paymentImg" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/LINE_Pay_logo_%282019%29.svg/1044px-LINE_Pay_logo_%282019%29.svg.png" alt="" />
         </div>
         {/* linepay內容（白底） */}
-        <div className="paymentContent">
+        <div className="paymentContent px-16">
             <div className="creditNum">
-            <p>信用卡卡號</p>
+            <p className='px-16'>當您選擇 Line Pay 付款時，將會跳轉至 Line Pay 官方支付頁面進行交易。本公司不會儲存您的付款資訊，以確保您的隱私與安全。</p>
         </div>
 
     </div>

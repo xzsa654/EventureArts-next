@@ -4,7 +4,9 @@ const AuthContext = createContext()
 import { FIREBASE_LOGIN, REGISTER } from '@/lib/authorization-api'
 import React, { useState, useEffect } from 'react'
 import { addToast } from '@heroui/react'
+import { useRouter } from 'next/navigation'
 export function AuthContextProvider({ children }) {
+  const router = useRouter()
   const storageKey = 'EventureArts-auth'
   const defaultAuth = {
     user_id: 0,
@@ -34,8 +36,8 @@ export function AuthContextProvider({ children }) {
     const str = localStorage.getItem(storageKey)
     try {
       const data = JSON.parse(str)
-
-      setAuth(data)
+      
+      if(data) setAuth(data)
     } catch (error) {
       console.log(error)
     }
@@ -83,9 +85,15 @@ export function AuthContextProvider({ children }) {
 
     const result = await res.json()
     if (result.success && result.code == 200) {
-      const { user_id, user_email, nickname, avatar, token } = result
+      const { user_id, user_email, nickname, avatar, token, user_role } = result
 
-      setAuth({ user_id, user_email, nickname, avatar, token })
+      setAuth({ user_id, user_email, nickname, avatar, token, user_role })
+      addToast({
+        radius: 'lg',
+        description: '成功登入！',
+        color: 'success',
+        timeout: 10000,
+      })
     } else {
       setFirstLogin(result.data)
     }
@@ -105,10 +113,8 @@ export function AuthContextProvider({ children }) {
     setAuth(obj)
     localStorage.setItem(storageKey, JSON.stringify(obj))
     addToast({
-      title: '驗證信已送出！',
       radius: 'lg',
-      description: '請前往您的信箱查收',
-      promise: new Promise((resolve) => setTimeout(resolve, 3000)),
+      description: '成功登入！',
       color: 'success',
       timeout: 10000,
     })
@@ -116,17 +122,25 @@ export function AuthContextProvider({ children }) {
 
   // 登出
   const logOut = () => {
+    router.push('/')
     localStorage.removeItem(storageKey)
     setAuth({ ...defaultAuth })
   }
 
+  // 變成品牌後更新setAuth
+  const beginBrand = () => {
+    setAuth((prev) => {
+      return { ...prev, user_role: 'brand' }
+    })
+  }
+
   // 驗證登入狀態憑證
   const getAuthHeader = () => {
-    if (!auth.token) {
+    if (!auth?.token) {
       return {}
     } else {
       // 設置到需要驗證登入狀態的 headers
-      return { Authorization: 'Bearer ' + auth.token }
+      return { Authorization: 'Bearer ' + auth?.token }
     }
   }
   return (
@@ -140,6 +154,8 @@ export function AuthContextProvider({ children }) {
           firstLogin,
           registerDataHandler,
           register,
+          getAuthHeader,
+          beginBrand,
         }}
       >
         {children}
