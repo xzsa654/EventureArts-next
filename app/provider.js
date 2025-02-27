@@ -8,10 +8,8 @@ export default function Provider({ children }) {
   return (
     <HeroUIProvider>
       <AuthContextProvider>
-      <ToastProvider placement="top-right" />
-      <OrderContextProvider>
+        <ToastProvider placement="top-right" />
         <ModalProvider>{children}</ModalProvider>
-        </OrderContextProvider>
       </AuthContextProvider>
     </HeroUIProvider>
   )
