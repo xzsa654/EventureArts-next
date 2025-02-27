@@ -1,6 +1,6 @@
 .map-page-wrapper {
   min-height: 100vh;
-  background-image: url("/chu-images/img-bg-dark.jpg");
+  /* background-image: url("/chu-images/img-bg-dark.jpg"); */
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

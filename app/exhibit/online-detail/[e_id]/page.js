@@ -492,7 +492,7 @@ export default function OnlineExhibitionDetail({ params }) {
       <div className="h-20 bg-black/90 backdrop-blur-lg border-t border-white/10 flex items-center justify-between px-4">
         <div>
           <h2 className="text-lg font-semibold">{exhibitionData.e_name}</h2>
-          <p className="text-sm text-white/70">{exhibitionData.creator_name}</p>
+          <p className="text-sm text-white/70">{exhibitionData.bd_name}</p>
         </div>
         <div className="flex gap-4">
           <Button
@@ -508,7 +508,7 @@ export default function OnlineExhibitionDetail({ params }) {
       {/* Info Panel */}
       {showInfo && (
         <motion.div
-          className="absolute right-0 top-16 bottom-20 w-80 bg-black/90 backdrop-blur-lg p-6 text-white overflow-auto"
+          className="absolute right-0 top-20 bottom-20 w-80 bg-black/90 backdrop-blur-lg p-6 text-white overflow-auto"
           initial={{ x: "100%" }}
           animate={{ x: 0 }}
           exit={{ x: "100%" }}
@@ -516,7 +516,7 @@ export default function OnlineExhibitionDetail({ params }) {
         >
           <div className="space-y-6">
             <div>
-              <h2 className="text-lg font-semibold mb-2">About this Model</h2>
+              <h2 className="text-lg font-semibold mb-2">About this Artwork</h2>
               <p className="text-white/70 text-sm leading-relaxed">{exhibitionData.e_desc}</p>
             </div>
             <div>
@@ -525,6 +525,20 @@ export default function OnlineExhibitionDetail({ params }) {
                 <li>• Left click + drag to rotate</li>
                 <li>• Right click + drag to pan</li>
                 <li>• Scroll to zoom in/out</li>
+              </ul>
+            </div>
+            <div>
+              <h2 className="text-lg font-semibold mb-2">Price</h2>
+              <ul className="text-sm space-y-2 text-white/70">
+                <li>$ {exhibitionData.e_price}NTD</li>
+                
+              </ul>
+            </div>
+            <div>
+              <h2 className="text-lg font-semibold mb-2">Artist</h2>
+              <ul className="text-sm space-y-2 text-white/70">
+                <li>{exhibitionData.bd_name}</li>
+                
               </ul>
             </div>
           </div>

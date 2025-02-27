@@ -7,6 +7,8 @@ import OurPagination from '@/components/common/pagination'
 import { ArrowRight } from '@/public/Yao/icons'
 import COMangContent from './course/co-content'
 import ExMangContent from './exhibit/ex-content'
+import { HiArrowNarrowRight } from 'react-icons/hi'
+
 import { useRouter } from 'next/navigation'
 export default function Mang({ type }) {
   const router = useRouter()
@@ -16,7 +18,7 @@ export default function Mang({ type }) {
       <div className="flex-auto ">
         {type == 'course' ? <COMangContent /> : <ExMangContent />}
       </div>
-      <div className="flex flex-col gap-8 items-center justify-center">
+      <div className="flex flex-col gap-8 items-center justify-center ">
         <OurPagination />
         <div className="flex gap-4">
           <Button
@@ -30,8 +32,8 @@ export default function Mang({ type }) {
             }}
             color="primary"
             radius="none"
-            className="text-16 text-white max-sm:hidden"
-            endContent=<ArrowRight />
+            className="text-16 text-white max-sm:hidden hover:scale-110 transition-transform duration-200"
+            endContent=<HiArrowNarrowRight className="transition-transform duration-300 ease-out group-hover:translate-x-3" />
           >
             {type == 'course' ? '新增課程' : '新增線上展覽'}
           </Button>
@@ -40,8 +42,10 @@ export default function Mang({ type }) {
             onPress={() => router.push('/user/b/ex-mang/add-on')}
             color="primary"
             radius="none"
-            className={`${type == 'course' ? 'hidden' : ''} text-16 text-white`}
-            endContent=<ArrowRight />
+            className={`${
+              type == 'course' ? 'hidden' : ''
+            } text-16 text-white hover:scale-110 transition-transform duration-200`}
+            endContent=<HiArrowNarrowRight className="transition-transform duration-300 ease-out group-hover:translate-x-3" />
           >
             新增線下展覽
           </Button>

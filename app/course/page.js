@@ -13,17 +13,18 @@ import BrandList1 from './_components/brand-list1'
 
 export default function CoursePage(props) {
   return (
-    
-    //body用justify-center置中；div裡面若非滿版，用mx-auto置中。
-    <div className="mt-20 flex justify-center flex-col h-full">
-        <div className='px-16 my-7 mx-auto'><Headline /></div>
-        <Carousel />
+    <div class="bg-[url('/chu-images/img-bg.jpg')] bg-fixed">
+    <div className="flex justify-center flex-col h-full">
+        <div className='mt-20 px-16 pt-8 pb-4 mx-auto w-[80%]'><Headline /></div>
+        <div className='px-16 pt-8 mx-auto w-full'><Carousel /></div>
+        <div className='px-24 pt-12 mx-auto w-full'><QuickLinks /></div>
         <div className='px-16 pt-8 mx-auto w-full'><Searchbox /></div>
-        <div className='px-24 py-8 mx-auto w-full'><QuickLinks /></div>
-        <div className='px-16 pb-8 mx-auto w-full'><NewProduct /></div>
-        <div className='px-16 pb-8 mx-auto w-full'><CardDraw /></div>
-        <div className='px-16 pb-8 mx-auto w-full'><TopSix /></div>
-        <div className='px-16 pb-8 mx-auto w-full'><BrandList1 /></div>
+        <div className='px-16 pt-8 mx-auto w-full'><NewProduct /></div>
+        <div className='px-16 pt-8 mx-auto w-full'><CardDraw /></div>
+        <div className='px-16 pt-8 mx-auto w-full'><TopSix /></div>
+        <div className='px-16 py-16 mx-auto w-full'><BrandList1 /></div>
     </div>
+
+</div>
   )
 }
