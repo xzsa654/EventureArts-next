@@ -3,12 +3,12 @@
 import React, { useState, useEffect } from 'react'
 
 import { ScrollShadow } from '@heroui/react'
-import UserAddForm from './add-form'
-export default function ExAdd({ online }) {
+import UserCoAddForm from './add-co-form'
+export default function CoAdd({ online }) {
   return (
     <>
       <ScrollShadow className="h-[680px]">
-        <UserAddForm online={online} />
+        <UserCoAddForm  />
       </ScrollShadow>
     </>
   )

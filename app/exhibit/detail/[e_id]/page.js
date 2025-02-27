@@ -1,43 +1,40 @@
-"use client"
+'use client'
+import useSWR from 'swr'
+import { MdLocationOn, MdDateRange } from 'react-icons/md'
+import { BsCashCoin } from 'react-icons/bs'
+import { RiBuildingLine } from 'react-icons/ri'
+import { IoMdHeartEmpty } from 'react-icons/io'
+import { IoShareOutline } from 'react-icons/io5'
+import { RiStore2Line } from 'react-icons/ri'
+import Image from 'next/image'
+import { useRouter } from 'next/navigation' // for buy ticket btn
+import Link from 'next/link'
+import { Button } from '@heroui/button'
+import Loading from "../../loading"
 
-import React from "react"
-import { useParams } from "next/navigation"
-import { MdLocationOn, MdDateRange } from "react-icons/md"
-import { BsCashCoin } from "react-icons/bs"
-import { RiBuildingLine } from "react-icons/ri"
-import { IoMdHeartEmpty } from "react-icons/io"
-import { IoShareOutline } from "react-icons/io5"
-import Image from "next/image"
 
-// mock function to simulate fetching data from a backend
-const fetchExhibitionDetails = async (e_id) => {
-  //  API call using the e_id
-  return {
-    e_id,
-    e_name: "Now/Here: Picasso and His Time 畢卡索",
-    e_abstract:
-      "Aotearoa artist Hana Pera Aoake reflects on their visit to the Venice Biennale and the questions posed by its central exhibition, 草間彌生",
-    e_desc:
-      "這是會上下滑動的區域, 藉由直線, 相鄰直線上下方向相反現年96歲的草間彌生是當代藝術史上最具代表性及親覽性的創作者之一。她的作品涉及繪畫、雕塑、拼貼、版畫、行為展演等多領域, 並以其鮮豔的色彩和圓點圖案聞名。本展將展出1951年至2005年間的70件作品, 並緊焦於草間彌生藝術生涯的關鍵時期和創作探索。",
-    e_startdate: "2024-08-24",
-    e_enddate: "2024-10-10",
-    e_price: 300,
-    locat_name: "ABC Gallery",
-    address: "台北市大安區復興南路一段390號3樓",
-    district: "大安區",
-    imageUrl: "/chu-images/img_9.jpg",
-  }
-}
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3001'
 
-export default function ExhibitionDetail() {
-  const params = useParams()
-  const [exhibitionData, setExhibitionData] = React.useState(null)
+// Fetcher function for useSWR
+const fetcher = (url) => fetch(url).then((res) => res.json())
 
-  React.useEffect(() => {
-    fetchExhibitionDetails(params.e_id).then(setExhibitionData)
-  }, [params.e_id])
+export default function ExhibitionDetail({ params }) {
+  const { e_id } = params
 
-  if (!exhibitionData) return <div>Loading...</div>
+  // ---for buy ticket btn start---
+  const router = useRouter() // ✅ 使用 Next.js App Router 的 useRouter
+  // ---for buy ticket btn end---
+
+  // Use SWR to fetch exhibition data
+  const { data, error } = useSWR(`${API_BASE_URL}/exhibit/api/${e_id}`, fetcher)
+  const exhibitionData = data?.data
+
+  console.log(exhibitionData)
+  // exhibitionData?.data[0];
+  console.log(error)
+  if (error) return <div>Error loading exhibition data</div>
+  if (!exhibitionData) return <Loading />
 
   return (
     <div className="min-h-screen bg-[url('/chu-images/img-bg.jpg')] bg-cover bg-fixed">
@@ -45,20 +42,27 @@ export default function ExhibitionDetail() {
         <div className="max-w-6xl mx-auto px-4 py-8">
           {/* Header Section */}
           <div className="space-y-4 mb-8">
-            <h2 className="text-5xl font-bold">{exhibitionData.e_name}</h2>
+            <h1 className="text-5xl font-bold text-gray-900">
+              {exhibitionData.e_name}
+            </h1>
 
             {/* Tags */}
-            <div className="flex gap-2 items-center">
-              <span className="px-4 py-2 border border-black rounded-full">ABC Arts</span>
-              <span className="px-4 py-2 border border-black rounded-full">ABC Arts</span>
-              <span className="px-4 py-2 border border-black rounded-full">藝術裝置與展覽設計</span>
+            <div className="flex flex-wrap gap-2 items-center">
+              {exhibitionData.e_optionNames?.split(',').map((option, index) => (
+                <span
+                  key={index}
+                  className="px-4 py-2 border border-gray-900 rounded-full"
+                >
+                  {option.trim()}
+                </span>
+              ))}
 
               {/* Action Buttons */}
               <div className="ml-auto flex gap-4">
-                <button className="text-black hover:underline">
+                <button className="text-gray-900 hover:underline">
                   <IoMdHeartEmpty size={24} />
                 </button>
-                <button className="text-black hover:underline">
+                <button className="text-gray-900 hover:underline">
                   <IoShareOutline size={24} />
                 </button>
               </div>
@@ -72,31 +76,41 @@ export default function ExhibitionDetail() {
               {/* Image Section */}
               <div className="relative aspect-[4/3] bg-gray-100">
                 <Image
-                  src={exhibitionData.imageUrl || "/placeholder.svg"}
-                  alt="Exhibition space"
+                  src={
+                    exhibitionData.cover_image?.startsWith('http')
+                      ? exhibitionData.cover_image
+                      : exhibitionData.cover_image
+                      ? `http://localhost:3001${exhibitionData.cover_image}`
+                      : '/chu-images/img_9.jpg'
+                  }
+                  alt={exhibitionData.e_name}
                   fill
-                  className="rounded-lg"
+                  className="rounded-lg object-cover"
                 />
               </div>
 
               {/* Exhibition Details */}
-              <div className="space-y-4 pt-4 border-t">
+              <div className="space-y-4 pt-4 border-t border-gray-300">
                 <div className="flex items-center gap-4 text-base">
-                  <MdDateRange size={24} className="text-black" />
+                  <MdDateRange size={24} className="text-gray-900" />
                   <span>{`${exhibitionData.e_startdate} - ${exhibitionData.e_enddate}`}</span>
                 </div>
-                <div className="border-t border-black border-[1px]"></div>
+                <div className="border-t border-black border-[1.5px]"></div>
                 <div className="flex items-center gap-4 text-base">
-                  <MdLocationOn size={24} className="text-black" />
-                  <span>{`${exhibitionData.address}, ${exhibitionData.district}`}</span>
+                  <MdLocationOn size={24} className="text-gray-900" />
+                  <span>{`${exhibitionData.city}${exhibitionData.district}${exhibitionData.address}`}</span>
                 </div>
                 <div className="flex items-center gap-4 text-base">
-                  <BsCashCoin size={24} className="text-black" />
+                  <BsCashCoin size={24} className="text-gray-900" />
                   <span>{`$${exhibitionData.e_price} NTD`}</span>
                 </div>
                 <div className="flex items-center gap-4 text-base">
-                  <RiBuildingLine size={24} className="text-black" />
+                  <RiBuildingLine size={24} className="text-gray-900" />
                   <span>{exhibitionData.locat_name}</span>
+                </div>
+                <div className="flex items-center gap-4 text-base">
+                  <RiStore2Line size={24} className="text-gray-900" />
+                  <span>{exhibitionData.bd_name}</span>
                 </div>
               </div>
             </div>
@@ -104,26 +118,29 @@ export default function ExhibitionDetail() {
             {/* Right Column - Content Section */}
             <div className="space-y-6">
               <div className="space-y-4">
-                <h3 className="text-2xl font-bold">{exhibitionData.e_abstract}</h3>
-                <p className="">{exhibitionData.e_desc}</p>
+                <h3 className="text-2xl font-bold text-gray-900">
+                  {exhibitionData.e_abstract}
+                </h3>
+                <p className="text-gray-700">{exhibitionData.e_desc}</p>
               </div>
 
               {/* Action Buttons */}
               <div className="flex gap-4 pt-6">
                 <a
                   href="#"
-                  className="text-xl font-bold flex-1 py-3 px-4 flex items-center justify-center text-black hover:underline"
+                  className="flex-1 py-3 px-4 flex items-center justify-center text-gray-900 hover:underline border border-gray-900 rounded-md"
                 >
                   <IoMdHeartEmpty size={20} className="mr-2" />
                   add like
                 </a>
-                <a
-                  href="#"
-                  className="text-xl font-bold flex-1 py-3 px-4 flex items-center justify-center text-black hover:underline"
+                <Button
+                  // href={`/order?e_id=${e_id}`} // 這行是配用"Link"
+                  className="flex-1 py-3 px-4 flex items-center justify-center text-gray-900 hover:underline border border-gray-900 rounded-md"
+                  onClick={() => router.push(`/order?e_id=${e_id}`)} // 改成用 button buy ticket to order page
                 >
                   buy ticket
                   <span className="ml-2">→</span>
-                </a>
+                </Button>
               </div>
             </div>
           </div>
@@ -132,4 +149,3 @@ export default function ExhibitionDetail() {
     </div>
   )
 }
-

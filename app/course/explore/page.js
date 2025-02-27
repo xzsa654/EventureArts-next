@@ -35,6 +35,9 @@ const regions = [
 
 export default function Explore(props) {
 
+
+
+
   return (
     <>
     <div className="main flex flex-col w-full px-16">

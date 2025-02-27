@@ -55,28 +55,24 @@ export default function CandidSection() {
   }
 
   return (
-    <section className={`h-[580px] transition-colors duration-1000 ${isDarkMode ? "dark bg-gray-900" : "bg-white"}`}>
-      <div className="container mx-auto px-4 py-20">
+    <section
+      className={`min-h-[580px] transition-colors duration-1000 ${isDarkMode ? "dark bg-gray-900" : "bg-white"}`}
+    >
+      <div className="container mx-auto px-4 py-10 md:py-20">
         <div className="relative">
           {/* Top right image */}
           <motion.div
-            className="absolute -top-4 right-0 w-[100px] h-[75px] md:w-[150px] md:h-[100px]"
+            className="absolute -top-4 right-0 w-[80px] h-[60px] sm:w-[100px] sm:h-[75px] md:w-[150px] md:h-[100px]"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
           >
-            <Image
-              src="/chu-images/img_9.jpg"
-              alt="Candid moment"
-              width={150}
-              height={100}
-              className="rounded-full"
-            />
+            <Image src="/chu-images/img_9.jpg" alt="Candid moment" fill className="rounded-full object-cover" />
           </motion.div>
 
           {/* Main heading with animation */}
           <motion.h1
-            className={`text-5xl md:text-7xl font-bold leading-tight tracking-tight mb-8 transition-colors duration-1000 ${isDarkMode ? "text-white" : "text-black"}`}
+            className={`text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold leading-tight tracking-tight mb-8 transition-colors duration-1000 ${isDarkMode ? "text-white" : "text-black"}`}
             variants={container}
             initial="hidden"
             animate="visible"
@@ -90,24 +86,18 @@ export default function CandidSection() {
 
           {/* Middle left image */}
           <motion.div
-            className="relative left-0 my-4 w-[100px] h-[75px] md:w-[150px] md:h-[100px]"
+            className="relative left-0 my-4 w-[80px] h-[60px] sm:w-[100px] sm:h-[75px] md:w-[150px] md:h-[100px]"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
           >
-            <Image
-              src="/chu-images/img_15.jpg"
-              alt="Lifestyle shot"
-              width={250}
-              height={100}
-              className="rounded-full"
-            />
+            <Image src="/chu-images/img_15.jpg" alt="Lifestyle shot" fill className="rounded-full object-cover" />
           </motion.div>
 
           {/* Subheading with animation */}
           <div className="ml-auto max-w-4xl">
             <motion.h2
-              className={`text-5xl md:text-7xl font-bold leading-tight tracking-tight transition-colors duration-1000 ${isDarkMode ? "text-white" : "text-black"}`}
+              className={`text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold leading-tight tracking-tight transition-colors duration-1000 ${isDarkMode ? "text-white" : "text-black"}`}
               variants={container}
               initial="hidden"
               animate="visible"
@@ -122,18 +112,12 @@ export default function CandidSection() {
 
           {/* Bottom right image */}
           <motion.div
-            className="absolute bottom-0 right-0 w-[100px] h-[75px] md:w-[150px] md:h-[100px]"
+            className="absolute bottom-0 right-0 w-[80px] h-[60px] sm:w-[100px] sm:h-[75px] md:w-[150px] md:h-[100px]"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
           >
-            <Image
-              src="/chu-images/img_5.jpg"
-              alt="Urban life"
-              width={150}
-              height={100}
-              className="rounded-full"
-            />
+            <Image src="/chu-images/img_5.jpg" alt="Urban life" fill className="rounded-full object-cover" />
           </motion.div>
 
           {/* Mode indicator */}

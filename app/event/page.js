@@ -17,6 +17,8 @@ import { RiStore2Fill } from "react-icons/ri";
 import { FaUsers } from "react-icons/fa";
 import { GiPartyFlags } from "react-icons/gi";
 
+// 引用樣式表
+import './event.css';
 
 export default function Event(props) {
   // 使用Full page Scroll

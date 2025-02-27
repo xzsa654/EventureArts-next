@@ -43,12 +43,13 @@ export default function Product(props) {
 // 元件完成後，會執行一次。
 
   useEffect(() => {
+    
     if (c_id) {
       fetch(`${PRODUCT}${c_id}`) // 後端 API URL
         .then((response) => response.json())  //箱子
         .then((data) => {   //包裝紙：解析箱子（後台送來的物件們）  
           console.log("API回應:", data);
-          setCourseData(data);
+          setCourseData(data[0]);
         })
         .catch((error) => console.error("fetch課程資料失敗:", error));
     }
@@ -81,7 +82,7 @@ export default function Product(props) {
             {/* A.日期 */}
               <div className="items">
                 <IoCalendarNumberOutline />
-                <p>{courseData?.c_startdate.split('T')[0]} 至 {courseData?.c_enddate.split('T')[0]}</p>
+                <p> {courseData?.c_startdate ? courseData.c_startdate.split('T')[0] : '無效日期'}  至 {courseData?.c_enddate ? courseData.c_enddate.split('T')[0] : '無效日期'}</p>
               </div>
             {/* B.名稱 */}
                 <div className="items">

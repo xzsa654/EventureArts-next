@@ -20,7 +20,7 @@ export default function UserFile({ online }) {
         }}
       />
       {/* Preview */}
-      <div className="w-full p-56 border-1  rounded-md border-black"></div>
+      <div className="w-full p-56 max-sm:p-32 border-1  rounded-md border-black"></div>
     </div>
   )
   const onlineVersion = (
@@ -36,7 +36,7 @@ export default function UserFile({ online }) {
   }
   return (
     <>
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-6 max-sm:mt-5">
         <div className="w-full text-16 ">
           上傳專區
           <span className="ml-2 text-14 text-red">
