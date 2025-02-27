@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Unna:ital,wght@0,400;0,700;1,400;1,700&display=swap');
-
   
 body {
     margin: 0;
@@ -10,21 +9,24 @@ body {
 }
 
 .topFrame {
-  border-bottom: 2px black solid;
+  border-bottom: 1px rgb(106, 106, 106) solid;
   width: 100%;
   display: flex;
   justify-content: center;
 }
 
-.exploreTop {
-  width: 500px;
-}
 
-.exploreTop h1 {
-    font-family: "Kanit", serif;
+.exploreTop p {
     font-weight: bold;
   }
 
   .SearchArea {
-    border-right: 1px lightgray solid;
+    /* border-right: 1px lightgray solid; */
+}
+
+/* 左側條件篩選標題 */
+.condition {
+  color: grey;
+  font-size: 1rem;
+  padding-top: 2rem;
 }
