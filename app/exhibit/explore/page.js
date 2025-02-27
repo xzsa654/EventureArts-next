@@ -12,6 +12,7 @@ import Loading from "../loading"
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3001"
 
+
 // Static options from your e_options table
 const EXHIBITION_OPTIONS = [
   { e_optionID: 1, e_optionName: "視覺藝術 (Visual Arts)" },

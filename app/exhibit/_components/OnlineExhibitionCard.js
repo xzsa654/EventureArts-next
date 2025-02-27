@@ -24,7 +24,7 @@ return (
               cover_image?.startsWith("http")
                 ? cover_image
                 : cover_image
-                ? `http://localhost:3001${cover_image}`
+                ? `http://localhost:3001/uploads/chu-uploads/${cover_image}`
                 : "/chu-images/img_9.jpg"
             }
             alt={title}
