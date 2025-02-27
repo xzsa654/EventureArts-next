@@ -9,9 +9,10 @@ import {
   Image,
 } from '@heroui/react'
 import { CiUser, CiLogout, CiShoppingCart, CiStar } from 'react-icons/ci'
+import { useRouter } from 'next/navigation'
 import { useAuth } from '@/hooks/use-auth'
-import Link from 'next/link'
 export default function AVatarGroup() {
+  const router = useRouter()
   const { auth, logOut } = useAuth()
 
   return (
@@ -33,27 +34,35 @@ export default function AVatarGroup() {
           />
         </DropdownTrigger>
         <DropdownMenu aria-label="User Actions" variant="flat">
-          <DropdownSection title={auth?.nickname} showDivider>
-            <DropdownItem key="profile" startContent=<CiUser size={20} />>
-              <Link href={'/user/c/profile'}>個人檔案</Link>
+          <DropdownSection title={auth.nickname} showDivider>
+            <DropdownItem
+              onPress={() => {
+                router.push('/user/c/profile')
+              }}
+              key="profile"
+              startContent=<CiUser size={20} />
+            >
+              個人檔案
             </DropdownItem>
 
             <DropdownItem
               key="tickets"
               startContent=<CiShoppingCart size={20} />
             >
-              <Link href={'/user'}>我的訂單</Link>
+              我的訂單
             </DropdownItem>
             <DropdownItem key="liked" startContent=<CiStar size={20} />>
-              <Link href={'/user'}>收藏清單</Link>
+              收藏清單
             </DropdownItem>
           </DropdownSection>
           {/* 品牌方會員才會顯示 */}
-          {auth?.role == 'brand' ? (
+          {auth.user_role == 'brand' ? (
             <DropdownSection showDivider title="我的品牌">
               <DropdownItem
+                onPress={() => {
+                  router.push('/user/b/profile')
+                }}
                 key="brand"
-                href="/"
                 startContent=<Image
                   src="/Yao/user/brand.svg"
                   width={23}
@@ -61,7 +70,7 @@ export default function AVatarGroup() {
                   className="mr-3"
                 ></Image>
               >
-                <Link href={'/user/b/ex-mang'}>Brand</Link>
+                Brand
               </DropdownItem>
             </DropdownSection>
           ) : (

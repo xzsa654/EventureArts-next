@@ -115,6 +115,25 @@ export default function LoginModal() {
       >
         登入
       </Button>
+      <div className="text-gray tracking-normal text-start">
+        本網站受 reCAPTCHA 和 Google
+        <br />
+        <Link
+          className=" text-blue-400"
+          href="https://policies.google.com/privacy"
+        >
+          {' '}
+          隱私權政策
+        </Link>{' '}
+        與&nbsp;
+        <Link
+          className="text-blue-400"
+          href="https://policies.google.com/terms"
+        >
+          服務條款{' '}
+        </Link>
+        保護並適用
+      </div>
 
       <Link
         href={'#'}

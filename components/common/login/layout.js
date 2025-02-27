@@ -6,7 +6,6 @@ import {
   ModalFooter,
 } from '@heroui/react'
 import { useEffect } from 'react'
-import { useAuth } from '@/hooks/use-auth'
 import { BracketsIcon, TipsIcon } from '@/public/Yao/icons'
 export default function ModalLayout({
   formBody = <></>,
@@ -19,7 +18,6 @@ export default function ModalLayout({
   onOpenChange,
   size,
 }) {
-  const { auth } = useAuth()
   return (
     <>
       <Modal
@@ -60,7 +58,9 @@ export default function ModalLayout({
       >
         <ModalContent>
           {(onClose) => {
-            if (auth?.user_id !== 0) return onClose()
+            {
+              /* if (auth.user_id !== 0) return onClose() */
+            }
             return (
               <>
                 <ModalHeader className="flex  gap-2 item-center ">

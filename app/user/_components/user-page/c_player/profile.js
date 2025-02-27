@@ -1,10 +1,33 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { Button } from '@heroui/react'
+import { Button, useDisclosure } from '@heroui/react'
 import { HiArrowRight } from 'react-icons/hi'
+import { useAuth } from '@/hooks/use-auth'
+import Image from 'next/image'
+import { USERDATA } from '@/lib/user-api'
+import EditModal from './edit-modal'
 // C 端會員頁面
 export default function CPlayerProfile(props) {
+  const { auth, getAuthHeader } = useAuth()
+  const [data, setData] = useState({})
+  const { isOpen, onOpenChange } = useDisclosure()
+  const gender = { male: '男性', female: '女性', 'not provided': '未透露' }
+  const [reSend, onReSend] = useState(false)
+  useEffect(() => {
+    if (auth?.token) {
+      fetch(USERDATA, {
+        headers: {
+          ...getAuthHeader(),
+        },
+      })
+        .then((r) => r.json())
+        .then((result) => {
+          setData(result)
+          onReSend(false)
+        })
+    }
+  }, [auth.token, reSend])
   return (
     <>
       <div className="flex w-full ">
@@ -13,8 +36,13 @@ export default function CPlayerProfile(props) {
           {/* 左上方 */}
           <div className=" h-auto gap-4  p-4 flex items-center justify-center border-b-1 border-black">
             <div className="w-3/5 h-auto flex flex-col justify-center items-center">
-              <div className="w-[400px] h-[400px] mb-4 bg-blue-500">
-                put avatar inside here.
+              <div className="w-[400px] h-[400px] mb-4 ">
+                <Image
+                  width={400}
+                  height={400}
+                  alt="avatar"
+                  src={`http://localhost:3001/uploads/avatar/${data?.avatar}`}
+                ></Image>
               </div>
               <div className="flex justify-around w-[400px]">
                 <Button
@@ -41,23 +69,23 @@ export default function CPlayerProfile(props) {
               <div className="flex flex-col gap-2">
                 <dl className="text-base flex font-cn justify-between">
                   <dt>姓名：</dt>
-                  <dt>馬宜庭</dt>
+                  <dt>{data?.user_name || '暫無'}</dt>
                 </dl>
                 <dl className="text-base flex font-cn justify-between">
                   <dt>暱稱：</dt>
-                  <dt className="font-sans">Amelia</dt>
+                  <dt className="font-sans">{data?.nickname}</dt>
                 </dl>
                 <dl className="text-base flex font-cn justify-between">
                   <dt>生日：</dt>
-                  <dt className="font-sans">1994-10-14</dt>
+                  <dt className="font-sans">{data?.birthday}</dt>
                 </dl>
                 <dl className="text-base flex font-sans justify-between">
                   <dt>性別：</dt>
-                  <dt>女</dt>
+                  <dt>{gender[data.gender]}</dt>
                 </dl>
                 <dl className="text-base flex font-sans justify-between">
                   <dt>email：</dt>
-                  <dt>emma89032@test.com</dt>
+                  <dt>{data?.user_email}</dt>
                 </dl>
               </div>
             </div>
@@ -68,9 +96,9 @@ export default function CPlayerProfile(props) {
               <h5 className="font-cn font-semibold text-3xl mb-4">興趣</h5>
               <dl className="flex flex-col font-cn text-base mb-2">
                 <dt>展覽：</dt>
-                <dd>這裡放展覽分類</dd>
+                <dd>{data.e_interest}</dd>
                 <dt>課程：</dt>
-                <dd>這裡放課程分類</dd>
+                <dd>{data.c_interest}</dd>
               </dl>
             </div>
             <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4">
@@ -87,9 +115,7 @@ export default function CPlayerProfile(props) {
               <h4 className="font-cn font-semibold text-4xl self-start mt-0">
                 個人簡介
               </h4>
-              <p className="font-cn text-base">
-                熱愛單車旅行，嚮往騎車環遊世界。最愛清晨的第一道曙光。熱愛單車旅行，嚮往騎車環遊世界。最愛清晨的第一道曙光。
-              </p>
+              <p className="font-cn text-base">{data.profile}</p>
             </div>
 
             {/* 讓 about me 貼齊底部 */}
@@ -126,6 +152,9 @@ export default function CPlayerProfile(props) {
             <Button
               radius="none"
               className="px-12 text-base bg-primary text-white hover:text-[#E3C8B9] hover:scale-110 transition-transform duration-200 cursor-pointer flex items-center group gap-x-2 "
+              onPress={() => {
+                onOpenChange()
+              }}
             >
               編輯
               <HiArrowRight className="transition-transform duration-300 ease-out group-hover:translate-x-3" />
@@ -133,6 +162,7 @@ export default function CPlayerProfile(props) {
           </div>
         </div>
       </div>
+      <EditModal {...{ data, isOpen, onOpenChange, onReSend }} />
     </>
   )
 }

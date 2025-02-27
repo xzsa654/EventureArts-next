@@ -3,8 +3,22 @@
 import React, { useState, useEffect } from 'react'
 import { Button } from '@heroui/react'
 import { HiArrowRight } from 'react-icons/hi'
+import { useAuth } from '@/hooks/use-auth'
 import Image from 'next/image'
+import { BRANDSDATA } from '@/lib/brands-api'
+import JoinUsModal from './join-us-modal'
 export default function BPlayerProfile(props) {
+  const [brand, setBrand] = useState([])
+  const { getAuthHeader } = useAuth()
+  // 獲取brand 的相關資料
+  useEffect(() => {
+    fetch(BRANDSDATA, { headers: { ...getAuthHeader() } })
+      .then((r) => r.json())
+      .then((res) => {
+        setBrand(res.body)
+      })
+  }, [])
+
   return (
     <>
       <div className="flex">
@@ -39,7 +53,7 @@ export default function BPlayerProfile(props) {
             {/* 右側圖片填滿 */}
             <div className="flex-1 h-full bg-slate-300">
               <Image
-                src="/Yao/logo.svg"
+                src={`http://localhost:3001/uploads/brand-banner/${brand?.bd_img}`}
                 alt="Banner Image"
                 className="w-full h-full "
                 width={300}
@@ -50,8 +64,13 @@ export default function BPlayerProfile(props) {
           {/* 左下方 */}
           <div className=" h-auto gap-4  p-4 flex items-center justify-center  border-b-1 border-black">
             <div className="w-2/5   flex flex-col justify-center items-center">
-              <div className="w-[250] h-[250px] mb-4 bg-blue-500">
-                put brand's logo inside here.
+              <div className="w-[250] h-[250px] mb-4 ">
+                <Image
+                  width={250}
+                  height={250}
+                  alt="logo"
+                  src={`http://localhost:3001/uploads/brand-logo/${brand?.bd_logo}`}
+                ></Image>
               </div>
               <div className="flex justify-around w-[400]">
                 <Button
@@ -80,29 +99,24 @@ export default function BPlayerProfile(props) {
               <div className="flex flex-col gap-2">
                 <dl className="text-base flex font-cn justify-between">
                   <dt>品牌名稱：</dt>
-                  <dt>蹦蛙娛樂</dt>
+                  <dt>{brand?.bd_name}</dt>
                 </dl>
-                <dl className="text-base flex font-cn justify-between">
-                  <dt>主理人：</dt>
-                  <dt>張嘉航</dt>
-                </dl>
+
                 <dl className="text-base flex font-cn justify-between">
                   <dt>電話：</dt>
-                  <dt className="font-sans">02-39100200</dt>
+                  <dt className="font-sans">{brand?.bd_tel}</dt>
                 </dl>
                 <dl className="text-base flex font-cn justify-between">
                   <dt>地址：</dt>
-                  <dt>臺北市中正區寧波西街1號2樓</dt>
+                  <dt>{brand?.bd_address}</dt>
                 </dl>
                 <dl className="text-base flex font-cn justify-between">
                   <dt>品牌聯絡信箱：</dt>
-                  <dt className="font-sans">bonfrogbf@gmail.com</dt>
+                  <dt className="font-sans">{brand?.bd_email}</dt>
                 </dl>
                 <dl className="text-base flex font-cn justify-between">
                   <dt>品牌官方網站：</dt>
-                  <dt className="font-sans">
-                    https://www.instagram.com/bonfrogbf/
-                  </dt>
+                  <dt className="font-sans">{brand?.bd_website}</dt>
                 </dl>
               </div>
             </div>
@@ -115,9 +129,7 @@ export default function BPlayerProfile(props) {
               <h5 className="font-cn font-semibold text-3xl self-start mt-0">
                 品牌簡介
               </h5>
-              <p className="font-cn text-base">
-                如果蹦蛙村相關問題，可以直接詢問！如果蹦蛙村相關問題，可以直接詢問！
-              </p>
+              <p className="font-cn text-base">{brand?.bd_info}</p>
             </div>
 
             {/* 讓 introduction 貼齊底部 */}
@@ -161,6 +173,7 @@ export default function BPlayerProfile(props) {
           </div>
         </div>
       </div>
+      <JoinUsModal />
     </>
   )
 }
