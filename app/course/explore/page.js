@@ -121,6 +121,7 @@ export default function Explore() {
             {courses.length > 0 ? (
               courses.map(course => (
                 <Card1 
+                  c_id={course.c_id}
                   key={course.c_id}
                   region={course.district}
                   cate={categoryMap[course.c_option] || "未知分類"} // 這裡用 map 查找分類名稱
