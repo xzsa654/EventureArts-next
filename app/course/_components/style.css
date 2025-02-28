@@ -87,9 +87,10 @@
   }
   
   .swiper-slide img {
+    padding-right: 5px;
+
     display: block;
-    width: 100%;
-    height: 100%;
+    aspect-ratio: 2 / 1; /* 設定寬高比為 2:1 */
     object-fit: cover;
   }
     /* 導航點點顏色 */

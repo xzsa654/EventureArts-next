@@ -12,6 +12,7 @@ export default function Card1({
 }) {
   return (
     <>
+{/* <Link href={`/course/product/${c_id}`} className="block"> */}
       <div className="card1">
         <img className="w-full aspect-[2/1]" src="https://static.pressplay.cc/static/uploads/project/C5C18CCEFA4438D49F1ACAF8DBD0200D/project_image/20220720/D170DA0561B3DA3CBCDACF92CE45221C/62d7e19752676D170DA0561B3DA3CBCDACF92CE45221C20220720190559.png" alt="productImg" />
         <div className="chips flex gap-3 px-4 py-6">
@@ -24,7 +25,7 @@ export default function Card1({
           <p className='pprice'>{pprice}</p>
         </div>
       </div>
-      
+{/* </Link>    */} 
     </>
   )
 }
