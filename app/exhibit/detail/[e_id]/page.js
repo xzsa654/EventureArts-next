@@ -80,7 +80,7 @@ export default function ExhibitionDetail({ params }) {
                     exhibitionData.cover_image?.startsWith('http')
                       ? exhibitionData.cover_image
                       : exhibitionData.cover_image
-                      ? `http://localhost:3001${exhibitionData.cover_image}`
+                      ? `http://localhost:3001/uploads/chu-uploads/${exhibitionData.cover_image}`
                       : '/chu-images/img_9.jpg'
                   }
                   alt={exhibitionData.e_name}
