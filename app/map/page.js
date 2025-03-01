@@ -31,7 +31,6 @@ export default function Page() {
   const [activeFilterType, setActiveFilterType] = useState("mrt") // "mrt" or "district"
   // Add a new state for filtered locations
   const [filteredLocations, setFilteredLocations] = useState([])
-  const [shortestPaths, setShortestPaths] = useState(null) // Added state for shortestPaths
 
   // Load map data
   useEffect(() => {
@@ -282,7 +281,6 @@ export default function Page() {
         isLoading={isLoading}
         activeFilterType={activeFilterType}
         onFilterTypeChange={handleFilterTypeChange}
-        setShortestPaths={setShortestPaths} 
       />
     ),
     [
@@ -350,8 +348,8 @@ export default function Page() {
               selectedStation={selectedStation}
               selectedLineStations={selectedLineStations}
               activeFilterType={activeFilterType}
-              shortestPaths={shortestPaths} 
-            />
+              shortestPaths={filteredPaths} 
+          />
           </div>
   
           {/* right side：MapView */}

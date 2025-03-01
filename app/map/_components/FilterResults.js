@@ -8,21 +8,24 @@ export default function FilterResults({
   selectedStation,
   selectedLineStations,
   activeFilterType,
-  shortestPaths, // Add this prop
+  shortestPaths,
 }) {
   // Helper function to get selected station info
   const getSelectedStationInfo = () => {
-    if (!selectedStation || !selectedLineStations) return null
+    if (!selectedStation || selectedStation === "all" || !selectedLineStations) return null
     return selectedLineStations.find((station) => station.station_id === selectedStation)
   }
 
   // Helper function to get location details by end_name (locat_id)
   const getLocationDetails = (end_name) => {
-    return filteredLocations?.find((loc) => loc.locat_id.toString() === end_name)
+    if (!end_name || !filteredLocations) return null
+    // Convert both to strings for comparison
+    return filteredLocations.find((loc) => loc.locat_id.toString() === end_name.toString())
   }
 
   // Helper function to format distance
   const formatDistance = (distance) => {
+    if (!distance) return "N/A"
     if (distance >= 1000) {
       return `${(distance / 1000).toFixed(2)} km`
     }
@@ -31,15 +34,20 @@ export default function FilterResults({
 
   const selectedStationInfo = getSelectedStationInfo()
 
+  // Sort shortest paths by distance
+  const sortedPaths = shortestPaths?.features
+    ? [...shortestPaths.features].sort((a, b) => a.properties.distance - b.properties.distance)
+    : []
+
   return (
     <div className="filter-results-container">
       <div className="filter-results-header">
-        <h2>{activeFilterType === "district" ? "District Results" : "Station Results"}</h2>
+        <h3>{activeFilterType === "district" ? "Results" : "Results"}</h3>
         <span className="results-count">
           {activeFilterType === "district" && filteredLocations
             ? `${filteredLocations.filter((loc) => loc.district === selectedDistrict).length} locations`
-            : selectedStationInfo && shortestPaths?.features
-              ? `${shortestPaths.features.length} paths found`
+            : selectedStationInfo && sortedPaths.length > 0
+              ? `${sortedPaths.length} found`
               : "No selection"}
         </span>
       </div>
@@ -75,7 +83,7 @@ export default function FilterResults({
               </div>
             </div>
 
-            <div className="station-details">
+            {/* <div className="station-details">
               <div className="details-label">Station Details:</div>
               <div className="details-grid">
                 <div>Latitude:</div>
@@ -83,13 +91,13 @@ export default function FilterResults({
                 <div>Longitude:</div>
                 <div className="coordinate">{selectedStationInfo.coordinates.longitude}</div>
               </div>
-            </div>
+            </div> */}
 
             {/* Shortest Paths Section */}
-            {shortestPaths?.features && shortestPaths.features.length > 0 && (
+            {sortedPaths.length > 0 ? (
               <div className="shortest-paths-section">
                 <div className="section-title">Nearest Locations:</div>
-                {shortestPaths.features.map((path, index) => {
+                {sortedPaths.map((path, index) => {
                   const locationDetails = getLocationDetails(path.properties.end_name)
                   return (
                     <div key={index} className="path-card">
@@ -97,18 +105,25 @@ export default function FilterResults({
                         <span className="path-number">#{index + 1}</span>
                         <span className="path-distance">{formatDistance(path.properties.distance)}</span>
                       </div>
-                      {locationDetails && (
+                      {locationDetails ? (
                         <div className="location-details">
                           <div className="location-id">ID: {locationDetails.locat_id}</div>
                           <div className="location-name">{locationDetails.locat_name}</div>
                           <div className="location-address">{locationDetails.address}</div>
+                        </div>
+                      ) : (
+                        <div className="location-details">
+                          <div className="location-id">ID: {path.properties.end_name}</div>
+                          <div className="location-name">Location details not found</div>
                         </div>
                       )}
                     </div>
                   )
                 })}
               </div>
-            )}
+            ) : selectedStation && selectedStation !== "all" ? (
+              <div className="no-paths-message">Click "Apply Filter" to find nearest locations</div>
+            ) : null}
           </div>
         )}
 

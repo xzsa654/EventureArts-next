@@ -25,8 +25,9 @@
   background: #f3f4f6;
   padding: 0.25rem 0.75rem;
   border-radius: 9999px;
-  font-size: 0.875rem;
+  font-size: 0.7rem;
   color: #6b7280;
+  border: 1px solid #111827;
 }
 
 .results-scroll-area {
