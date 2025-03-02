@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { Input } from '@heroui/react'
-import UploadsCard from './uploads-card'
+import UploadsCard from '../../_components/b_player/uploads-card'
 
 export default function UserFile({ online }) {
   // 線下版的上傳區

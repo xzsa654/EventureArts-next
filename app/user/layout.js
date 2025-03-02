@@ -1,16 +1,11 @@
+// app/user/layout.js
 'use client'
 
 import React, { useState, useEffect } from 'react'
 import { usePathname } from 'next/navigation'
 import { Image } from '@heroui/react'
 import Link from 'next/link'
-import Mang from './b_player/mang'
-import ExAdd from './b_player/exhibit/ex-add'
-import CoAdd from './b_player/course/co-add'
-import LikedEvents from './c_player/LikedEvents'
-import CPlayerProfile from './c_player/profile'
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules'
-import BPlayerProfile from './b_player/profile'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { useAuth } from '@/hooks/use-auth'
 // Import Swiper styles
@@ -20,13 +15,13 @@ import 'swiper/css/pagination'
 import 'swiper/css/scrollbar'
 import Loading from '@/components/common/loading'
 
-export default function UserPageFrame(props) {
+export default function UserLayout({ children }) {
   const { auth } = useAuth()
-  // 當前路由
+  // 当前路由
   const pathName = usePathname().split('/user')[1]
-
   const [loading, setLoading] = useState(!auth.token)
-  // onload 還沒載完前的 loading
+
+  // onload 还没载完前的 loading
   useEffect(() => {
     const loadData = async () => {
       try {
@@ -38,149 +33,42 @@ export default function UserPageFrame(props) {
     loadData()
   }, [])
 
-  // 路由對應的 title 和 components
-  const routing = {
-    '/b/profile': {
-      title: 'Brand PROFILE.',
-      components: <BPlayerProfile />,
-    },
-    '/b/ex-mang': {
-      title: '#EXHIBIT MANG.',
-      components: <Mang />,
-    },
-    '/b/ex-mang/add-on': { title: '#EXHIBIT MANG.', components: <ExAdd /> },
-    '/b/ex-mang/add-off': {
-      title: '#EXHIBIT MANG.',
-      components: <ExAdd online={true} />,
-    },
-    '/c/liked': { title: 'LIKED EVENTS *', components: <LikedEvents /> },
-    '/b/co-mang': {
-      title: '#COURSE MANG.',
-      components: <Mang type={'course'} />,
-    },
-    '/b/co-mang/add': {
-      title: '#COURSE MANG.',
-      components: <CoAdd />,
-    },
-    '/c/profile': {
-      title: 'MY PROFILE.',
-      components: <CPlayerProfile />,
-    },
+  // 获取页面标题
+  const getPageTitle = () => {
+    if (pathName.startsWith('/b/profile')) return 'Brand PROFILE.'
+    if (pathName.startsWith('/b/ex-mang')) return '#EXHIBIT MANG.'
+    if (pathName.startsWith('/b/co-mang')) return '#COURSE MANG.'
+    if (pathName.startsWith('/c/liked')) return 'LIKED EVENTS *'
+    if (pathName.startsWith('/c/profile')) return 'MY PROFILE.'
+    if (pathName.startsWith('/message')) return 'Message'
+    return ''
   }
 
   const isActive = { c: 'text-yellow-600', b: 'text-green-600' }
+
   if (loading) return <Loading />
   if (!auth?.token)
     return (
-      <div className="h-screen mt-20 flex text-3xl items-center justify-center text-center  text-black">
+      <div className="h-screen mt-20 flex text-3xl items-center justify-center text-center text-black">
         請先登入EventureArts，查看更多
       </div>
     )
+
   return (
     <>
       {/* layout */}
-      <div className="  max-sm:w-full mt-20 flex flex-col">
+      <div className="max-sm:w-full mt-20 flex flex-col">
         {/* Screen Message */}
         <div className="w-full border-black border-t-1 border-b-1 text-center max-sm:px-0 px-16 tracking-[0.08em]">
           <h1 className="w-full max-sm:text-4xl text-[128px] leading-[140px] font-bold">
-            {routing[pathName]?.title}
-            {/* MY PROFILE * */}
+            {getPageTitle()}
           </h1>
         </div>
-        {/* main */}
-
-        {/* sidebar-mobile */}
-        <div className="flex justify-between p-2 my-2  md:hidden   ">
-          <Swiper
-            modules={[Navigation, Pagination, Scrollbar, A11y]}
-            spaceBetween={30}
-            slidesPerView={2.7}
-            scrollbar={{ draggable: true }}
-          >
-            <SwiperSlide>
-              <Link
-                href="/user/c/profile"
-                className={`hover:text-yellow-600 ${
-                  pathName == 'profile' ? isActive.c : ''
-                }   text-[14px] mb-5`}
-              >
-                我的檔案
-              </Link>
-            </SwiperSlide>
-            <SwiperSlide>
-              <Link
-                href="#"
-                size="md"
-                className={`hover:text-yellow-600 ${
-                  pathName == 'order' ? isActive.c : ''
-                }  text-[14px]`}
-              >
-                訂單
-              </Link>
-            </SwiperSlide>
-
-            <SwiperSlide>
-              <Link
-                href="#"
-                size="md"
-                className={`hover:text-yellow-600 ${
-                  pathName == 'liked' ? isActive.c : ''
-                }    text-[14px]`}
-              >
-                收藏
-              </Link>
-            </SwiperSlide>
-            <SwiperSlide>
-              <Link
-                href="#"
-                size="md"
-                className={`hover:text-green-600 ${
-                  pathName == 'profile' ? isActive.b : ''
-                }`}
-              >
-                我的品牌
-              </Link>
-            </SwiperSlide>
-            <SwiperSlide>
-              <Link
-                href="#"
-                size="md"
-                className={`hover:text-green-600 ${
-                  pathName.split('/')[2] == 'co-mang' ? isActive.b : ''
-                }`}
-              >
-                課程管理
-              </Link>
-            </SwiperSlide>
-            <SwiperSlide>
-              <Link
-                href="#"
-                size="md"
-                className={`hover:text-green-600 ${
-                  pathName.split('/')[2] == 'ex-mang' ? isActive.b : ''
-                }`}
-              >
-                展覽管理
-              </Link>
-            </SwiperSlide>
-            <SwiperSlide>
-              <Link
-                href="#"
-                size="md"
-                className={`hover:text-green-600 ${
-                  pathName == 'order' ? isActive.b : ''
-                }`}
-              >
-                訂單管理
-              </Link>
-            </SwiperSlide>
-          </Swiper>
-        </div>
-
         <div
           className="container h-full flex-auto  max-sm:border-none max-sm:px-2
-          border-black border-r-1 border-l-1  mx-auto max-sm:my-0  flex max-sm:flex-col "
+          border-black border-r-1 border-l-1  mx-auto max-sm:my-0  flex max-sm:flex-col"
         >
+          {/* 这里保留你原有的侧边栏代码 */}
           {/*sidebar  */}
           <div className="h-auto border-black w-[150px] border-r-1 max-sm:hidden  ">
             {/* 用戶端 sidebar-top */}
@@ -280,12 +168,12 @@ export default function UserPageFrame(props) {
           {/* content */}
           <div
             className={`w-full flex flex-col h-auto gap-5 ${
-              pathName.includes('profile')
+              pathName.includes('profile') || pathName.includes('message')
                 ? ''
                 : 'mx-12 my-6 max-sm:my-2 max-sm:mx-0'
             }`}
           >
-            {routing[pathName]?.components}
+            {children}
           </div>
         </div>
       </div>

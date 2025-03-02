@@ -10,8 +10,8 @@ import {
   CheckboxGroup,
   Textarea,
 } from '@heroui/react'
-import { CustomCheckbox } from '../custom-checkbox'
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules'
+import { CustomCheckbox } from '../../../_components/b_player/custom-checkbox'
 
 import { Swiper, SwiperSlide } from 'swiper/react'
 
@@ -20,8 +20,7 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 import 'swiper/css/scrollbar'
-
-export default function CoMiddleForm(props) {
+export default function UserCoAddForm() {
   const [groupSelected, setGroupSelected] = React.useState([])
   return (
     <>

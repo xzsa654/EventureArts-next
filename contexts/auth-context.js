@@ -5,7 +5,9 @@ import { FIREBASE_LOGIN, REGISTER } from '@/lib/authorization-api'
 import React, { useState, useEffect } from 'react'
 import { addToast } from '@heroui/react'
 import { useRouter } from 'next/navigation'
+import { io } from 'socket.io-client'
 export function AuthContextProvider({ children }) {
+  const BASEURL = 'http://localhost:3001'
   const router = useRouter()
   const storageKey = 'EventureArts-auth'
   const defaultAuth = {
@@ -34,13 +36,8 @@ export function AuthContextProvider({ children }) {
 
   useEffect(() => {
     const str = localStorage.getItem(storageKey)
-    try {
-      const data = JSON.parse(str)
-      
-      if(data) setAuth(data)
-    } catch (error) {
-      console.log(error)
-    }
+    const data = JSON.parse(str)
+    if (data) setAuth(data)
   }, [])
   //註冊 TODO:
   // 1. 取出所有表單內會員資料
@@ -62,6 +59,7 @@ export function AuthContextProvider({ children }) {
     const result = await res.json()
     if (result.success) {
       setAuth(result.data)
+      getSocket()
       setFirstLogin({
         user_email: '',
         mobile: '',
@@ -86,8 +84,8 @@ export function AuthContextProvider({ children }) {
     const result = await res.json()
     if (result.success && result.code == 200) {
       const { user_id, user_email, nickname, avatar, token, user_role } = result
-
       setAuth({ user_id, user_email, nickname, avatar, token, user_role })
+      getSocket()
       addToast({
         radius: 'lg',
         description: '成功登入！',
@@ -103,15 +101,18 @@ export function AuthContextProvider({ children }) {
     const nextData = { ...firstLogin, ...obj }
     setFirstLogin(nextData)
   }
-  // 登入是異步的 , 當狀態被改變時再添加到 localstorage 中
+
+  // 登入是異步的 , 當狀態被改變時再添加到 localstorage 中 與連接socket
   useEffect(() => {
     localStorage.setItem(storageKey, JSON.stringify(auth))
+    getSocket()
   }, [auth])
 
   // 登入
   const loginhandle = async (obj) => {
     setAuth(obj)
     localStorage.setItem(storageKey, JSON.stringify(obj))
+    getSocket()
     addToast({
       radius: 'lg',
       description: '成功登入！',
@@ -143,6 +144,18 @@ export function AuthContextProvider({ children }) {
       return { Authorization: 'Bearer ' + auth?.token }
     }
   }
+
+  //socket.io 啟動函式
+  const getSocket = () => {
+    if (auth.token) {
+      const socket = io(BASEURL, {
+        withCredentials: true,
+        query: { user_id: auth.user_id },
+      })
+      socket.connect()
+    }
+  }
+
   return (
     <>
       <AuthContext.Provider
