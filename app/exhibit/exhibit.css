@@ -129,7 +129,7 @@
 
 /* ExhibitionSection.js CSS  */
 .carousel-column {
-  animation: scrollUp 130s linear infinite;
+  animation: scrollUp 30s linear infinite;
   will-change: transform;
 }
 
@@ -150,3 +150,75 @@
   width: 1px;
   background-color: #d1d5db;
 }
+
+/* Add these CSS classes for the advanced search animation */
+.advanced-search-closed {
+  max-height: 0;
+  opacity: 0;
+}
+
+.advanced-search-open {
+  max-height: 500px;
+  opacity: 1;
+}
+
+.advanced-search {
+  transform-origin: top;
+}
+
+
+/* 3D transform styles for ArtistSection */
+/* 3D transform styles */
+.perspective {
+  perspective: 2000px;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+/* Masonry grid layout */
+.masonry-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-content: flex-start;
+  position: relative;
+  padding: 8px;
+}
+
+.masonry-grid::after {
+  content: "";
+  flex-grow: 999999999;
+}
+
+/* Hover effects */
+.masonry-grid > div {
+  transition: transform 0.3s ease;
+}
+
+.masonry-grid > div:hover {
+  z-index: 1;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .masonry-grid {
+    gap: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .masonry-grid {
+    gap: 8px;
+  }
+}
+

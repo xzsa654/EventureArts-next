@@ -52,7 +52,7 @@ const RankList = () => {
     return (
         <div className="div">
             <div className="para">
-                <ParaTitle title="熱門課程" link="" btn="" />
+                <ParaTitle title="熱門課程｜Best-Selling Courses" link="/course/explore" btn="" />
             </div>
 
             <div className="RankArea flex flex-wrap gap-8 justify-around">
@@ -64,7 +64,9 @@ const RankList = () => {
                                 {/* 左邊- 排名 */}
                                 <div className="rank w-12 text-center">{rank.num}</div>
                                 {/* 中間- 圖片 */}
-                                <div className='content-center px-8'><img src="https://fakeimg.pl/300x150/" alt="" /></div>
+                                <div className='content-center px-8'>
+                                    <img  className="transition hover:scale-125 ease-in-out" src="https://fakeimg.pl/300x150/" alt="" />
+                                </div>
                                 {/* 右邊- 文字組 */}
                                 <div className="content-center">
                                     <div className="pname2 pb-4">{rank.pname}</div> 

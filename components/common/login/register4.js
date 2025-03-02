@@ -64,7 +64,7 @@ export default function RegisterStep4(props) {
               {items.map((item) => (
                 <Chip
                   color="primary"
-                  radius="large"
+                  radius="lg"
                   key={item?.data.c_optionID}
                   startContent=<CheckIcon />
                 >
@@ -104,7 +104,7 @@ export default function RegisterStep4(props) {
               {items.map((item) => (
                 <Chip
                   color="primary"
-                  radius="large"
+                  radius="lg"
                   key={item?.data.e_optionID}
                   startContent=<CheckIcon />
                 >

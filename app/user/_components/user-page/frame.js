@@ -12,17 +12,31 @@ import CPlayerProfile from './c_player/profile'
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules'
 import BPlayerProfile from './b_player/profile'
 import { Swiper, SwiperSlide } from 'swiper/react'
-
+import { useAuth } from '@/hooks/use-auth'
 // Import Swiper styles
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 import 'swiper/css/scrollbar'
+import Loading from '@/components/common/loading'
 
 export default function UserPageFrame(props) {
+  const { auth } = useAuth()
   // 當前路由
   const pathName = usePathname().split('/user')[1]
-  console.log(pathName)
+
+  const [loading, setLoading] = useState(!auth.token)
+  // onload 還沒載完前的 loading
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        if ((await auth.token) !== '') setLoading(false)
+      } finally {
+        setLoading(false)
+      }
+    }
+    loadData()
+  }, [])
 
   // 路由對應的 title 和 components
   const routing = {
@@ -55,7 +69,13 @@ export default function UserPageFrame(props) {
   }
 
   const isActive = { c: 'text-yellow-600', b: 'text-green-600' }
-
+  if (loading) return <Loading />
+  if (!auth?.token)
+    return (
+      <div className="h-screen mt-20 flex text-3xl items-center justify-center text-center  text-black">
+        請先登入EventureArts，查看更多
+      </div>
+    )
   return (
     <>
       {/* layout */}
@@ -162,7 +182,7 @@ export default function UserPageFrame(props) {
           border-black border-r-1 border-l-1  mx-auto max-sm:my-0  flex max-sm:flex-col "
         >
           {/*sidebar  */}
-          <div className="h-auto border-black border-r-1 max-sm:hidden  ">
+          <div className="h-auto border-black w-[150px] border-r-1 max-sm:hidden  ">
             {/* 用戶端 sidebar-top */}
             <ul className="border-black border-b-1 h-1/2">
               <li className=" font-cn border-black border-b-1 flex items-center justify-center  w-full h-[50px] ">
@@ -201,58 +221,60 @@ export default function UserPageFrame(props) {
             </ul>
 
             {/* 品牌端 sidebar-tail */}
-            <ul className="w-[150px] border-black border-b-1 h-1/2 flex flex-col ">
-              <li className=" border-b-1 font-cn  border-black flex items-center justify-center  w-full h-[50px] ">
-                <Link
-                  href="/user/b/profile"
-                  size="md"
-                  className={` text-16 hover:text-green-600 ${
-                    pathName == '/b/profile' ? isActive.b : ''
-                  }`}
-                >
-                  我的品牌
-                </Link>
-              </li>
-              <li className=" font-cn border-black border-b-1 flex items-center justify-center  w-full h-[50px] ">
-                <Link
-                  href="/user/b/co-mang"
-                  size="md"
-                  className={`text-16 hover:text-green-600 ${
-                    pathName.split('/')[2] == 'co-mang' ? isActive.b : ''
-                  }`}
-                >
-                  課程管理
-                </Link>
-              </li>
-              <li className="  font-cn border-black border-b-1 flex items-center justify-center  w-full h-[50px] ">
-                <Link
-                  href="/user/b/ex-mang"
-                  size="md"
-                  className={`text-16 hover:text-green-600 ${
-                    pathName.split('/')[2] == 'ex-mang' ? isActive.b : ''
-                  }`}
-                >
-                  展覽管理
-                </Link>
-              </li>
-              <li className="  font-cn border-black border-b-1 flex items-center justify-center  w-full h-[50px] ">
-                <Link
-                  href="#"
-                  size="md"
-                  className={`text-16 hover:text-green-600 ${
-                    pathName == 'order' ? isActive.b : ''
-                  }`}
-                >
-                  訂單管理
-                </Link>
-              </li>
-              <li className="flex items-center justify-center grow">
-                <Image
-                  src="/Yao/user/Group 47.svg" // public 資料夾內的 logo.svg
-                  alt="Logo"
-                />
-              </li>
-            </ul>
+            {auth.user_role == 'brand' && (
+              <ul className="w-[150px] border-black border-b-1 h-1/2 flex flex-col ">
+                <li className=" border-b-1 font-cn  border-black flex items-center justify-center  w-full h-[50px] ">
+                  <Link
+                    href="/user/b/profile"
+                    size="md"
+                    className={` text-16 hover:text-green-600 ${
+                      pathName == '/b/profile' ? isActive.b : ''
+                    }`}
+                  >
+                    我的品牌
+                  </Link>
+                </li>
+                <li className=" font-cn border-black border-b-1 flex items-center justify-center  w-full h-[50px] ">
+                  <Link
+                    href="/user/b/co-mang"
+                    size="md"
+                    className={`text-16 hover:text-green-600 ${
+                      pathName.split('/')[2] == 'co-mang' ? isActive.b : ''
+                    }`}
+                  >
+                    課程管理
+                  </Link>
+                </li>
+                <li className="  font-cn border-black border-b-1 flex items-center justify-center  w-full h-[50px] ">
+                  <Link
+                    href="/user/b/ex-mang"
+                    size="md"
+                    className={`text-16 hover:text-green-600 ${
+                      pathName.split('/')[2] == 'ex-mang' ? isActive.b : ''
+                    }`}
+                  >
+                    展覽管理
+                  </Link>
+                </li>
+                <li className="  font-cn border-black border-b-1 flex items-center justify-center  w-full h-[50px] ">
+                  <Link
+                    href="#"
+                    size="md"
+                    className={`text-16 hover:text-green-600 ${
+                      pathName == 'order' ? isActive.b : ''
+                    }`}
+                  >
+                    訂單管理
+                  </Link>
+                </li>
+                <li className="flex items-center justify-center grow">
+                  <Image
+                    src="/Yao/user/Group 47.svg" // public 資料夾內的 logo.svg
+                    alt="Logo"
+                  />
+                </li>
+              </ul>
+            )}
           </div>
 
           {/* content */}

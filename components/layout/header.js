@@ -236,7 +236,7 @@ export default function Header(props) {
                 isOpen ? 'flex' : 'hidden'
               } lg:flex  justify-center text-small `}
             >
-              <Link href="#" onClick={onOpen}>
+              <button onClick={onOpen}>
                 {/* 已登入的 component */}
                 {auth?.user_id !== 0 ? (
                   <AVatarGroup />
@@ -246,7 +246,7 @@ export default function Header(props) {
                 ) : (
                   <HiUser size={35} />
                 )}
-              </Link>
+              </button>
             </NavbarItem>
             <NavbarItem>
               <Link href="#" onClick={toggleMenu}>

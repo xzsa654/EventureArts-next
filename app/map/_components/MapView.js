@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import {
   MapContainer,
   TileLayer,
@@ -8,145 +8,355 @@ import {
   ZoomControl,
   GeoJSON,
   LayerGroup,
-  // CircleMarker,
   Marker,
   Popup,
 } from 'react-leaflet'
+import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import './MapView.css'
-import L from 'leaflet'
+
+// Fix Leaflet's default icon issue
+L.Icon.Default.imagePath = 'https://unpkg.com/leaflet@1.7.1/dist/images/'
 
 export default function MapView({
   mrtRoutes,
-  mrtStations,
   taipeiDistricts,
   selectedMRT,
+  selectedStation,
   selectedDistrict,
-  dbLocations,
+  selectedLineStations,
+  shortestPaths,
+  filteredLocations,
+  onRouteClick,
+  onStationClick,
+  activeFilterType,
 }) {
   const mapRef = useRef(null)
   const center = [25.033, 121.5654]
+  const [hoveredRoute, setHoveredRoute] = useState(null)
+  const [hoveredDistrict, setHoveredDistrict] = useState(null)
 
-  useEffect(() => {
-    // 設定預設的 Marker icon（Leaflet 預設的 icon URL 在 Next.js 下可能出不來）
-    if (!mapRef.current) {
-      delete L.Icon.Default.prototype._getIconUrl
-      L.Icon.Default.mergeOptions({
-        iconRetinaUrl:
-          'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
-        iconUrl:
-          'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
-        shadowUrl:
-          'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
-      })
-    }
-  }, [])
-
-  // MRT line default style
+  // Base styles
   const routeStyle = {
     color: '#666666',
     weight: 3,
     opacity: 0.8,
   }
-  // MRT line highlight style
+
   const selectedStyle = {
     color: '#ff0000',
     weight: 5,
     opacity: 1,
   }
+
   const hoverStyle = {
     color: '#0000ff',
     weight: 5,
     opacity: 1,
   }
 
-  //
+  const shortestPathStyle = {
+    color: '#00ff00',
+    weight: 4,
+    opacity: 0.8,
+    dashArray: '5, 10', // Dashed line style
+  }
+
+  // Format distance helper function
+  const formatDistance = (distance) => {
+    if (distance >= 1000) {
+      return `${(distance / 1000).toFixed(2)} km`
+    }
+    return `${Math.round(distance)} m`
+  }
+
+  // Add buffer around routes for easier interaction
+  const routeBuffer = {
+    weight: 30,
+    color: '#000',
+    opacity: 0,
+  }
+
+  const getLineColor = (lineName) => {
+    const colorMap = {
+      淡水信義線: '#e3002c', // Red
+      松山新店線: '#008659', // Green
+      中和新蘆線: '#f8b61c', // Orange
+      板南線: '#0070bd', // Blue
+      文湖線: '#c48c31', // Brown
+    }
+    return colorMap[lineName] || '#666666'
+  }
+
+  // Update station styles
   const stationStyle = {
     radius: 6,
     fillColor: '#ffffff',
-    color: '#000000',
-    weight: 1.5,
+    color: selectedMRT ? getLineColor(selectedMRT) : '#000000',
+    weight: 2,
     opacity: 1,
     fillOpacity: 1,
   }
 
-  // 行政區樣式：選到的區域 fillOpacity 會比較深
+  const selectedStationStyle = {
+    radius: 10,
+    fillColor: getLineColor(selectedMRT) || '#ff7800',
+    color: '#000',
+    weight: 3,
+    opacity: 1,
+    fillOpacity: 0.8,
+  }
+
+  const hoverStationStyle = {
+    radius: 8,
+    fillColor: '#ffffff',
+    color: getLineColor(selectedMRT) || '#000000',
+    weight: 3,
+    opacity: 1,
+    fillOpacity: 0.9,
+  }
+
   const districtStyle = (feature) => {
     const isSelected = feature.properties.TNAME === selectedDistrict
+    const isHovered = feature.properties.TNAME === hoveredDistrict
+
     return {
       color: '#ff7800',
-      weight: 2,
+      weight: isSelected || isHovered ? 3 : 1,
       opacity: 0.65,
-      fillOpacity: isSelected ? 0.7 : 0.2,
+      fillOpacity: isSelected ? 0.7 : isHovered ? 0.5 : 0.2,
       fillColor: isSelected ? '#ff7800' : '#ffb380',
     }
   }
 
-  // MRT 車站用 circleMarker 呈現
-  const pointToLayer = (feature, latlng) => {
-    return L.circleMarker(latlng, stationStyle)
+  // Function to check if a route should be highlighted
+  const shouldHighlightRoute = (feature) => {
+    if (!selectedMRT || !feature.properties) return false
+    return feature.properties.MRTCODE === selectedMRT
   }
 
-  // MRT 路線事件：滑入、滑出時改變樣式
-  const onEachRouteFeature = (feature, layer) => {
-    layer.on({
+  const styleRoutes = (feature) => {
+    const isHighlighted = shouldHighlightRoute(feature)
+    const isHovered = hoveredRoute === feature.properties.MRTCODE
+
+    if (isHovered) {
+      return {
+        ...hoverStyle,
+        color: getLineColor(feature.properties.MRTCODE),
+      }
+    }
+
+    if (isHighlighted) {
+      return {
+        ...selectedStyle,
+        color: getLineColor(feature.properties.MRTCODE),
+      }
+    }
+
+    return routeStyle
+  }
+
+  const onEachRoute = (feature, layer) => {
+    // Add invisible buffer layer for easier interaction
+    const buffer = L.geoJSON(feature, {
+      style: routeBuffer,
+      interactive: true,
+    })
+
+    buffer.on({
       mouseover: () => {
-        if (!selectedMRT || feature.properties.MRTCODE === selectedMRT) {
-          layer.setStyle(hoverStyle)
-        }
+        setHoveredRoute(feature.properties.MRTCODE)
+        layer.setStyle({
+          ...hoverStyle,
+          color: getLineColor(feature.properties.MRTCODE),
+        })
       },
       mouseout: () => {
-        if (!selectedMRT || feature.properties.MRTCODE === selectedMRT) {
-          layer.setStyle(
-            selectedMRT === feature.properties.MRTCODE
-              ? selectedStyle
-              : routeStyle
-          )
-        }
+        setHoveredRoute(null)
+        layer.setStyle(styleRoutes(feature))
+      },
+      click: () => {
+        console.log('Clicked route:', feature.properties.MRTCODE)
+        onRouteClick(feature.properties.MRTCODE)
       },
     })
-  }
 
-  // 行政區事件：滑入、滑出時改變透明度
-  const onEachDistrict = (feature, layer) => {
-    if (feature.properties && feature.properties.TNAME) {
-      layer.bindPopup(feature.properties.TNAME)
-    }
     layer.on({
       mouseover: () => {
-        if (
-          !selectedDistrict ||
-          feature.properties.TNAME === selectedDistrict
-        ) {
-          layer.setStyle({
-            fillOpacity: 0.7,
-            fillColor: '#ff7800',
-          })
-        }
+        setHoveredRoute(feature.properties.MRTCODE)
       },
       mouseout: () => {
+        setHoveredRoute(null)
+      },
+      click: () => {
+        console.log('Clicked route:', feature.properties.MRTCODE)
+        onRouteClick(feature.properties.MRTCODE)
+      },
+    })
+
+    // Add popup with line name
+    layer.bindPopup(feature.properties.MRTCODE)
+  }
+
+  // Create GeoJSON for stations
+  const stationGeoJSON = {
+    type: 'FeatureCollection',
+    features: selectedLineStations.map((station) => ({
+      type: 'Feature',
+      properties: {
+        name: station.name_chinese,
+        name_english: station.name_english,
+        id: station.station_id,
+      },
+      geometry: {
+        type: 'Point',
+        coordinates: [
+          station.coordinates.longitude,
+          station.coordinates.latitude,
+        ],
+      },
+    })),
+  }
+
+  // Function to check if a station should be highlighted
+  const shouldHighlightStation = (stationId) => {
+    return selectedStation === stationId
+  }
+
+  // Function to get station style based on selection state
+  const getStationStyle = (stationId) => {
+    if (shouldHighlightStation(stationId)) {
+      return selectedStationStyle
+    }
+    return stationStyle
+  }
+
+  const onEachDistrict = (feature, layer) => {
+    layer.on({
+      mouseover: (e) => {
+        setHoveredDistrict(feature.properties.TNAME)
+        layer.setStyle({
+          ...districtStyle(feature),
+          fillOpacity: 0.5,
+          weight: 3,
+        })
+      },
+      mouseout: (e) => {
+        setHoveredDistrict(null)
         layer.setStyle(districtStyle(feature))
       },
+      click: (e) => {
+        // You can add click handling for districts if needed
+        console.log('Clicked district:', feature.properties.TNAME)
+      },
     })
+
+    // Add popup with district name
+    layer.bindPopup(feature.properties.TNAME)
   }
 
-  // 只呈現選取的 MRT 路線（若有）
-  const filterRoutes = (feature) => {
-    return !selectedMRT || feature.properties.MRTCODE === selectedMRT
-  }
 
-  // 決定 MRT 路線顏色
-  const styleRoutes = (feature) => {
-    return selectedMRT === feature.properties.MRTCODE
-      ? selectedStyle
-      : routeStyle
-  }
+  // FitBounds happens when shortestPaths, filteredLocations, or selectedDistrict changes
+  useEffect(() => {
+    const map = mapRef.current // 獲取地圖
+    if (!map) return // 如果地圖未加載，則不執行後續操作
 
-  // 根據 selectedDistrict 過濾資料庫座標
-  const filteredDbLocations =
-    selectedDistrict && selectedDistrict !== ''
-      ? dbLocations.filter((loc) => loc.district === selectedDistrict)
-      : dbLocations
+    let bounds = L.latLngBounds() // 初始化邊界
+
+    // 處理 shortestPaths 圖層
+    if (
+      shortestPaths &&
+      shortestPaths.features &&
+      shortestPaths.features.length > 0
+    ) {
+      shortestPaths.features.forEach((path) => {
+        const endCoordinates =
+          path.geometry.coordinates[0][path.geometry.coordinates[0].length - 1]
+        bounds = bounds.extend([endCoordinates[1], endCoordinates[0]])
+      })
+    }
+
+    // 處理 filteredLocations 圖層
+    if (Array.isArray(filteredLocations) && filteredLocations.length > 0) {
+      filteredLocations.forEach((loc) => {
+        if (
+          loc.latitude &&
+          loc.longitude &&
+          loc.district === selectedDistrict
+        ) {
+          bounds = bounds.extend([+loc.latitude, +loc.longitude])
+        }
+      })
+    }
+
+    // 如果邊界有效，更新地圖範圍
+    if (bounds.isValid()) {
+      map.fitBounds(bounds, { padding: [20, 20] })
+    }
+  }, [shortestPaths, filteredLocations, selectedDistrict]) // 依據圖層和篩選條件變化觸發
+
+  // Create separate LayerGroups for routes and stations
+  const renderRoutes = () => (
+    <LayerGroup>
+      {mrtRoutes && (
+        <GeoJSON
+          key={`routes-${selectedMRT || 'all'}-${hoveredRoute}`}
+          data={mrtRoutes}
+          style={styleRoutes}
+          onEachFeature={onEachRoute}
+        />
+      )}
+    </LayerGroup>
+  )
+
+  const renderStations = () => (
+    <LayerGroup>
+      {selectedLineStations && selectedLineStations.length > 0 && (
+        <GeoJSON
+          key={`stations-${selectedMRT}-${JSON.stringify(
+            selectedLineStations
+          )}`}
+          data={stationGeoJSON}
+          pointToLayer={(feature, latlng) => {
+            const style = getStationStyle(feature.properties.id)
+            const marker = L.circleMarker(latlng, {
+              ...style,
+              zIndexOffset: 1000,
+            })
+
+            marker.on({
+              mouseover: () => {
+                if (!shouldHighlightStation(feature.properties.id)) {
+                  marker.setStyle({
+                    ...hoverStationStyle,
+                    zIndexOffset: 1000,
+                  })
+                }
+              },
+              mouseout: () => {
+                if (!shouldHighlightStation(feature.properties.id)) {
+                  marker.setStyle({
+                    ...style,
+                    zIndexOffset: 1000,
+                  })
+                }
+              },
+              click: () => {
+                console.log('Clicked station:', feature.properties.id)
+                onStationClick(feature.properties.id)
+              },
+            })
+
+            marker.bindPopup(
+              `${feature.properties.name}<br>${feature.properties.name_english}`
+            )
+
+            return marker
+          }}
+        />
+      )}
+    </LayerGroup>
+  )
 
   return (
     <div className="map-view">
@@ -159,56 +369,48 @@ export default function MapView({
         ref={mapRef}
       >
         <ZoomControl position="bottomright" />
-
         <LayersControl position="topright">
-          {/* 不同底圖 */}
-          <LayersControl.BaseLayer checked name="Dark">
+          {/* Base layers */}
+          <LayersControl.BaseLayer name="Dark">
             <TileLayer
               attribution='&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>'
               url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
             />
           </LayersControl.BaseLayer>
 
-          <LayersControl.BaseLayer name="Light">
+          <LayersControl.BaseLayer checked name="Light">
             <TileLayer
               attribution='&copy; <a href="https://carto.com/">CartoDB</a>'
               url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
             />
           </LayersControl.BaseLayer>
 
-          {/* MRT 路線與車站 */}
-          <LayersControl.Overlay checked name="MRT">
-            <LayerGroup>
-              {mrtRoutes && (
-                <GeoJSON
-                  key={selectedMRT || 'all'}
-                  data={mrtRoutes}
-                  style={styleRoutes}
-                  onEachFeature={onEachRouteFeature}
-                  filter={filterRoutes}
-                />
-              )}
-              {mrtStations && (
-                <GeoJSON
-                  key="stations"
-                  data={mrtStations}
-                  pointToLayer={pointToLayer}
-                  onEachFeature={(feature, layer) => {
-                    if (feature.properties && feature.properties.name) {
-                      layer.bindPopup(feature.properties.name)
-                    }
-                  }}
-                />
-              )}
-            </LayerGroup>
+          {/* MRT layers - only visible when activeFilterType is "mrt" */}
+          <LayersControl.Overlay
+            checked={activeFilterType === 'mrt'}
+            name="MRT Lines"
+          >
+            {renderRoutes()}
           </LayersControl.Overlay>
 
-          {/* 行政區 */}
-          <LayersControl.Overlay checked name="Taipei Districts">
+          <LayersControl.Overlay
+            checked={activeFilterType === 'mrt'}
+            name="MRT Stations"
+          >
+            {renderStations()}
+          </LayersControl.Overlay>
+
+          {/* District layer - only visible when activeFilterType is "district" */}
+          <LayersControl.Overlay
+            checked={activeFilterType === 'district'}
+            name="Taipei Districts"
+          >
             <LayerGroup>
               {taipeiDistricts && (
                 <GeoJSON
-                  key={selectedDistrict || 'all-districts'}
+                  key={`districts-${
+                    selectedDistrict || 'all'
+                  }-${hoveredDistrict}`}
                   data={taipeiDistricts}
                   style={districtStyle}
                   onEachFeature={onEachDistrict}
@@ -217,42 +419,82 @@ export default function MapView({
             </LayerGroup>
           </LayersControl.Overlay>
 
-          {/* 從資料庫取得的標記點（根據 selectedDistrict 篩選） */}
-          <LayersControl.Overlay checked name="Database Locations">
+          {/* Filtered Locations overlay to match the database fields */}
+          <LayersControl.Overlay checked name="Filtered Locations">
             <LayerGroup>
-              {filteredDbLocations.map((loc) => {
-                if (loc.latitude && loc.longitude) {
-                  return (
-                    <Marker
-                    key={loc.locat_id}
-                    position={[+loc.latitude, +loc.longitude]}
-                  
-                      // key={loc.locat_id}
-                      // center={[
-                      //   parseFloat(loc.latitude),
-                      //   parseFloat(loc.longitude),
-                      // ]}
-                      // style of circle marker
-                      // pathOptions={{
-                      //   color: '#65a30d',
-                      //   weight: 2,
-                      //   fillColor: '#fbbf24',
-                      //   fillOpacity: 0.8,
-                      // }}
-                      // radius={10}
-                    >
-                      <Popup>
-                        <b>ID: {loc.locat_id}</b>
+              {Array.isArray(filteredLocations) &&
+                filteredLocations.map((loc) => {
+                  // Only show locations that match the selected district
+                  if (
+                    loc.latitude &&
+                    loc.longitude &&
+                    loc.district === selectedDistrict
+                  ) {
+                    return (
+                      <Marker
+                        key={loc.locat_id}
+                        position={[+loc.latitude, +loc.longitude]}
+                      >
+                        <Popup>
+                          <div className="space-y-1">
+                            <p>
+                              <b>ID: {loc.locat_id}</b>
+                            </p>
+                            <p>
+                              <b>{loc.locat_name}</b>
+                            </p>
+                            <p>{loc.district}</p>
+                            <p>{loc.address}</p>
+                          </div>
+                        </Popup>
+                      </Marker>
+                    )
+                  }
+                  return null
+                })}
+            </LayerGroup>
+          </LayersControl.Overlay>
+
+          <LayersControl.Overlay checked name="Shortest Paths">
+            <LayerGroup>
+              {shortestPaths?.features?.map((path, index) => (
+                <LayerGroup key={`path-${index}`}>
+                  <GeoJSON
+                    data={path}
+                    style={shortestPathStyle}
+                    onEachFeature={(feature, layer) => {
+                      const distance = formatDistance(
+                        feature.properties.distance
+                      )
+                      layer.bindPopup(`
+                        <div>
+                          <strong>End Location:</strong> ${feature.properties.end_name}<br/>
+                          <strong>Distance:</strong> ${distance}
+                        </div>
+                      `)
+                    }}
+                  />
+                  <Marker
+                    position={[
+                      path.geometry.coordinates[0][
+                        path.geometry.coordinates[0].length - 1
+                      ][1],
+                      path.geometry.coordinates[0][
+                        path.geometry.coordinates[0].length - 1
+                      ][0],
+                    ]}
+                  >
+                    <Popup>
+                      <div>
+                        <strong>Location ID:</strong> {path.properties.end_name}
                         <br />
-                        <b>{loc.locat_name}</b>
-                        <br />
-                        {loc.district}{loc.address}
-                      </Popup>
-                    </Marker>
-                  )
-                }
-                return null
-              })}
+                        <strong>Distance:</strong>{' '}
+                        {formatDistance(path.properties.distance)}
+                      </div>
+                    </Popup>
+                  </Marker>
+                </LayerGroup>
+              ))}
             </LayerGroup>
           </LayersControl.Overlay>
         </LayersControl>

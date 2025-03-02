@@ -19,7 +19,7 @@ export default function Carousel(props) {
     <>
       <Swiper
         slidesPerView={3}
-        spaceBetween={-2}
+        spaceBetween={0}
         pagination={{
           clickable: true,          
           bulletClass: 'swiper-pagination-bullet',

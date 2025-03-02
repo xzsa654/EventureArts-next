@@ -1,0 +1,82 @@
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    height: 100%;
+  }
+
+.Compare {
+    background-color: rgb(59, 59, 59);
+}
+
+
+/* ------ 1. 上方CTA banner ------ */
+.banner {
+    background-image: url('https://images.unsplash.com/photo-1483058712412-4245e9b90334?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+    background-repeat: no-repeat;
+    background-size: cover; /* 背景圖片填滿容器 */
+    backdrop-filter: blur(10px); /* 設定模糊程度 */
+    -webkit-backdrop-filter: blur(10px); /* Safari 兼容 */
+    position: relative;
+    z-index: 1; /* 確保背景在下層 */
+  }
+  
+  .banner::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.5);
+    z-index: -1; /* 使它在背景圖片下面 */
+  }
+
+.banner p {  /* Title: ”讓您的品牌被看見“ */
+    font-size: 30px;
+}
+
+/* ------ 2. 平台4特點 ------ */
+.Special {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 270px;
+}
+
+.title{
+    font-size: 1.5rem;
+    padding: 6px 0px;
+}
+
+.subtitle{
+    font-size: 1rem;
+    color: rgb(86, 86, 86);
+}
+
+
+/* 區塊標題列 */
+.sectionTitle p {
+    text-align: center;
+    padding: 2rem 0rem;
+}
+
+/* .section2 {
+    overflow: hidden;
+} */
+
+.heroui-accordion-item-title {
+    font-size: 1.5rem; /* 24px */
+    font-weight: bold;
+  }
+
+/* Q&A 標題 */
+.why{
+    font-size: 18px;
+    font-weight: bold;
+    color: #3B4163;
+}
+
+.section {
+    min-height: 100vh;
+  }
