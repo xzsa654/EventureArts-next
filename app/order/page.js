@@ -28,7 +28,7 @@ export default function Orderpage(props) {
       )
         .then((res) => res.json())
         .then((data) => {
-          setOrderData(data) // ✅ 存入狀態
+          setOrderData(data) // 存入狀態
           setLoading(false)
         })
         .catch((err) => {
