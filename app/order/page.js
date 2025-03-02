@@ -2,8 +2,10 @@
 
 import { useState, useEffect } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
+import { useAuth } from '@/hooks/use-auth' // 引入 useAuth
 // import { useOrder } from '@/hooks/use-order'
 import './order.css'
+import ComponentsReminder from './_components/reminder'
 import { Button } from '@heroui/button'
 import { HiArrowRight } from 'react-icons/hi2'
 
@@ -15,30 +17,42 @@ export default function Orderpage(props) {
   const e_id = searchParams.get('e_id')
   const c_id = searchParams.get('c_id')
   const router = useRouter()
-  const [orderData, setOrderData] = useState(null) 
+  const { auth, getAuthHeader } = useAuth() // 取得登入資訊
+  const [orderData, setOrderData] = useState(null)
   const [loading, setLoading] = useState(true)
 
+  // 1.確保使用者已登入，否則跳轉登入頁面
   useEffect(() => {
-    if ((e_id || c_id) && !orderData) {
-      // 向 API 取得訂單資訊
+    if (!auth?.token) {
+      alert('請先登入')
+      router.push('/login')
+    }
+  }, [auth, router])
+
+  useEffect(() => {
+    if ((e_id || c_id) && auth?.token) {
+      // 加入 Authorization 標頭
       fetch(
         `${API_BASE_URL}/order/api/getOrderDetails?e_id=${e_id || ''}&c_id=${
           c_id || ''
-        }`
+        }`,
+        {
+          headers: {
+            ...getAuthHeader(), // 透過 useAuth() 加入 JWT Token
+          },
+        }
       )
         .then((res) => res.json())
         .then((data) => {
-          setOrderData(data) // 存入狀態
+          setOrderData(data)
           setLoading(false)
         })
         .catch((err) => {
           console.error('Error fetching order details:', err)
           setLoading(false)
         })
-    } else {
-      setLoading(false)
     }
-  }, [e_id, c_id])
+  }, [e_id, c_id, auth])
 
   if (loading) return <p>載入中...</p>
   if (!orderData) return <p>無法生成訂單，請再試一遍</p>
@@ -142,10 +156,10 @@ export default function Orderpage(props) {
             className="text-base text-yellow-600 hover:text-yellow-300 hover:scale-110 transition-transform duration-200 cursor-pointer flex items-center group gap-x-2 mt-5 px-7  data-[hover=true]:bg-primary-300"
             onPress={() => {
               const data = {
-                user_id: 3,
-                user_name: '測試者',
-                e_id: e_id,
-                c_id: c_id,
+                user_id: auth.user_id, // 從 auth 取得 user_id
+                user_name: auth.user_name, // 從 auth 取得 user_name
+                e_id,
+                c_id,
                 event_name: orderData.event_name,
                 event_price: orderData.event_price,
                 event_startdate: orderData.event_startdate,
@@ -162,9 +176,24 @@ export default function Orderpage(props) {
                 amount: orderData.event_price,
               }
 
-              window.location.href = `http://localhost:3001/ecpay-test?${new URLSearchParams(
-                data
-              )}`
+              // 送到後端時，加入 Authorization 標頭
+              fetch(
+                `http://localhost:3001/ecpay-test?${new URLSearchParams(data)}`,
+                {
+                  headers: {
+                    ...getAuthHeader(), // 傳送 JWT Token
+                  },
+                }
+              )
+                .then((res) => res.json())
+                .then((result) => {
+                  console.log('訂單成功送出:', result)
+                  window.location.href = result.redirect_url
+                })
+                .catch((err) => {
+                  console.error('訂單送出失敗:', err)
+                  alert('訂單送出失敗，請稍後再試')
+                })
             }}
           >
             {/* const { 
@@ -177,6 +206,9 @@ export default function Orderpage(props) {
             <HiArrowRight className="transition-transform duration-300 ease-out group-hover:translate-x-3" />
           </Button>
         </div>
+      </div>
+      <div className="w-full flex flex-col justify-center px-16 py-16 bg-[#f7f5f1]">
+        <ComponentsReminder />
       </div>
     </>
   )
