@@ -2,26 +2,23 @@
 
 import { useState, useEffect, useRef } from "react"
 import useSWR from "swr"
-import { motion } from "framer-motion"
 import { Button } from "@heroui/react"
 import Link from "next/link"
 import { FiInfo, FiArrowLeft, FiShare2 } from "react-icons/fi"
 import { IoMdHeartEmpty } from "react-icons/io"
-import Image from "next/image"
 import * as THREE from "three"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 import { PCDLoader } from "three/examples/jsm/loaders/PCDLoader"
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader"
 import { PLYLoader } from "three/examples/jsm/loaders/PLYLoader"
-import Loading from "../../loading"
-
-
+import { ImageGallery } from "../../_components/image-gallery"
+import { motion } from "framer-motion"
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3001"
 const fetcher = (url) => fetch(url).then((res) => res.json())
 
-export default function OnlineExhibitionDetail({ params }) {
+export default function Page({ params }) {
   const { e_id } = params
   const [showInfo, setShowInfo] = useState(false)
   const [isLiked, setIsLiked] = useState(false)
@@ -44,7 +41,7 @@ export default function OnlineExhibitionDetail({ params }) {
     console.log("Loading media:", media.media_url, "Type:", media.media_type)
 
     // For 2D content, we'll render differently
-    if (media.media_type.startsWith("2d-")) {
+    if (media.media_type === "image" || media.media_type.startsWith("2d-")) {
       if (canvasRef.current) {
         canvasRef.current.style.display = "none"
       }
@@ -172,6 +169,7 @@ export default function OnlineExhibitionDetail({ params }) {
           (error) => console.error("Error loading OBJ model:", error),
         )
         break
+
       case "3d-ply":
         const plyLoader = new PLYLoader()
         plyLoader.load(
@@ -234,6 +232,7 @@ export default function OnlineExhibitionDetail({ params }) {
           },
         )
         break
+
       case "3d-model":
         // Check if it's a PLY file
         if (media.media_url.toLowerCase().endsWith(".ply")) {
@@ -421,16 +420,99 @@ export default function OnlineExhibitionDetail({ params }) {
   }, [exhibitionData])
 
   // Render 2D content
-  if (exhibitionData?.media_files?.[0]?.media_type.startsWith("2d-")) {
+  if (exhibitionData?.media_files?.some((file) => file.media_type === "image" || file.media_type.startsWith("2d-"))) {
+    const images = exhibitionData.media_files
+      .filter((file) => file.media_type === "image" || file.media_type.startsWith("2d-"))
+      .map((file) => ({
+        media_url: file.media_url,
+        alt: exhibitionData.e_name,
+      }))
+    
+    // Render image content  
     return (
-      <div className="h-screen flex items-center justify-center bg-black">
-        <Image
-          src={exhibitionData.media_files[0].media_url || "/placeholder.svg"}
-          alt={exhibitionData.e_name}
-          width={800}
-          height={800}
-          className="max-w-full max-h-full object-contain"
-        />
+      <div className="h-screen flex flex-col bg-black text-white">
+        {/* Navigation */}
+        <nav className="h-16 bg-black/90 backdrop-blur-lg border-b border-white/10 flex items-center justify-between px-4">
+        <Link
+          href="/exhibit/online"
+          className="text-white/70 hover:text-white transition-colors flex items-center gap-2"
+        >
+          <FiArrowLeft size={20} />
+          <span>Back to Online.</span>
+        </Link>
+        <div className="flex gap-4">
+          <Button variant="ghost" className="text-white/70 hover:text-white" onClick={() => setIsLiked(!isLiked)}>
+            {isLiked ? <IoMdHeartEmpty size={20} className="text-red-500" /> : <IoMdHeartEmpty size={20} />}
+          </Button>
+          <Button variant="ghost" className="text-white/70 hover:text-white" onClick={() => setShowInfo(!showInfo)}>
+            <FiInfo size={20} />
+          </Button>
+          <Button
+            variant="ghost"
+            className="text-white/70 hover:text-white"
+            onClick={() => {
+              navigator.clipboard.writeText(window.location.href)
+            }}
+          >
+            <FiShare2 size={20} />
+          </Button>
+        </div>
+      </nav>
+
+        {/* Main Content */}
+<div className="flex-grow relative">
+  <div className="absolute inset-0 w-full h-full overflow-hidden">
+    <h1 className="text-3xl font-bold text-center mt-8 text-white z-10 relative">
+      {exhibitionData.e_name}
+    </h1>
+    <ImageGallery images={images} />
+  </div>
+</div>
+
+
+        {/* Bottom Info Bar */}
+      <div className="h-20 bg-black/90 backdrop-blur-lg border-t border-white/10 flex items-center justify-between px-4">
+        <div>
+          <p className="text-sm text-white/70">{exhibitionData.creator_name}</p>
+        </div>
+        <div className="flex gap-4">
+          <Button
+            variant="outline"
+            className="text-white border-white hover:bg-white hover:text-black transition-colors"
+          >
+            Contact Artist
+          </Button>
+          <Button className="bg-white text-black hover:bg-white/90 transition-colors">Inquire About Purchase</Button>
+        </div>
+      </div>
+
+        {/* Info Panel - Keep this as the single source of exhibition info */}
+        {showInfo && (
+          <motion.div
+            className="fixed right-0 top-16 bottom-0 w-80 bg-black/90 backdrop-blur-lg p-6 text-white overflow-auto z-40"
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ type: "spring", damping: 30 }}
+          >
+            <div className="space-y-6">
+              <div>
+                <h2 className="text-lg font-semibold mb-2">About this Exhibition</h2>
+                <p className="text-white/70 text-sm leading-relaxed">{exhibitionData.e_desc}</p>
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold mb-2">Artist</h3>
+                <p className="text-white/70 text-sm">{exhibitionData.creator_name}</p>
+              </div>
+              {images.length > 1 && (
+                <div>
+                  <h3 className="text-lg font-semibold mb-2">Gallery</h3>
+                  <p className="text-white/70 text-sm">This exhibition contains {images.length} images.</p>
+                </div>
+              )}
+            </div>
+          </motion.div>
+        )}
       </div>
     )
   }
@@ -445,7 +527,7 @@ export default function OnlineExhibitionDetail({ params }) {
   }
 
   if (error) return <div className="text-white">Error loading exhibition data</div>
-  if (!exhibitionData) return <Loading />
+  if (!exhibitionData) return <div className="text-white">Loading...</div>
   if (loadingError) return <div className="text-white">{loadingError}</div>
 
   return (
@@ -492,7 +574,7 @@ export default function OnlineExhibitionDetail({ params }) {
       <div className="h-20 bg-black/90 backdrop-blur-lg border-t border-white/10 flex items-center justify-between px-4">
         <div>
           <h2 className="text-lg font-semibold">{exhibitionData.e_name}</h2>
-          <p className="text-sm text-white/70">{exhibitionData.bd_name}</p>
+          <p className="text-sm text-white/70">{exhibitionData.creator_name}</p>
         </div>
         <div className="flex gap-4">
           <Button
@@ -508,7 +590,7 @@ export default function OnlineExhibitionDetail({ params }) {
       {/* Info Panel */}
       {showInfo && (
         <motion.div
-          className="absolute right-0 top-20 bottom-20 w-80 bg-black/90 backdrop-blur-lg p-6 text-white overflow-auto"
+          className="absolute right-0 top-16 bottom-20 w-80 bg-black/90 backdrop-blur-lg p-6 text-white overflow-auto"
           initial={{ x: "100%" }}
           animate={{ x: 0 }}
           exit={{ x: "100%" }}
@@ -516,7 +598,7 @@ export default function OnlineExhibitionDetail({ params }) {
         >
           <div className="space-y-6">
             <div>
-              <h2 className="text-lg font-semibold mb-2">About this Artwork</h2>
+              <h2 className="text-lg font-semibold mb-2">About this Model</h2>
               <p className="text-white/70 text-sm leading-relaxed">{exhibitionData.e_desc}</p>
             </div>
             <div>
@@ -525,20 +607,6 @@ export default function OnlineExhibitionDetail({ params }) {
                 <li>• Left click + drag to rotate</li>
                 <li>• Right click + drag to pan</li>
                 <li>• Scroll to zoom in/out</li>
-              </ul>
-            </div>
-            <div>
-              <h2 className="text-lg font-semibold mb-2">Price</h2>
-              <ul className="text-sm space-y-2 text-white/70">
-                <li>$ {exhibitionData.e_price}NTD</li>
-                
-              </ul>
-            </div>
-            <div>
-              <h2 className="text-lg font-semibold mb-2">Artist</h2>
-              <ul className="text-sm space-y-2 text-white/70">
-                <li>{exhibitionData.bd_name}</li>
-                
               </ul>
             </div>
           </div>

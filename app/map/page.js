@@ -32,6 +32,28 @@ export default function Page() {
   // Add a new state for filtered locations
   const [filteredLocations, setFilteredLocations] = useState([])
 
+  //避免離開地圖網頁時scroll bar 失效
+  useEffect(() => {
+    const updateOverflow = () => {
+      if (window.innerWidth > 768) {
+        document.body.style.overflow = "hidden"
+      } else {
+        document.body.style.overflow = "auto"
+      }
+    }
+  
+    // Initial call
+    updateOverflow()
+  
+    // Update on resize
+    window.addEventListener("resize", updateOverflow)
+  
+    return () => {
+      document.body.style.overflow = "auto"
+      window.removeEventListener("resize", updateOverflow)
+    }
+  }, [])
+  
   // Load map data
   useEffect(() => {
     const fetchData = async () => {
