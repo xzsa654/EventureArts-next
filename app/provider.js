@@ -3,7 +3,7 @@
 import { AuthContextProvider } from '@/contexts/auth-context'
 import { HeroUIProvider, ToastProvider } from '@heroui/react'
 import { ModalProvider } from '@/contexts/modal-context'
-
+import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3'
 export default function Provider({ children }) {
   return (
     <HeroUIProvider>
