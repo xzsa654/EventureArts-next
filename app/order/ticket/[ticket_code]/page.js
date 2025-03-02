@@ -14,10 +14,6 @@ export default function TicketPage() {
   const [ticketData, setTicketData] = useState(null)
   const [loading, setLoading] = useState(true)
 
-
-  const defaultContent = (
-    <p>這是預設內容，您可以在這裡提供問題解答或其他資訊。</p>
-  )
   useEffect(() => {
     if (ticket_code) {
       fetch(`${API_BASE_URL}/order/api/getTicket?ticket_code=${ticket_code}`)
