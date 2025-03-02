@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
-import { useOrder } from '@/hooks/use-order'
+// import { useOrder } from '@/hooks/use-order'
 import './order.css'
 import { Button } from '@heroui/button'
 import { HiArrowRight } from 'react-icons/hi2'
@@ -15,7 +15,7 @@ export default function Orderpage(props) {
   const e_id = searchParams.get('e_id')
   const c_id = searchParams.get('c_id')
   const router = useRouter()
-  const { orderData, setOrderData } = useOrder() // 使用 my hook 'useOrder' 存放完整的活動 & 商家資料
+  const [orderData, setOrderData] = useState(null) 
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -28,7 +28,8 @@ export default function Orderpage(props) {
       )
         .then((res) => res.json())
         .then((data) => {
-          setOrderData(data) // 把訂單資訊存進 my hook 'useOrder'
+          setOrderData(data) // ✅ 存入狀態
+          setLoading(false)
         })
         .catch((err) => {
           console.error('Error fetching order details:', err)
@@ -37,7 +38,7 @@ export default function Orderpage(props) {
     } else {
       setLoading(false)
     }
-  }, [e_id, c_id, orderData, setOrderData])
+  }, [e_id, c_id])
 
   if (loading) return <p>載入中...</p>
   if (!orderData) return <p>無法生成訂單，請再試一遍</p>
