@@ -10,6 +10,7 @@ import CandidSection from "./_components/candid-section"
 import useSWR from "swr"
 import OnlineExhibitionCard from "./_components/OnlineExhibitionCard"
 import Loading from "./loading"
+import ArtistSection from "./_components/ArtistSection" 
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3001"
 
@@ -188,59 +189,7 @@ export default function ExhibitPage() {
       </section>
 
       {/* Artist Section */}
-      <section className="p-6">
-        <div className="flex justify-between items-center mb-10">
-          <h2 className="text-3xl font-bold">Artists</h2>
-          <a href="#" className="text-xl font-bold flex items-center gap-2 hover:opacity-70 cursor-pointer">
-            See MORE
-            <ArrowLongRightIcon className="w-5 h-5" />
-          </a>
-        </div>
-
-        <div className="relative">
-          <div className="grid grid-cols-3 gap-6">
-            <div className="aspect-[4/3] relative">
-              <Image
-                src="/chu-images/img_9.jpg"
-                alt="Vinyl record player"
-                width={500}
-                height={300}
-                priority
-                className="object-cover"
-              />
-            </div>
-            <div className="aspect-[4/3] relative">
-              <Image
-                src="/chu-images/img_9.jpg"
-                alt="Neon ART sign"
-                width={500}
-                height={300}
-                priority
-                className="object-cover"
-              />
-            </div>
-            <div className="aspect-[4/3] relative">
-              <Image
-                src="/chu-images/img_9.jpg"
-                alt="Album covers collection"
-                width={500}
-                height={300}
-                priority
-                className="object-cover"
-              />
-            </div>
-          </div>
-
-          <div className="flex justify-end gap-4 mt-6">
-            <button className="p-2 border border-black cursor-pointer">
-              <ChevronLeftIcon className="w-6 h-6" />
-            </button>
-            <button className="p-2 border border-black cursor-pointer">
-              <ChevronRightIcon className="w-6 h-6" />
-            </button>
-          </div>
-        </div>
-      </section>
+      <ArtistSection />
     </main>
   )
 }
