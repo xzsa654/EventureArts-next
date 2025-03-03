@@ -1,7 +1,6 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-
-export default function UserPage(props) {
+export default function MessagePage(props) {
   return <></>
 }

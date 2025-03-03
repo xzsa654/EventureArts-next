@@ -7,11 +7,14 @@ import {
   DropdownSection,
   User,
   Image,
+  useDisclosure,
 } from '@heroui/react'
 import { CiUser, CiLogout, CiShoppingCart, CiStar } from 'react-icons/ci'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/hooks/use-auth'
+import MessageDrawer from './message-drawer.js/message'
 export default function AVatarGroup() {
+  const { isOpen, onOpenChange } = useDisclosure()
   const router = useRouter()
   const { auth, logOut } = useAuth()
 
@@ -51,6 +54,13 @@ export default function AVatarGroup() {
             >
               我的訂單
             </DropdownItem>
+            <DropdownItem
+              key="message"
+              onPress={onOpenChange}
+              startContent=<CiStar size={20} />
+            >
+              我的訊息
+            </DropdownItem>
             <DropdownItem key="liked" startContent=<CiStar size={20} />>
               收藏清單
             </DropdownItem>
@@ -88,6 +98,7 @@ export default function AVatarGroup() {
           </DropdownItem>
         </DropdownMenu>
       </Dropdown>
+      <MessageDrawer {...{ onOpenChange, isOpen }} />
     </div>
   )
 }

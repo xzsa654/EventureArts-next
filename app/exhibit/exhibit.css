@@ -165,3 +165,60 @@
 .advanced-search {
   transform-origin: top;
 }
+
+
+/* 3D transform styles for ArtistSection */
+/* 3D transform styles */
+.perspective {
+  perspective: 2000px;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+/* Masonry grid layout */
+.masonry-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-content: flex-start;
+  position: relative;
+  padding: 8px;
+}
+
+.masonry-grid::after {
+  content: "";
+  flex-grow: 999999999;
+}
+
+/* Hover effects */
+.masonry-grid > div {
+  transition: transform 0.3s ease;
+}
+
+.masonry-grid > div:hover {
+  z-index: 1;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .masonry-grid {
+    gap: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .masonry-grid {
+    gap: 8px;
+  }
+}
+
