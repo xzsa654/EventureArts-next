@@ -41,14 +41,6 @@ body {
   }
 
 
-/* ------ 2. 平台4特點 ------ */
-.Special {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 270px;
-}
-
 .title{
     font-size: 1.5rem;
     padding: 6px 0px;
@@ -74,10 +66,3 @@ body {
     font-size: 1.5rem; /* 24px */
     font-weight: bold;
   }
-
-/* Q&A 標題 */
-.why{
-    font-size: 18px;
-    font-weight: bold;
-    color: #3B4163;
-}
