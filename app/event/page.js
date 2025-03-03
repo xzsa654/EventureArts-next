@@ -69,8 +69,7 @@ export default function Event(props) {
           {/* 1.1 讓您的品牌被看見 */}
           <div className='urge flex flex-col items-center justify-center w-full h-2/5'>
             <div className="title text-center">
-              <p className='text-m'> - 讓您的品牌被看見 - </p>
-              <p className='pt-4 text-2xl urge'>Amplify Your Brand. Elevate Your Presence.</p>
+              <p className='py-4 text-4xl'>Amplify Your Brand. Elevate Your Presence.</p>
             </div>
             <div className="btns flex flex-row gap-8 pt-4">
               <BtnCTA text={'上架課程'} />
@@ -116,25 +115,24 @@ export default function Event(props) {
 
 
         {/* 2. 合作品牌 */}
-        <div className="section2 h-screen px-40 bg-[#3c3c3c] bg-opacity-60">
-          <div className="sectionTitle text-white">
-            <p>合作品牌</p>
-          </div>
+        <div className="section2 h-screen px-40 py-8 bg-[#3c3c3c] bg-opacity-60">
           <CardB1 />
         </div>
 
         {/* 3. 前後對照圖 */}
-        <div className="h-screen">
-          <div className="sectionTitle text-black">
-            <p>人氣，就是品牌的影響力——讓您的空間轉化為熱鬧商機。</p>
+        <div className="h-screen w-full flex flex-col items-center">
+          <div className="sectionTitle text-black text-center my-8">
+            <p>人氣，就是品牌的影響力— 讓您的空間轉化為熱鬧商機。</p>
           </div>
-          <div className="compareimg">
+          <div className="compareimg flex justify-center items-center max-w-[60%] w-full">
             <ReactCompareImage 
               leftImage="/Blair/event/FlowerShop-before.png" 
               rightImage="/Blair/event/FlowerShop-after2.png" 
+              style={{ width: '100%' }}
             />
           </div>
         </div>
+
 
         {/* 4. 上架流程 */}
         <div className="section3 h-screen w-full flex flex-col px-16">
@@ -143,16 +141,56 @@ export default function Event(props) {
           </div>
           
           <div className="4steps flex flex-wrap justify-around items-center h-[80%]">
-            <div><img src="https://fakeimg.pl/250x500/" alt="上架流程示意圖" /></div>
-            <div><img src="https://fakeimg.pl/250x500/" alt="上架流程示意圖" /></div>
-            <div><img src="https://fakeimg.pl/250x500/" alt="上架流程示意圖" /></div>
-            <div><img src="https://fakeimg.pl/250x500/" alt="上架流程示意圖" /></div>
+            <div>
+              <div className='stepimg w-[250px] h-[250px]'>
+                <img className="w-[90%]" src="/blair/event/step1.svg" alt="上架流程示意圖" />
+              </div>
+              <div className="steptext text-center">
+                <p>STEP 1</p>
+                <p>描述標題</p>
+                <p>描述文字</p>
+              </div>
+            </div>
+
+            <div>
+              <div className='stepimg w-[250px] h-[250px]'>
+                <img className="w-[90%]" src="/blair/event/step2.svg" alt="上架流程示意圖" />
+              </div>
+              <div className="steptext text-center">
+                <p>STEP 2</p>
+                <p>描述標題</p>
+                <p>描述文字</p>
+              </div>
+            </div>
+
+            <div>
+              <div className='stepimg w-[250px] h-[250px]'>
+                <img className="w-[90%]" src="/blair/event/step3.svg" alt="上架流程示意圖" />
+              </div>
+              <div className="steptext text-center">
+                <p>STEP 3</p>
+                <p>描述標題</p>
+                <p>描述文字</p>
+              </div>
+            </div>
+
+            <div>
+              <div className='stepimg w-[250px] h-[250px]'>
+                <img className="w-[90%]" src="/blair/event/step4.svg" alt="上架流程示意圖" />
+              </div>
+              <div className="steptext text-center">
+                <p>STEP 4</p>
+                <p>描述標題</p>
+                <p>描述文字</p>
+              </div>
+            </div>
+
           </div>
         </div>
 
 
         {/* 5. 常見問題 */}
-        <div className="section4 h-screen flex flex-col justify-center px-16">
+        <div className="section4 h-screen flex flex-col justify-center px-32">
           <div className="sectionTitle">
             <p>常見問題</p>
           </div>

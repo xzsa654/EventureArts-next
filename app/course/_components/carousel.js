@@ -34,23 +34,23 @@ export default function Carousel(props) {
       >
           <SwiperSlide>
           <a href="/course/product/2">
-          <img src="/Blair/carousel-banner/banner5-bake.png" alt="" /></a>
-          </SwiperSlide>   
-
-          <SwiperSlide>
-          <a href="/course/product/2">
           <img src="/Blair/carousel-banner/banner1-crown.png" alt="" /></a>
           </SwiperSlide>
 
           <SwiperSlide>
           <a href="/course/product/2">
-          <img src="/Blair/carousel-banner/banner3-florist.png" alt="" /></a>
-          </SwiperSlide>
+          <img src="/Blair/carousel-banner/banner5-bake.png" alt="" /></a>
+          </SwiperSlide>   
 
           <SwiperSlide>
           <a href="/course/product/2">
           <img src="/Blair/carousel-banner/banner2-coffee.png" alt="" /></a>
           </SwiperSlide>    
+
+          <SwiperSlide>
+          <a href="/course/product/2">
+          <img src="/Blair/carousel-banner/banner3-florist.png" alt="" /></a>
+          </SwiperSlide>
 
           <SwiperSlide>
           <a href="/course/product/2">
