@@ -20,7 +20,7 @@ export function ImageGallery({ images }) {
     image: getImageUrl(image.media_url),
     text: image.media_desc || 'Exhibition image',
   }))
-console.log(items);
+  console.log(items)
   return (
     <div className="container mx-auto px-4 py-8">
       {/* CircularGallery */}
@@ -30,7 +30,7 @@ console.log(items);
           bend={3}
           textColor="#ffffff"
           borderRadius={0.05}
-          onClickItem={(index) => setSelectedImage(images[index])} 
+          onClickItem={(index) => setSelectedImage(images[index])}
         />
       </div>
 
@@ -41,7 +41,7 @@ console.log(items);
           onClick={() => setSelectedImage(null)}
         >
           <Button
-            className="absolute top-4 right-4 text-white"
+            className="absolute top-4 right-4 text-black"
             onClick={(event) => {
               event.stopPropagation()
               setSelectedImage(null)
@@ -49,13 +49,12 @@ console.log(items);
           >
             Close
           </Button>
-          <div className="relative w-full max-w-5xl aspect-square">
+          <div className="w-full h-screen flex items-center justify-center bg-black">
             <Image
               src={getImageUrl(selectedImage.media_url)}
               alt={selectedImage.media_desc}
-              width={1200}
-              height={1200}
-              className="object-contain w-full h-full"
+              fill
+              className="object-contain"
             />
           </div>
         </div>

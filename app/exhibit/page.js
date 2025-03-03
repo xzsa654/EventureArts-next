@@ -8,7 +8,6 @@ import "./exhibit.css"
 import Link from "next/link"
 import OnlineBanner from "./_components/OnlineBanner"
 import useSWR from "swr"
-import OnlineExhibitionCard from "./_components/OnlineExhibitionCard"
 import Loading from "./loading"
 import ArtistSection from "./_components/ArtistSection"
 import OnlineSwiper from "./_components/OnlineSwiper"
@@ -196,7 +195,7 @@ export default function ExhibitPage() {
             </Link>
           </div> */}
 
-          {/* Online Exhibition Swiper */}
+          {/* Online Exhibition Swiper(OnlineExhibitionCard is in this section) */}
           <OnlineSwiper onlineExhibitions={onlineExhibitions}/>
           {/* <div className="relative">
             <div className="flex gap-6 justify-center">
@@ -219,7 +218,7 @@ export default function ExhibitPage() {
       </section> */}
 
       {/* Make Your Own Exhibition Section */}
-      <section className="border-t border-b-2 border-black py-8 mb-1 p-6">
+      <section className="border-t border-b-2 border-black/30 py-8 mb-1 p-6">
         <div className="flex justify-between items-center">
           <h2 className="text-2xl font-bold">Make Your Own Exhibition</h2>
           <Link
