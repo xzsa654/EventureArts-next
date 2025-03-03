@@ -17,6 +17,9 @@ import ChatRoom from './chatroom'
 import MessageFooter from './messageFooter'
 
 export default function MessageDrawer({ onOpenChange = () => {}, isOpen }) {
+  useEffect(() => {
+    onOpenChange(true)
+  }, [])
   // 如果關閉了聊天室 回去列表狀態
   useEffect(() => {
     setIsChatting(false)
@@ -94,7 +97,7 @@ export default function MessageDrawer({ onOpenChange = () => {}, isOpen }) {
                 )}
               </DrawerBody>
 
-              <DrawerFooter>
+              <DrawerFooter className=" relative">
                 {isChatting && (
                   <MessageFooter
                     renderHandler={renderHandler}

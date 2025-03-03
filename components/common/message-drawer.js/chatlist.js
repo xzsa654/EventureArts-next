@@ -2,10 +2,10 @@
 
 import React, { useState, useEffect } from 'react'
 import { useAuth } from '@/hooks/use-auth'
-import { User, ScrollShadow } from '@heroui/react'
-import { useRouter } from 'next/navigation'
+import { User, ScrollShadow, Badge } from '@heroui/react'
+
 export default function ChatList({ chatHandle = () => {} }) {
-  const { getAuthHeader, auth } = useAuth()
+  const { getAuthHeader, auth, onlineUsers } = useAuth()
   const [data, setData] = useState()
   useEffect(() => {
     if (auth?.token) {
@@ -28,18 +28,29 @@ export default function ChatList({ chatHandle = () => {} }) {
           <ul className="flex flex-col gap-5 pt-2 ps-2">
             {data?.map((v) => {
               return (
-                <User
-                  className=" justify-start w-full hover:bg-gray-400 cursor-pointer "
+                <Badge
                   key={v.id}
-                  avatarProps={{
-                    src: `http://localhost:3001/uploads/avatar/${v.avatar}`,
-                  }}
-                  name={v.name}
-                  description={v.text}
-                  onClick={() => {
-                    chatHandle(v.id)
-                  }}
-                />
+                  content=""
+                  color={
+                    onlineUsers?.includes(`${v.id.toString()}`)
+                      ? 'success'
+                      : 'primary'
+                  }
+                  shape="circle"
+                  placement="bottom-left"
+                >
+                  <User
+                    className=" justify-start w-full hover:bg-gray-400 cursor-pointer "
+                    avatarProps={{
+                      src: `http://localhost:3001/uploads/avatar/${v.avatar}`,
+                    }}
+                    name={v.name}
+                    description={v.text}
+                    onClick={() => {
+                      chatHandle(v.id)
+                    }}
+                  />
+                </Badge>
               )
             })}
           </ul>

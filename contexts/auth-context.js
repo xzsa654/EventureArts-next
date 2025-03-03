@@ -144,6 +144,8 @@ export function AuthContextProvider({ children }) {
       return { Authorization: 'Bearer ' + auth?.token }
     }
   }
+  const [socket, setSocket] = useState(null)
+  const [onlineUsers, setOnlineUsers] = useState({})
 
   //socket.io 啟動函式
   const getSocket = () => {
@@ -153,6 +155,12 @@ export function AuthContextProvider({ children }) {
         query: { user_id: auth.user_id },
       })
       socket.connect()
+      setSocket(socket)
+      // 這裡的名稱要相對應後端 emit 的名稱
+      socket.on('getOnlineUsers', (user_id) => {
+        //取得 online 的使用者添加到狀態
+        setOnlineUsers(user_id)
+      })
     }
   }
 
@@ -169,6 +177,8 @@ export function AuthContextProvider({ children }) {
           register,
           getAuthHeader,
           beginBrand,
+          socket,
+          onlineUsers,
         }}
       >
         {children}
