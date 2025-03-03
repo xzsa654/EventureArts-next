@@ -18,9 +18,9 @@ export function ImageGallery({ images }) {
   // 整理給 CircularGallery 的 items
   const items = images.map((image) => ({
     image: getImageUrl(image.media_url),
-    text: image.media_type || 'Exhibition image',
+    text: image.media_desc || 'Exhibition image',
   }))
-
+console.log(items);
   return (
     <div className="container mx-auto px-4 py-8">
       {/* CircularGallery */}
@@ -52,7 +52,7 @@ export function ImageGallery({ images }) {
           <div className="relative w-full max-w-5xl aspect-square">
             <Image
               src={getImageUrl(selectedImage.media_url)}
-              alt={selectedImage.alt || 'Exhibition image'}
+              alt={selectedImage.media_desc}
               width={1200}
               height={1200}
               className="object-contain w-full h-full"

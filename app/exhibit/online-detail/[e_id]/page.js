@@ -1,21 +1,22 @@
-"use client"
+'use client'
 
-import { useState, useEffect, useRef } from "react"
-import useSWR from "swr"
-import { Button } from "@heroui/react"
-import Link from "next/link"
-import { FiInfo, FiArrowLeft, FiShare2 } from "react-icons/fi"
-import { IoMdHeartEmpty } from "react-icons/io"
-import * as THREE from "three"
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
-import { PCDLoader } from "three/examples/jsm/loaders/PCDLoader"
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
-import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader"
-import { PLYLoader } from "three/examples/jsm/loaders/PLYLoader"
-import { ImageGallery } from "../../_components/image-gallery"
-import { motion } from "framer-motion"
+import { useState, useEffect, useRef } from 'react'
+import useSWR from 'swr'
+import { Button } from '@heroui/react'
+import Link from 'next/link'
+import { FiInfo, FiArrowLeft, FiShare2 } from 'react-icons/fi'
+import { IoMdHeartEmpty } from 'react-icons/io'
+import * as THREE from 'three'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+import { PCDLoader } from 'three/examples/jsm/loaders/PCDLoader'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader'
+import { PLYLoader } from 'three/examples/jsm/loaders/PLYLoader'
+import { ImageGallery } from '../../_components/image-gallery'
+import { motion } from 'framer-motion'
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3001"
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3001'
 const fetcher = (url) => fetch(url).then((res) => res.json())
 
 export default function Page({ params }) {
@@ -38,12 +39,12 @@ export default function Page({ params }) {
     const media = exhibitionData.media_files?.[0]
     if (!media) return
 
-    console.log("Loading media:", media.media_url, "Type:", media.media_type)
+    console.log('Loading media:', media.media_url, 'Type:', media.media_type)
 
     // For 2D content, we'll render differently
-    if (media.media_type === "image" || media.media_type.startsWith("2d-")) {
+    if (media.media_type === 'image' || media.media_type.startsWith('2d-')) {
       if (canvasRef.current) {
-        canvasRef.current.style.display = "none"
+        canvasRef.current.style.display = 'none'
       }
       return
     }
@@ -54,7 +55,7 @@ export default function Page({ params }) {
 
     // Show the 3D canvas
     if (canvasRef.current) {
-      canvasRef.current.style.display = "block"
+      canvasRef.current.style.display = 'block'
     }
 
     // Initialize scene
@@ -74,7 +75,12 @@ export default function Page({ params }) {
     sceneRef.current.add(directionalLight2)
 
     // Initialize camera
-    cameraRef.current = new THREE.PerspectiveCamera(50, containerWidth / containerHeight, 0.01, 1000)
+    cameraRef.current = new THREE.PerspectiveCamera(
+      50,
+      containerWidth / containerHeight,
+      0.01,
+      1000
+    )
 
     // Initialize renderer
     rendererRef.current = new THREE.WebGLRenderer({
@@ -85,7 +91,10 @@ export default function Page({ params }) {
     rendererRef.current.setPixelRatio(window.devicePixelRatio)
 
     // Initialize controls
-    controlsRef.current = new OrbitControls(cameraRef.current, rendererRef.current.domElement)
+    controlsRef.current = new OrbitControls(
+      cameraRef.current,
+      rendererRef.current.domElement
+    )
     controlsRef.current.enableDamping = true
     controlsRef.current.dampingFactor = 0.05
 
@@ -95,7 +104,7 @@ export default function Page({ params }) {
 
     // Load 3D model based on type
     switch (media.media_type) {
-      case "3d-obj":
+      case '3d-obj':
         const objLoader = new OBJLoader()
         objLoader.load(
           media.media_url,
@@ -115,7 +124,7 @@ export default function Page({ params }) {
 
             // Get the initial bounding box to check position
             const initialBox = new THREE.Box3().setFromObject(obj)
-            console.log("Initial bounds:", initialBox.min, initialBox.max)
+            console.log('Initial bounds:', initialBox.min, initialBox.max)
 
             // Reset position and normalize coordinates
             obj.position.set(0, 0, 0)
@@ -144,11 +153,15 @@ export default function Page({ params }) {
 
             // Calculate optimal camera position
             const fov = cameraRef.current.fov * (Math.PI / 180)
-            const horizontalFov = Math.atan(Math.tan(fov / 2) * cameraRef.current.aspect) * 2
-            const distance = boundingSphere.radius / Math.sin(Math.min(fov, horizontalFov) / 2)
+            const horizontalFov =
+              Math.atan(Math.tan(fov / 2) * cameraRef.current.aspect) * 2
+            const distance =
+              boundingSphere.radius / Math.sin(Math.min(fov, horizontalFov) / 2)
 
             // Position camera to view model
-            const offset = new THREE.Vector3(1, 0.5, 1).normalize().multiplyScalar(distance)
+            const offset = new THREE.Vector3(1, 0.5, 1)
+              .normalize()
+              .multiplyScalar(distance)
             cameraRef.current.position.copy(boundingSphere.center).add(offset)
             cameraRef.current.lookAt(boundingSphere.center)
 
@@ -156,7 +169,7 @@ export default function Page({ params }) {
             controlsRef.current.target.copy(boundingSphere.center)
             controlsRef.current.update()
 
-            console.log("Model loaded:", {
+            console.log('Model loaded:', {
               position: obj.position,
               scale: obj.scale,
               boundingSphere: boundingSphere,
@@ -166,11 +179,11 @@ export default function Page({ params }) {
           (xhr) => {
             console.log(`Loading: ${(xhr.loaded / xhr.total) * 100}%`)
           },
-          (error) => console.error("Error loading OBJ model:", error),
+          (error) => console.error('Error loading OBJ model:', error)
         )
         break
 
-      case "3d-ply":
+      case '3d-ply':
         const plyLoader = new PLYLoader()
         plyLoader.load(
           media.media_url,
@@ -212,7 +225,7 @@ export default function Page({ params }) {
             controlsRef.current.target.set(0, 0, 0)
             controlsRef.current.update()
 
-            console.log("PLY Model loaded with:", {
+            console.log('PLY Model loaded with:', {
               position: mesh.position,
               scale: mesh.scale,
               boundingSphere: boundingSphere,
@@ -224,18 +237,20 @@ export default function Page({ params }) {
             sceneRef.current.add(axesHelper)
           },
           (progress) => {
-            console.log(`Loading progress: ${(progress.loaded / progress.total) * 100}%`)
+            console.log(
+              `Loading progress: ${(progress.loaded / progress.total) * 100}%`
+            )
           },
           (error) => {
-            console.error("Error loading PLY model:", error)
-            setLoadingError("Failed to load PLY model")
-          },
+            console.error('Error loading PLY model:', error)
+            setLoadingError('Failed to load PLY model')
+          }
         )
         break
 
-      case "3d-model":
+      case '3d-model':
         // Check if it's a PLY file
-        if (media.media_url.toLowerCase().endsWith(".ply")) {
+        if (media.media_url.toLowerCase().endsWith('.ply')) {
           const plyLoader = new PLYLoader()
           plyLoader.load(
             media.media_url,
@@ -277,7 +292,7 @@ export default function Page({ params }) {
               controlsRef.current.target.set(0, 0, 0)
               controlsRef.current.update()
 
-              console.log("PLY Model loaded with:", {
+              console.log('PLY Model loaded with:', {
                 position: mesh.position,
                 scale: mesh.scale,
                 boundingSphere: boundingSphere,
@@ -289,12 +304,14 @@ export default function Page({ params }) {
               sceneRef.current.add(axesHelper)
             },
             (progress) => {
-              console.log(`Loading progress: ${(progress.loaded / progress.total) * 100}%`)
+              console.log(
+                `Loading progress: ${(progress.loaded / progress.total) * 100}%`
+              )
             },
             (error) => {
-              console.error("Error loading PLY model:", error)
-              setLoadingError("Failed to load PLY model")
-            },
+              console.error('Error loading PLY model:', error)
+              setLoadingError('Failed to load PLY model')
+            }
           )
         } else {
           const gltfLoader = new GLTFLoader()
@@ -304,15 +321,15 @@ export default function Page({ params }) {
               const model = gltf.scene
 
               // Debug initial state
-              console.log("Initial model position:", model.position)
-              console.log("Initial model scale:", model.scale)
+              console.log('Initial model position:', model.position)
+              console.log('Initial model scale:', model.scale)
 
               // Center the model
               const box = new THREE.Box3().setFromObject(model)
               const center = box.getCenter(new THREE.Vector3())
               const size = box.getSize(new THREE.Vector3())
 
-              console.log("Model bounds:", {
+              console.log('Model bounds:', {
                 center: center,
                 size: size,
                 min: box.min,
@@ -342,7 +359,7 @@ export default function Page({ params }) {
               controlsRef.current.target.set(0, 0, 0)
               controlsRef.current.update()
 
-              console.log("Model loaded with:", {
+              console.log('Model loaded with:', {
                 finalPosition: model.position,
                 finalScale: model.scale,
                 cameraPosition: cameraRef.current.position,
@@ -354,17 +371,19 @@ export default function Page({ params }) {
               sceneRef.current.add(axesHelper)
             },
             (progress) => {
-              console.log(`Loading progress: ${(progress.loaded / progress.total) * 100}%`)
+              console.log(
+                `Loading progress: ${(progress.loaded / progress.total) * 100}%`
+              )
             },
             (error) => {
-              console.error("Error loading GLTF model:", error)
-              setLoadingError("Failed to load 3D model")
-            },
+              console.error('Error loading GLTF model:', error)
+              setLoadingError('Failed to load 3D model')
+            }
           )
         }
         break
 
-      case "3d-pointcloud":
+      case '3d-pointcloud':
         const pcdLoader = new PCDLoader()
         pcdLoader.load(
           media.media_url,
@@ -379,20 +398,21 @@ export default function Page({ params }) {
             points.scale.multiplyScalar(scale)
 
             sceneRef.current.add(points)
-            console.log("Point Cloud Loaded Successfully!")
+            console.log('Point Cloud Loaded Successfully!')
           },
           undefined,
-          (error) => console.error("Error loading Point Cloud:", error),
+          (error) => console.error('Error loading Point Cloud:', error)
         )
         break
 
       default:
-        console.warn("Unsupported media type:", media.media_type)
+        console.warn('Unsupported media type:', media.media_type)
     }
 
     // Animation loop
     const animate = () => {
-      if (!sceneRef.current || !cameraRef.current || !rendererRef.current) return
+      if (!sceneRef.current || !cameraRef.current || !rendererRef.current)
+        return
 
       requestAnimationFrame(animate)
       controlsRef.current?.update()
@@ -410,104 +430,134 @@ export default function Page({ params }) {
       cameraRef.current.updateProjectionMatrix()
       rendererRef.current.setSize(newWidth, newHeight)
     }
-    window.addEventListener("resize", handleResize)
+    window.addEventListener('resize', handleResize)
 
     return () => {
-      window.removeEventListener("resize", handleResize)
+      window.removeEventListener('resize', handleResize)
       rendererRef.current?.dispose()
       controlsRef.current?.dispose()
     }
   }, [exhibitionData])
 
   // Render 2D content
-  if (exhibitionData?.media_files?.some((file) => file.media_type === "image" || file.media_type.startsWith("2d-"))) {
+  //the content that get by backend API
+  if (
+    exhibitionData?.media_files?.some(
+      (file) => file.media_type === 'image' || file.media_type.startsWith('2d-')
+    )
+  ) {
     const images = exhibitionData.media_files
-      .filter((file) => file.media_type === "image" || file.media_type.startsWith("2d-"))
+      .filter(
+        (file) =>
+          file.media_type === 'image' || file.media_type.startsWith('2d-')
+      )
       .map((file) => ({
         media_url: file.media_url,
         alt: exhibitionData.e_name,
+        media_desc: file.media_desc, //description of the image by database
       }))
-    
-    // Render image content  
+
+    // Render image content
     return (
       <div className="h-screen flex flex-col bg-black text-white">
         {/* Navigation */}
         <nav className="h-16 bg-black/90 backdrop-blur-lg border-b border-white/10 flex items-center justify-between px-4">
-        <Link
-          href="/exhibit/online"
-          className="text-white/70 hover:text-white transition-colors flex items-center gap-2"
-        >
-          <FiArrowLeft size={20} />
-          <span>Back to Online.</span>
-        </Link>
-        <div className="flex gap-4">
-          <Button variant="ghost" className="text-white/70 hover:text-white" onClick={() => setIsLiked(!isLiked)}>
-            {isLiked ? <IoMdHeartEmpty size={20} className="text-red-500" /> : <IoMdHeartEmpty size={20} />}
-          </Button>
-          <Button variant="ghost" className="text-white/70 hover:text-white" onClick={() => setShowInfo(!showInfo)}>
-            <FiInfo size={20} />
-          </Button>
-          <Button
-            variant="ghost"
-            className="text-white/70 hover:text-white"
-            onClick={() => {
-              navigator.clipboard.writeText(window.location.href)
-            }}
+          <Link
+            href="/exhibit/online"
+            className="text-white/70 hover:text-white transition-colors flex items-center gap-2"
           >
-            <FiShare2 size={20} />
-          </Button>
-        </div>
-      </nav>
+            <FiArrowLeft size={20} />
+            <span>Back to Online.</span>
+          </Link>
+          <div className="flex gap-4">
+            <Button
+              variant="ghost"
+              className="text-white/70 hover:text-white"
+              onClick={() => setIsLiked(!isLiked)}
+            >
+              {isLiked ? (
+                <IoMdHeartEmpty size={20} className="text-red-500" />
+              ) : (
+                <IoMdHeartEmpty size={20} />
+              )}
+            </Button>
+            <Button
+              variant="ghost"
+              className="text-white/70 hover:text-white"
+              onClick={() => setShowInfo(!showInfo)}
+            >
+              <FiInfo size={20} />
+            </Button>
+            <Button
+              variant="ghost"
+              className="text-white/70 hover:text-white"
+              onClick={() => {
+                navigator.clipboard.writeText(window.location.href)
+              }}
+            >
+              <FiShare2 size={20} />
+            </Button>
+          </div>
+        </nav>
 
         {/* Main Content */}
-<div className="flex-grow relative">
-  <div className="absolute inset-0 w-full h-full overflow-hidden">
-    <h1 className="text-3xl font-bold text-center mt-8 text-white z-10 relative">
-      {exhibitionData.e_name}
-    </h1>
-    <ImageGallery images={images} />
-  </div>
-</div>
-
+        <div className="flex-grow relative">
+          <div className="absolute inset-0 w-full h-full overflow-hidden">
+            <h1 className="text-3xl font-bold text-center mt-8 text-white z-10 relative">
+              {exhibitionData.e_name}
+            </h1>
+            <ImageGallery images={images} />
+          </div>
+        </div>
 
         {/* Bottom Info Bar */}
-      <div className="h-20 bg-black/90 backdrop-blur-lg border-t border-white/10 flex items-center justify-between px-4">
-        <div>
-          <p className="text-sm text-white/70">{exhibitionData.creator_name}</p>
+        <div className="h-20 bg-black/90 backdrop-blur-lg border-t border-white/10 flex items-center justify-between px-4">
+          <div>
+            <p className="text-sm text-white/70">{exhibitionData.bd_name}</p>
+          </div>
+          <div className="flex gap-4">
+            <Button
+              variant="outline"
+              className="text-white border-white hover:bg-white hover:text-black transition-colors"
+            >
+              Contact Artist
+            </Button>
+            <Button className="bg-white text-black hover:bg-white/90 transition-colors">
+              Inquire About Purchase
+            </Button>
+          </div>
         </div>
-        <div className="flex gap-4">
-          <Button
-            variant="outline"
-            className="text-white border-white hover:bg-white hover:text-black transition-colors"
-          >
-            Contact Artist
-          </Button>
-          <Button className="bg-white text-black hover:bg-white/90 transition-colors">Inquire About Purchase</Button>
-        </div>
-      </div>
 
         {/* Info Panel - Keep this as the single source of exhibition info */}
         {showInfo && (
           <motion.div
             className="fixed right-0 top-16 bottom-0 w-80 bg-black/90 backdrop-blur-lg p-6 text-white overflow-auto z-40"
-            initial={{ x: "100%" }}
+            initial={{ x: '100%' }}
             animate={{ x: 0 }}
-            exit={{ x: "100%" }}
-            transition={{ type: "spring", damping: 30 }}
+            exit={{ x: '100%' }}
+            transition={{ type: 'spring', damping: 30 }}
           >
             <div className="space-y-6">
               <div>
-                <h2 className="text-lg font-semibold mb-2">About this Exhibition</h2>
-                <p className="text-white/70 text-sm leading-relaxed">{exhibitionData.e_desc}</p>
+                <h2 className="text-lg font-semibold mb-2">
+                  About this Exhibition
+                </h2>
+                <p className="text-white/70 text-sm leading-relaxed">
+                  {exhibitionData.e_desc}
+                </p>
               </div>
               <div>
                 <h3 className="text-lg font-semibold mb-2">Artist</h3>
-                <p className="text-white/70 text-sm">{exhibitionData.creator_name}</p>
+                <p className="text-white/70 text-sm">
+                  {exhibitionData.bd_name}
+                </p>
               </div>
               {images.length > 1 && (
                 <div>
                   <h3 className="text-lg font-semibold mb-2">Gallery</h3>
-                  <p className="text-white/70 text-sm">This exhibition contains {images.length} images.</p>
+                  <p className="text-white/70 text-sm">
+                    This exhibition contains {images.length} images.
+                  </p>
                 </div>
               )}
             </div>
@@ -518,15 +568,20 @@ export default function Page({ params }) {
   }
 
   // Render video content
-  if (exhibitionData?.media_files?.[0]?.media_type === "video") {
+  if (exhibitionData?.media_files?.[0]?.media_type === 'video') {
     return (
       <div className="h-screen flex items-center justify-center bg-black">
-        <video controls className="max-w-full max-h-full" src={exhibitionData.media_files[0].media_url} />
+        <video
+          controls
+          className="max-w-full max-h-full"
+          src={exhibitionData.media_files[0].media_url}
+        />
       </div>
     )
   }
 
-  if (error) return <div className="text-white">Error loading exhibition data</div>
+  if (error)
+    return <div className="text-white">Error loading exhibition data</div>
   if (!exhibitionData) return <div className="text-white">Loading...</div>
   if (loadingError) return <div className="text-white">{loadingError}</div>
 
@@ -542,10 +597,22 @@ export default function Page({ params }) {
           <span>Back to Online.</span>
         </Link>
         <div className="flex gap-4">
-          <Button variant="ghost" className="text-white/70 hover:text-white" onClick={() => setIsLiked(!isLiked)}>
-            {isLiked ? <IoMdHeartEmpty size={20} className="text-red-500" /> : <IoMdHeartEmpty size={20} />}
+          <Button
+            variant="ghost"
+            className="text-white/70 hover:text-white"
+            onClick={() => setIsLiked(!isLiked)}
+          >
+            {isLiked ? (
+              <IoMdHeartEmpty size={20} className="text-red-500" />
+            ) : (
+              <IoMdHeartEmpty size={20} />
+            )}
           </Button>
-          <Button variant="ghost" className="text-white/70 hover:text-white" onClick={() => setShowInfo(!showInfo)}>
+          <Button
+            variant="ghost"
+            className="text-white/70 hover:text-white"
+            onClick={() => setShowInfo(!showInfo)}
+          >
             <FiInfo size={20} />
           </Button>
           <Button
@@ -583,7 +650,9 @@ export default function Page({ params }) {
           >
             Contact Artist
           </Button>
-          <Button className="bg-white text-black hover:bg-white/90 transition-colors">Inquire About Purchase</Button>
+          <Button className="bg-white text-black hover:bg-white/90 transition-colors">
+            Inquire About Purchase
+          </Button>
         </div>
       </div>
 
@@ -591,15 +660,17 @@ export default function Page({ params }) {
       {showInfo && (
         <motion.div
           className="absolute right-0 top-16 bottom-20 w-80 bg-black/90 backdrop-blur-lg p-6 text-white overflow-auto"
-          initial={{ x: "100%" }}
+          initial={{ x: '100%' }}
           animate={{ x: 0 }}
-          exit={{ x: "100%" }}
-          transition={{ type: "spring", damping: 30 }}
+          exit={{ x: '100%' }}
+          transition={{ type: 'spring', damping: 30 }}
         >
           <div className="space-y-6">
             <div>
               <h2 className="text-lg font-semibold mb-2">About this Model</h2>
-              <p className="text-white/70 text-sm leading-relaxed">{exhibitionData.e_desc}</p>
+              <p className="text-white/70 text-sm leading-relaxed">
+                {exhibitionData.e_desc}
+              </p>
             </div>
             <div>
               <h2 className="text-lg font-semibold mb-2">Controls</h2>
@@ -615,4 +686,3 @@ export default function Page({ params }) {
     </div>
   )
 }
-
