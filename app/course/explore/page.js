@@ -121,6 +121,8 @@ export default function Explore() {
             {courses.length > 0 ? (
               courses.map(course => (
                 <Card1 
+                  // 圖片區域
+                  img={course.c_img}
                   c_id={course.c_id}
                   key={course.c_id}
                   region={course.district}

@@ -75,8 +75,8 @@
 
   .mySwiper img {
     width: 100%;
-    height: auto;
-    object-fit: cover; /* 保持圖片比例並裁切過大部分 */
+    height: 100%;
+    object-fit: contain;  /* 用 'contain' 確保圖片不會被放大 */
   }
   
   .swiper-slide {
