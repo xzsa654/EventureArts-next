@@ -14,8 +14,10 @@ export default function ComponentsReminder(props) {
   )
   return (
     <>
-      <p className="text-left t-16 pb-3  text-gray-800 border-dashed border-b-1 border-[#dadada]">票券相關資訊</p>
-      <HerouiReactAccordion selectionMode="multiple" className='px-0'>
+      <p className="text-left t-16 pb-3  text-gray-800 border-dashed border-b-1 border-[#dadada]">
+        票券相關資訊
+      </p>
+      <HerouiReactAccordion selectionMode="multiple" className="px-0">
         <HerouiReactAccordionItem
           key="1"
           aria-label="購票須知"
@@ -33,8 +35,9 @@ export default function ComponentsReminder(props) {
           title="購票須知"
         >
           <p className="text-12">
-            •
-            付款成功後，您的票券將顯示於會員中心的「我的訂單」頁面，本平台不會發送票券Email通知，請記得至會員中心查看。
+            • 付款成功後，您的票券將顯示於會員中心的「我的訂單」頁面。
+            <br />
+            • 本平台不會發送票券Email通知，請記得至會員中心查看。
             <br />
             • 本票券為記名制，包含訂單編號與購買者姓名，故不可轉讓或修改姓名。
             <br />•
@@ -58,7 +61,7 @@ export default function ComponentsReminder(props) {
           title="票券使用規則"
         >
           <p className="text-12">
-            • 不可退票：本活動 無退票機制，請確認行程後再行購買。
+            • 不可退票：本活動無退票機制，請確認行程後再行購買。
             <br />
             • 不可轉讓：票券僅限購買者本人使用，入場時需驗證購票資訊。
             <br />•
