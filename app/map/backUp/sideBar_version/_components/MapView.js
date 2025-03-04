@@ -8,6 +8,7 @@ import "leaflet/dist/leaflet.css"
 import "./MapView.css"
 import { useFitBounds } from "./useFitBounds" // Import the new hook
 import MarkerClusterGroup from "@changey/react-leaflet-markercluster"
+import FilterResults from "./FilterResults"
 
 // Fix Leaflet's default icon issue
 L.Icon.Default.imagePath = "https://unpkg.com/leaflet@1.7.1/dist/images/"
@@ -319,141 +320,162 @@ const MapView = ({
     </LayerGroup>
   )
 
+  // Add this function to handle location clicks
+  const handleLocationClick = (location) => {
+    if (location.latitude && location.longitude) {
+      mapRef.current.setView([+location.latitude, +location.longitude], 16, {
+        animate: true,
+        duration: 1,
+      })
+    }
+  }
+
   return (
-    <div className="map-view">
-      <MapContainer
-        center={center}
-        zoom={13}
-        scrollWheelZoom={true}
-        className="map-container"
-        zoomControl={false}
-        ref={mapRef}
-      >
-        <ZoomControl position="bottomright" />
-        <LayersControl position="topright">
-          {/* Base layers */}
-          <LayersControl.BaseLayer name="Dark">
-            <TileLayer
-              attribution='&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>'
-              url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
-            />
-          </LayersControl.BaseLayer>
+    <div className="map-view relative">
+      {/* Add FilterResults component */}
+      <FilterResults
+        filteredLocations={filteredLocations}
+        selectedDistrict={selectedDistrict}
+        onLocationClick={handleLocationClick}
+      />
 
-          <LayersControl.BaseLayer checked name="Light">
-            <TileLayer
-              attribution='&copy; <a href="https://carto.com/">CartoDB</a>'
-              url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
-            />
-          </LayersControl.BaseLayer>
+      {/* Adjust the map container to account for the sidebar */}
+      <div className={`transition-all duration-300 ml-12`}>
+        <MapContainer
+          center={center}
+          zoom={13}
+          scrollWheelZoom={true}
+          className="map-container"
+          zoomControl={false}
+          ref={mapRef}
+        >
+          <ZoomControl position="bottomright" />
+          <LayersControl position="topright">
+            {/* Base layers */}
+            <LayersControl.BaseLayer name="Dark">
+              <TileLayer
+                attribution='&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>'
+                url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
+              />
+            </LayersControl.BaseLayer>
 
-          {/* MRT layers - only visible when activeFilterType is "mrt" */}
-          <LayersControl.Overlay checked={activeFilterType === "mrt"} name="MRT Lines">
-            {renderRoutes()}
-          </LayersControl.Overlay>
+            <LayersControl.BaseLayer checked name="Light">
+              <TileLayer
+                attribution='&copy; <a href="https://carto.com/">CartoDB</a>'
+                url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+              />
+            </LayersControl.BaseLayer>
 
-          <LayersControl.Overlay checked={activeFilterType === "mrt"} name="MRT Stations">
-            {renderStations()}
-          </LayersControl.Overlay>
+            {/* MRT layers - only visible when activeFilterType is "mrt" */}
+            <LayersControl.Overlay checked={activeFilterType === "mrt"} name="MRT Lines">
+              {renderRoutes()}
+            </LayersControl.Overlay>
 
-          {/* District layer - only visible when activeFilterType is "district" */}
-          <LayersControl.Overlay checked={activeFilterType === "district"} name="Taipei Districts">
-            <LayerGroup>
-              {taipeiDistricts && (
-                <GeoJSON
-                  key={`districts-${selectedDistrict || "all"}-${hoveredDistrict}`}
-                  data={taipeiDistricts}
-                  style={districtStyle}
-                  onEachFeature={onEachDistrict}
-                />
-              )}
-            </LayerGroup>
-          </LayersControl.Overlay>
+            <LayersControl.Overlay checked={activeFilterType === "mrt"} name="MRT Stations">
+              {renderStations()}
+            </LayersControl.Overlay>
 
-          {/* Filtered Locations overlay to match the database fields */}
-          <LayersControl.Overlay checked name="Filtered Locations">
-            <MarkerClusterGroup
-              chunkedLoading
-              maxClusterRadius={60}
-              spiderfyOnMaxZoom={true}
-              polygonOptions={{
-                fillColor: "#ff7800",
-                color: "#ff7800",
-                weight: 0.5,
-                opacity: 1,
-                fillOpacity: 0.2,
-              }}
-            >
-              {Array.isArray(filteredLocations) &&
-                filteredLocations.map((loc) => {
-                  if (loc.latitude && loc.longitude && loc.district === selectedDistrict) {
-                    return (
-                      <Marker
-                        key={loc.locat_id}
-                        position={[+loc.latitude, +loc.longitude]}
-                        icon={L.divIcon({
-                          className: "custom-marker",
-                          html: `<div class="marker-pin"></div>`,
-                          iconSize: [30, 30],
-                          iconAnchor: [15, 30],
-                        })}
-                      >
-                        <Popup>
-                          <div className="space-y-1">
-                            <p>
-                              <b>ID: {loc.locat_id}</b>
-                            </p>
-                            <p>
-                              <b>{loc.locat_name}</b>
-                            </p>
-                            <p>{loc.district}</p>
-                            <p>{loc.address}</p>
-                          </div>
-                        </Popup>
-                      </Marker>
-                    )
-                  }
-                  return null
-                })}
-            </MarkerClusterGroup>
-          </LayersControl.Overlay>
-
-          <LayersControl.Overlay checked name="Shortest Paths">
-            <LayerGroup>
-              {shortestPaths?.features?.map((path, index) => (
-                <LayerGroup key={`path-${index}`}>
+            {/* District layer - only visible when activeFilterType is "district" */}
+            <LayersControl.Overlay checked={activeFilterType === "district"} name="Taipei Districts">
+              <LayerGroup>
+                {taipeiDistricts && (
                   <GeoJSON
-                    data={path}
-                    style={shortestPathStyle}
-                    onEachFeature={(feature, layer) => {
-                      const distance = formatDistance(feature.properties.distance)
-                      layer.bindPopup(`
-                        <div>
-                          <strong>End Location:</strong> ${feature.properties.end_name}<br/>
-                          <strong>Distance:</strong> ${distance}
-                        </div>
-                      `)
-                    }}
+                    key={`districts-${selectedDistrict || "all"}-${hoveredDistrict}`}
+                    data={taipeiDistricts}
+                    style={districtStyle}
+                    onEachFeature={onEachDistrict}
                   />
-                  <Marker
-                    position={[
-                      path.geometry.coordinates[0][path.geometry.coordinates[0].length - 1][1],
-                      path.geometry.coordinates[0][path.geometry.coordinates[0].length - 1][0],
-                    ]}
-                  >
-                    <Popup>
-                      <div>
-                        <strong>Location ID:</strong> {path.properties.end_name}
-                        <br />
-                        <strong>Distance:</strong> {formatDistance(path.properties.distance)}
-                      </div>
-                    </Popup>
-                  </Marker>
-                </LayerGroup>
-              ))}
-            </LayerGroup>
-          </LayersControl.Overlay>
-        </LayersControl>
-      </MapContainer>
+                )}
+              </LayerGroup>
+            </LayersControl.Overlay>
+
+            {/* Filtered Locations overlay to match the database fields */}
+            <LayersControl.Overlay checked name="Filtered Locations">
+              <MarkerClusterGroup
+                chunkedLoading
+                maxClusterRadius={60}
+                spiderfyOnMaxZoom={true}
+                polygonOptions={{
+                  fillColor: "#ff7800",
+                  color: "#ff7800",
+                  weight: 0.5,
+                  opacity: 1,
+                  fillOpacity: 0.2,
+                }}
+              >
+                {Array.isArray(filteredLocations) &&
+                  filteredLocations.map((loc) => {
+                    if (loc.latitude && loc.longitude && loc.district === selectedDistrict) {
+                      return (
+                        <Marker
+                          key={loc.locat_id}
+                          position={[+loc.latitude, +loc.longitude]}
+                          icon={L.divIcon({
+                            className: "custom-marker",
+                            html: `<div class="marker-pin"></div>`,
+                            iconSize: [30, 30],
+                            iconAnchor: [15, 30],
+                          })}
+                          onClick={() => handleLocationClick(loc)} // Add onClick handler
+                        >
+                          <Popup>
+                            <div className="space-y-1">
+                              <p>
+                                <b>ID: {loc.locat_id}</b>
+                              </p>
+                              <p>
+                                <b>{loc.locat_name}</b>
+                              </p>
+                              <p>{loc.district}</p>
+                              <p>{loc.address}</p>
+                            </div>
+                          </Popup>
+                        </Marker>
+                      )
+                    }
+                    return null
+                  })}
+              </MarkerClusterGroup>
+            </LayersControl.Overlay>
+
+            <LayersControl.Overlay checked name="Shortest Paths">
+              <LayerGroup>
+                {shortestPaths?.features?.map((path, index) => (
+                  <LayerGroup key={`path-${index}`}>
+                    <GeoJSON
+                      data={path}
+                      style={shortestPathStyle}
+                      onEachFeature={(feature, layer) => {
+                        const distance = formatDistance(feature.properties.distance)
+                        layer.bindPopup(`
+                          <div>
+                            <strong>End Location:</strong> ${feature.properties.end_name}<br/>
+                            <strong>Distance:</strong> ${distance}
+                          </div>
+                        `)
+                      }}
+                    />
+                    <Marker
+                      position={[
+                        path.geometry.coordinates[0][path.geometry.coordinates[0].length - 1][1],
+                        path.geometry.coordinates[0][path.geometry.coordinates[0].length - 1][0],
+                      ]}
+                    >
+                      <Popup>
+                        <div>
+                          <strong>Location ID:</strong> {path.properties.end_name}
+                          <br />
+                          <strong>Distance:</strong> {formatDistance(path.properties.distance)}
+                        </div>
+                      </Popup>
+                    </Marker>
+                  </LayerGroup>
+                ))}
+              </LayerGroup>
+            </LayersControl.Overlay>
+          </LayersControl>
+        </MapContainer>
+      </div>
     </div>
   )
 }
