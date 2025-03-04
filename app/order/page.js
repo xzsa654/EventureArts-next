@@ -17,12 +17,12 @@ export default function Orderpage(props) {
   const e_id = searchParams.get('e_id')
   const c_id = searchParams.get('c_id')
   const router = useRouter()
-  const { auth, getAuthHeader } = useAuth() // 取得登入資訊
+  // const { auth, getAuthHeader } = useAuth() // 取得登入資訊
   const [orderData, setOrderData] = useState(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if ((e_id || c_id) && auth?.token) {
+    if ((e_id || c_id) && !orderData) {
       // 加入 Authorization 標頭
       fetch(
         `${API_BASE_URL}/order/api/getOrderDetails?e_id=${e_id || ''}&c_id=${
@@ -38,6 +38,8 @@ export default function Orderpage(props) {
           console.error('Error fetching order details:', err)
           setLoading(false)
         })
+    } else {
+      setLoading(false)
     }
   }, [e_id, c_id])
 
@@ -163,24 +165,9 @@ export default function Orderpage(props) {
                 amount: orderData.event_price,
               }
 
-              // 送到後端時，加入 Authorization 標頭
-              fetch(
-                `http://localhost:3001/ecpay-test?${new URLSearchParams(data)}`,
-                {
-                  headers: {
-                    ...getAuthHeader(), // 傳送 JWT Token
-                  },
-                }
-              )
-                .then((res) => res.json())
-                .then((result) => {
-                  console.log('訂單成功送出:', result)
-                  window.location.href = result.redirect_url
-                })
-                .catch((err) => {
-                  console.error('訂單送出失敗:', err)
-                  alert('訂單送出失敗，請稍後再試')
-                })
+              window.location.href = `http://localhost:3001/ecpay-test?${new URLSearchParams(
+                data
+              )}`
             }}
           >
             {/* const { 
