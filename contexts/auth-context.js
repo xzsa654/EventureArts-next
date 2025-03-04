@@ -145,7 +145,7 @@ export function AuthContextProvider({ children }) {
     }
   }
   const [socket, setSocket] = useState(null)
-  const [onlineUsers, setOnlineUsers] = useState({})
+  const [onlineUsers, setOnlineUsers] = useState([])
 
   //socket.io 啟動函式
   const getSocket = () => {
