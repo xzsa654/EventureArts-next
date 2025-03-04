@@ -3,13 +3,16 @@
 import React, { useState, useEffect } from 'react'
 import { Button, Alert, Badge, Avatar } from '@heroui/react'
 import { HiArrowLeft } from 'react-icons/hi'
-import Image from 'next/image'
+import { useAuth } from '@/hooks/use-auth'
 
 export default function ChatRoomHeader({
+  chatWith,
   chatHandle = () => {},
   avatar,
   nickname,
 }) {
+  const { onlineUsers } = useAuth()
+
   return (
     <>
       <header className="w-[400px]  fixed z-20 ">
@@ -29,9 +32,14 @@ export default function ChatRoomHeader({
                 >
                   <HiArrowLeft size={20} className=" hover:text-gray-900" />
                 </Button>
+
                 <Badge
-                  color="primary"
                   content=""
+                  color={
+                    onlineUsers?.includes(`${chatWith.toString()}`)
+                      ? 'success'
+                      : 'primary'
+                  }
                   placement="bottom-right"
                   shape="circle"
                 >
@@ -44,6 +52,7 @@ export default function ChatRoomHeader({
             }
             className="w-full flex-auto"
           ></Alert>
+          <div></div>
         </div>
       </header>
     </>
