@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import ModalLayout from '@/components/common/login/layout'
 import {
-  useDisclosure,
   Form,
   Input,
   ScrollShadow,
@@ -15,12 +14,10 @@ import BPlayerJoinUsFiles from './join-us-files'
 import { HiArrowNarrowRight } from 'react-icons/hi'
 import { useAuth } from '@/hooks/use-auth'
 import { ADDBRAND } from '@/lib/brands-api'
-import { useRouter } from 'next/navigation'
 
-export default function JoinUsModal() {
+export default function JoinUsModal({ isOpen, onOpenChange }) {
   const [logoImg, setLogoImg] = useState('')
   const [errorMessage, setErrorMessage] = useState(false)
-  const router = useRouter()
   const [errorMsg, setErrorMsg] = useState({
     bd_address: '',
     bd_email: '',
@@ -38,10 +35,6 @@ export default function JoinUsModal() {
   const { user_id, user_role } = auth
   const title = '成為品牌'
   const tips = '成為品牌'
-  const { isOpen, onOpenChange } = useDisclosure()
-  useEffect(() => {
-    if (user_role == 'customer') onOpenChange()
-  }, [])
 
   const mySubmit = async (e) => {
     e.preventDefault()
