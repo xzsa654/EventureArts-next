@@ -33,7 +33,7 @@ export default function Page() {
   const [filteredLocations, setFilteredLocations] = useState([])
   const [selectedLocationId, setSelectedLocationId] = useState(null)//新增管理地圖選取地點的狀態  
 
-  const [activeDataType, setActiveDataType] = useState("exhibition")//新增
+  const [activeDataType, setActiveDataType] = useState("")//新增管理展覽或課程的篩選器選擇
 
   //避免離開地圖網頁時scroll bar 失效
   useEffect(() => {
@@ -217,6 +217,11 @@ export default function Page() {
   //使用者按下 FilterPanel 裡面的 Apply Filter 按鈕後才執行後端fetch
   // Modify handleApplyFilter to handle both MRT and district filtering
   const handleApplyFilter = useCallback(async () => {
+    if (!activeDataType) {
+      alert("請先選擇:展覽/課程")
+      return
+    }
+
     if (activeFilterType === "mrt") {
       console.log("🎯 Applying MRT filter for station:", selectedStation)
       if (!selectedStation || !mapData.shortestPaths) return
@@ -286,7 +291,8 @@ export default function Page() {
         setIsLoading(false)
       }
     }
-  }, [activeFilterType, selectedStation, selectedDistrict, mapData.shortestPaths, selectedLineStations])
+  }, [activeFilterType, selectedStation, selectedDistrict, mapData.shortestPaths, selectedLineStations, activeDataType])
+
 
   // Add handler for filter type change
   const handleFilterTypeChange = useCallback((type) => {

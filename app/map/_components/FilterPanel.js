@@ -48,6 +48,7 @@ export default function FilterPanel({
       <div className="filter-header">
         <h2>Filters</h2>
         <Select
+          placeholder="展覽/課程"          
           value={activeDataType}
           onChange={(e) => onDataTypeChange(e.target.value)}
           aria-label="Select data type"
@@ -136,10 +137,13 @@ export default function FilterPanel({
                   </Select>
                 )}
 
+                {/* 以下是選取MRT的apply防呆邏輯 */}
                 <button
                   onClick={onApplyFilter}
                   disabled={
-                    !selectedStation || selectedStation === 'all' || isLoading
+                    isLoading ||
+                    !activeDataType || // ✅ 必須選擇展覽/課程
+                    (!selectedStation && !selectedDistrict) // 沒有任何篩選條件
                   }
                   className="apply-button w-full bg-black text-white rounded-full disabled:cursor-not-allowed hover:bg-yellow"
                 >
@@ -177,10 +181,14 @@ export default function FilterPanel({
                   ))}
                 </Select>
 
+                {/* 以下是選取Dist的apply防呆邏輯 */}
                 <button
                   onClick={onApplyFilter}
                   disabled={
-                    !selectedDistrict || selectedDistrict === 'all' || isLoading
+                    isLoading ||
+                    !activeDataType || // ✅ 必須選展覽或課程
+                    !selectedDistrict ||
+                    selectedDistrict === 'all'
                   }
                   className="apply-button w-full bg-black text-white rounded-full disabled:cursor-not-allowed hover:bg-yellow"
                 >
