@@ -1,25 +1,49 @@
 .map-page-wrapper {
   min-height: 100vh;
-  /* background-image: url("/chu-images/img-bg-dark.jpg"); */
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
   display: flex;
   flex-direction: column;
 }
 
 .map-content {
   flex: 1;
-  padding-top: 80px; 
+  padding-top: 80px;
 }
 
 .map-page {
   display: flex;
-  min-height: calc(100vh - 80px - 2rem); 
-  padding: 1rem;
-  gap: 2rem;
+  width: 100%;
+  padding: 0 2rem;
+  gap: 1rem;
+  min-height: calc(100vh - 80px);
+  height: auto;
 }
 
+.left-side {
+  width: 300px;
+  min-width: 300px;
+  max-width: 300px;
+  display: flex;
+  flex-direction: column;
+  /* overflow-y: auto; */
+  height: calc(100vh - 80px);
+}
+
+.right-side {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+}
+
+/* Map container styles */
+.map-container {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+/* Loading styles */
 .map-loading {
   flex: 1;
   display: flex;
@@ -49,9 +73,54 @@
   }
 }
 
-.footer {
-  background-color: rgba(255, 255, 255, 0.8);
+/* Filter results styles */
+.filter-results {
+  flex: 1;
+  overflow-y: auto;
   padding: 1rem;
-  text-align: center;
+}
+
+/* Add these styles to ensure proper scrolling */
+.filter-results-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.results-scroll-area {
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* Media queries for responsive design */
+@media (max-width: 768px) {
+  .map-page {
+    flex-direction: column;
+    padding: 0 1rem;
+    height: auto;
+    min-height: calc(100vh - 80px);
+  }
+
+  .left-side {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    min-height: auto;
+    overflow-y: visible;
+  }
+
+  .right-side {
+    height: 50vh;
+    min-height: 300px;
+    position: relative;
+    margin-bottom: 1rem;
+  }
+
+  .map-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+  }
 }
 

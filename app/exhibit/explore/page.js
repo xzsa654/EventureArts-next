@@ -8,8 +8,10 @@ import { MdSort } from "react-icons/md"
 import useSWR from "swr"
 import "./styles.css"
 import PaginationAdapter from "../PaginationAdapter"
+import Loading from "../loading"
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3001"
+
 
 // Static options from your e_options table
 const EXHIBITION_OPTIONS = [
@@ -171,7 +173,7 @@ export default function ExploreExhibitions() {
   }
 
   if (error) return <div className="text-white text-center pt-[200px]">Error loading exhibitions</div>
-  if (isLoading) return <div className="text-white text-center pt-[200px]">Loading...</div>
+  if (isLoading) return <Loading />
 
   return (
     <div

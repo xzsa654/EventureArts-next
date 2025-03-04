@@ -47,8 +47,8 @@ const Excard = ({ e_id, tag, cover_image, date, title, description }) => {
               cover_image?.startsWith("http")
                 ? cover_image
                 : cover_image
-                ? `http://localhost:3001${cover_image}`
-                : "/chu-images/img_5.jpg"
+                ? `http://localhost:3001/uploads/chu-uploads/${cover_image}`
+                : `https://picsum.photos/seed/${e_id}/400/300`
             }
             alt={title}
             width={400}

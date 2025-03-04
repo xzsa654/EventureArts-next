@@ -79,8 +79,8 @@ export default function ExhibitionDetail({ params }) {
                     exhibitionData.cover_image?.startsWith('http')
                       ? exhibitionData.cover_image
                       : exhibitionData.cover_image
-                      ? `http://localhost:3001${exhibitionData.cover_image}`
-                      : '/chu-images/img_9.jpg'
+                      ? `http://localhost:3001/uploads/chu-uploads/${exhibitionData.cover_image}`
+                      : `https://picsum.photos/seed/${e_id}/800/600`
                   }
                   alt={exhibitionData.e_name}
                   fill
