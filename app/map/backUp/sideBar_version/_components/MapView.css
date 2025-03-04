@@ -1,8 +1,9 @@
-.map-view {
-  flex-grow: 1;
+/* .map-view {
+  flex: 1;
   position: relative;
-  width: 100%;
-  height: 100%; 
+  max-width: 1150px;
+  max-height: 700px;
+  margin: 2rem auto;
 }
 
 .map-container {
@@ -12,35 +13,7 @@
   overflow: hidden;
   z-index: 10;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-}
-
-/* add FilterResults style */
-html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  overflow: hidden; /* 防止額外滾動 */
-}
-
-
-/* 
-.map-view {
-  flex-grow: 1;
-  position: relative;
-  width: 100%;
-  height: 100%; 
-}
-
-.map-container {
-  width: 100%;
-  height: 100%;
-  border-radius: 0; 
-  overflow: hidden;
-  z-index: 10;
 } */
-
-
-
 
 /* Custom styling for layer control */
 .leaflet-control-layers {
@@ -227,3 +200,34 @@ html, body {
   justify-content: center;
 }
 
+
+/* Add these styles to your existing CSS */
+.map-view {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+}
+
+.map-container {
+  width: 100%;
+  height: 100vh;
+}
+
+/* Scrollbar styling for the results list */
+.overflow-y-auto {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+.overflow-y-auto::-webkit-scrollbar {
+  width: 6px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+  border-radius: 3px;
+}

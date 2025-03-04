@@ -14,7 +14,7 @@ return (
     animate={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.3 }}
     // ★ Enforce min-width & min-height on the outer container
-      className="group w-[400px] min-h-[450px]"
+    className="group w-full max-w-[380px] min-h-[450px] mx-auto"
   >
     <Link href={`/exhibit/online-detail/${e_id}`}>
       <div className="bg-white bg-opacity-5 overflow-hidden relative p-4 rounded-lg border border-white border-opacity-10 transition-all duration-300 hover:bg-opacity-10 hover:shadow-lg">
@@ -24,7 +24,7 @@ return (
               cover_image?.startsWith("http")
                 ? cover_image
                 : cover_image
-                ? `http://localhost:3001${cover_image}`
+                ? `http://localhost:3001/uploads/chu-uploads/${cover_image}`
                 : "/chu-images/img_9.jpg"
             }
             alt={title}

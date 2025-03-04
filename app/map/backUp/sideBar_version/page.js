@@ -4,7 +4,6 @@ import dynamic from "next/dynamic"
 import { useState, useEffect, useMemo, useCallback } from "react"
 import FilterPanel from "./_components/FilterPanel"
 import "./map.css"
-import FilterResults from "./_components/FilterResults"
 
 const MapView = dynamic(() => import("./_components/MapView"), {
   ssr: false,
@@ -32,28 +31,6 @@ export default function Page() {
   // Add a new state for filtered locations
   const [filteredLocations, setFilteredLocations] = useState([])
 
-  //避免離開地圖網頁時scroll bar 失效
-  useEffect(() => {
-    const updateOverflow = () => {
-      if (window.innerWidth > 768) {
-        document.body.style.overflow = "hidden"
-      } else {
-        document.body.style.overflow = "auto"
-      }
-    }
-  
-    // Initial call
-    updateOverflow()
-  
-    // Update on resize
-    window.addEventListener("resize", updateOverflow)
-  
-    return () => {
-      document.body.style.overflow = "auto"
-      window.removeEventListener("resize", updateOverflow)
-    }
-  }, [])
-  
   // Load map data
   useEffect(() => {
     const fetchData = async () => {
@@ -361,26 +338,11 @@ export default function Page() {
     <div className="map-page-wrapper">
       <div className="map-content">
         <div className="map-page">
-          {/* Left side: Filter panel and results */}
-          <div className="left-side">
-            {memoizedFilterPanel}
-            <FilterResults
-              filteredLocations={filteredLocations}
-              selectedDistrict={selectedDistrict}
-              selectedStation={selectedStation}
-              selectedLineStations={selectedLineStations}
-              activeFilterType={activeFilterType}
-              shortestPaths={filteredPaths} 
-          />
-          </div>
-  
-          {/* right side：MapView */}
-          <div className="right-side">
-            {memoizedMapView}
-          </div>
+          {memoizedFilterPanel}
+          {memoizedMapView}
         </div>
       </div>
     </div>
-  )  
+  )
 }
 
