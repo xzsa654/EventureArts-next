@@ -9,7 +9,7 @@ export default function FilterResults({
   selectedLineStations,
   activeFilterType,
   shortestPaths,
-  onSelectLocation, // ✅ 接收來自FilterResults結果的 props
+  onSelectLocation, //  接收來自FilterResults結果的 props
 }) {
   // Helper function to get selected station info
   const getSelectedStationInfo = () => {

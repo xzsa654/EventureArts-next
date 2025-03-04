@@ -191,6 +191,13 @@ export default function Page() {
     [handleStationSelect],
   )
 
+  // Handle district click
+  const handleDistrictClick = (districtName) => {
+    console.log("✅ 點擊行政區:", districtName)
+    setSelectedDistrict(districtName)
+  }
+  
+
   // Add new handler for district selection
   const handleDistrictSelect = useCallback((districtName) => {
     console.log("🏙️ District selected:", districtName)
@@ -340,8 +347,10 @@ export default function Page() {
         selectedLineStations={selectedLineStations}
         shortestPaths={filteredPaths}
         filteredLocations={filteredLocations} // Pass the filtered locations
-        onRouteClick={handleRouteClick}
+        onRouteClick={handleRouteClick} //MapView圖層選擇路線
         onStationClick={handleStationClick}
+        onDistrictClick={handleDistrictClick}//MapView圖層點擊Dist
+
         activeFilterType={activeFilterType}
         selectedLocationId={selectedLocationId} // 新增管理地點狀態
       />
@@ -357,6 +366,7 @@ export default function Page() {
       filteredLocations, // Add to dependencies
       handleRouteClick,
       handleStationClick,
+      
       activeFilterType,
       selectedLocationId, // 新增FilterResults的地點到 dependencies
     ],

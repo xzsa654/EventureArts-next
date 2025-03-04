@@ -25,6 +25,7 @@ const MapView = ({
   onStationClick,
   activeFilterType,
   selectedLocationId, //新增從FilterResults.js傳入的selectedLocationId
+  onDistrictClick, //新增地圖行政區點擊
 }) => {
   const mapRef = useRef(null)
   const center = [25.033, 121.5654]
@@ -140,6 +141,7 @@ const MapView = ({
     fillOpacity: 0.9,
   }
 
+  // District selected style (hover)
   const districtStyle = (feature) => {
     const isSelected = feature.properties.TNAME === selectedDistrict
     const isHovered = feature.properties.TNAME === hoveredDistrict
@@ -267,7 +269,7 @@ const MapView = ({
         layer.setStyle(districtStyle(feature))
       },
       click: (e) => {
-        // You can add click handling for districts if needed
+        onDistrictClick(feature.properties.TNAME)  // 地圖行政區點擊
         console.log("Clicked district:", feature.properties.TNAME)
       },
     })
