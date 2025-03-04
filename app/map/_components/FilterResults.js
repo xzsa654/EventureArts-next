@@ -69,13 +69,13 @@ export default function FilterResults({
 
             {filteredLocations?.map((location) => (
               <div
-                key={location.e_id}
+                key={location.id} // 後端更改SQL之後可判斷courses/exhibit
                 className="location-card"
                 onClick={() => onSelectLocation(location.locat_id)}
               >
                 <div className="location-content">
                   <div className="location-info">
-                    <h3>{location.e_name}</h3>
+                    <h3>{location.name}</h3> {/* 只需要name */}
                     <div className="location-address">
                       {location.locat_name}
                     </div>

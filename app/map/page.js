@@ -31,8 +31,9 @@ export default function Page() {
   const [activeFilterType, setActiveFilterType] = useState("mrt") // "mrt" or "district"
   // Add a new state for filtered locations
   const [filteredLocations, setFilteredLocations] = useState([])
-  const [selectedLocationId, setSelectedLocationId] = useState(null)//新增管理地點的狀態  
+  const [selectedLocationId, setSelectedLocationId] = useState(null)//新增管理地圖選取地點的狀態  
 
+  const [activeDataType, setActiveDataType] = useState("exhibition")//新增
 
   //避免離開地圖網頁時scroll bar 失效
   useEffect(() => {
@@ -212,6 +213,8 @@ export default function Page() {
     }
   }, [mapData.taipeiDistricts])
 
+  //**後端fetch在這～**/
+  //使用者按下 FilterPanel 裡面的 Apply Filter 按鈕後才執行後端fetch
   // Modify handleApplyFilter to handle both MRT and district filtering
   const handleApplyFilter = useCallback(async () => {
     if (activeFilterType === "mrt") {
@@ -251,8 +254,10 @@ export default function Page() {
       setIsLoading(true)
       try {
         // Fetch all locations
-        // const response = await fetch(`${API_BASE_URL}/map`)
-        const response = await fetch(`${API_BASE_URL}/map?district=${selectedDistrict}`);
+        // const response = await fetch(`${API_BASE_URL}/map`)//最初僅fetch地點
+        // const response = await fetch(`${API_BASE_URL}/map?district=${selectedDistrict}`);  //原本只有展覽的fetch
+        const response = await fetch(`${API_BASE_URL}/map?district=${selectedDistrict}&type=${activeDataType}`)//新增判斷展覽或課程的fetch
+
 
 
         if (!response.ok) {
@@ -309,6 +314,8 @@ export default function Page() {
         onStationSelect={handleStationSelect}
         onDistrictSelect={handleDistrictSelect}
         onApplyFilter={handleApplyFilter}
+        onDataTypeChange={setActiveDataType} // ⭐️ 傳入
+        activeDataType={activeDataType} // ⭐️ 傳入
         selectedMRT={selectedMRT}
         selectedStation={selectedStation}
         selectedDistrict={selectedDistrict}
@@ -332,6 +339,8 @@ export default function Page() {
       isLoading,
       activeFilterType,
       handleFilterTypeChange,
+      setActiveDataType, // ✅ 確保依賴改變會更新
+      activeDataType, // ✅ 確保 activeDataType 有變化時重新渲染
     ],
   )
 

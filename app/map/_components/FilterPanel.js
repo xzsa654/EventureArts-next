@@ -11,12 +11,15 @@ export default function FilterPanel({
   onStationSelect,
   onDistrictSelect,
   onApplyFilter,
+  onDataTypeChange, // ⭐️ 新增fetchData邏輯
+
   selectedMRT,
   selectedStation,
   selectedDistrict,
   selectedLineStations,
   isLoading,
   activeFilterType,
+  activeDataType, // ⭐️ 接收目前選到的是「展覽」還是「課程」
   onFilterTypeChange,
 }) {
   const lineSelectRef = useRef(null)
@@ -44,6 +47,21 @@ export default function FilterPanel({
     <div className="filter-panel">
       <div className="filter-header">
         <h2>Filters</h2>
+        <Select
+          value={activeDataType}
+          onChange={(e) => onDataTypeChange(e.target.value)}
+          aria-label="Select data type"
+          variant="bordered"
+          radius="full"
+          classNames={{ trigger: 'border-1.5 border-black' }}
+        >
+          <SelectItem key="exhibition" value="exhibition">
+            展覽
+          </SelectItem>
+          <SelectItem key="courses" value="courses">
+            課程
+          </SelectItem>
+        </Select>
         <button>Clear all</button>
       </div>
       <div className="filter-section">
