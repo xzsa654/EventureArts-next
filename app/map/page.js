@@ -195,8 +195,9 @@ export default function Page() {
     const newValue = districtName === "all" ? "" : districtName
     setSelectedDistrict(newValue)
     setFilteredPaths(null) // 清除現有的捷運路徑
+    setFilteredLocations([]) // 清除現有的地點
   
-    // ✅ 如果有選擇行政區，確保 `useFitBounds` 會更新
+    // 如果有選擇行政區，確保 `useFitBounds` 會更新
     if (newValue && mapData.taipeiDistricts?.features) {
       console.log(`📍 FitBounds will be applied for district: ${newValue}`)
     }
@@ -241,7 +242,9 @@ export default function Page() {
       setIsLoading(true)
       try {
         // Fetch all locations
-        const response = await fetch(`${API_BASE_URL}/map`)
+        // const response = await fetch(`${API_BASE_URL}/map`)
+        const response = await fetch(`${API_BASE_URL}/map?district=${selectedDistrict}`);
+
 
         if (!response.ok) {
           throw new Error("Failed to fetch locations")
@@ -284,6 +287,7 @@ export default function Page() {
       setSelectedLineStations([])
     }
     setFilteredPaths(null)
+    setFilteredLocations([])  // 清空行政區篩選器
   }, [])
 
   // Update the memoized components to include new props

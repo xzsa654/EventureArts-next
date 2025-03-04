@@ -44,12 +44,12 @@ export default function FilterResults({
       <div className="filter-results-header">
         <h3>{activeFilterType === "district" ? "Results" : "Results"}</h3>
         <span className="results-count">
-          {activeFilterType === "district" && filteredLocations
-            ? `${filteredLocations.filter((loc) => loc.district === selectedDistrict).length} locations`
-            : selectedStationInfo && sortedPaths.length > 0
-              ? `${sortedPaths.length} found`
-              : "No selection"}
-        </span>
+  {activeFilterType === "district" && filteredLocations
+    ? `${filteredLocations.length} exhibitions`
+    : selectedStationInfo && sortedPaths.length > 0
+      ? `${sortedPaths.length} found`
+      : "No selection"}
+</span>
       </div>
 
       <div className="results-scroll-area">
@@ -59,18 +59,18 @@ export default function FilterResults({
               <span className="district-name">{selectedDistrict}</span>
             </div>
 
-            {filteredLocations
-              ?.filter((loc) => loc.district === selectedDistrict)
-              .map((location) => (
-                <div key={location.locat_id} className="location-card">
-                  <div className="location-content">
-                    <div className="location-info">
-                      <h3>{location.locat_name}</h3>
-                      <div className="location-address">{location.address}</div>
-                    </div>
-                  </div>
-                </div>
-              ))}
+            {filteredLocations?.map((location) => (
+  <div key={location.e_id} className="location-card">
+    <div className="location-content">
+      <div className="location-info">
+        <h3>{location.e_name}</h3>
+        <div className="location-address">{location.locat_name}</div>
+        <div className="location-address">{location.address}</div>
+      </div>
+    </div>
+  </div>
+))}
+
           </div>
         )}
 
