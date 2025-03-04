@@ -70,10 +70,14 @@
   border: 1px solid #e5e7eb;
   border-radius: 8px;
   transition: background-color 0.2s;
+  cursor: pointer; 
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .location-card:hover {
-  background-color: #f9fafb;
+  transform: translateY(-3px); 
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); 
+  background-color: #ccc9c5; 
 }
 
 .location-info h3 {

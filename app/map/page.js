@@ -31,6 +31,8 @@ export default function Page() {
   const [activeFilterType, setActiveFilterType] = useState("mrt") // "mrt" or "district"
   // Add a new state for filtered locations
   const [filteredLocations, setFilteredLocations] = useState([])
+  const [selectedLocationId, setSelectedLocationId] = useState(null)//新增管理地點的狀態  
+
 
   //避免離開地圖網頁時scroll bar 失效
   useEffect(() => {
@@ -341,6 +343,7 @@ export default function Page() {
         onRouteClick={handleRouteClick}
         onStationClick={handleStationClick}
         activeFilterType={activeFilterType}
+        selectedLocationId={selectedLocationId} // 新增管理地點狀態
       />
     ),
     [
@@ -355,6 +358,7 @@ export default function Page() {
       handleRouteClick,
       handleStationClick,
       activeFilterType,
+      selectedLocationId, // 新增FilterResults的地點到 dependencies
     ],
   )
 
@@ -375,6 +379,7 @@ export default function Page() {
               selectedLineStations={selectedLineStations}
               activeFilterType={activeFilterType}
               shortestPaths={filteredPaths} 
+              onSelectLocation={setSelectedLocationId}
           />
           </div>
   

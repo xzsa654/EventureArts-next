@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef, useState } from "react"
+import { useRef, useState, useEffect } from "react"
 import { MapContainer, TileLayer, LayersControl, ZoomControl, GeoJSON, LayerGroup, Marker, Popup } from "react-leaflet"
 import L from "leaflet"
 import "leaflet/dist/leaflet.css"
@@ -24,11 +24,27 @@ const MapView = ({
   onRouteClick,
   onStationClick,
   activeFilterType,
+  selectedLocationId, //新增從FilterResults.js傳入的selectedLocationId
 }) => {
   const mapRef = useRef(null)
   const center = [25.033, 121.5654]
   const [hoveredRoute, setHoveredRoute] = useState(null)
   const [hoveredDistrict, setHoveredDistrict] = useState(null)
+
+  // 監聽 selectedLocationId 變化
+  useEffect(() => {
+    if (!selectedLocationId || !filteredLocations.length) return
+
+    const location = filteredLocations.find(
+      (loc) => loc.locat_id === selectedLocationId
+    )
+    if (location && mapRef.current) {
+      const { latitude, longitude } = location
+      mapRef.current.flyTo([latitude, longitude], 17, {
+        duration: 1.5,
+      })
+    }
+  }, [selectedLocationId, filteredLocations])
 
   // Use the custom fitBounds hook
   useFitBounds({
