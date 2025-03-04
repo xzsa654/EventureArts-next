@@ -21,26 +21,13 @@ export default function Orderpage(props) {
   const [orderData, setOrderData] = useState(null)
   const [loading, setLoading] = useState(true)
 
-  // 1.確保使用者已登入，否則跳轉登入頁面
-  useEffect(() => {
-    if (!auth?.token) {
-      alert('請先登入')
-      router.push('/login')
-    }
-  }, [auth, router])
-
   useEffect(() => {
     if ((e_id || c_id) && auth?.token) {
       // 加入 Authorization 標頭
       fetch(
         `${API_BASE_URL}/order/api/getOrderDetails?e_id=${e_id || ''}&c_id=${
           c_id || ''
-        }`,
-        {
-          headers: {
-            ...getAuthHeader(), // 透過 useAuth() 加入 JWT Token
-          },
-        }
+        }`
       )
         .then((res) => res.json())
         .then((data) => {
@@ -52,7 +39,7 @@ export default function Orderpage(props) {
           setLoading(false)
         })
     }
-  }, [e_id, c_id, auth])
+  }, [e_id, c_id])
 
   if (loading) return <p>載入中...</p>
   if (!orderData) return <p>無法生成訂單，請再試一遍</p>
@@ -156,8 +143,8 @@ export default function Orderpage(props) {
             className="text-base text-yellow-600 hover:text-yellow-300 hover:scale-110 transition-transform duration-200 cursor-pointer flex items-center group gap-x-2 mt-5 px-7  data-[hover=true]:bg-primary-300"
             onPress={() => {
               const data = {
-                user_id: auth.user_id, // 從 auth 取得 user_id
-                user_name: auth.user_name, // 從 auth 取得 user_name
+                user_id: 3,
+                user_name: '測試者',
                 e_id,
                 c_id,
                 event_name: orderData.event_name,
