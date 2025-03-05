@@ -1,15 +1,18 @@
-"use client"
-import Image from "next/image"
-import "../exhibit.css"
+'use client'
+import Image from 'next/image'
+import '../exhibit.css'
 
 const defaultImages = [
-  "/chu-images/img_9.jpg",
-  "/chu-images/img_5.jpg",
-  "/chu-images/img_15.jpg",
-  "/chu-images/img_18.jpg",
+  '/chu-images/img_9.jpg',
+  '/chu-images/img_5.jpg',
+  '/chu-images/img_15.jpg',
+  '/chu-images/img_18.jpg',
 ]
 
-export default function ExhibitionSection({ onExhibitionSelect, exhibitions = [] }) {
+export default function ExhibitionSection({
+  onExhibitionSelect,
+  exhibitions = [],
+}) {
   // Group items by column (assuming we want to maintain 3 columns)
   const columns = [[], [], []]
   exhibitions.forEach((exhibition, index) => {
@@ -20,7 +23,7 @@ export default function ExhibitionSection({ onExhibitionSelect, exhibitions = []
     return defaultImages[index % defaultImages.length]
   }
 
-  const renderColumn = (items, animationDelay = "0s", columnIndex) => (
+  const renderColumn = (items, animationDelay = '0s', columnIndex) => (
     <div className="carousel-column" style={{ animationDelay }}>
       {/* Original items */}
       {items.map((exhibition, index) => (
@@ -31,8 +34,14 @@ export default function ExhibitionSection({ onExhibitionSelect, exhibitions = []
             onClick={() => onExhibitionSelect(exhibition)}
           >
             <Image
-              src={exhibition.cover_image || getDefaultImage(columnIndex * items.length + index)}
-              alt={exhibition.e_name || "Exhibition image"}
+              src={
+                exhibition.cover_image
+                  ? exhibition.cover_image.startsWith('http')
+                    ? exhibition.cover_image 
+                    : `http://localhost:3001/uploads/chu-uploads/${exhibition.cover_image}` 
+                  : getDefaultImage(columnIndex * items.length + index) // Use default image if no cover image
+              }
+              alt={exhibition.e_name || 'Exhibition image'}
               fill
               // height={400}
               // width={300}
@@ -54,7 +63,13 @@ export default function ExhibitionSection({ onExhibitionSelect, exhibitions = []
     <section className="relative h-[700px]">
       {/* Background Image */}
       <div className="fixed inset-0 -z-10">
-        <Image src="/chu-images/img-bg.jpg" alt="Background" fill priority className="object-cover"/>
+        <Image
+          src="/chu-images/img-bg.jpg"
+          alt="Background"
+          fill
+          priority
+          className="object-cover"
+        />
       </div>
 
       {/* this is Left text + carousel area  */}
@@ -70,20 +85,25 @@ export default function ExhibitionSection({ onExhibitionSelect, exhibitions = []
           {/* Right side vertical carousels */}
           <div
             className="w-full md:w-[70%] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1 overflow-hidden relative pr-0 ml-auto justify-items-center md:justify-items-end"
-            style={{ height: "700px" }}
+            style={{ height: '700px' }}
           >
             {/* Vertical lines */}
             <div className="vertical-line hidden md:block md:left-1/2 lg:left-1/3"></div>
             <div className="vertical-line hidden lg:block lg:left-2/3"></div>
 
             {/* Each column has different animation delay for varied movement */}
-            <div className="overflow-hidden w-full">{renderColumn(columns[0], "0s", 0)}</div>
-            <div className="overflow-hidden w-full hidden md:block">{renderColumn(columns[1], "-3s", 1)}</div>
-            <div className="overflow-hidden w-full hidden lg:block">{renderColumn(columns[2], "-6s", 2)}</div>
+            <div className="overflow-hidden w-full">
+              {renderColumn(columns[0], '0s', 0)}
+            </div>
+            <div className="overflow-hidden w-full hidden md:block">
+              {renderColumn(columns[1], '-3s', 1)}
+            </div>
+            <div className="overflow-hidden w-full hidden lg:block">
+              {renderColumn(columns[2], '-6s', 2)}
+            </div>
           </div>
         </div>
       </section>
     </section>
   )
 }
-

@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 // import { useOrder } from '@/hooks/use-order' // 取得 useOrder
+import ComponentsReminder from '@/app/order/_components/reminder'
 import { Button } from '@heroui/button'
 import { HiArrowRight } from 'react-icons/hi2'
 
@@ -222,6 +223,9 @@ export default function ECPayCallback() {
             </div>
           </div>
         </div>
+      </div>
+      <div className="w-full flex flex-col justify-center px-16 py-16 bg-[#f7f5f1]">
+        <ComponentsReminder />
       </div>
     </>
   )

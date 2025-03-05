@@ -2,10 +2,13 @@
 
 import { useState, useEffect } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
-import { useOrder } from '@/hooks/use-order'
+import { useAuth } from '@/hooks/use-auth' // 引入 useAuth
+// import { useOrder } from '@/hooks/use-order'
 import './order.css'
+import ComponentsReminder from './_components/reminder'
 import { Button } from '@heroui/button'
 import { HiArrowRight } from 'react-icons/hi2'
+import { useModal } from '@/contexts/modal-context'
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3001'
@@ -15,12 +18,14 @@ export default function Orderpage(props) {
   const e_id = searchParams.get('e_id')
   const c_id = searchParams.get('c_id')
   const router = useRouter()
-  const { orderData, setOrderData } = useOrder() // 使用 my hook 'useOrder' 存放完整的活動 & 商家資料
+  const { auth, getAuthHeader } = useAuth() // 取得登入資訊
+  const [orderData, setOrderData] = useState(null)
   const [loading, setLoading] = useState(true)
+  const { onOpenChange } = useModal().login
 
   useEffect(() => {
     if ((e_id || c_id) && !orderData) {
-      // 向 API 取得訂單資訊
+      // 加入 Authorization 標頭
       fetch(
         `${API_BASE_URL}/order/api/getOrderDetails?e_id=${e_id || ''}&c_id=${
           c_id || ''
@@ -28,7 +33,8 @@ export default function Orderpage(props) {
       )
         .then((res) => res.json())
         .then((data) => {
-          setOrderData(data) // 把訂單資訊存進 my hook 'useOrder'
+          setOrderData(data)
+          setLoading(false)
         })
         .catch((err) => {
           console.error('Error fetching order details:', err)
@@ -37,7 +43,7 @@ export default function Orderpage(props) {
     } else {
       setLoading(false)
     }
-  }, [e_id, c_id, orderData, setOrderData])
+  }, [e_id, c_id])
 
   if (loading) return <p>載入中...</p>
   if (!orderData) return <p>無法生成訂單，請再試一遍</p>
@@ -140,11 +146,17 @@ export default function Orderpage(props) {
             variant="light"
             className="text-base text-yellow-600 hover:text-yellow-300 hover:scale-110 transition-transform duration-200 cursor-pointer flex items-center group gap-x-2 mt-5 px-7  data-[hover=true]:bg-primary-300"
             onPress={() => {
+              // ✅ 檢查是否有登入
+              if (!auth?.token) {
+                return onOpenChange(true)
+              }
+
+              // 使用登入者的 user_id & user_name
               const data = {
-                user_id: 3,
-                user_name: '測試者',
-                e_id: e_id,
-                c_id: c_id,
+                user_id: auth.user_id, // 從 `auth` 取得
+                // user_name: auth.user_name, // 從 `auth` 取得
+                e_id,
+                c_id,
                 event_name: orderData.event_name,
                 event_price: orderData.event_price,
                 event_startdate: orderData.event_startdate,
@@ -176,6 +188,9 @@ export default function Orderpage(props) {
             <HiArrowRight className="transition-transform duration-300 ease-out group-hover:translate-x-3" />
           </Button>
         </div>
+      </div>
+      <div className="w-full flex flex-col justify-center px-16 py-16 bg-[#f7f5f1]">
+        <ComponentsReminder />
       </div>
     </>
   )

@@ -4,6 +4,7 @@ import dynamic from "next/dynamic"
 import { useState, useEffect, useMemo, useCallback } from "react"
 import FilterPanel from "./_components/FilterPanel"
 import "./map.css"
+import FilterResults from "./_components/FilterResults"
 
 const MapView = dynamic(() => import("./_components/MapView"), {
   ssr: false,
@@ -31,6 +32,28 @@ export default function Page() {
   // Add a new state for filtered locations
   const [filteredLocations, setFilteredLocations] = useState([])
 
+  //避免離開地圖網頁時scroll bar 失效
+  useEffect(() => {
+    const updateOverflow = () => {
+      if (window.innerWidth > 768) {
+        document.body.style.overflow = "hidden"
+      } else {
+        document.body.style.overflow = "auto"
+      }
+    }
+  
+    // Initial call
+    updateOverflow()
+  
+    // Update on resize
+    window.addEventListener("resize", updateOverflow)
+  
+    return () => {
+      document.body.style.overflow = "auto"
+      window.removeEventListener("resize", updateOverflow)
+    }
+  }, [])
+  
   // Load map data
   useEffect(() => {
     const fetchData = async () => {
@@ -168,11 +191,16 @@ export default function Page() {
 
   // Add new handler for district selection
   const handleDistrictSelect = useCallback((districtName) => {
-    console.log("🏙️ District select:", districtName)
+    console.log("🏙️ District selected:", districtName)
     const newValue = districtName === "all" ? "" : districtName
     setSelectedDistrict(newValue)
-    setFilteredPaths(null) // Clear any existing paths
-  }, [])
+    setFilteredPaths(null) // 清除現有的捷運路徑
+  
+    // ✅ 如果有選擇行政區，確保 `useFitBounds` 會更新
+    if (newValue && mapData.taipeiDistricts?.features) {
+      console.log(`📍 FitBounds will be applied for district: ${newValue}`)
+    }
+  }, [mapData.taipeiDistricts])
 
   // Modify handleApplyFilter to handle both MRT and district filtering
   const handleApplyFilter = useCallback(async () => {
@@ -333,11 +361,26 @@ export default function Page() {
     <div className="map-page-wrapper">
       <div className="map-content">
         <div className="map-page">
-          {memoizedFilterPanel}
-          {memoizedMapView}
+          {/* Left side: Filter panel and results */}
+          <div className="left-side">
+            {memoizedFilterPanel}
+            <FilterResults
+              filteredLocations={filteredLocations}
+              selectedDistrict={selectedDistrict}
+              selectedStation={selectedStation}
+              selectedLineStations={selectedLineStations}
+              activeFilterType={activeFilterType}
+              shortestPaths={filteredPaths} 
+          />
+          </div>
+  
+          {/* right side：MapView */}
+          <div className="right-side">
+            {memoizedMapView}
+          </div>
         </div>
       </div>
     </div>
-  )
+  )  
 }
 

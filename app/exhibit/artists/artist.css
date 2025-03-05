@@ -1,0 +1,110 @@
+/* Base hover effect styles */
+.hover-invert,
+.hover-duotone,
+.hover-grayscale,
+.hover-negative {
+  position: relative;
+  overflow: hidden;
+  background: white;
+}
+
+/* Hover transform effect */
+/* Delete these rules completely */
+
+/* Invert effect */
+.hover-invert:hover img {
+  filter: invert(1);
+}
+
+/* Duotone effect */
+.hover-duotone::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #d6ab11;
+  mix-blend-mode: color;
+  opacity: 0;
+  transition: opacity 0.5s;
+  z-index: 1;
+}
+
+.hover-duotone:hover::before {
+  opacity: 1;
+}
+
+.hover-duotone:hover img {
+  filter: grayscale(100%) contrast(1.2);
+}
+
+/* Grayscale with color swap */
+.hover-grayscale::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+  mix-blend-mode: color;
+  opacity: 0;
+  transition: opacity 0.5s;
+  z-index: 1;
+}
+
+.hover-grayscale:hover::before {
+  opacity: 1;
+}
+
+.hover-grayscale:hover img {
+  filter: grayscale(100%) contrast(1.1);
+}
+
+/* Negative effect */
+.hover-negative:hover img {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+/* Common hover overlay styles */
+.hover-invert::after,
+.hover-duotone::after,
+.hover-grayscale::after,
+.hover-negative::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.3), transparent);
+  opacity: 0;
+  transition: opacity 0.5s;
+  z-index: 2;
+}
+
+.hover-invert:hover::after,
+.hover-duotone:hover::after,
+.hover-grayscale:hover::after,
+.hover-negative:hover::after {
+  opacity: 1;
+}
+
+/* View More text styles */
+.hover-invert span,
+.hover-duotone span,
+.hover-grayscale span,
+.hover-negative span {
+  position: relative;
+  z-index: 3;
+}
+
+/* Smooth transitions */
+.hover-invert img,
+.hover-duotone img,
+.hover-grayscale img,
+.hover-negative img {
+  transition: all 0.5s ease-out;
+}
+
+/* Additional effects for specific needs */
+.hover-duotone.blue::before {
+  background: #0066ff;
+}
+
+.hover-grayscale.warm::before {
+  background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+}
+
