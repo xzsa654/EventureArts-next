@@ -47,23 +47,26 @@ export default function FilterPanel({
     <div className="filter-panel">
       <div className="filter-header">
         <h2>Filters</h2>
-        <Select
-          placeholder="展覽/課程"          
-          value={activeDataType}
-          onChange={(e) => onDataTypeChange(e.target.value)}
-          aria-label="Select data type"
+        <div style={{ marginLeft: "auto" }}>
+          <button>Clear all</button>
+        </div>
+      </div>
+      <div className="filter-section">
+        <Tabs
+          selectedKey={activeDataType}
+          onSelectionChange={(key) => onDataTypeChange(key)}
+          classNames={{
+            tabList: "w-full border-1.5 border-black",
+            panel: "w-full p-0",
+          }}
+          color="primary"
+          aria-label="Data type options"
           variant="bordered"
           radius="full"
-          classNames={{ trigger: 'border-1.5 border-black' }}
         >
-          <SelectItem key="exhibition" value="exhibition">
-            展覽
-          </SelectItem>
-          <SelectItem key="courses" value="courses">
-            課程
-          </SelectItem>
-        </Select>
-        <button>Clear all</button>
+          <Tab key="exhibition" title="展覽" />
+          <Tab key="courses" title="課程" />
+        </Tabs>
       </div>
       <div className="filter-section">
         <p>Search By...</p>
