@@ -36,7 +36,7 @@ export default function ChatRoomHeader({
                 <Badge
                   content=""
                   color={
-                    onlineUsers?.includes(`${chatWith.toString()}`)
+                    onlineUsers?.includes(`${chatWith?.toString()}`)
                       ? 'success'
                       : 'primary'
                   }

@@ -19,8 +19,9 @@ import {
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/hooks/use-auth'
 import MessageDrawer from './message-drawer.js/message'
+import { useModal } from '@/contexts/modal-context'
 export default function AVatarGroup() {
-  const { isOpen, onOpenChange } = useDisclosure()
+  const { isOpen, onOpenChange } = useModal().message
   const router = useRouter()
   const { auth, logOut } = useAuth()
 

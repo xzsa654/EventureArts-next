@@ -16,7 +16,6 @@ export default function ChatRoom({
   const messageTailRef = useRef()
 
   const [messages, setMessages] = useState([])
-  const [show, setShow] = useState()
   useEffect(() => {
     if (!chatWith || !socket) return
 
@@ -56,7 +55,7 @@ export default function ChatRoom({
   useEffect(() => {
     if (messages && messageTailRef.current) {
       setTimeout(() => {
-        messageTailRef.current.scrollIntoView({ behavior: 'auto' })
+        messageTailRef.current?.scrollIntoView({ behavior: 'auto' })
       }, 50)
     }
   }, [messages])
