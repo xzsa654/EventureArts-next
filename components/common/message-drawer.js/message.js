@@ -40,8 +40,6 @@ export default function MessageDrawer({
     setRenderControl(boolean)
   }
 
-  
-
   const chatHandle = (id) => {
     setIsChatting(!isChatting)
     if (id) {

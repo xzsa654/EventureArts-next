@@ -10,6 +10,7 @@ export default function ChatRoomHeader({
   chatHandle = () => {},
   avatar,
   nickname,
+  brandname,
 }) {
   const { onlineUsers } = useAuth()
 
@@ -19,7 +20,7 @@ export default function ChatRoomHeader({
         <div>
           <Alert
             hideIcon
-            title={nickname}
+            title={`${nickname} ${brandname ? `(${brandname})` : ''}`}
             startContent={
               <>
                 <Button

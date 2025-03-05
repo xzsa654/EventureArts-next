@@ -3,9 +3,8 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useAuth } from '@/hooks/use-auth'
 import { User, Chip, Image } from '@heroui/react'
+import SplitText from './splitText'
 import ChatRoomHeader from './chatroomheader'
-// import MessageHeader from '../../_components/headerMessage'
-// import ComponentsBottomMessage from '../../_components/bottomMessage'
 export default function ChatRoom({
   chatWith,
   chatHandle = () => {},
@@ -14,6 +13,7 @@ export default function ChatRoom({
 }) {
   const { getAuthHeader, auth, socket } = useAuth()
   const messageTailRef = useRef()
+  const [typing, setTyping] = useState()
 
   const [messages, setMessages] = useState([])
   useEffect(() => {
@@ -37,6 +37,11 @@ export default function ChatRoom({
   }, [chatWith, socket])
 
   useEffect(() => {
+    socket.on('eachTyping', (data) => {
+      setTyping(data)
+    })
+  }, [chatWith, socket])
+  useEffect(() => {
     if (auth?.token) {
       fetch('http://localhost:3001/message/t/' + `${chatWith}`, {
         method: 'GET',
@@ -58,8 +63,11 @@ export default function ChatRoom({
         messageTailRef.current?.scrollIntoView({ behavior: 'auto' })
       }, 50)
     }
-  }, [messages])
+  }, [messages, typing])
 
+  const handleAnimationComplete = () => {
+    console.log('All letters have animated!')
+  }
   return (
     <>
       <ChatRoomHeader
@@ -67,6 +75,7 @@ export default function ChatRoom({
         chatHandle={chatHandle}
         avatar={messages.at(0)?.avatar}
         nickname={messages.at(1)?.nickname}
+        brandname={messages.at(1)?.brandname}
       />
       <div className="mt-20 overflow-auto px-3 ">
         {messages.map((message, i) => {
@@ -117,7 +126,7 @@ export default function ChatRoom({
               key={i}
               className="text-left gap-2 flex flex-col justify-start items-start"
             >
-              <div className="flex justify-center items-center text-zinc">
+              <div className="flex justify-center w-full items-center text-zinc">
                 {message.date}
               </div>
               <div className="text-zinc">{message.time}</div>
@@ -161,6 +170,17 @@ export default function ChatRoom({
             </div>
           )
         })}
+        <SplitText
+          text={typing}
+          className=" w-full text-12 text-center"
+          delay={50}
+          animationFrom={{ opacity: 0, transform: 'translate3d(0,0,0)' }}
+          animationTo={{ opacity: 1, transform: 'translate3d(0,0,0)' }}
+          easing="easeOutCubic"
+          threshold={0.2}
+          rootMargin="-50px"
+          onLetterAnimationComplete={handleAnimationComplete}
+        />
         <div className="h-1" ref={messageTailRef}></div>
       </div>
     </>

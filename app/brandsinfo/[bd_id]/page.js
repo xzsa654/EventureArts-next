@@ -61,6 +61,11 @@ export default function BrandsPage({ params }) {
     fetchData()
   }, [bd_id])
 
+  // 關閉後要回復id狀態
+  useEffect(() => {
+    if (!isOpen) setId(null)
+  }, [isOpen])
+
   return (
     <>
       {/* 品牌資訊 */}
@@ -223,7 +228,6 @@ export default function BrandsPage({ params }) {
       </div>
       {/* 展覽區塊 */}
       <div>
-        exhibit container
         <div className="m-6">
           <MarqueeExhibit className="custom-marquee-one" />
         </div>
