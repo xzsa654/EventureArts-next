@@ -9,6 +9,7 @@ import { HiArrowRight } from 'react-icons/hi'
 import { Button } from '@heroui/react'
 import Image from 'next/image'
 import MessageDrawer from '@/components/common/message-drawer.js/message'
+import BlurText from '@/components/common/blur-text'
 import { useModal } from '@/contexts/modal-context'
 export default function BrandsPage({ params }) {
   const [exhibitions, setExhibitions] = useState([])
@@ -223,7 +224,6 @@ export default function BrandsPage({ params }) {
       </div>
       {/* 展覽區塊 */}
       <div>
-        exhibit container
         <div className="m-6">
           <MarqueeExhibit className="custom-marquee-one" />
         </div>
@@ -231,9 +231,13 @@ export default function BrandsPage({ params }) {
           {loading && <p>載入中...</p>}
           {error && <p className="text-red-500 text-center">{error}</p>}
           {!loading && !error && exhibitions.length === 0 && (
-            <div className="text-red-500 text-center py-10">
-              此商家目前尚未上架展覽
-            </div>
+            <BlurText
+              text="此商家目前尚未上架展覽......"
+              delay={150}
+              animateBy="letters"
+              direction="top"
+              className="text-xl text-red-500 text-center py-10"
+            />
           )}
           {!loading &&
             !error &&
@@ -250,10 +254,16 @@ export default function BrandsPage({ params }) {
         <div className="bg-[#f7f5f1] mx-16 py-4 flex flex-wrap gap-x-8 gap-y-4 justify-center">
           {loading && <p>載入中...</p>}
           {error && <p className="text-red-500 text-center">{error}</p>}
+          {loading && <p>載入中...</p>}
+          {error && <p className="text-red-500 text-center">{error}</p>}
           {!loading && !error && courses.length === 0 && (
-            <div className="text-red-500 text-center py-10">
-              此商家目前尚未上架課程
-            </div>
+            <BlurText
+              text="此商家目前尚未上架課程......"
+              delay={150}
+              animateBy="letters"
+              direction="top"
+              className="text-xl text-red-500 text-center py-10"
+            />
           )}
           {!loading &&
             !error &&
