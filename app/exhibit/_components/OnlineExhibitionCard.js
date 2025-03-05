@@ -36,9 +36,9 @@ return (
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-0 group-hover:opacity-60 transition-opacity duration-300"></div>
         </div>
-        <div className="absolute top-6 left-6 bg-white bg-opacity-90 text-black text-xs font-medium px-2 py-1 rounded-full">
+        {/* <div className="absolute top-6 left-6 bg-white bg-opacity-90 text-black text-xs font-medium px-2 py-1 rounded-full">
           {tag}
-        </div>
+        </div> */}
         <h3 className="text-lg font-semibold mb-2 text-white group-hover:text-[#D4A84B] transition-colors duration-300">
           {title}
         </h3>

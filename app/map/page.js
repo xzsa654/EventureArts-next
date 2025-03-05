@@ -31,7 +31,11 @@ export default function Page() {
   const [activeFilterType, setActiveFilterType] = useState("mrt") // "mrt" or "district"
   // Add a new state for filtered locations
   const [filteredLocations, setFilteredLocations] = useState([])
+  const [selectedLocationId, setSelectedLocationId] = useState(null)//新增管理地圖選取地點的狀態  
 
+  const [activeDataType, setActiveDataType] = useState("")//新增管理展覽或課程的篩選器選擇
+
+  
   //避免離開地圖網頁時scroll bar 失效
   useEffect(() => {
     const updateOverflow = () => {
@@ -189,21 +193,62 @@ export default function Page() {
     [handleStationSelect],
   )
 
+  // Handle district click
+// --- handlers ---
+// --- handlers ---
+// 點擊地圖上的行政區時
+const handleDistrictClick = (districtName) => {
+  console.log("✅ 點擊行政區:", districtName)
+  setSelectedDistrict(districtName)
+
+  //  清空捷運篩選相關，避免混用
+  setSelectedMRT("")
+  setSelectedStation("")
+  setSelectedLineStations([])
+  setFilteredPaths(null)
+  setFilteredLocations([]) // ✅ 清空舊的 pin 結果
+}
+
+// 切換展覽/課程時
+const handleDataTypeChange = useCallback((selectedType) => {
+  setActiveDataType(selectedType)
+  setSelectedDistrict("")
+  setSelectedMRT("")
+  setSelectedStation("")
+  setSelectedLineStations([])
+  setFilteredLocations([])
+  setFilteredPaths(null)
+}, [])
+
+
+
   // Add new handler for district selection
   const handleDistrictSelect = useCallback((districtName) => {
     console.log("🏙️ District selected:", districtName)
     const newValue = districtName === "all" ? "" : districtName
-    setSelectedDistrict(newValue)
-    setFilteredPaths(null) // 清除現有的捷運路徑
   
-    // ✅ 如果有選擇行政區，確保 `useFitBounds` 會更新
+    setSelectedDistrict(newValue)
+    setFilteredLocations([])  // ✅ 這行清空上一次篩選結果
+    setFilteredPaths(null)    // ✅ 也清空捷運的篩選結果
+    setSelectedMRT("")        // ✅ 清空捷運線
+    setSelectedStation("")    // ✅ 清空捷運站
+    setSelectedLineStations([])
+  
     if (newValue && mapData.taipeiDistricts?.features) {
       console.log(`📍 FitBounds will be applied for district: ${newValue}`)
     }
   }, [mapData.taipeiDistricts])
+  
 
+  //**後端fetch在這～**/
+  //使用者按下 FilterPanel 裡面的 Apply Filter 按鈕後才執行後端fetch
   // Modify handleApplyFilter to handle both MRT and district filtering
   const handleApplyFilter = useCallback(async () => {
+    if (!activeDataType) {
+      alert("請先選擇:展覽/課程")
+      return
+    }
+
     if (activeFilterType === "mrt") {
       console.log("🎯 Applying MRT filter for station:", selectedStation)
       if (!selectedStation || !mapData.shortestPaths) return
@@ -241,7 +286,11 @@ export default function Page() {
       setIsLoading(true)
       try {
         // Fetch all locations
-        const response = await fetch(`${API_BASE_URL}/map`)
+        // const response = await fetch(`${API_BASE_URL}/map`)//最初僅fetch地點
+        // const response = await fetch(`${API_BASE_URL}/map?district=${selectedDistrict}`);  //原本只有展覽的fetch
+        const response = await fetch(`${API_BASE_URL}/map?district=${selectedDistrict}&type=${activeDataType}`)//新增判斷展覽或課程的fetch
+
+
 
         if (!response.ok) {
           throw new Error("Failed to fetch locations")
@@ -269,7 +318,8 @@ export default function Page() {
         setIsLoading(false)
       }
     }
-  }, [activeFilterType, selectedStation, selectedDistrict, mapData.shortestPaths, selectedLineStations])
+  }, [activeFilterType, selectedStation, selectedDistrict, mapData.shortestPaths, selectedLineStations, activeDataType])
+
 
   // Add handler for filter type change
   const handleFilterTypeChange = useCallback((type) => {
@@ -284,6 +334,7 @@ export default function Page() {
       setSelectedLineStations([])
     }
     setFilteredPaths(null)
+    setFilteredLocations([])  // 清空行政區篩選器
   }, [])
 
   // Update the memoized components to include new props
@@ -296,6 +347,8 @@ export default function Page() {
         onStationSelect={handleStationSelect}
         onDistrictSelect={handleDistrictSelect}
         onApplyFilter={handleApplyFilter}
+        onDataTypeChange={handleDataTypeChange} // ⭐️ 傳遞清空邏輯
+        activeDataType={activeDataType} // ⭐️ 傳入
         selectedMRT={selectedMRT}
         selectedStation={selectedStation}
         selectedDistrict={selectedDistrict}
@@ -319,6 +372,8 @@ export default function Page() {
       isLoading,
       activeFilterType,
       handleFilterTypeChange,
+      activeDataType, // ✅ 確保 activeDataType 有變化時重新渲染
+      handleDataTypeChange, // ✅ 加到 dependencies
     ],
   )
 
@@ -334,9 +389,12 @@ export default function Page() {
         selectedLineStations={selectedLineStations}
         shortestPaths={filteredPaths}
         filteredLocations={filteredLocations} // Pass the filtered locations
-        onRouteClick={handleRouteClick}
+        onRouteClick={handleRouteClick} //MapView圖層選擇路線
         onStationClick={handleStationClick}
+        onDistrictClick={handleDistrictClick}//MapView圖層點擊Dist
+
         activeFilterType={activeFilterType}
+        selectedLocationId={selectedLocationId} // 新增管理地點狀態
       />
     ),
     [
@@ -350,37 +408,42 @@ export default function Page() {
       filteredLocations, // Add to dependencies
       handleRouteClick,
       handleStationClick,
+      
       activeFilterType,
+      selectedLocationId, // 新增FilterResults的地點到 dependencies
     ],
   )
 
+  
   if (isLoading && !mapData.mrtRoutes) return <div>Loading map data...</div>
   if (error) return <div>{error}</div>
 
   return (
-    <div className="map-page-wrapper">
-      <div className="map-content">
-        <div className="map-page">
-          {/* Left side: Filter panel and results */}
-          <div className="left-side">
-            {memoizedFilterPanel}
-            <FilterResults
-              filteredLocations={filteredLocations}
-              selectedDistrict={selectedDistrict}
-              selectedStation={selectedStation}
-              selectedLineStations={selectedLineStations}
-              activeFilterType={activeFilterType}
-              shortestPaths={filteredPaths} 
-          />
-          </div>
+    <div className="map-page-wrapper relative w-screen h-[calc(100vh-80px)] mt-[80px]">
+      {/* Map 滿版 */}
+      <div className="map-content absolute inset-0 z-0">
+        {memoizedMapView}
+      </div>
   
-          {/* right side：MapView */}
-          <div className="right-side">
-            {memoizedMapView}
-          </div>
-        </div>
+      {/* FilterPanel 浮動框 */}
+      <div className="absolute top-4 left-4 z-10">
+        {memoizedFilterPanel}
+      </div>
+  
+      {/* FilterResults 固定左下角 */}
+      <div className="absolute bottom-4 left-4 z-10">
+        <FilterResults
+          filteredLocations={filteredLocations}
+          selectedDistrict={selectedDistrict}
+          selectedStation={selectedStation}
+          selectedLineStations={selectedLineStations}
+          activeFilterType={activeFilterType}
+          shortestPaths={filteredPaths}
+          onSelectLocation={setSelectedLocationId}
+        />
       </div>
     </div>
-  )  
+  )
+  
 }
 

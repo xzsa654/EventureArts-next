@@ -11,13 +11,17 @@ export default function FilterPanel({
   onStationSelect,
   onDistrictSelect,
   onApplyFilter,
+  onDataTypeChange, // ⭐️ 新增fetchData邏輯
+
   selectedMRT,
   selectedStation,
   selectedDistrict,
   selectedLineStations,
   isLoading,
   activeFilterType,
+  activeDataType, // ⭐️ 接收目前選到的是「展覽」還是「課程」
   onFilterTypeChange,
+  shortestPaths,
 }) {
   const lineSelectRef = useRef(null)
 
@@ -29,22 +33,55 @@ export default function FilterPanel({
     }
   }, [selectedMRT])
 
+  // Update Dist. when MapView changes
+  const districtSelectRef = useRef(null)
+
+  // 監聽 selectedDistrict 變化，更新下拉選單
+  useEffect(() => {
+    console.log('🏙️ Updating district dropdown to:', selectedDistrict)
+    if (districtSelectRef.current) {
+      districtSelectRef.current.value = selectedDistrict || ''
+    }
+  }, [selectedDistrict])
+
   return (
-    <div className="filter-panel">
+    <div className="filter-panel bg-black/30 backdrop-blur-md rounded-2xl p-6 shadow-lg text-white w-[300px]">
       <div className="filter-header">
         <h2>Filters</h2>
-        <button>Clear all</button>
+        <div style={{ marginLeft: 'auto' }}>
+          <button>Clear all</button>
+        </div>
       </div>
       <div className="filter-section">
-        <p>Search By...</p>
+        <Tabs
+          selectedKey={activeDataType}
+          onSelectionChange={(key) => onDataTypeChange(key)}
+          classNames={{
+            tabList: 'w-full border-1.5 border-black',
+            panel: 'w-full p-0',
+            tab: '',
+            cursor: 'bg-black',
+          }}
+          color="primary"
+          aria-label="Data type options"
+          variant="bordered"
+          radius="full"
+        >
+          <Tab key="courses" title="Course" />
+          <Tab key="exhibition" title="Exhibit" />
+        </Tabs>
+      </div>
+      <div className="filter-section">
+        <span className='py-1'>Search By...</span>
         <Tabs
           selectedKey={activeFilterType}
           onSelectionChange={onFilterTypeChange}
           classNames={{
             tabList: 'w-full border-1.5 border-black',
             panel: 'w-full p-0',
+            cursor: 'bg-black',
           }}
-          color= "primary"
+          color="primary"
           aria-label="Filter options"
           variant="bordered"
           radius="full"
@@ -107,10 +144,13 @@ export default function FilterPanel({
                   </Select>
                 )}
 
+                {/* 以下是選取MRT的apply禁用邏輯 */}
                 <button
                   onClick={onApplyFilter}
                   disabled={
-                    !selectedStation || selectedStation === 'all' || isLoading
+                    isLoading ||
+                    !activeDataType || // ✅ 必須選擇展覽/課程
+                    (!selectedStation && !selectedDistrict) // 沒有任何篩選條件
                   }
                   className="apply-button w-full bg-black text-white rounded-full disabled:cursor-not-allowed hover:bg-yellow"
                 >
@@ -127,8 +167,10 @@ export default function FilterPanel({
                   placeholder="Select district"
                   variant="bordered"
                   radius="full"
-                  value={selectedDistrict || ''}
-                  onChange={(e) => onDistrictSelect(e.target.value)}
+                  selectedKeys={selectedDistrict ? [selectedDistrict] : []} // Click MapView的時候，會更新下拉式選單
+                  onSelectionChange={(keys) =>
+                    onDistrictSelect(Array.from(keys)[0])
+                  }
                   classNames={{ trigger: 'border-1.5 border-black' }}
                   aria-label="Select district"
                 >
@@ -146,10 +188,14 @@ export default function FilterPanel({
                   ))}
                 </Select>
 
+                {/* 以下是選取Dist的apply的禁用邏輯 */}
                 <button
                   onClick={onApplyFilter}
                   disabled={
-                    !selectedDistrict || selectedDistrict === 'all' || isLoading
+                    isLoading ||
+                    !activeDataType || // ✅ 必須選展覽或課程
+                    !selectedDistrict ||
+                    selectedDistrict === 'all'
                   }
                   className="apply-button w-full bg-black text-white rounded-full disabled:cursor-not-allowed hover:bg-yellow"
                 >

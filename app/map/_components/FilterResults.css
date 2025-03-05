@@ -1,36 +1,46 @@
 .filter-results-container {
-  background: white;
+  background: rgba(130, 128, 128, 0.5);
+  backdrop-filter: blur(6px);
   border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  /* Remove fixed height */
-  /* height: calc(50vh - 1rem); */
-  width: 100%;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 16px;
+  width: 300px; /* 跟 FilterPanel 同寬 */
+  max-height: calc(100vh - 80px - 378px - 40px);
+  overflow-y: auto;
+  font-size: 14px;
 }
 
+
+/* 動畫效果 */
+.filter-results-container {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+
+
 .filter-results-header {
-  padding: 1rem;
+  padding: 0.75rem 1rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid #e5e7eb;
 }
 
-.filter-results-header h2 {
-  font-size: 1.125rem;
-  font-weight: 600;
+.filter-results-header h4 {
+  font-size: 14px; /* text-sm */
+  font-weight: 500; /* font-medium */
+  color: #374151; /* text-gray-700 */
+  letter-spacing: 0.05em; /* tracking-wide */
   margin: 0;
 }
 
 .results-count {
-  background: #f3f4f6;
-  padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
-  font-size: 0.875rem;
-  color: #6b7280;
+  font-size: 14px; /* text-sm */
+  color: #6b7280; /* text-gray-500 */
+  letter-spacing: 0.1em; /* tracking-wider */
 }
+
 
 .results-scroll-area {
   /* Remove fixed height */
@@ -70,10 +80,14 @@
   border: 1px solid #e5e7eb;
   border-radius: 8px;
   transition: background-color 0.2s;
+  cursor: pointer; 
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .location-card:hover {
-  background-color: #f9fafb;
+  transform: translateY(-3px); 
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); 
+  background-color: #ccc9c5; 
 }
 
 .location-info h3 {
@@ -140,11 +154,7 @@
 }
 
 /* Add these new styles for shortest paths */
-.shortest-paths-section {
-  margin-top: 1.5rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid #e5e7eb;
-}
+
 
 .section-title {
   font-weight: 600;

@@ -1,40 +1,20 @@
+/* 頁面最外層，滿版設定 */
 .map-page-wrapper {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-.map-content {
-  flex: 1;
-  padding-top: 80px;
-}
-
-.map-page {
-  display: flex;
-  width: 100%;
-  padding: 0 2rem;
-  gap: 1rem;
-  min-height: calc(100vh - 80px);
-  height: auto;
-}
-
-.left-side {
-  width: 300px;
-  min-width: 300px;
-  max-width: 300px;
-  display: flex;
-  flex-direction: column;
-  /* overflow-y: auto; */
+  width: 100vw;
+  position: relative;
+  overflow: hidden;
+  margin-top: 80px;
   height: calc(100vh - 80px);
 }
 
-.right-side {
-  flex: 1;
-  min-width: 0;
-  position: relative;
+/* 地圖區域滿版鋪底 */
+.map-content {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
 }
 
-/* Map container styles */
+/* Map 容器 */
 .map-container {
   width: 100%;
   height: 100%;
@@ -43,7 +23,7 @@
   left: 0;
 }
 
-/* Loading styles */
+/* Loading 樣式 */
 .map-loading {
   flex: 1;
   display: flex;
@@ -73,16 +53,36 @@
   }
 }
 
-/* Filter results styles */
-.filter-results {
-  flex: 1;
-  overflow-y: auto;
-  padding: 1rem;
+/* FilterPanel 浮動黑底透明框 */
+.filter-panel {
+  background: rgba(130, 128, 128, 0.5);
+  border: 1px solid #e5e7eb;
+  backdrop-filter: blur(10px); /* 模糊背景 */
+  border-radius: 16px;
+  padding: 20px;
+  /* box-shadow: 0 4px 5px rgba(0, 0, 0, 0.2); */
+  color: #f3f4f6; 
+  width: 300px;
+  font-size: 14px; 
+  letter-spacing: 0.05em;
+  line-height: 1.6; /* 增加舒適度 */
 }
 
-/* Add these styles to ensure proper scrolling */
+/* FilterResults 浮動框（可依需求調整位置） */
+.filter-results {
+  background-color: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(6px);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  max-height: 40vh;
+  width: 280px;
+  overflow-y: auto;
+  font-size: 14px;
+}
+
+/* FilterResults 容器結構 */
 .filter-results-container {
-  flex: 1;
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -93,34 +93,22 @@
   overflow-y: auto;
 }
 
-/* Media queries for responsive design */
+/* 手機版 RWD */
 @media (max-width: 768px) {
-  .map-page {
-    flex-direction: column;
-    padding: 0 1rem;
-    height: auto;
-    min-height: calc(100vh - 80px);
+  .filter-panel {
+    width: 90vw;
+    max-width: 360px;
+    padding: 16px;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
   }
 
-  .left-side {
-    width: 100%;
-    max-width: 100%;
-    height: auto;
-    min-height: auto;
-    overflow-y: visible;
-  }
-
-  .right-side {
-    height: 50vh;
-    min-height: 300px;
-    position: relative;
-    margin-bottom: 1rem;
-  }
-
-  .map-container {
-    position: absolute;
-    width: 100%;
-    height: 100%;
+  .filter-results {
+    width: 90vw;
+    max-width: 360px;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
   }
 }
-
