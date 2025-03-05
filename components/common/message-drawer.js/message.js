@@ -16,11 +16,21 @@ import ChatList from './chatlist'
 import ChatRoom from './chatroom'
 import MessageFooter from './messageFooter'
 
-export default function MessageDrawer({ onOpenChange = () => {}, isOpen }) {
+export default function MessageDrawer({
+  onOpenChange = () => {},
+  isOpen,
+  getId,
+}) {
   // 如果關閉了聊天室 回去列表狀態
   useEffect(() => {
-    setIsChatting(false)
-  }, [onOpenChange])
+    if (!isOpen) {
+      setIsChatting(false)
+      setChatWith('')
+    }
+  }, [isOpen])
+  useEffect(() => {
+    if (getId && isOpen) chatHandle(getId)
+  }, [isOpen, getId])
   const [isChatting, setIsChatting] = useState(false)
   const [chatWith, setChatWith] = useState('')
 
