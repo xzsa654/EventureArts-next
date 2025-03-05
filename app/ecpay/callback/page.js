@@ -163,7 +163,7 @@ export default function ECPayCallback() {
 
   return (
     <>
-      <div className=" w-full  h-screen bg-[#f7f5f1]">
+      <div className=" w-full  h-auto bg-[#f7f5f1]">
         <div className=" pt-40 px-16">
           <h5 className="text-xl font-bold pb-4">ECPay(綠界金流) - 付款成功</h5>
           <div className="border-t-1  border-[#dadada]">
@@ -198,15 +198,27 @@ export default function ECPayCallback() {
               <dd>{RtnMsg === 'Succeeded' ? '付款成功' : RtnMsg}</dd>
             </dl>
             {/* 按鈕 */}
-            <div className="flex justify-center mt-40 gap-10">
+            <div className="flex justify-center mt-40 gap-8">
               <Button
                 size="sm"
                 radius="none"
                 classNames={{}}
                 variant="light"
                 className="text-base text-yellow-600 hover:text-yellow-300 hover:scale-110 transition-transform duration-200 cursor-pointer flex items-center group gap-x-2 mt-5 px-7  data-[hover=true]:bg-primary-300"
+                onPress={() => router.push('/exhibit/explore')}
               >
-                回到首頁
+                探索更多展覽
+                <HiArrowRight className="transition-transform duration-300 ease-out group-hover:translate-x-3" />
+              </Button>
+              <Button
+                size="sm"
+                radius="none"
+                classNames={{}}
+                variant="light"
+                className="text-base text-yellow-600 hover:text-yellow-300 hover:scale-110 transition-transform duration-200 cursor-pointer flex items-center group gap-x-2 mt-5 px-7  data-[hover=true]:bg-primary-300"
+                onPress={() => router.push('/course/explore')}
+              >
+                探索更多課程
                 <HiArrowRight className="transition-transform duration-300 ease-out group-hover:translate-x-3" />
               </Button>
               <Button

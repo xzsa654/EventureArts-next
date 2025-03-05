@@ -17,6 +17,15 @@ export default function TicketPage() {
   const [ticketData, setTicketData] = useState(null)
   const [loading, setLoading] = useState(true)
   const router = useRouter()
+  useEffect(() => {
+    // 進入頁面時修改 body 背景色
+    document.body.style.backgroundColor = '#f7f5f1'
+
+    // 離開頁面時恢復原本顏色（防止影響其他頁面）
+    return () => {
+      document.body.style.backgroundColor = ''
+    }
+  }, [])
 
   useEffect(() => {
     if (ticket_code) {
@@ -38,7 +47,7 @@ export default function TicketPage() {
 
   return (
     <>
-      <div className=" w-full h-auto mt-20">
+      <div className=" w-full h-auto mt-20 ">
         <p className="text-left t-16 px-10 pb-4 text-gray-800 ">您的票券</p>
         <div className="w-full h-auto flex flex-wrap justify-center items-center">
           <div className="flex flex-1 justify-center min-w-[380px] mb-6">
@@ -67,7 +76,7 @@ export default function TicketPage() {
             classNames={{}}
             variant="light"
             className="text-base text-yellow-600 hover:text-yellow-300 hover:scale-110 transition-transform duration-200 cursor-pointer flex items-center group gap-x-2 mt-5 px-7  data-[hover=true]:bg-primary-300"
-            onPress={() => router.push('/')}
+            onPress={() => router.push('/course/explore')}
           >
             探索更多課程
             <HiArrowRight className="transition-transform duration-300 ease-out group-hover:translate-x-3" />
@@ -78,7 +87,7 @@ export default function TicketPage() {
             classNames={{}}
             variant="light"
             className="text-base text-yellow-600 hover:text-yellow-300 hover:scale-110 transition-transform duration-200 cursor-pointer flex items-center group gap-x-2 mt-5 px-7  data-[hover=true]:bg-primary-300"
-            onPress={() => router.push('/')}
+            onPress={() => router.push('/user/c/myticket')}
           >
             去我的訂單
             <HiArrowRight className="transition-transform duration-300 ease-out group-hover:translate-x-3" />
