@@ -193,36 +193,51 @@ export default function Page() {
   )
 
   // Handle district click
-  const handleDistrictClick = (districtName) => {
-    console.log("✅ 點擊行政區:", districtName)
-    setSelectedDistrict(districtName)
-  }
-  
+// --- handlers ---
+// --- handlers ---
+// 點擊地圖上的行政區時
+const handleDistrictClick = (districtName) => {
+  console.log("✅ 點擊行政區:", districtName)
+  setSelectedDistrict(districtName)
 
-  // --- handler ---
-const handleDataTypeChange = (selectedType) => {
-  setActiveDataType(selectedType)
-  setSelectedDistrict("")     // ✅ 清空行政區
-  setSelectedMRT("")          // ✅ 清空捷運線
-  setSelectedStation("")      // ✅ 清空捷運站
-  setSelectedLineStations([]) // ✅ 清空捷運站列表
-  setFilteredLocations([])    // ✅ 清空結果
-  setFilteredPaths(null)      // ✅ 清空捷徑路線
+  //  清空捷運篩選相關，避免混用
+  setSelectedMRT("")
+  setSelectedStation("")
+  setSelectedLineStations([])
+  setFilteredPaths(null)
+  setFilteredLocations([]) // ✅ 清空舊的 pin 結果
 }
+
+// 切換展覽/課程時
+const handleDataTypeChange = useCallback((selectedType) => {
+  setActiveDataType(selectedType)
+  setSelectedDistrict("")
+  setSelectedMRT("")
+  setSelectedStation("")
+  setSelectedLineStations([])
+  setFilteredLocations([])
+  setFilteredPaths(null)
+}, [])
+
+
 
   // Add new handler for district selection
   const handleDistrictSelect = useCallback((districtName) => {
     console.log("🏙️ District selected:", districtName)
     const newValue = districtName === "all" ? "" : districtName
-    setSelectedDistrict(newValue)
-    setFilteredPaths(null) // 清除現有的捷運路徑
-    setFilteredLocations([]) // 清除現有的地點
   
-    // 如果有選擇行政區，確保 `useFitBounds` 會更新
+    setSelectedDistrict(newValue)
+    setFilteredLocations([])  // ✅ 這行清空上一次篩選結果
+    setFilteredPaths(null)    // ✅ 也清空捷運的篩選結果
+    setSelectedMRT("")        // ✅ 清空捷運線
+    setSelectedStation("")    // ✅ 清空捷運站
+    setSelectedLineStations([])
+  
     if (newValue && mapData.taipeiDistricts?.features) {
       console.log(`📍 FitBounds will be applied for district: ${newValue}`)
     }
   }, [mapData.taipeiDistricts])
+  
 
   //**後端fetch在這～**/
   //使用者按下 FilterPanel 裡面的 Apply Filter 按鈕後才執行後端fetch
