@@ -44,10 +44,10 @@ export default function FilterPanel({
   }, [selectedDistrict])
 
   return (
-    <div className="filter-panel">
+    <div className="filter-panel bg-black/30 backdrop-blur-md rounded-2xl p-6 shadow-lg text-white w-[300px]">
       <div className="filter-header">
         <h2>Filters</h2>
-        <div style={{ marginLeft: "auto" }}>
+        <div style={{ marginLeft: 'auto' }}>
           <button>Clear all</button>
         </div>
       </div>
@@ -56,16 +56,16 @@ export default function FilterPanel({
           selectedKey={activeDataType}
           onSelectionChange={(key) => onDataTypeChange(key)}
           classNames={{
-            tabList: "w-full border-1.5 border-black",
-            panel: "w-full p-0",
+            tabList: 'w-full border-1.5 border-black',
+            panel: 'w-full p-0',
           }}
           color="primary"
           aria-label="Data type options"
           variant="bordered"
           radius="full"
         >
-          <Tab key="exhibition" title="展覽" />
-          <Tab key="courses" title="課程" />
+          <Tab key="courses" title="Course" />
+          <Tab key="exhibition" title="Exhibit" />
         </Tabs>
       </div>
       <div className="filter-section">

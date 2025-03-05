@@ -50,8 +50,10 @@ export default function FilterResults({
   return (
     <div className="filter-results-container">
       <div className="filter-results-header">
-        <h3>{activeFilterType === 'district' ? 'Results' : 'Results'}</h3>
-        <span className="results-count">
+        <h4 className="text-sm font-medium text-gray-700 tracking-wide">
+          Results
+        </h4>
+        <span className="text-sm text-gray-500 tracking-wider">
           {activeFilterType === 'district' && filteredLocations
             ? `${filteredLocations.length} exhibitions`
             : selectedStationInfo && sortedPaths.length > 0
@@ -63,9 +65,9 @@ export default function FilterResults({
       <div className="results-scroll-area">
         {activeFilterType === 'district' && selectedDistrict && (
           <div className="results-content">
-            <div className="district-header">
+            {/* <div className="district-header">
               <span className="district-name">{selectedDistrict}</span>
-            </div>
+            </div> */}
 
             {filteredLocations?.map((location) => (
               <div

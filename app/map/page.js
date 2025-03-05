@@ -413,34 +413,36 @@ const handleDataTypeChange = useCallback((selectedType) => {
     ],
   )
 
+  
   if (isLoading && !mapData.mrtRoutes) return <div>Loading map data...</div>
   if (error) return <div>{error}</div>
 
   return (
-    <div className="map-page-wrapper">
-      <div className="map-content">
-        <div className="map-page">
-          {/* Left side: Filter panel and results */}
-          <div className="left-side">
-            {memoizedFilterPanel}
-            <FilterResults
-              filteredLocations={filteredLocations}
-              selectedDistrict={selectedDistrict}
-              selectedStation={selectedStation}
-              selectedLineStations={selectedLineStations}
-              activeFilterType={activeFilterType}
-              shortestPaths={filteredPaths} 
-              onSelectLocation={setSelectedLocationId}
-          />
-          </div>
+    <div className="map-page-wrapper relative w-screen h-[calc(100vh-80px)] mt-[80px]">
+      {/* Map 滿版 */}
+      <div className="map-content absolute inset-0 z-0">
+        {memoizedMapView}
+      </div>
   
-          {/* right side：MapView */}
-          <div className="right-side">
-            {memoizedMapView}
-          </div>
-        </div>
+      {/* FilterPanel 浮動框 */}
+      <div className="absolute top-4 left-4 z-10">
+        {memoizedFilterPanel}
+      </div>
+  
+      {/* FilterResults 固定左下角 */}
+      <div className="absolute bottom-4 left-4 z-10">
+        <FilterResults
+          filteredLocations={filteredLocations}
+          selectedDistrict={selectedDistrict}
+          selectedStation={selectedStation}
+          selectedLineStations={selectedLineStations}
+          activeFilterType={activeFilterType}
+          shortestPaths={filteredPaths}
+          onSelectLocation={setSelectedLocationId}
+        />
       </div>
     </div>
-  )  
+  )
+  
 }
 

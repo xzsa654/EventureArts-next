@@ -1,6 +1,6 @@
 .filter-panel {
   /* width: 320px; */
-  padding: 1rem;
+  padding: 0.5rem;
   /* overflow-y: auto; */
   transition: all 0.3s ease;
 }
