@@ -44,7 +44,7 @@ export default function ChatList({ chatHandle = () => {} }) {
                     avatarProps={{
                       src: `http://localhost:3001/uploads/avatar/${v.avatar}`,
                     }}
-                    name={v.name}
+                    name={`${v.name} ${v.brandname ? `(${v.brandname})` : ''} `}
                     description={v.text}
                     onClick={() => {
                       chatHandle(v.id)

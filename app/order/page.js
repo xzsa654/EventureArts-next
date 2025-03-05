@@ -1,91 +1,197 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
-import { Checkbox } from '@heroui/react';
-import BtnCTA from '../course/_components/btnCTA';
+import { useState, useEffect } from 'react'
+import { useSearchParams, useRouter } from 'next/navigation'
+import { useAuth } from '@/hooks/use-auth' // 引入 useAuth
+// import { useOrder } from '@/hooks/use-order'
+import './order.css'
+import ComponentsReminder from './_components/reminder'
+import { Button } from '@heroui/button'
+import { HiArrowRight } from 'react-icons/hi2'
+import { useModal } from '@/contexts/modal-context'
 
-import './order.css';
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3001'
 
-export default function Order(props) {
+export default function Orderpage(props) {
+  const searchParams = useSearchParams() // 使用 useSearchParams 取 query
+  const e_id = searchParams.get('e_id')
+  const c_id = searchParams.get('c_id')
+  const router = useRouter()
+  const { auth, getAuthHeader } = useAuth() // 取得登入資訊
+  const [orderData, setOrderData] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const { onOpenChange } = useModal().login
+
+  useEffect(() => {
+    if ((e_id || c_id) && !orderData) {
+      // 加入 Authorization 標頭
+      fetch(
+        `${API_BASE_URL}/order/api/getOrderDetails?e_id=${e_id || ''}&c_id=${
+          c_id || ''
+        }`
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          setOrderData(data)
+          setLoading(false)
+        })
+        .catch((err) => {
+          console.error('Error fetching order details:', err)
+          setLoading(false)
+        })
+    } else {
+      setLoading(false)
+    }
+  }, [e_id, c_id])
+
+  if (loading) return <p>載入中...</p>
+  if (!orderData) return <p>無法生成訂單，請再試一遍</p>
+
   return (
     <>
-    {/*---------- 上—— 商品明細 ----------*/}
-    <div className="detail">
-        <div className="orderTitle"><p>商品明細</p></div>
+      {/*---------- 上—— 商家資料 ----------*/}
+      <div className="detail">
+        <div className="orderTitle">
+          <p>商品明細</p>
+        </div>
         <hr />
-        {/* 1. 課程名稱&價格 */}
+        {/* 1. 活動名稱 */}
         <div className="flex flex-row justify-between">
-            <p>生活裡的花與器｜風格美感花藝選搭課｜floral design.</p>
-            <p>$ 1,688 NTD</p>
+          <p>活動名稱</p>
+          <p>{orderData.event_name}</p>
         </div>
-        {/* 2. 課程時間 */}
+        {/* 2. 活動價格 */}
         <div className="flex flex-row justify-between">
-            <p>課程時間</p>
-            <p>2025-01-11~ 2025-01-11</p>
+          <p>活動票價</p>
+          <p>$ {orderData.event_price} NTD</p>
         </div>
-        {/* 3. 課程地址 */}
+        {/* 3. 活動時間 */}
         <div className="flex flex-row justify-between">
-            <p>課程地址</p>
-            <p>台北市內湖區文德路10號</p>
+          <p>活動時間</p>
+          <p>
+            {orderData.event_startdate} ~ {orderData.event_enddate}
+          </p>
+        </div>
+        {/* 4. 活動地址 */}
+        <div className="flex flex-row justify-between">
+          <p>活動地址</p>
+          <p>
+            {orderData.city}
+            {orderData.district}
+            {orderData.address}
+          </p>
         </div>
         {/* 4. 課程備註 */}
         <div className="flex flex-row justify-between">
-            <p> </p>
-            <p className='note'>*請於付款後，致電品牌方進行預約確認，謝謝您。</p>
-        </div>      
-    </div>
+          <p> </p>
+          <p className="note ">*請於付款後，致電品牌方進行預約確認，謝謝您。</p>
+        </div>
+      </div>
+      {/*---------- 中—— 商品明細 ----------*/}
+      <div className="detail">
+        <div className="orderTitle">
+          <p>商家資料</p>
+        </div>
+        <hr />
+        {/* 1. 課程名稱&價格 */}
+        <div className="flex flex-row justify-between">
+          <p>商家名稱</p>
+          <p>{orderData.bd_name}</p>
+        </div>
+        {/* 2. 課程時間 */}
+        <div className="flex flex-row justify-between">
+          <p>聯絡電話</p>
+          <p>{orderData.bd_tel}</p>
+        </div>
+        {/* 3. 課程地址 */}
+        <div className="flex flex-row justify-between">
+          <p>聯絡信箱</p>
+          <p>{orderData.bd_email}</p>
+        </div>
+      </div>
 
-    {/*---------- 中—— 付款方式 ----------*/}
-    <div className="detail">
-        <div className="orderTitle"><p>付款方式</p></div>
+      {/*---------- 下—— 付款方式 ----------*/}
+      <div className="detail">
+        <div className="orderTitle">
+          <p>付款方式</p>
+        </div>
         <hr />
         {/* 1. 信用卡 */}
-        <div className="paymentTitle flex flex-row justify-between">
-            <Checkbox defaultSelected color="default">信用卡一次付清</Checkbox>
-            <div className="credit flex flex-row">
-                <img className="paymentImg" src="https://logos-world.net/wp-content/uploads/2020/06/Visa-Logo-2006.png" alt="" />
-                <img className="paymentImg" src="https://pngimg.com/d/mastercard_PNG16.png" alt="" />
-            </div>
+        <div className="paymentTitle flex flex-row justify-between text-16">
+          信用卡一次付清
+          <div className="credit flex flex-row"></div>
         </div>
-            {/* 信用卡內容（白底） */}
-            <div className="paymentContent">
-            <p className='px-16'>本公司採用綠界科技（ECPay）金流交易系統，當您選擇信用卡付款時，將會跳轉至綠界的安全支付頁面進行交易。本公司不會儲存您的信用卡資訊，以確保您的隱私與安全，請安心付款。</p>               
-            </div>
-        {/* 2. linePay */}
-        <div className="paymentTitle flex flex-row justify-between">
-            <Checkbox color="default">Line Pay</Checkbox>
-            <img className="paymentImg" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/LINE_Pay_logo_%282019%29.svg/1044px-LINE_Pay_logo_%282019%29.svg.png" alt="" />
+      </div>
+
+      {/*---------- 送出訂單 ----------*/}
+      <div className="detail mb-8">
+        {/* 導至綠界金流按鈕 */}
+        <div className="flex justify-center  gap-10">
+          <Button
+            size="sm"
+            radius="none"
+            classNames={{}}
+            variant="light"
+            className="text-base text-gray-600 hover:text-gray-300 hover:scale-110 transition-transform duration-200 cursor-pointer flex items-center group gap-x-2 mt-5 px-7  data-[hover=true]:bg-primary-300"
+            onPress={() => router.push('/')}
+          >
+            取消本次購買
+            <HiArrowRight className="transition-transform duration-300 ease-out group-hover:translate-x-3" />
+          </Button>
+          <Button
+            size="sm"
+            radius="none"
+            classNames={{}}
+            variant="light"
+            className="text-base text-yellow-600 hover:text-yellow-300 hover:scale-110 transition-transform duration-200 cursor-pointer flex items-center group gap-x-2 mt-5 px-7  data-[hover=true]:bg-primary-300"
+            onPress={() => {
+              // ✅ 檢查是否有登入
+              if (!auth?.token) {
+                return onOpenChange(true)
+              }
+
+              // 使用登入者的 user_id & user_name
+              const data = {
+                user_id: auth.user_id, // 從 `auth` 取得
+                // user_name: auth.user_name, // 從 `auth` 取得
+                e_id,
+                c_id,
+                event_name: orderData.event_name,
+                event_price: orderData.event_price,
+                event_startdate: orderData.event_startdate,
+                event_enddate: orderData.event_enddate,
+                locat_id: orderData.locat_id,
+                locat_name: orderData.locat_name,
+                city: orderData.city,
+                district: orderData.district,
+                address: orderData.address,
+                bd_id: orderData.bd_id,
+                bd_name: orderData.bd_name,
+                bd_tel: orderData.bd_tel,
+                bd_email: orderData.bd_email,
+                amount: orderData.event_price,
+              }
+
+              window.location.href = `http://localhost:3001/ecpay-test?${new URLSearchParams(
+                data
+              )}`
+            }}
+          >
+            {/* const { 
+      user_id, user_name, ticket_code, merchant_trade_no, trade_amt, trade_date, 
+      payment_date, payment_type, e_id, c_id, event_name, event_price, 
+      event_startdate, event_enddate, locat_id, locat_name, city, district, address, 
+      bd_id, bd_name, bd_tel, bd_email 
+    } = req.body; */}
+            綠界金流付款
+            <HiArrowRight className="transition-transform duration-300 ease-out group-hover:translate-x-3" />
+          </Button>
         </div>
-        {/* linepay內容（白底） */}
-        <div className="paymentContent px-16">
-            <div className="creditNum">
-            <p className='px-16'>當您選擇 Line Pay 付款時，將會跳轉至 Line Pay 官方支付頁面進行交易。本公司不會儲存您的付款資訊，以確保您的隱私與安全。</p>
-        </div>
-
-    </div>
-
-    </div>
-
-    {/*---------- 下—— 送出訂單 ----------*/}
-    <div className="detail mb-8">
-        <div className="orderTitle"><p>送出訂單</p></div>
-        <hr />
-
-        {/* 課程名稱+結帳價格 */}
-        <div className="flex flex-row justify-between">
-            <p>生活裡的花與器｜風格美感花藝選搭課｜floral design.</p>
-            <p className='totlePrice'>$ 1,688 NTD</p>
-        </div>
-        <div className="flex flex-row justify-between">
-            <p> </p>
-            <div className='flex flex-row gap-4 mt-12'>
-                <BtnCTA text={"取消"} />
-                <BtnCTA text={"送出"} />
-            </div>
-        </div>
-    </div>
-
-
+      </div>
+      <div className="w-full flex flex-col justify-center px-16 py-16 bg-[#f7f5f1]">
+        <ComponentsReminder />
+      </div>
     </>
   )
 }

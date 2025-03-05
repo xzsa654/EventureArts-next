@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { Form, Input, Button, Image } from '@heroui/react'
 import { useAuth } from '@/hooks/use-auth'
 import { AiOutlinePicture, AiOutlineArrowRight } from 'react-icons/ai'
@@ -9,7 +9,7 @@ import { HiOutlineX } from 'react-icons/hi'
 export default function BottomMessage({ renderHandler = () => {}, chatWith }) {
   // 控制輸入框的可控元件
   const [text, setText] = useState()
-  const { getAuthHeader, auth } = useAuth()
+  const { getAuthHeader, auth, socket } = useAuth()
   // 控制需要幾張圖片與容器開啟
   const [howManyPicture, setHowManyPicture] = useState([])
   // file 可控元件
@@ -67,6 +67,10 @@ export default function BottomMessage({ renderHandler = () => {}, chatWith }) {
     setHowManyPicture(nextData)
     setMyPic(nextData2)
   }
+
+  useEffect(() => {
+    socket.emit('typing', { chatWith, text })
+  }, [text])
 
   return (
     <>

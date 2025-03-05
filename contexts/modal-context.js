@@ -3,7 +3,7 @@
 
 import { createContext, useContext } from 'react'
 import { useDisclosure } from '@heroui/react'
-import { Alert } from '@heroui/react'
+
 // 創建 context
 const ModalContext = createContext(null)
 
@@ -16,7 +16,7 @@ export function ModalProvider({ children }) {
   const register2 = useDisclosure()
   const register3 = useDisclosure()
   const register4 = useDisclosure()
-
+  const message = useDisclosure()
   const value = {
     login,
     reset,
@@ -24,6 +24,7 @@ export function ModalProvider({ children }) {
     register2,
     register3,
     register4,
+    message,
   }
 
   return <ModalContext.Provider value={value}>{children}</ModalContext.Provider>
