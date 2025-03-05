@@ -20,11 +20,10 @@ const API_BASE_URL =
 const fetcher = (url) => fetch(url).then((res) => res.json())
 
 export default function ExhibitionDetail({ params }) {
-  const { e_id } = params
-
   // ---for buy ticket btn start---
   const router = useRouter() // ✅ 使用 Next.js App Router 的 useRouter
   // ---for buy ticket btn end---
+  const { e_id } = params
 
   // Use SWR to fetch exhibition data
   const { data, error } = useSWR(`${API_BASE_URL}/exhibit/api/${e_id}`, fetcher)
@@ -136,7 +135,7 @@ export default function ExhibitionDetail({ params }) {
                 <Button
                   // href={`/order?e_id=${e_id}`} // 這行是配用"Link"
                   className="flex-1 py-3 px-4 flex items-center justify-center text-gray-900 hover:underline border border-gray-900 rounded-md"
-                  onClick={() => router.push(`/order?e_id=${e_id}`)} // 改成用 button buy ticket to order page
+                  onPress={() => router.push(`/order?e_id=${e_id}`)} // 改成用 button buy ticket to order page
                 >
                   buy ticket
                   <span className="ml-2">→</span>

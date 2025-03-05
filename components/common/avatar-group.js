@@ -21,9 +21,9 @@ import { useAuth } from '@/hooks/use-auth'
 import MessageDrawer from './message-drawer.js/message'
 import { useModal } from '@/contexts/modal-context'
 export default function AVatarGroup() {
-  const { isOpen, onOpenChange } = useModal().message
   const router = useRouter()
   const { auth, logOut } = useAuth()
+  const { isOpen, onOpenChange } = useModal().message
 
   return (
     <div>
@@ -38,7 +38,7 @@ export default function AVatarGroup() {
             as="button"
             avatarProps={{
               isBordered: true,
-              src: `http://localhost:3001/uploads/avatar/${auth.avatar}`,
+              src: `http://localhost:3001/uploads/avatar/${auth?.avatar}`,
             }}
             className="transition-transform"
           />
