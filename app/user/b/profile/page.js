@@ -6,7 +6,6 @@ import { HiArrowRight } from 'react-icons/hi'
 import { useAuth } from '@/hooks/use-auth'
 import Image from 'next/image'
 import { BRANDSDATA } from '@/lib/brands-api'
-import JoinUsModal from '../../_components/b_player/join-us-modal'
 export default function BPlayerProfile(props) {
   const [brand, setBrand] = useState([])
   const { getAuthHeader } = useAuth()
@@ -173,7 +172,6 @@ export default function BPlayerProfile(props) {
           </div>
         </div>
       </div>
-      <JoinUsModal />
     </>
   )
 }
