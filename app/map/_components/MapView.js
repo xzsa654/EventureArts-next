@@ -37,7 +37,7 @@ const MapView = ({
   onDistrictClick, //新增地圖行政區點擊
 }) => {
   const mapRef = useRef(null)
-  const center = [25.033, 121.5654]
+  const center = [25.0449, 121.5233] //善導寺
   const [hoveredRoute, setHoveredRoute] = useState(null)
   const [hoveredDistrict, setHoveredDistrict] = useState(null)
 
@@ -357,7 +357,7 @@ const MapView = ({
     <div className="map-view">
       <MapContainer
         center={center}
-        zoom={13}
+        zoom={12}
         scrollWheelZoom={true}
         className="map-container"
         zoomControl={false}
