@@ -199,6 +199,17 @@ export default function Page() {
   }
   
 
+  // --- handler ---
+const handleDataTypeChange = (selectedType) => {
+  setActiveDataType(selectedType)
+  setSelectedDistrict("")     // ✅ 清空行政區
+  setSelectedMRT("")          // ✅ 清空捷運線
+  setSelectedStation("")      // ✅ 清空捷運站
+  setSelectedLineStations([]) // ✅ 清空捷運站列表
+  setFilteredLocations([])    // ✅ 清空結果
+  setFilteredPaths(null)      // ✅ 清空捷徑路線
+}
+
   // Add new handler for district selection
   const handleDistrictSelect = useCallback((districtName) => {
     console.log("🏙️ District selected:", districtName)
@@ -320,7 +331,7 @@ export default function Page() {
         onStationSelect={handleStationSelect}
         onDistrictSelect={handleDistrictSelect}
         onApplyFilter={handleApplyFilter}
-        onDataTypeChange={setActiveDataType} // ⭐️ 傳入
+        onDataTypeChange={handleDataTypeChange} // ⭐️ 傳遞清空邏輯
         activeDataType={activeDataType} // ⭐️ 傳入
         selectedMRT={selectedMRT}
         selectedStation={selectedStation}
@@ -345,8 +356,8 @@ export default function Page() {
       isLoading,
       activeFilterType,
       handleFilterTypeChange,
-      setActiveDataType, // ✅ 確保依賴改變會更新
       activeDataType, // ✅ 確保 activeDataType 有變化時重新渲染
+      handleDataTypeChange, // ✅ 加到 dependencies
     ],
   )
 

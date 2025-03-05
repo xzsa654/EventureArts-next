@@ -137,7 +137,7 @@ export default function FilterPanel({
                   </Select>
                 )}
 
-                {/* 以下是選取MRT的apply防呆邏輯 */}
+                {/* 以下是選取MRT的apply禁用邏輯 */}
                 <button
                   onClick={onApplyFilter}
                   disabled={
@@ -181,7 +181,7 @@ export default function FilterPanel({
                   ))}
                 </Select>
 
-                {/* 以下是選取Dist的apply防呆邏輯 */}
+                {/* 以下是選取Dist的apply的禁用邏輯 */}
                 <button
                   onClick={onApplyFilter}
                   disabled={
