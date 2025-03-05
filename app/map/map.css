@@ -55,13 +55,17 @@
 
 /* FilterPanel 浮動黑底透明框 */
 .filter-panel {
-  background-color: rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(10px);
+  background: rgba(130, 128, 128, 0.5);
+  border: 1px solid #e5e7eb;
+  backdrop-filter: blur(10px); /* 模糊背景 */
   border-radius: 16px;
   padding: 20px;
-  box-shadow: 0 4px 5px rgba(0, 0, 0, 0.2);
-  color: white;
+  /* box-shadow: 0 4px 5px rgba(0, 0, 0, 0.2); */
+  color: #f3f4f6; 
   width: 300px;
+  font-size: 14px; 
+  letter-spacing: 0.05em;
+  line-height: 1.6; /* 增加舒適度 */
 }
 
 /* FilterResults 浮動框（可依需求調整位置） */

@@ -35,6 +35,7 @@ export default function Page() {
 
   const [activeDataType, setActiveDataType] = useState("")//新增管理展覽或課程的篩選器選擇
 
+  
   //避免離開地圖網頁時scroll bar 失效
   useEffect(() => {
     const updateOverflow = () => {

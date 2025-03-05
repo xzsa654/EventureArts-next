@@ -1,6 +1,7 @@
 'use client'
 
 import './FilterResults.css'
+import { useFetchLocations } from '../hooks/useFetchLocations'
 
 export default function FilterResults({
   filteredLocations,
@@ -9,8 +10,21 @@ export default function FilterResults({
   selectedLineStations,
   activeFilterType,
   shortestPaths,
-  onSelectLocation, //  接收來自FilterResults結果的 props
+  onSelectLocation,
 }) {
+  // 排序捷運最近距離
+  const shortestPathsSorted = shortestPaths?.features
+    ? [...shortestPaths.features].sort(
+        (a, b) => a.properties.distance - b.properties.distance
+      )
+    : []
+
+  // 取得 end_name 作為 locatIds
+  const locatIds = shortestPathsSorted.map((path) => path.properties.end_name)
+
+  // 透過 hook 獲取 locations 資料
+  const { locations, loading, error } = useFetchLocations(locatIds)
+
   // Helper function to get selected station info
   const getSelectedStationInfo = () => {
     if (!selectedStation || selectedStation === 'all' || !selectedLineStations)
@@ -23,7 +37,6 @@ export default function FilterResults({
   // Helper function to get location details by end_name (locat_id)
   const getLocationDetails = (end_name) => {
     if (!end_name || !filteredLocations) return null
-    // Convert both to strings for comparison
     return filteredLocations.find(
       (loc) => loc.locat_id.toString() === end_name.toString()
     )
@@ -40,12 +53,6 @@ export default function FilterResults({
 
   const selectedStationInfo = getSelectedStationInfo()
 
-  // Sort shortest paths by distance
-  const sortedPaths = shortestPaths?.features
-    ? [...shortestPaths.features].sort(
-        (a, b) => a.properties.distance - b.properties.distance
-      )
-    : []
 
   return (
     <div className="filter-results-container">
@@ -56,69 +63,46 @@ export default function FilterResults({
         <span className="text-sm text-gray-500 tracking-wider">
           {activeFilterType === 'district' && filteredLocations
             ? `${filteredLocations.length} exhibitions`
-            : selectedStationInfo && sortedPaths.length > 0
-            ? `${sortedPaths.length} found`
+            : selectedStationInfo && shortestPathsSorted.length > 0
+            ? `${shortestPathsSorted.length} found`
             : 'No selection'}
         </span>
       </div>
-
+  
       <div className="results-scroll-area">
         {activeFilterType === 'district' && selectedDistrict && (
           <div className="results-content">
-            {/* <div className="district-header">
-              <span className="district-name">{selectedDistrict}</span>
-            </div> */}
-
             {filteredLocations?.map((location) => (
-              <div
-                key={location.id} // 後端更改SQL之後可判斷courses/exhibit
+              <button
+                key={location.id}
                 className="location-card"
                 onClick={() => onSelectLocation(location.locat_id)}
               >
                 <div className="location-content">
                   <div className="location-info">
-                    <h3>{location.name}</h3> {/* 只需要name */}
+                    <h3>{location.name}</h3>
                     <div className="location-address">
                       {location.locat_name}
                     </div>
                     <div className="location-address">{location.address}</div>
                   </div>
                 </div>
-              </div>
+              </button>
             ))}
           </div>
         )}
-
+  
         {activeFilterType === 'mrt' && selectedStationInfo && (
           <div className="results-content">
-            <div className="station-header">
-              <div className="station-info">
-                <div className="station-name">
-                  {selectedStationInfo.name_chinese}
-                </div>
-                <div className="station-name-english">
-                  {selectedStationInfo.name_english}
-                </div>
-              </div>
-            </div>
-
-            {/* <div className="station-details">
-              <div className="details-label">Station Details:</div>
-              <div className="details-grid">
-                <div>Latitude:</div>
-                <div className="coordinate">{selectedStationInfo.coordinates.latitude}</div>
-                <div>Longitude:</div>
-                <div className="coordinate">{selectedStationInfo.coordinates.longitude}</div>
-              </div>
-            </div> */}
-
-            {/* Shortest Paths Section */}
-            {sortedPaths.length > 0 ? (
-              <div className="shortest-paths-section">
+            {loading && <div className="loading">Loading locations...</div>}
+            {error && <div className="error">Error loading locations</div>}
+  
+            {shortestPathsSorted.length > 0 ? (
+              <div>
                 <div className="section-title">Nearest Locations:</div>
-                {sortedPaths.map((path, index) => {
-                  const locationDetails = getLocationDetails(
-                    path.properties.end_name
+                {shortestPathsSorted.map((path, index) => {
+                  const locationDetails = locations.find(
+                    (loc) => loc.locat_id.toString() === path.properties.end_name.toString()
                   )
                   return (
                     <div key={index} className="path-card">
@@ -161,11 +145,12 @@ export default function FilterResults({
             ) : null}
           </div>
         )}
-
+  
         {!selectedDistrict && !selectedStationInfo && (
           <div className="no-selection">No selection made</div>
         )}
       </div>
     </div>
   )
+  
 }

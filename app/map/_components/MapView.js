@@ -434,7 +434,7 @@ const MapView = ({
                   if (loc.latitude && loc.longitude) {
                     return (
                       <Marker
-                        key={loc.locat_id}
+                        key={loc.id}
                         position={[+loc.latitude, +loc.longitude]}
                         icon={L.divIcon({
                           className: 'custom-marker',

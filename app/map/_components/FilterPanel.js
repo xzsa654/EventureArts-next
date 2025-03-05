@@ -21,6 +21,7 @@ export default function FilterPanel({
   activeFilterType,
   activeDataType, // ⭐️ 接收目前選到的是「展覽」還是「課程」
   onFilterTypeChange,
+  shortestPaths,
 }) {
   const lineSelectRef = useRef(null)
 
@@ -58,6 +59,8 @@ export default function FilterPanel({
           classNames={{
             tabList: 'w-full border-1.5 border-black',
             panel: 'w-full p-0',
+            tab: '',
+            cursor: 'bg-black',
           }}
           color="primary"
           aria-label="Data type options"
@@ -69,13 +72,14 @@ export default function FilterPanel({
         </Tabs>
       </div>
       <div className="filter-section">
-        <p>Search By...</p>
+        <span className='py-1'>Search By...</span>
         <Tabs
           selectedKey={activeFilterType}
           onSelectionChange={onFilterTypeChange}
           classNames={{
             tabList: 'w-full border-1.5 border-black',
             panel: 'w-full p-0',
+            cursor: 'bg-black',
           }}
           color="primary"
           aria-label="Filter options"
