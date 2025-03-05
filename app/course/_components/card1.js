@@ -16,7 +16,7 @@ export default function Card1({
   
   return (
     <>
-<Link href={`/course/product/${c_id||20}`} className="block">
+<Link href={`/course/product/${c_id || 20}`} className="block">
       <div className="card1">
         <img className="w-full aspect-[2/1]" src={img} alt="productImg" />
         <div className="chips flex gap-3 px-4 py-6">
