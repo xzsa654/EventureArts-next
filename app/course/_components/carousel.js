@@ -1,18 +1,18 @@
 'use client'
 
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState } from 'react'
 
 // import Swiper 樣式
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
-import 'swiper/css/pagination';
-import 'swiper/css/autoplay';
+import { Swiper, SwiperSlide } from 'swiper/react'
+import 'swiper/css'
+import 'swiper/css/pagination'
+import 'swiper/css/autoplay'
 
 // import 自定義樣式
-import './style.css';
+import './style.css'
 
 // import required modules
-import { Pagination, Autoplay } from 'swiper/modules';
+import { Pagination, Autoplay } from 'swiper/modules'
 
 export default function Carousel(props) {
   return (
@@ -21,7 +21,7 @@ export default function Carousel(props) {
         slidesPerView={3}
         spaceBetween={0}
         pagination={{
-          clickable: true,          
+          clickable: true,
           bulletClass: 'swiper-pagination-bullet',
           bulletActiveClass: 'swiper-pagination-bullet-active',
         }}
@@ -32,37 +32,66 @@ export default function Carousel(props) {
         }}
         className="mySwiper"
       >
-          <SwiperSlide className="w-1/3 h-auto">
+        <SwiperSlide className="w-1/3 h-auto course">
           <a href="/course/product/2">
-          <img className="w-[800px] h-[300px]" src="/Blair/carousel-banner/banner1-crown.png" alt="" /></a>
-          </SwiperSlide>
+            <img
+              className="w-[800px] h-[300px]"
+              src="/Blair/carousel-banner/banner1-crown.png"
+              alt=""
+            />
+          </a>
+        </SwiperSlide>
 
-          <SwiperSlide className="w-1/3 h-auto">
+        <SwiperSlide className="w-1/3 h-auto course">
           <a href="/course/product/2">
-          <img className="w-[800px] h-[300px]" src="/Blair/carousel-banner/banner5-bake.png" alt="" /></a>
-          </SwiperSlide>   
+            <img
+              className="w-[800px] h-[300px]"
+              src="/Blair/carousel-banner/banner5-bake.png"
+              alt=""
+            />
+          </a>
+        </SwiperSlide>
 
-          <SwiperSlide className="w-1/3 h-auto">
+        <SwiperSlide className="w-1/3 h-auto course">
           <a href="/course/product/2">
-          <img className="w-[800px] h-[300px]" src="/Blair/carousel-banner/banner2-coffee.png" alt="" /></a>
-          </SwiperSlide>    
+            <img
+              className="w-[800px] h-[300px]"
+              src="/Blair/carousel-banner/banner2-coffee.png"
+              alt=""
+            />
+          </a>
+        </SwiperSlide>
 
-          <SwiperSlide className="w-1/3 h-auto">
+        <SwiperSlide className="w-1/3 h-auto course">
           <a href="/course/product/2">
-          <img className="w-[800px] h-[300px]" src="/Blair/carousel-banner/banner3-florist.png" alt="" /></a>
-          </SwiperSlide>
+            <img
+              className="w-[800px] h-[300px]"
+              src="/Blair/carousel-banner/banner3-florist.png"
+              alt=""
+            />
+          </a>
+        </SwiperSlide>
 
-          <SwiperSlide className="w-1/3 h-auto">
+        <SwiperSlide className="w-1/3 h-auto course">
           <a href="/course/product/2">
-          <img className="w-[800px] h-[300px]" src="/Blair/carousel-banner/banner4-journal.png" alt="" /></a>
-          </SwiperSlide>
-          
-          <SwiperSlide className="w-1/3 h-auto">
+            <img
+              className="w-[800px] h-[300px]"
+              src="/Blair/carousel-banner/banner4-journal.png"
+              alt=""
+            />
+          </a>
+        </SwiperSlide>
+
+        <SwiperSlide className="w-1/3 h-auto course">
           <a href="/course/product/2">
-          <img className="w-[800px] h-[300px]" src="/Blair/carousel-banner/banner6-tarot.png" alt="" /></a>
-          </SwiperSlide>    
-          
+            <img
+              className="w-[800px] h-[300px]"
+              src="/Blair/carousel-banner/banner6-tarot.png"
+              alt=""
+            />
+          </a>
+        </SwiperSlide>
       </Swiper>
     </>
-  );
+  )
 }
