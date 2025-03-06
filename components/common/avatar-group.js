@@ -9,7 +9,13 @@ import {
   Image,
   useDisclosure,
 } from '@heroui/react'
-import { CiUser, CiLogout, CiShoppingCart, CiStar } from 'react-icons/ci'
+import {
+  CiUser,
+  CiLogout,
+  CiShoppingCart,
+  CiStar,
+  CiChat1,
+} from 'react-icons/ci'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/hooks/use-auth'
 import MessageDrawer from './message-drawer.js/message'
@@ -58,7 +64,7 @@ export default function AVatarGroup() {
             <DropdownItem
               key="message"
               onPress={onOpenChange}
-              startContent=<CiStar size={20} />
+              startContent=<CiChat1 size={20} />
             >
               我的訊息
             </DropdownItem>

@@ -18,7 +18,6 @@ export default function CoursePage(props) {
         <div className='mt-20 px-16 pt-8 pb-4 mx-auto w-[80%]'><Headline /></div>
         <div className='px-16 pt-8 mx-auto w-full'><Carousel /></div>
         <div className='px-24 pt-12 mx-auto w-full'><QuickLinks /></div>
-        <div className='px-16 pt-8 mx-auto w-full'><Searchbox /></div>
         <div className='px-16 pt-8 mx-auto w-full'><NewProduct /></div>
         <div className='px-16 pt-8 mx-auto w-full'><CardDraw /></div>
         <div className='px-16 pt-8 mx-auto w-full'><TopSix /></div>

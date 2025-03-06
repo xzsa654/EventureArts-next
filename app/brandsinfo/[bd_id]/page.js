@@ -71,6 +71,11 @@ export default function BrandsPage({ params }) {
     fetchData()
   }, [bd_id])
 
+  // 關閉後要回復id狀態
+  useEffect(() => {
+    if (!isOpen) setId(null)
+  }, [isOpen])
+
   return (
     <>
       {/* 品牌資訊 */}

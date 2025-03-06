@@ -7,8 +7,6 @@ import {
   DrawerHeader,
   DrawerBody,
   DrawerFooter,
-  Button,
-  ScrollShadow,
   Input,
 } from '@heroui/react'
 import { FaSearch } from 'react-icons/fa'
@@ -31,6 +29,7 @@ export default function MessageDrawer({
   useEffect(() => {
     if (getId && isOpen) chatHandle(getId)
   }, [isOpen, getId])
+
   const [isChatting, setIsChatting] = useState(false)
   const [chatWith, setChatWith] = useState('')
 
@@ -46,6 +45,7 @@ export default function MessageDrawer({
       setChatWith(id)
     }
   }
+  const [filterValue, setFilterValue] = useState('')
   return (
     <>
       <Drawer
@@ -87,6 +87,9 @@ export default function MessageDrawer({
                     label="Search"
                     placeholder="按名字進行搜尋..."
                     radius="lg"
+                    onChange={(e) => {
+                      setFilterValue(e.target.value)
+                    }}
                     startContent={
                       <FaSearch className="text-black/50 mb-0.5 dark:text-white/90 text-slate-400 pointer-events-none flex-shrink-0" />
                     }
@@ -100,11 +103,11 @@ export default function MessageDrawer({
                     {...{ chatWith, chatHandle, renderHandler, renderControl }}
                   />
                 ) : (
-                  <ChatList {...{ chatHandle }} />
+                  <ChatList {...{ chatHandle, filterValue }} />
                 )}
               </DrawerBody>
 
-              <DrawerFooter>
+              <DrawerFooter className=" relative">
                 {isChatting && (
                   <MessageFooter
                     renderHandler={renderHandler}

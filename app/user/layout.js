@@ -5,8 +5,6 @@ import React, { useState, useEffect } from 'react'
 import { usePathname } from 'next/navigation'
 import { Image } from '@heroui/react'
 import Link from 'next/link'
-import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules'
-import { Swiper, SwiperSlide } from 'swiper/react'
 import { useAuth } from '@/hooks/use-auth'
 // Import Swiper styles
 import 'swiper/css'

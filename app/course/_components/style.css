@@ -70,7 +70,9 @@
   .swiper {
     width: 100%;
     height: 25%;
+
   }
+
   
   .swiper-slide {
     /* padding:  */
@@ -87,9 +89,10 @@
   }
   
   .swiper-slide img {
+    padding-right: 5px;
+
     display: block;
-    width: 100%;
-    height: 100%;
+    aspect-ratio: 2 / 1; /* 設定寬高比為 2:1 */
     object-fit: cover;
   }
     /* 導航點點顏色 */
@@ -97,7 +100,7 @@
     background-color: #E3C8B9;
   }
   .mySwiper .swiper-pagination-bullet-active {
-    background-color: #F0686C;
+    background-color: #F7B0B3;
   }
 /* --------- Carousel END --------- */
 
@@ -107,6 +110,12 @@
   font-family: 'Noto serif tc', serif ;
   font-weight: bold;
   font-size: 16px;
+}
+
+.linkbox:hover{
+  border: 2px #F7B0B3 solid;
+  border-radius: 5%;
+  transform: scale(1.1);
 }
 
 
@@ -121,7 +130,7 @@
 .card1:hover {
   background-color: transparent;
   transform: scale(1.03);
-  border: 2px #f08e91 solid;
+  border: 2px #F7B0B3 solid;
 }
 
 .chip {
@@ -153,12 +162,12 @@
 .rankNum {
   font-size: 40px;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-  color: #F0686C;
+  color: #F7B0B3;
   text-align: center;
 }
 
 .rank {
-  color: #f69ea1;
+  color: #F7B0B3;
   font-size: 50px;
   font-family: "Unna", serif;
   font-style: italic;

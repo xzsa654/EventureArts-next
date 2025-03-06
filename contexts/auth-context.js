@@ -6,6 +6,8 @@ import React, { useState, useEffect } from 'react'
 import { addToast } from '@heroui/react'
 import { useRouter } from 'next/navigation'
 import { io } from 'socket.io-client'
+import { useModal } from './modal-context'
+import { CiChat1 } from 'react-icons/ci'
 export function AuthContextProvider({ children }) {
   const BASEURL = 'http://localhost:3001'
   const router = useRouter()
@@ -19,6 +21,7 @@ export function AuthContextProvider({ children }) {
     token: '',
   }
   const [auth, setAuth] = useState(defaultAuth)
+  const { isOpen } = useModal().message
 
   // 當第一次第三方登入時使用
   const [firstLogin, setFirstLogin] = useState({
@@ -144,6 +147,8 @@ export function AuthContextProvider({ children }) {
       return { Authorization: 'Bearer ' + auth?.token }
     }
   }
+  const [socket, setSocket] = useState(null)
+  const [onlineUsers, setOnlineUsers] = useState([])
 
   //socket.io 啟動函式
   const getSocket = () => {
@@ -153,8 +158,42 @@ export function AuthContextProvider({ children }) {
         query: { user_id: auth.user_id },
       })
       socket.connect()
+      setSocket(socket)
+      // 這裡的名稱要相對應後端 emit 的名稱
+      socket.on('getOnlineUsers', (user_id) => {
+        //取得 online 的使用者添加到狀態
+        setOnlineUsers(user_id)
+      })
     }
   }
+
+  // 添加通知
+  const [senderName, setSenderName] = useState('')
+  useEffect(() => {
+    if (isOpen) return
+    if (socket) {
+      socket?.on('details', (details) => {
+        if (details.brandname) {
+          setSenderName(`${details.nickname}(${details.brandname})`)
+        } else {
+          setSenderName(`${details.nickname}`)
+        }
+      })
+      if (senderName) {
+        socket?.on('newMessage', (newMessage) => {
+          if (+newMessage.receiver_id == auth.user_id) {
+            addToast({
+              radius: 'lg',
+              icon: <CiChat1 />,
+              description: `${senderName}向你發出訊息`,
+              color: 'danger',
+              timeout: 10000,
+            })
+          }
+        })
+      }
+    }
+  }, [socket, isOpen, senderName])
 
   return (
     <>
@@ -169,6 +208,8 @@ export function AuthContextProvider({ children }) {
           register,
           getAuthHeader,
           beginBrand,
+          socket,
+          onlineUsers,
         }}
       >
         {children}

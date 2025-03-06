@@ -40,6 +40,7 @@ export default function LoginModal() {
       setErrorMessage(result.message)
     } else {
       loginhandle(result.data)
+      onOpenChange(false)
     }
   }
 

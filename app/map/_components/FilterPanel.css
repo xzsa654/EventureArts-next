@@ -1,20 +1,13 @@
-.filter-panel {
-  /* width: 320px; */
-  padding: 1rem;
-  /* overflow-y: auto; */
-  transition: all 0.3s ease;
-}
-
 .filter-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
+  margin-bottom: 0.5rem;
 }
 
 .filter-header h2 {
-  font-size: 1.25rem;
-  font-weight: 500;
+  font-size: 1rem;
+  font-weight: 300;
   color: #333;
 }
 

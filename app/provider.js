@@ -12,9 +12,9 @@ export default function Provider({ children }) {
         language="zh-TW"
       >
         <ToastProvider placement="top-right" />
-        <AuthContextProvider>
-          <ModalProvider>{children}</ModalProvider>
-        </AuthContextProvider>
+        <ModalProvider>
+          <AuthContextProvider>{children}</AuthContextProvider>
+        </ModalProvider>
       </GoogleReCaptchaProvider>
     </HeroUIProvider>
   )
