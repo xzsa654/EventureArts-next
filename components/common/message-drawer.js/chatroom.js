@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react'
 import { useAuth } from '@/hooks/use-auth'
-import { User, Chip, Image } from '@heroui/react'
+import { User, Chip, Image, addToast } from '@heroui/react'
 import SplitText from './splitText'
 import ChatRoomHeader from './chatroomheader'
 export default function ChatRoom({
@@ -16,6 +16,7 @@ export default function ChatRoom({
   const [typing, setTyping] = useState()
 
   const [messages, setMessages] = useState([])
+
   useEffect(() => {
     if (!chatWith || !socket) return
 

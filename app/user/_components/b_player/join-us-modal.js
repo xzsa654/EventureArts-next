@@ -55,7 +55,6 @@ export default function JoinUsModal({ isOpen, onOpenChange }) {
         color: 'danger',
         timeout: 10000,
       })
-      console.log(res)
 
       // 展開錯誤的陣列將值丟到一個物件內
       const mergedObject = Object.assign({}, ...res.message)
