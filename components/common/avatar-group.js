@@ -56,6 +56,9 @@ export default function AVatarGroup() {
             </DropdownItem>
 
             <DropdownItem
+              onPress={() => {
+                router.push('/user/c/myticket')
+              }}
               key="tickets"
               startContent=<CiShoppingCart size={20} />
             >
