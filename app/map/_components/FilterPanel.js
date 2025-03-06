@@ -21,7 +21,7 @@ export default function FilterPanel({
   activeFilterType,
   activeDataType, // ⭐️ 接收目前選到的是「展覽」還是「課程」
   onFilterTypeChange,
-  shortestPaths,
+  // shortestPaths,
 }) {
   const lineSelectRef = useRef(null)
 

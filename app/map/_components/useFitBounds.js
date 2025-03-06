@@ -8,9 +8,11 @@ export function useFitBounds({
   shortestPaths,
   filteredLocations,
   selectedDistrict,
+  selectedMRT,
   selectedStation,
   selectedLineStations,
   taipeiDistricts,
+  mrtRoutes,
   activeFilterType,
   fitBoundOptions = {},
 }) {
@@ -20,6 +22,7 @@ export function useFitBounds({
   const prevActiveFilterType = useRef(activeFilterType)
   const prevShortestPaths = useRef(shortestPaths?.features?.length || 0)
   const prevSelectedDistrict = useRef(selectedDistrict)
+  const prevSelectedMRT = useRef(selectedMRT)
 
   useEffect(() => {
     const map = mapRef.current
@@ -29,7 +32,7 @@ export function useFitBounds({
     let hasBounds = false
 
     const defaultOptions = {
-      padding: [50, 50],
+      padding: [100, 100],
       maxZoom: 16,
       minZoom: 13,
       animate: true,
@@ -44,9 +47,17 @@ export function useFitBounds({
     const isNewFilteredLocations = (filteredLocations?.length || 0) !== prevFilteredLocations.current
     const isNewShortestPaths = (shortestPaths?.features?.length || 0) !== prevShortestPaths.current
     const isNewDistrict = selectedDistrict !== prevSelectedDistrict.current
+    const isNewMRT = selectedMRT !== prevSelectedMRT.current
 
     // If nothing has changed, don't update bounds
-    if (!isNewStation && !isNewFilterType && !isNewFilteredLocations && !isNewShortestPaths && !isNewDistrict) {
+    if (
+      !isNewStation &&
+      !isNewFilterType &&
+      !isNewFilteredLocations &&
+      !isNewShortestPaths &&
+      !isNewDistrict &&
+      !isNewMRT
+    ) {
       return
     }
 
@@ -61,7 +72,7 @@ export function useFitBounds({
 
       if (hasBounds) {
         const boundsZoom = map.getBoundsZoom(bounds, false, options.padding)
-        const finalZoom = Math.min(Math.max(boundsZoom, 13), 15)
+        const finalZoom = Math.min(Math.max(boundsZoom, 11), 13)
         map.fitBounds(bounds, { ...options, maxZoom: finalZoom })
       }
     }
@@ -93,7 +104,7 @@ export function useFitBounds({
 
       if (hasBounds) {
         const boundsZoom = map.getBoundsZoom(bounds, false, options.padding)
-        const finalZoom = Math.min(Math.max(boundsZoom, 13), 15)
+        const finalZoom = Math.min(Math.max(boundsZoom, 9), 11)
         map.fitBounds(bounds, { ...options, maxZoom: finalZoom })
       }
     }
@@ -121,6 +132,53 @@ export function useFitBounds({
         map.fitBounds(bounds, { ...options, maxZoom: finalZoom })
       }
     }
+    // Handle new MRT line selection - only apply when there are shortestPaths (after Apply is pressed)
+    else if (
+      isNewMRT &&
+      selectedMRT &&
+      mrtRoutes &&
+      activeFilterType === "mrt" &&
+      shortestPaths?.features?.length > 0
+    ) {
+      const route = mrtRoutes.features.find(
+        (feature) => feature.properties.MRTCODE === selectedMRT
+      );
+    
+      if (route) {
+        if (
+          route.geometry.type === "MultiLineString" &&
+          route.geometry.coordinates.length > 0
+        ) {
+          route.geometry.coordinates.forEach((line) => {
+            line.forEach((coord) => {
+              bounds = bounds.extend([coord[1], coord[0]]);
+              hasBounds = true;
+            });
+          });
+        } else if (
+          route.geometry.type === "LineString" &&
+          route.geometry.coordinates.length > 0
+        ) {
+          route.geometry.coordinates.forEach((coord) => {
+            bounds = bounds.extend([coord[1], coord[0]]);
+            hasBounds = true;
+          });
+        } else {
+          console.warn("No valid coordinates for MRT route:", selectedMRT);
+        }
+    
+        if (hasBounds && bounds.isValid()) {
+          const boundsZoom = map.getBoundsZoom(bounds, false, options.padding);
+          const finalZoom = Math.min(Math.max(boundsZoom, 13), 15);
+          map.fitBounds(bounds, { ...options, maxZoom: finalZoom });
+        } else {
+          console.warn("Invalid bounds for MRT route:", selectedMRT);
+        }
+      } else {
+        console.warn("MRT route not found:", selectedMRT);
+      }
+    }
+    
 
     // Update refs with current values
     prevSelectedStation.current = selectedStation
@@ -128,14 +186,17 @@ export function useFitBounds({
     prevActiveFilterType.current = activeFilterType
     prevShortestPaths.current = shortestPaths?.features?.length || 0
     prevSelectedDistrict.current = selectedDistrict
+    prevSelectedMRT.current = selectedMRT
   }, [
     mapRef,
     shortestPaths,
     filteredLocations,
     selectedDistrict,
+    selectedMRT,
     selectedStation,
     selectedLineStations,
     taipeiDistricts,
+    mrtRoutes,
     activeFilterType,
     fitBoundOptions,
   ])

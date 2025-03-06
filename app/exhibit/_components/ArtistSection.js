@@ -33,7 +33,7 @@ function ArtistCard({ artist, index }) {
       transition={{ duration: 0.6 }}
       className="group shrink-0"
     >
-      <Link href={`/artists/${artist.bd_id}`}>
+      <Link href={`/brandsinfo/${artist.bd_id}`}>
         <div
           className={`relative w-[265px] h-[265px] overflow-hidden bg-white ${hoverEffects[effectStyle]}`}
         >
@@ -70,7 +70,24 @@ function ArtistCard({ artist, index }) {
 
 export default function ArtistSection() {
   const { data, error, isLoading } = useSWR(API_ENDPOINT, fetcher)
-  const artists = data?.success ? data.data : []
+  let artists = data?.success ? data.data : []
+
+  if (artists.length) {
+    const fixedArtists = [53, 54, 55, 52, 51]
+      .map((id) => artists.find((artist) => artist.bd_id === id))
+      .filter(Boolean)
+
+    const randomPool = artists.filter(
+      (artist) => artist.bd_id >= 56 && artist.bd_id <= 75
+    )
+
+    for (let i = randomPool.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1))
+      ;[randomPool[i], randomPool[j]] = [randomPool[j], randomPool[i]]
+    }
+
+    artists = [...fixedArtists, ...randomPool].slice(0, 22)
+  }
 
   // Handle loading state
   if (isLoading) {

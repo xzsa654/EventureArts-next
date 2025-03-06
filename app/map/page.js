@@ -35,6 +35,9 @@ export default function Page() {
 
   const [activeDataType, setActiveDataType] = useState("")//新增管理展覽或課程的篩選器選擇
 
+  const [clickedStationLocations, setClickedStationLocations] = useState([]) //捷運站選取後跟後端資料
+
+
   
   //避免離開地圖網頁時scroll bar 失效
   useEffect(() => {
@@ -188,10 +191,12 @@ export default function Page() {
   const handleStationClick = useCallback(
     (stationId) => {
       console.log("🗺️ Map station clicked:", stationId)
+      setClickedStationLocations([]) // ✅ 清空舊的捷運站 pin
       handleStationSelect(stationId)
     },
-    [handleStationSelect],
+    [handleStationSelect]
   )
+  
 
   // Handle district click
 // --- handlers ---
@@ -221,6 +226,12 @@ const handleDataTypeChange = useCallback((selectedType) => {
 }, [])
 
 
+//清空FilterResults跟後端的pin
+const handleSelectLocation = (location) => {
+  setClickedStationLocations([location])
+}
+
+
 
   // Add new handler for district selection
   const handleDistrictSelect = useCallback((districtName) => {
@@ -244,34 +255,45 @@ const handleDataTypeChange = useCallback((selectedType) => {
   //使用者按下 FilterPanel 裡面的 Apply Filter 按鈕後才執行後端fetch
   // Modify handleApplyFilter to handle both MRT and district filtering
   const handleApplyFilter = useCallback(async () => {
+
+    setClickedStationLocations([])
+
+    // 確保先選擇了展覽或課程類型
     if (!activeDataType) {
       alert("請先選擇:展覽/課程")
       return
     }
-
+  
+    // 如果是 MRT 篩選
     if (activeFilterType === "mrt") {
       console.log("🎯 Applying MRT filter for station:", selectedStation)
-      if (!selectedStation || !mapData.shortestPaths) return
-
+  
+      if (!selectedStation || !mapData.shortestPaths) {
+        console.log("❌ No station selected or no path data available");
+        return
+      }
+  
       setIsLoading(true)
+  
       try {
         const station = selectedLineStations.find((s) => s.station_id === selectedStation)
         if (!station) {
           console.error("❌ Selected station not found in line stations")
           return
         }
-
+  
         const stationName = `${station.name_chinese}`
         console.log("🔍 Searching for paths from:", stationName)
-
+  
+        // 篩選出來的路徑
         const paths = mapData.shortestPaths.features.filter((feature) => feature.properties.start_name === stationName)
-
+  
         console.log(`✅ Found ${paths.length} paths from ${stationName}`)
         setFilteredPaths({
           type: "FeatureCollection",
           features: paths,
         })
-        setFilteredLocations([]) // Clear any existing locations
+        setFilteredLocations([]) // 清空地點資料
       } catch (err) {
         console.error("Error filtering paths:", err)
         setError("Failed to filter paths")
@@ -279,46 +301,55 @@ const handleDataTypeChange = useCallback((selectedType) => {
         setIsLoading(false)
       }
     } else {
-      // District filtering logic
+      // 如果是行政區篩選
       console.log("🎯 Applying district filter for:", selectedDistrict)
-      if (!selectedDistrict || selectedDistrict === "all") return
-
+  
+      if (!selectedDistrict || selectedDistrict === "all") {
+        console.log("❌ No district selected or selected 'all'. Skipping filter.");
+        return
+      }
+  
       setIsLoading(true)
+  
       try {
-        // Fetch all locations
-        // const response = await fetch(`${API_BASE_URL}/map`)//最初僅fetch地點
-        // const response = await fetch(`${API_BASE_URL}/map?district=${selectedDistrict}`);  //原本只有展覽的fetch
-        const response = await fetch(`${API_BASE_URL}/map?district=${selectedDistrict}&type=${activeDataType}`)//新增判斷展覽或課程的fetch
-
-
-
+        // 根據篩選的行政區和選擇的資料類型（展覽或課程）發送請求
+        const response = await fetch(`${API_BASE_URL}/map?district=${selectedDistrict}&type=${activeDataType}`)
+  
         if (!response.ok) {
           throw new Error("Failed to fetch locations")
         }
-
+  
         const result = await response.json()
-
-        // Check if the API call was successful and filter the data by district
+  
+        // 確保回傳資料是有效的並且為陣列，然後根據行政區過濾
         if (result.success && Array.isArray(result.data)) {
           const filteredData = result.data.filter((location) => location.district === selectedDistrict)
-
+  
           console.log(`✅ Found ${filteredData.length} locations in ${selectedDistrict}:`, filteredData)
           setFilteredLocations(filteredData)
         } else {
           console.warn("API call successful but no valid data:", result.message)
-          setFilteredLocations([])
+          setFilteredLocations([]) // 沒有符合條件的資料時清空
         }
-
-        setFilteredPaths(null) // Clear any existing paths
+  
+        setFilteredPaths(null) // 清空任何已存在的路徑
       } catch (err) {
         console.error("Error fetching locations:", err)
         setError("Failed to fetch locations")
-        setFilteredLocations([])
+        setFilteredLocations([]) // 出現錯誤時清空
       } finally {
         setIsLoading(false)
       }
     }
-  }, [activeFilterType, selectedStation, selectedDistrict, mapData.shortestPaths, selectedLineStations, activeDataType])
+  }, [
+    activeFilterType, 
+    selectedStation, 
+    selectedDistrict, 
+    mapData.shortestPaths, 
+    selectedLineStations, 
+    activeDataType
+  ]);
+  
 
 
   // Add handler for filter type change
@@ -395,6 +426,8 @@ const handleDataTypeChange = useCallback((selectedType) => {
 
         activeFilterType={activeFilterType}
         selectedLocationId={selectedLocationId} // 新增管理地點狀態
+        clickedStationLocations={clickedStationLocations}
+
       />
     ),
     [
@@ -411,6 +444,7 @@ const handleDataTypeChange = useCallback((selectedType) => {
       
       activeFilterType,
       selectedLocationId, // 新增FilterResults的地點到 dependencies
+      clickedStationLocations,
     ],
   )
 
@@ -440,6 +474,8 @@ const handleDataTypeChange = useCallback((selectedType) => {
           activeFilterType={activeFilterType}
           shortestPaths={filteredPaths}
           onSelectLocation={setSelectedLocationId}
+          selectedType={activeDataType} // ⭐️ 新增傳入
+          
         />
       </div>
     </div>
