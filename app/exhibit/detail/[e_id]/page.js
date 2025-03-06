@@ -21,7 +21,7 @@ const fetcher = (url) => fetch(url).then((res) => res.json())
 
 export default function ExhibitionDetail({ params }) {
   // ---for buy ticket btn start---
-  const router = useRouter() // ✅ 使用 Next.js App Router 的 useRouter
+  const router = useRouter() // 使用 Next.js App Router 的 useRouter
   // ---for buy ticket btn end---
   const { e_id } = params
 
