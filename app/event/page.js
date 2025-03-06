@@ -10,6 +10,9 @@ import UploadProcess from './_components/upload-process';
 import AccordionQa from './_components/accordion-qa';
 import Special from './_components/special';
 
+import { useDisclosure } from '@heroui/react'
+import JoinUsModal from '../user/_components/b_player/join-us-modal'
+
 
 // 引用樣式表
 import './event.css'
