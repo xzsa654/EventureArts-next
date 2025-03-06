@@ -80,17 +80,17 @@ export default function BrandsPage({ params }) {
     <>
       {/* 品牌資訊 */}
       <div className="px-16 pt-20">
-        <div className=" border-black border-x-1">
+        <div className=" border-black border-x-2">
           <div className="text-center ">
-            <h2 className="text-9xl font-bold border-black border-y-1">
+            <h2 className="text-9xl font-bold border-black border-y-2">
               #BRAND PROFILE
             </h2>
           </div>
           <div className="flex w-full h-[760]">
             {/* 左邊 */}
-            <div className=" w-4/5 flex flex-col border-r-1 border-black ">
+            <div className=" w-4/5 flex flex-col border-r-2 border-black ">
               {/* 左上方 */}
-              <div className="relative p-5 h-3/5 flex items-stretch gap-5 border-b border-black">
+              <div className="relative p-5 h-3/5 flex items-stretch gap-5 border-b-2 border-black">
                 <div className="w-1/12  h-auto flex flex-col justify-between pt-20">
                   {/* banner 貼齊上方 */}
                   <h5 className="text-4xl font-bold -rotate-90 ">banner</h5>
@@ -108,7 +108,7 @@ export default function BrandsPage({ params }) {
                 </div>
               </div>
               {/* 左下方 */}
-              <div className="h-2/5 gap-4 p-4 flex items-center justify-center border-b-1 border-black">
+              <div className="h-2/5 gap-4 p-4 flex items-center justify-center border-b-2 border-black">
                 {/* 縮小左側圖片區域，確保與 info 對齊 */}
                 <div className="min-w-[250px] flex flex-col justify-center items-center">
                   <div className="w-[250px] h-[250px] overflow-hidden relative">
@@ -157,7 +157,7 @@ export default function BrandsPage({ params }) {
             {/* 右邊 */}
             <div className=" w-1/5 flex flex-col">
               {/* 右上方*/}
-              <div className="h-2/3 p-4 flex flex-col border-b-1 border-black">
+              <div className="h-2/3 p-4 flex flex-col border-b-2 border-black">
                 <div className="flex items-center justify-center gap-2 h-5/6">
                   <div className="w-1/5">
                     <h6 className="font-cn font-semibold text-3xl">品牌簡介</h6>
@@ -171,7 +171,7 @@ export default function BrandsPage({ params }) {
                 </div>
               </div>
               {/* 右下方 */}
-              <div className="h-1/3 p-4 flex flex-col items-center justify-around border-b-1 border-black">
+              <div className="h-1/3 p-4 flex flex-col items-center justify-around border-b-2 border-black">
                 <svg
                   width="160"
                   height="67"
