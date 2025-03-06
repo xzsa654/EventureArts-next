@@ -20,17 +20,18 @@ export default function BPlayerProfile(props) {
 
   return (
     <>
-      <div className="flex">
+      <div className="flex w-full h-[820]">
         {/* 左邊 */}
         <div className=" w-4/5 flex flex-col border-r-1 border-black ">
           {/* 左上方 */}
-          <div className="relative p-4 h-3/5 flex items-stretch gap-4 border-b border-black">
-            {/* 左側 Banner + 按鈕區域 */}
-            <div className="flex flex-col justify-between h-full w-fit pt-10">
-              {/* banner 貼齊上方 */}
-              <h5 className="text-4xl font-bold -rotate-90 ">banner</h5>
+          <div className="relative p-5 h-3/5 flex items-stretch gap-5 border-b border-black">
+            <div className="flex flex-col justify-between">
+              <div className="w-1/6  h-auto flex flex-col justify-between pt-28">
+                {/* banner 貼齊上方 */}
+                <h5 className="text-4xl font-bold -rotate-90 ">banner</h5>
+              </div>
               <div className="flex flex-col">
-                <Button
+                {/* <Button
                   radius="none"
                   variant="bordered"
                   className="px-4 text-12 border-green-600 text-primary hover:text-green-600 hover:scale-110 transition-transform duration-200 cursor-pointer flex items-center group gap-x-2 mb-2"
@@ -45,33 +46,36 @@ export default function BPlayerProfile(props) {
                 >
                   上傳新的 Banner
                   <HiArrowRight className="transition-transform duration-300 ease-out group-hover:translate-x-1" />
-                </Button>
+                </Button> */}
               </div>
             </div>
 
             {/* 右側圖片填滿 */}
-            <div className="flex-1 h-full bg-slate-300">
+            <div className="w-5/6 overflow-hidden">
               <Image
                 src={`http://localhost:3001/uploads/brand-banner/${brand?.bd_img}`}
                 alt="Banner Image"
-                className="w-full h-full "
-                width={300}
-                height={300}
+                className="w-full h-full object-cover "
+                width={800}
+                height={250}
               />
             </div>
           </div>
           {/* 左下方 */}
-          <div className=" h-auto gap-4  p-4 flex items-center justify-center  border-b-1 border-black">
-            <div className="w-2/5   flex flex-col justify-center items-center">
-              <div className="w-[250] h-[250px] mb-4 ">
+          <div className="h-2/5 gap-4 p-4 flex items-center justify-center border-b-1 border-black">
+            {/* 縮小左側圖片區域，確保與 info 對齊 */}
+            <div className="min-w-[250px] flex flex-col justify-center items-center">
+              <div className="w-[250px] h-[250px] overflow-hidden relative">
                 <Image
                   width={250}
                   height={250}
                   alt="logo"
                   src={`http://localhost:3001/uploads/brand-logo/${brand?.bd_logo}`}
+                  className="object-cover w-full h-full"
                 ></Image>
               </div>
-              <div className="flex justify-around w-[400]">
+
+              {/* <div className="flex justify-around w-[400]">
                 <Button
                   radius="none"
                   variant="bordered"
@@ -88,13 +92,15 @@ export default function BPlayerProfile(props) {
                   上傳新 Logo
                   <HiArrowRight className="transition-transform duration-300 ease-out group-hover:translate-x-1" />
                 </Button>
-              </div>
+              </div> */}
             </div>
-            <div className="w-3/5 flex flex-col justify-between h-full">
-              {/* 讓 info 貼齊上方 */}
-              <h3 className="text-6xl text-start font-bold">Brand's info</h3>
 
-              {/* 讓 dl 的容器貼齊下方 */}
+            {/* 右側文字區域，確保與圖片同高 */}
+            <div className="flex-1 h-[250px] flex flex-col justify-between  p-4">
+              {/* 讓 info 貼齊上方，與 dl 分開 */}
+              <h3 className="text-6xl text-start font-bold pb-4">info</h3>
+
+              {/* 品牌資訊區塊，確保與 info 間距夠大 */}
               <div className="flex flex-col gap-2">
                 <dl className="text-base flex font-cn justify-between">
                   <dt>品牌名稱：</dt>
@@ -103,7 +109,7 @@ export default function BPlayerProfile(props) {
 
                 <dl className="text-base flex font-cn justify-between">
                   <dt>電話：</dt>
-                  <dt className="font-sans">{brand?.bd_tel}</dt>
+                  <dt>{brand?.bd_tel}</dt>
                 </dl>
                 <dl className="text-base flex font-cn justify-between">
                   <dt>地址：</dt>
@@ -111,33 +117,36 @@ export default function BPlayerProfile(props) {
                 </dl>
                 <dl className="text-base flex font-cn justify-between">
                   <dt>品牌聯絡信箱：</dt>
-                  <dt className="font-sans">{brand?.bd_email}</dt>
+                  <dt>{brand?.bd_email}</dt>
                 </dl>
                 <dl className="text-base flex font-cn justify-between">
                   <dt>品牌官方網站：</dt>
-                  <dt className="font-sans">{brand?.bd_website}</dt>
+                  <dt>{brand?.bd_website}</dt>
                 </dl>
               </div>
             </div>
           </div>
         </div>
-        {/* 右上方 */}
+
+        {/* 右邊 */}
         <div className=" w-1/5 flex flex-col">
+          {/* 右上方*/}
           <div className="h-2/3 p-4 flex flex-col border-b-1 border-black">
-            <div className="flex items-center justify-center gap-6 h-5/6">
-              <h5 className="font-cn font-semibold text-3xl self-start mt-0">
-                品牌簡介
-              </h5>
-              <p className="font-cn text-base">{brand?.bd_info}</p>
+            <div className="flex items-center justify-center gap-2 h-5/6">
+              <div className="w-1/5">
+                <h6 className="font-cn font-semibold text-3xl">品牌簡介</h6>
+              </div>
+              <div className=" w-4/5 font-cn text-12">{brand?.bd_info}</div>
             </div>
 
-            {/* 讓 introduction 貼齊底部 */}
+            {/* 讓 Insight 貼齊底部 */}
             <div className="h-1/6 flex justify-center items-end">
-              <h5 className="text-3xl text-center font-bold">introduction</h5>
+              <h6 className="text-3xl text-center font-bold">Insight</h6>
             </div>
           </div>
-          {/* 右下方 start */}
-          <div className="h-1/3 p-4 flex flex-col items-center justify-between">
+
+          {/* 右下方 */}
+          <div className="h-1/3 p-4 flex flex-col items-center justify-around">
             <svg
               width="160"
               height="67"
