@@ -35,6 +35,9 @@ export default function Page() {
 
   const [activeDataType, setActiveDataType] = useState("")//新增管理展覽或課程的篩選器選擇
 
+  const [clickedStationLocations, setClickedStationLocations] = useState([]) //捷運站選取後跟後端資料
+
+
   
   //避免離開地圖網頁時scroll bar 失效
   useEffect(() => {
@@ -188,10 +191,12 @@ export default function Page() {
   const handleStationClick = useCallback(
     (stationId) => {
       console.log("🗺️ Map station clicked:", stationId)
+      setClickedStationLocations([]) // ✅ 清空舊的捷運站 pin
       handleStationSelect(stationId)
     },
-    [handleStationSelect],
+    [handleStationSelect]
   )
+  
 
   // Handle district click
 // --- handlers ---
@@ -221,6 +226,12 @@ const handleDataTypeChange = useCallback((selectedType) => {
 }, [])
 
 
+//清空FilterResults跟後端的pin
+const handleSelectLocation = (location) => {
+  setClickedStationLocations([location])
+}
+
+
 
   // Add new handler for district selection
   const handleDistrictSelect = useCallback((districtName) => {
@@ -244,6 +255,9 @@ const handleDataTypeChange = useCallback((selectedType) => {
   //使用者按下 FilterPanel 裡面的 Apply Filter 按鈕後才執行後端fetch
   // Modify handleApplyFilter to handle both MRT and district filtering
   const handleApplyFilter = useCallback(async () => {
+
+    setClickedStationLocations([])
+
     // 確保先選擇了展覽或課程類型
     if (!activeDataType) {
       alert("請先選擇:展覽/課程")
@@ -412,6 +426,8 @@ const handleDataTypeChange = useCallback((selectedType) => {
 
         activeFilterType={activeFilterType}
         selectedLocationId={selectedLocationId} // 新增管理地點狀態
+        clickedStationLocations={clickedStationLocations}
+
       />
     ),
     [
@@ -428,6 +444,7 @@ const handleDataTypeChange = useCallback((selectedType) => {
       
       activeFilterType,
       selectedLocationId, // 新增FilterResults的地點到 dependencies
+      clickedStationLocations,
     ],
   )
 
@@ -458,6 +475,7 @@ const handleDataTypeChange = useCallback((selectedType) => {
           shortestPaths={filteredPaths}
           onSelectLocation={setSelectedLocationId}
           selectedType={activeDataType} // ⭐️ 新增傳入
+          
         />
       </div>
     </div>

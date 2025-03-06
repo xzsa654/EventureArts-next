@@ -61,6 +61,16 @@ export default function FilterResults({
 
   const selectedStationInfo = getSelectedStationInfo()
 
+  // Add explicit handler for path card clicks with logging
+  const handlePathCardClick = (locatId) => {
+    console.log(`Clicked on path card with location ID: ${locatId}`)
+    // Make sure we're passing a valid ID
+    if (locatId) {
+      // Convert to string to ensure consistent comparison
+      onSelectLocation(locatId.toString())
+    }
+  }
+
   return (
     <div className="filter-results-container">
       <div className="filter-results-header">
@@ -104,7 +114,11 @@ export default function FilterResults({
                     (loc) => loc.locat_id.toString() === path.properties.end_name.toString(),
                   )
                   return (
-                    <div key={index} className="path-card">
+                    <button
+                      key={index}
+                      className="path-card"
+                      onClick={() => handlePathCardClick(path.properties.end_name)}
+                    >
                       <div className="path-header">
                         <span className="path-number">#{index + 1}</span>
                         <span className="path-distance">{formatDistance(path.properties.distance)}</span>
@@ -151,12 +165,12 @@ export default function FilterResults({
                           <div className="location-name">Location details not found</div>
                         </div>
                       )}
-                    </div>
+                    </button>
                   )
                 })}
               </div>
             ) : selectedStation && selectedStation !== "all" ? (
-              <div className="no-paths-message">Click Apply Filter to find nearest locations</div>
+              <div className="no-paths-message">Click "Apply Filter" to find nearest locations</div>
             ) : null}
           </div>
         )}

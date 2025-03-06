@@ -1,25 +1,42 @@
-'use client'
+"use client"
 
-import { useRef, useState, useEffect } from 'react'
-import {
-  MapContainer,
-  TileLayer,
-  LayersControl,
-  ZoomControl,
-  GeoJSON,
-  LayerGroup,
-  Marker,
-  Popup,
-} from 'react-leaflet'
-import L from 'leaflet'
-import 'leaflet/dist/leaflet.css'
+import { useRef, useState, useEffect } from "react"
+import { MapContainer, TileLayer, LayersControl, ZoomControl, GeoJSON, LayerGroup, Marker, Popup } from "react-leaflet"
+import L from "leaflet"
+import "leaflet/dist/leaflet.css"
 
-import './MapView.css'
-import { useFitBounds } from './useFitBounds' // Import the new hook
-import MarkerClusterGroup from '@changey/react-leaflet-markercluster'
+import "./MapView.css"
+import { useFitBounds } from "./useFitBounds" // Import the new hook
+import MarkerClusterGroup from "@changey/react-leaflet-markercluster"
 
 // Fix Leaflet's default icon issue
-L.Icon.Default.imagePath = 'https://unpkg.com/leaflet@1.7.1/dist/images/'
+L.Icon.Default.imagePath = "https://unpkg.com/leaflet@1.7.1/dist/images/"
+
+// Custom icons for different types
+const exhibitionIcon = L.divIcon({
+  className: "custom-marker exhibition-marker",
+  html: `<div class="marker-pin exhibition-pin"></div>`,
+  iconSize: [30, 30],
+  iconAnchor: [15, 30],
+})
+
+const courseIcon = L.divIcon({
+  className: "custom-marker course-marker",
+  html: `<div class="marker-pin course-pin"></div>`,
+  iconSize: [30, 30],
+  iconAnchor: [15, 30],
+})
+
+// Helper function to format date
+const formatDate = (dateString) => {
+  if (!dateString) return "N/A"
+  const date = new Date(dateString)
+  return date.toLocaleDateString("zh-TW", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  })
+}
 
 const MapView = ({
   mrtRoutes,
@@ -40,21 +57,272 @@ const MapView = ({
   const center = [25.0449, 121.5233] //善導寺
   const [hoveredRoute, setHoveredRoute] = useState(null)
   const [hoveredDistrict, setHoveredDistrict] = useState(null)
+  const [locations, setLocations] = useState([])
+  const [selectedType, setSelectedType] = useState("exhibition") // Default to exhibition
+
+  // Track previous values to detect changes
+  const prevSelectedMRT = useRef(selectedMRT)
+  const prevActiveFilterType = useRef(activeFilterType)
+  const prevSelectedStation = useRef(selectedStation)
+  const prevSelectedDistrict = useRef(selectedDistrict)
+
+  // Get the type from URL or context
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search)
+    const type = urlParams.get("type") || "exhibition"
+    setSelectedType(type)
+  }, [])
+
+  // Clear locations when filter criteria changes
+  useEffect(() => {
+    const isNewMRT = selectedMRT !== prevSelectedMRT.current
+    const isNewFilterType = activeFilterType !== prevActiveFilterType.current
+    const isNewStation = selectedStation !== prevSelectedStation.current
+    const isNewDistrict = selectedDistrict !== prevSelectedDistrict.current
+
+    // Clear locations when user changes filter criteria
+    if (isNewMRT || isNewFilterType || isNewStation || isNewDistrict) {
+      console.log("Filter criteria changed, clearing location markers")
+      setLocations([])
+    }
+
+    // Update refs
+    prevSelectedMRT.current = selectedMRT
+    prevActiveFilterType.current = activeFilterType
+    prevSelectedStation.current = selectedStation
+    prevSelectedDistrict.current = selectedDistrict
+  }, [selectedMRT, activeFilterType, selectedStation, selectedDistrict])
+
+  // Fetch location data when shortestPaths changes
+  useEffect(() => {
+    if (!shortestPaths?.features?.length) return
+
+    const locatIds = shortestPaths.features.map((path) => path.properties.end_name)
+
+    if (locatIds.length === 0) return
+
+    console.log(`Fetching locations for IDs: ${locatIds.join(",")}, with type: ${selectedType}`)
+
+    const fetchLocations = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:3001/map/fetchLocations?locatIds=${locatIds.join(",")}&type=${selectedType}`,
+        )
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch locations")
+        }
+
+        const data = await response.json()
+        console.log("Fetched location data:", data)
+
+        if (data.success && data.data.length > 0) {
+          setLocations(data.data)
+        }
+      } catch (err) {
+        console.error("Error fetching locations:", err)
+      }
+    }
+
+    fetchLocations()
+  }, [shortestPaths, selectedType])
+
+  // Debug locations
+  useEffect(() => {
+    console.log("Current locations state:", locations)
+    console.log("Current filteredLocations prop:", filteredLocations)
+  }, [locations, filteredLocations])
 
   // 監聽 selectedLocationId 變化
   useEffect(() => {
-    if (!selectedLocationId || !filteredLocations.length) return
+    if (!selectedLocationId) return
 
-    const location = filteredLocations.find(
-      (loc) => loc.locat_id === selectedLocationId
-    )
+    console.log(`Selected location ID: ${selectedLocationId}`)
+
+    // First check filteredLocations
+    let location = filteredLocations?.find((loc) => loc.locat_id.toString() === selectedLocationId.toString())
+
+    // If not found in filteredLocations, check in locations from API
+    if (!location) {
+      location = locations.find((loc) => loc.locat_id.toString() === selectedLocationId.toString())
+    }
+
+    console.log("Found location:", location)
+
     if (location && mapRef.current) {
       const { latitude, longitude } = location
+      console.log(`Flying to: [${latitude}, ${longitude}]`)
+
+      // Store the marker reference to open its popup after flying
+      let markerToOpen = null
+
+      // Find the marker in the DOM
+      const markers = document.querySelectorAll(".leaflet-marker-icon")
+      markers.forEach((marker) => {
+        const markerElement = marker._leaflet_pos
+        if (markerElement) {
+          const markerInstance = marker._leaflet_id
+            ? Object.values(mapRef.current._layers).find((layer) => layer._leaflet_id === marker._leaflet_id)
+            : null
+
+          if (markerInstance && markerInstance.options && markerInstance.options.position) {
+            const pos = markerInstance.options.position
+            // Check if this marker's position matches our target location
+            if (Math.abs(pos[0] - latitude) < 0.0001 && Math.abs(pos[1] - longitude) < 0.0001) {
+              markerToOpen = markerInstance
+            }
+          }
+        }
+      })
+
+      // Fly to the location
       mapRef.current.flyTo([latitude, longitude], 17, {
         duration: 1.5,
+        // After flying completes, open the popup
+        callback: () => {
+          if (markerToOpen && markerToOpen.openPopup) {
+            setTimeout(() => {
+              markerToOpen.openPopup()
+            }, 500)
+          }
+        },
       })
+
+      // Create a temporary marker if we couldn't find the existing one
+      if (!markerToOpen) {
+        // Determine icon based on location type
+        const hasExhibitions = location.exhibitions && location.exhibitions.length > 0
+        const hasCourses = location.courses && location.courses.length > 0
+
+        const icon = hasExhibitions
+          ? exhibitionIcon
+          : hasCourses
+            ? courseIcon
+            : L.divIcon({
+                className: "custom-marker",
+                html: `<div class="marker-pin"></div>`,
+                iconSize: [30, 30],
+                iconAnchor: [15, 30],
+              })
+
+        // Create a temporary marker and open its popup
+        setTimeout(() => {
+          const tempMarker = L.marker([latitude, longitude], { icon }).addTo(mapRef.current)
+
+          // Create popup content
+          const popupContent = document.createElement("div")
+          popupContent.className = "popup-content"
+
+          // Add title based on type
+          // const titleType = document.createElement("h3")
+          // titleType.className = "popup-title-type"
+          // titleType.textContent = hasExhibitions ? "Exhibition" : hasCourses ? "Course" : "Location"
+          // popupContent.appendChild(titleType)
+
+          // Add name if it exists (e_name or name)
+          if (location.name) {
+            const nameDiv = document.createElement("div")
+            nameDiv.className = "popup-name"
+            nameDiv.textContent = location.name
+            popupContent.appendChild(nameDiv)
+          }
+
+          // Add dates if they exist
+          if (location.startdate && location.enddate) {
+            const datesDiv = document.createElement("div")
+            datesDiv.className = "popup-dates"
+            datesDiv.textContent = `${formatDate(location.startdate)} - ${formatDate(location.enddate)}`
+            popupContent.appendChild(datesDiv)
+          }
+
+          // Add location name
+          const locationName = document.createElement("div")
+          locationName.className = "popup-location-name"
+          locationName.textContent = location.locat_name
+          popupContent.appendChild(locationName)
+
+          // Add address
+          const address = document.createElement("div")
+          address.className = "popup-address"
+          address.textContent = location.address
+          popupContent.appendChild(address)
+
+          // Add exhibitions if available
+          if (hasExhibitions) {
+            const exhibitionsDiv = document.createElement("div")
+            exhibitionsDiv.className = "popup-exhibitions"
+
+            const exhibitionsTitle = document.createElement("h4")
+            exhibitionsTitle.textContent = "Exhibitions"
+            exhibitionsDiv.appendChild(exhibitionsTitle)
+
+            const exhibitionsList = document.createElement("div")
+            exhibitionsList.className = "exhibition-list"
+
+            location.exhibitions.forEach((exhibition) => {
+              const item = document.createElement("div")
+              item.className = "exhibition-item"
+
+              const name = document.createElement("div")
+              name.className = "exhibition-name"
+              name.textContent = exhibition.e_name || exhibition.name
+
+              const dates = document.createElement("div")
+              dates.className = "exhibition-dates"
+              dates.textContent = `${formatDate(exhibition.e_startdate || exhibition.startdate)} - ${formatDate(exhibition.e_enddate || exhibition.enddate)}`
+
+              item.appendChild(name)
+              item.appendChild(dates)
+              exhibitionsList.appendChild(item)
+            })
+
+            exhibitionsDiv.appendChild(exhibitionsList)
+            popupContent.appendChild(exhibitionsDiv)
+          }
+
+          // Add courses if available
+          if (hasCourses) {
+            const coursesDiv = document.createElement("div")
+            coursesDiv.className = "popup-courses"
+
+            const coursesTitle = document.createElement("h4")
+            coursesTitle.textContent = "Courses"
+            coursesDiv.appendChild(coursesTitle)
+
+            const coursesList = document.createElement("div")
+            coursesList.className = "course-list"
+
+            location.courses.forEach((course) => {
+              const item = document.createElement("div")
+              item.className = "course-item"
+
+              const name = document.createElement("div")
+              name.className = "course-name"
+              name.textContent = course.c_name || course.name
+
+              const dates = document.createElement("div")
+              dates.className = "course-dates"
+              dates.textContent = `${formatDate(course.c_startdate || course.startdate)} - ${formatDate(course.c_enddate || course.enddate)}`
+
+              item.appendChild(name)
+              item.appendChild(dates)
+              coursesList.appendChild(item)
+            })
+
+            coursesDiv.appendChild(coursesList)
+            popupContent.appendChild(coursesDiv)
+          }
+
+          tempMarker.bindPopup(popupContent).openPopup()
+
+          // Remove the temporary marker after some time
+          setTimeout(() => {
+            mapRef.current.removeLayer(tempMarker)
+          }, 10000)
+        }, 1600) // Wait for fly animation to complete
+      }
     }
-  }, [selectedLocationId, filteredLocations])
+  }, [selectedLocationId, filteredLocations, locations])
 
   // Use the custom fitBounds hook
   useFitBounds({
@@ -63,37 +331,37 @@ const MapView = ({
     filteredLocations,
     selectedDistrict,
     selectedMRT,
+    selectedStation,
     selectedLineStations,
-    selectedStation, // Add this
     taipeiDistricts,
     mrtRoutes,
-    activeFilterType, // Add this
+    activeFilterType,
   })
 
   // Base styles
   const routeStyle = {
-    color: '#666666',
+    color: "#666666",
     weight: 3,
     opacity: 0.8,
   }
 
   const selectedStyle = {
-    color: '#ff0000',
+    color: "#ff0000",
     weight: 5,
     opacity: 1,
   }
 
   const hoverStyle = {
-    color: '#0000ff',
+    color: "#0000ff",
     weight: 5,
     opacity: 1,
   }
 
   const shortestPathStyle = {
-    color: '#00ff00',
+    color: "#00ff00",
     weight: 4,
     opacity: 0.8,
-    dashArray: '5, 10', // Dashed line style
+    dashArray: "5, 10", // Dashed line style
   }
 
   // Format distance helper function
@@ -107,26 +375,26 @@ const MapView = ({
   // Add buffer around routes for easier interaction
   const routeBuffer = {
     weight: 30,
-    color: '#000',
+    color: "#000",
     opacity: 0,
   }
 
   const getLineColor = (lineName) => {
     const colorMap = {
-      淡水信義線: '#e3002c', // Red
-      松山新店線: '#008659', // Green
-      中和新蘆線: '#f8b61c', // Orange
-      板南線: '#0070bd', // Blue
-      文湖線: '#c48c31', // Brown
+      淡水信義線: "#e3002c", // Red
+      松山新店線: "#008659", // Green
+      中和新蘆線: "#f8b61c", // Orange
+      板南線: "#0070bd", // Blue
+      文湖線: "#c48c31", // Brown
     }
-    return colorMap[lineName] || '#666666'
+    return colorMap[lineName] || "#666666"
   }
 
   // Update station styles
   const stationStyle = {
     radius: 6,
-    fillColor: '#ffffff',
-    color: selectedMRT ? getLineColor(selectedMRT) : '#000000',
+    fillColor: "#ffffff",
+    color: selectedMRT ? getLineColor(selectedMRT) : "#000000",
     weight: 2,
     opacity: 1,
     fillOpacity: 1,
@@ -134,8 +402,8 @@ const MapView = ({
 
   const selectedStationStyle = {
     radius: 10,
-    fillColor: getLineColor(selectedMRT) || '#ff7800',
-    color: '#000',
+    fillColor: getLineColor(selectedMRT) || "#ff7800",
+    color: "#000",
     weight: 3,
     opacity: 1,
     fillOpacity: 0.8,
@@ -143,8 +411,8 @@ const MapView = ({
 
   const hoverStationStyle = {
     radius: 8,
-    fillColor: '#ffffff',
-    color: getLineColor(selectedMRT) || '#000000',
+    fillColor: "#ffffff",
+    color: getLineColor(selectedMRT) || "#000000",
     weight: 3,
     opacity: 1,
     fillOpacity: 0.9,
@@ -156,11 +424,11 @@ const MapView = ({
     const isHovered = feature.properties.TNAME === hoveredDistrict
 
     return {
-      color: '#ff7800',
+      color: "#ff7800",
       weight: isSelected || isHovered ? 3 : 1,
       opacity: 0.65,
       fillOpacity: isSelected ? 0.7 : isHovered ? 0.5 : 0.2,
-      fillColor: isSelected ? '#ff7800' : '#ffb380',
+      fillColor: isSelected ? "#ff7800" : "#ffb380",
     }
   }
 
@@ -211,7 +479,7 @@ const MapView = ({
         layer.setStyle(styleRoutes(feature))
       },
       click: () => {
-        console.log('Clicked route:', feature.properties.MRTCODE)
+        console.log("Clicked route:", feature.properties.MRTCODE)
         onRouteClick(feature.properties.MRTCODE)
       },
     })
@@ -224,7 +492,7 @@ const MapView = ({
         setHoveredRoute(null)
       },
       click: () => {
-        console.log('Clicked route:', feature.properties.MRTCODE)
+        console.log("Clicked route:", feature.properties.MRTCODE)
         onRouteClick(feature.properties.MRTCODE)
       },
     })
@@ -235,20 +503,17 @@ const MapView = ({
 
   // Create GeoJSON for stations
   const stationGeoJSON = {
-    type: 'FeatureCollection',
+    type: "FeatureCollection",
     features: selectedLineStations.map((station) => ({
-      type: 'Feature',
+      type: "Feature",
       properties: {
         name: station.name_chinese,
         name_english: station.name_english,
         id: station.station_id,
       },
       geometry: {
-        type: 'Point',
-        coordinates: [
-          station.coordinates.longitude,
-          station.coordinates.latitude,
-        ],
+        type: "Point",
+        coordinates: [station.coordinates.longitude, station.coordinates.latitude],
       },
     })),
   }
@@ -282,7 +547,7 @@ const MapView = ({
       },
       click: (e) => {
         onDistrictClick(feature.properties.TNAME) // 地圖行政區點擊
-        console.log('Clicked district:', feature.properties.TNAME)
+        console.log("Clicked district:", feature.properties.TNAME)
       },
     })
 
@@ -295,7 +560,7 @@ const MapView = ({
     <LayerGroup>
       {mrtRoutes && (
         <GeoJSON
-          key={`routes-${selectedMRT || 'all'}-${hoveredRoute}`}
+          key={`routes-${selectedMRT || "all"}-${hoveredRoute}`}
           data={mrtRoutes}
           style={styleRoutes}
           onEachFeature={onEachRoute}
@@ -308,9 +573,7 @@ const MapView = ({
     <LayerGroup>
       {selectedLineStations && selectedLineStations.length > 0 && (
         <GeoJSON
-          key={`stations-${selectedMRT}-${JSON.stringify(
-            selectedLineStations
-          )}`}
+          key={`stations-${selectedMRT}-${JSON.stringify(selectedLineStations)}`}
           data={stationGeoJSON}
           pointToLayer={(feature, latlng) => {
             const style = getStationStyle(feature.properties.id)
@@ -337,14 +600,12 @@ const MapView = ({
                 }
               },
               click: () => {
-                console.log('Clicked station:', feature.properties.id)
+                console.log("Clicked station:", feature.properties.id)
                 onStationClick(feature.properties.id)
               },
             })
 
-            marker.bindPopup(
-              `${feature.properties.name}<br>${feature.properties.name_english}`
-            )
+            marker.bindPopup(`${feature.properties.name}<br>${feature.properties.name_english}`)
 
             return marker
           }}
@@ -352,6 +613,264 @@ const MapView = ({
       )}
     </LayerGroup>
   )
+
+  // Add this useEffect to forcibly clear markers when activeFilterType changes
+  // Add this right after the existing useEffects at the top of the component
+  useEffect(() => {
+    console.log("Filter type changed to:", activeFilterType)
+    // Immediately clear locations when filter type changes
+    setLocations([])
+
+    // Force re-render of marker components by setting a key
+    const markerLayerEl = document.querySelector(".leaflet-marker-pane")
+    if (markerLayerEl) {
+      // Clear all markers from the DOM
+      while (markerLayerEl.firstChild) {
+        markerLayerEl.removeChild(markerLayerEl.firstChild)
+      }
+    }
+
+    // Also clear popup pane
+    const popupLayerEl = document.querySelector(".leaflet-popup-pane")
+    if (popupLayerEl) {
+      while (popupLayerEl.firstChild) {
+        popupLayerEl.removeChild(popupLayerEl.firstChild)
+      }
+    }
+  }, [activeFilterType])
+
+  // Render exhibition/course markers
+  const renderLocationMarkers = () => {
+    // First check if we should show any markers based on the active filter type
+    if (activeFilterType === "mrt" && !shortestPaths?.features?.length) {
+      console.log("Not showing MRT markers - no paths available")
+      return null
+    }
+
+    if (activeFilterType === "district" && !filteredLocations?.length) {
+      console.log("Not showing district markers - no filtered locations")
+      return null
+    }
+
+    // For MRT filter, only use locations from API
+    // For district filter, only use filteredLocations
+    const locationsToShow =
+      activeFilterType === "mrt" ? locations : activeFilterType === "district" ? filteredLocations : []
+
+    if (!locationsToShow.length) {
+      console.log("No locations to render markers for")
+      return null
+    }
+
+    console.log(`Rendering ${locationsToShow.length} markers for ${activeFilterType} filter`)
+
+    return (
+      <MarkerClusterGroup
+        key={`locations-${activeFilterType}-${locationsToShow.length}-${selectedLocationId}`}
+        chunkedLoading
+        maxClusterRadius={60}
+        spiderfyOnMaxZoom={true}
+        polygonOptions={{
+          fillColor: "#ff7800",
+          color: "#ff7800",
+          weight: 0.5,
+          opacity: 1,
+          fillOpacity: 0.2,
+        }}
+      >
+        {locationsToShow.map((loc, index) => {
+          // Added index to map function
+          if (loc.latitude && loc.longitude) {
+            // Determine if it's an exhibition or course
+            const hasExhibitions = loc.exhibitions && loc.exhibitions.length > 0
+            const hasCourses = loc.courses && loc.courses.length > 0
+
+            console.log(`Rendering marker for location ${loc.locat_id} at [${loc.latitude}, ${loc.longitude}]`)
+
+            return (
+              <Marker
+                key={`loc-${loc.locat_id}-${activeFilterType}-${index}`} // Updated key to include index
+                position={[+loc.latitude, +loc.longitude]}
+                icon={
+                  hasExhibitions
+                    ? exhibitionIcon
+                    : hasCourses
+                      ? courseIcon
+                      : L.divIcon({
+                          className: "custom-marker",
+                          html: `<div class="marker-pin"></div>`,
+                          iconSize: [30, 30],
+                          iconAnchor: [15, 30],
+                        })
+                }
+                eventHandlers={{
+                  // Add a click handler to update selectedLocationId
+                  click: () => {
+                    console.log(`Marker clicked for location: ${loc.locat_id}`)
+                  },
+                  // Add this to help with finding markers
+                  add: (e) => {
+                    // Store reference to this marker with its location ID
+                    e.target.options.locationId = loc.locat_id
+                    e.target.options.position = [+loc.latitude, +loc.longitude]
+                  },
+                }}
+              >
+                <Popup className="location-popup">
+                  <div className="popup-content">
+                    {/* New structure for popup content */}
+                    {/* <h3 className="popup-title-type">
+                      {hasExhibitions ? "Exhibition" : hasCourses ? "Course" : "Location"}
+                    </h3> */}
+
+                    {/* Display name if it exists */}
+                    {loc.name && <div className="popup-name">{loc.name}</div>}
+
+                    {/* Display dates if they exist */}
+                    {loc.startdate && loc.enddate && (
+                      <div className="popup-dates">
+                        {formatDate(loc.startdate)} - {formatDate(loc.enddate)}
+                      </div>
+                    )}
+
+                    {/* Display location name */}
+                    <div className="popup-location-name">{loc.locat_name}</div>
+
+                    {/* Display address */}
+                    <div className="popup-address">{loc.address}</div>
+
+                    {/* Show exhibitions if available */}
+                    {hasExhibitions && (
+                      <div className="popup-exhibitions">
+                        <h4>Exhibitions</h4>
+                        <div className="exhibition-list">
+                          {loc.exhibitions.map((exhibition, idx) => (
+                            <div key={exhibition.e_id || exhibition.id || idx} className="exhibition-item">
+                              <div className="exhibition-name">{exhibition.e_name || exhibition.name}</div>
+                              <div className="exhibition-dates">
+                                {formatDate(exhibition.e_startdate || exhibition.startdate)} -{" "}
+                                {formatDate(exhibition.e_enddate || exhibition.enddate)}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Show courses if available */}
+                    {hasCourses && (
+                      <div className="popup-courses">
+                        <h4>Courses</h4>
+                        <div className="course-list">
+                          {loc.courses.map((course, idx) => (
+                            <div key={course.c_id || course.id || idx} className="course-item">
+                              <div className="course-name">{course.c_name || course.name}</div>
+                              <div className="course-dates">
+                                {formatDate(course.c_startdate || course.startdate)} -{" "}
+                                {formatDate(course.c_enddate || course.enddate)}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </Popup>
+              </Marker>
+            )
+          }
+          return null
+        })}
+      </MarkerClusterGroup>
+    )
+  }
+
+  // Add renderPathEndMarkers function to display numbered markers at path endpoints
+  // This helps with visibility when clicking on path cards
+  const renderPathEndMarkers = () => {
+    if (!shortestPaths?.features?.length) return null
+
+    // Only show path end markers for MRT filter type
+    if (activeFilterType !== "mrt") return null
+
+    return (
+      <LayerGroup>
+        {shortestPaths.features.map((path, index) => {
+          if (!path.geometry?.coordinates?.[0]?.length) return null
+
+          const coords = path.geometry.coordinates[0]
+          const lastCoord = coords[coords.length - 1]
+
+          if (!lastCoord || lastCoord.length < 2) return null
+
+          const position = [lastCoord[1], lastCoord[0]]
+          const locatId = path.properties.end_name
+
+          // Find location details if available
+          const locationDetails = locations.find((loc) => loc.locat_id.toString() === locatId.toString())
+
+          return (
+            <Marker
+              key={`path-end-${index}-${locatId}`}
+              position={position}
+              icon={L.divIcon({
+                className: "path-end-marker",
+                html: `<div class="path-end-pin">${index + 1}</div>`,
+                iconSize: [24, 24],
+                iconAnchor: [12, 12],
+              })}
+            >
+              <Popup>
+                <div>
+                  <strong>Location ID:</strong> {locatId}
+                  <br />
+                  <strong>Distance:</strong> {formatDistance(path.properties.distance)}
+                  {locationDetails && (
+                    <>
+                      <br />
+                      <strong>Name:</strong> {locationDetails.locat_name}
+                      <br />
+                      <strong>Address:</strong> {locationDetails.address}
+                    </>
+                  )}
+                </div>
+              </Popup>
+            </Marker>
+          )
+        })}
+      </LayerGroup>
+    )
+  }
+
+  // Render shortest paths only when appropriate
+  const renderShortestPaths = () => {
+    if (!shortestPaths?.features?.length) return null
+
+    // Only show shortest paths for MRT filter type
+    if (activeFilterType !== "mrt") return null
+
+    return (
+      <LayerGroup>
+        {shortestPaths.features.map((path, index) => (
+          <LayerGroup key={`path-${index}`}>
+            <GeoJSON
+              data={path}
+              style={shortestPathStyle}
+              onEachFeature={(feature, layer) => {
+                const distance = formatDistance(feature.properties.distance)
+                layer.bindPopup(`
+                  <div>
+                    <strong>End Location:</strong> ${feature.properties.end_name}<br/>
+                    <strong>Distance:</strong> ${distance}
+                  </div>
+                `)
+              }}
+            />
+          </LayerGroup>
+        ))}
+      </LayerGroup>
+    )
+  }
 
   return (
     <div className="map-view">
@@ -381,31 +900,20 @@ const MapView = ({
           </LayersControl.BaseLayer>
 
           {/* MRT layers - only visible when activeFilterType is "mrt" */}
-          <LayersControl.Overlay
-            checked={activeFilterType === 'mrt'}
-            name="MRT Lines"
-          >
+          <LayersControl.Overlay checked={activeFilterType === "mrt"} name="MRT Lines">
             {renderRoutes()}
           </LayersControl.Overlay>
 
-          <LayersControl.Overlay
-            checked={activeFilterType === 'mrt'}
-            name="MRT Stations"
-          >
+          <LayersControl.Overlay checked={activeFilterType === "mrt"} name="MRT Stations">
             {renderStations()}
           </LayersControl.Overlay>
 
           {/* District layer - only visible when activeFilterType is "district" */}
-          <LayersControl.Overlay
-            checked={activeFilterType === 'district'}
-            name="Taipei Districts"
-          >
+          <LayersControl.Overlay checked={activeFilterType === "district"} name="Taipei Districts">
             <LayerGroup>
               {taipeiDistricts && (
                 <GeoJSON
-                  key={`districts-${
-                    selectedDistrict || 'all'
-                  }-${hoveredDistrict}`}
+                  key={`districts-${selectedDistrict || "all"}-${hoveredDistrict}`}
                   data={taipeiDistricts}
                   style={districtStyle}
                   onEachFeature={onEachDistrict}
@@ -415,95 +923,18 @@ const MapView = ({
           </LayersControl.Overlay>
 
           {/* Filtered Locations overlay to match the database fields */}
-          <LayersControl.Overlay checked name="Filtered Locations">
-            <MarkerClusterGroup
-              key={`${selectedDistrict}-${selectedStation}`} // ✅ 依行政區和捷運站變化強制重建
-              chunkedLoading
-              maxClusterRadius={60}
-              spiderfyOnMaxZoom={true}
-              polygonOptions={{
-                fillColor: '#ff7800',
-                color: '#ff7800',
-                weight: 0.5,
-                opacity: 1,
-                fillOpacity: 0.2,
-              }}
-            >
-              {Array.isArray(filteredLocations) &&
-                filteredLocations.map((loc) => {
-                  if (loc.latitude && loc.longitude) {
-                    return (
-                      <Marker
-                        key={loc.id}
-                        position={[+loc.latitude, +loc.longitude]}
-                        icon={L.divIcon({
-                          className: 'custom-marker',
-                          html: `<div class="marker-pin"></div>`,
-                          iconSize: [30, 30],
-                          iconAnchor: [15, 30],
-                        })}
-                      >
-                        <Popup>
-                          <div className="space-y-1">
-                            <p>
-                              <b>ID: {loc.locat_id}</b>
-                            </p>
-                            <p>
-                              <b>{loc.locat_name}</b>
-                            </p>
-                            <p>{loc.district}</p>
-                            <p>{loc.address}</p>
-                          </div>
-                        </Popup>
-                      </Marker>
-                    )
-                  }
-                  return null
-                })}
-            </MarkerClusterGroup>
+          <LayersControl.Overlay checked name="Locations">
+            {renderLocationMarkers()}
           </LayersControl.Overlay>
 
+          {/* Add the Path Endpoints layer to the LayersControl */}
+          <LayersControl.Overlay checked name="Path Endpoints">
+            {renderPathEndMarkers()}
+          </LayersControl.Overlay>
+
+          {/* Shortest Paths */}
           <LayersControl.Overlay checked name="Shortest Paths">
-            <LayerGroup>
-              {shortestPaths?.features?.map((path, index) => (
-                <LayerGroup key={`path-${index}`}>
-                  <GeoJSON
-                    data={path}
-                    style={shortestPathStyle}
-                    onEachFeature={(feature, layer) => {
-                      const distance = formatDistance(
-                        feature.properties.distance
-                      )
-                      layer.bindPopup(`
-                        <div>
-                          <strong>End Location:</strong> ${feature.properties.end_name}<br/>
-                          <strong>Distance:</strong> ${distance}
-                        </div>
-                      `)
-                    }}
-                  />
-                  <Marker
-                    position={[
-                      path.geometry.coordinates[0][
-                        path.geometry.coordinates[0].length - 1
-                      ][1],
-                      path.geometry.coordinates[0][
-                        path.geometry.coordinates[0].length - 1
-                      ][0],
-                    ]}
-                  >
-                    <Popup>
-                      <div>
-                        <strong>Location ID:</strong> {path.properties.end_name}
-                        <br />
-                        <strong>Distance:</strong>{' '}
-                        {formatDistance(path.properties.distance)}
-                      </div>
-                    </Popup>
-                  </Marker>
-                </LayerGroup>
-              ))}
-            </LayerGroup>
+            {renderShortestPaths()}
           </LayersControl.Overlay>
         </LayersControl>
       </MapContainer>
@@ -512,3 +943,4 @@ const MapView = ({
 }
 
 export default MapView
+
