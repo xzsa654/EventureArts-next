@@ -27,10 +27,14 @@ import './product.css';
 
 // 引入路由
 import { PRODUCT } from '@/lib/course-api';
+import { useRouter } from 'next/navigation';  //跳轉訂單頁面用
+
 
 export default function Product() {
 
-// ------ 動態路由設置 START ------
+  const router = useRouter()   //跳轉訂單頁面用
+
+  // ------ 動態路由設置 START ------
   const [courseData, setCourseData] = useState({
 
   });
@@ -116,8 +120,8 @@ console.log(courseData)
           <Button radius="none" className="bg-[#f7f5f1] text-black text-[15px] w-[200px] h-[50px] border-black border-2">LIKE<GoHeart />
           </Button>
 
-      {/* NEXT link 到訂單頁面 */}
-          <Button radius="none" className="bg-[#000000] text-white text-[15px] w-[200px] h-[50px]">BUY<BsArrowRight />
+      {/* onPress 跳轉到訂單頁面 */}
+          <Button radius="none" className="bg-[#000000] text-white text-[15px] w-[200px] h-[50px]"  onPress={() => router.push(`/order?c_id=${c_id}`)} >BUY<BsArrowRight />
           </Button>
         </div>
 
