@@ -26,7 +26,7 @@ function ArtistCard({ artist, effectStyle = "invert" }) {
       transition={{ duration: 0.6 }}
       className="group"
     >
-      <Link href={`/artist/${artist.bd_id}`}>
+      <Link href={`/brandsinfo/${artist.bd_id}`}>
         <div className={`relative w-[265px] h-[265px] overflow-hidden bg-white ${hoverEffects[effectStyle]}`}>
           <Image
             src={artist.bd_logo ? `${IMAGE_BASE_URL}/${artist.bd_logo}` : "/placeholder.svg"}

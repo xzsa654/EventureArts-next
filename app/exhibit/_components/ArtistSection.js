@@ -73,9 +73,9 @@ export default function ArtistSection() {
   let artists = data?.success ? data.data : []
 
   if (artists.length) {
-    const fixedArtists = [53, 54, 55, 52, 51].map(
-      (id) => artists.find((artist) => artist.bd_id === id)
-    ).filter(Boolean)
+    const fixedArtists = [53, 54, 55, 52, 51]
+      .map((id) => artists.find((artist) => artist.bd_id === id))
+      .filter(Boolean)
 
     const randomPool = artists.filter(
       (artist) => artist.bd_id >= 56 && artist.bd_id <= 75
@@ -148,7 +148,9 @@ export default function ArtistSection() {
 
       <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide">
         {artists.map((artist, index) => (
-          <ArtistCard key={artist.bd_id} artist={artist} index={index} />
+          <Link href={`/brandsinfo/${artist.bd_id}`} key={artist.bd_id}>
+            <ArtistCard artist={artist} index={index} />
+          </Link>
         ))}
       </div>
     </section>
