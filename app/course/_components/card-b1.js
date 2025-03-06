@@ -8,9 +8,9 @@ export default function CardB1() {
 
   const brands = [
     {
-      blogo: "https://i.pinimg.com/736x/22/43/57/224357b86d5a65947d00db2388299fdb.jpg",
-      bname: "Art Gallery",
-      binfo: "提供當代藝術作品展示與互動展覽，探索藝術的無限可能性。"
+      blogo: "/blair/brand-logo/partner-brand.png",
+      bname: "Partner Brand",
+      binfo: "合作品牌"
     },
     {
       blogo: "https://i.pinimg.com/736x/f4/65/30/f4653008b576255456f94886aa91c39b.jpg",

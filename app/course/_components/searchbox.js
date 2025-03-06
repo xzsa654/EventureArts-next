@@ -45,16 +45,6 @@ export default function Searchbox() {
             ))}</Select>
             </div>
 
-            {/* SelectDate 選擇日期 */}
-            <div className="SelectDate w-[330px] px-4">
-            <DateRangePicker
-                className=""
-                label="日期區間"
-                variant="underlined"
-                radius="none"
-            />
-            </div>
-
             {/* Keywords 關鍵字搜索 */}
             <div className="Keywords w-[330px] px-4">
             <Input 

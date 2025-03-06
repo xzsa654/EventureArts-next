@@ -1,71 +1,67 @@
 'use client'
 
 import React from 'react'
+import Link from 'next/link'
 
 const links = [
   {
-    src: "Blair/links/flower.png",
+    src: "Blair/links/plant.png",
     text: "花藝植栽",
-    href: "https://google.com.tw",
+    href: "/course/explore?cate=1",
   },
   {
-    src: "Blair/links/r4.png",
+    src: "Blair/links/needlethreads.png",
     text: "縫紉布藝",
-    href: "#",
+    href: "/course/explore?cate=2",
   },
   {
-    src: "Blair/links/r3.png",
+    src: "Blair/links/crystal.png",
     text: "身心靈",
-    href: "#",
+    href: "/course/explore?cate=3",
   },
   {
     src: "Blair/links/piano.png",
     text: "音樂舞蹈",
-    href: "#",
+    href: "/course/explore?cate=4",
   },
   {
-    src: "Blair/links/r7.png",
+    src: "Blair/links/mokapot.png",
     text: "食尚飲品",
-    href: "#",
+    href: "/course/explore?cate=5",
   },
   {
-    src: "Blair/links/r2.png",
+    src: "Blair/links/book.png",
     text: "講座分享",
-    href: "#",
+    href: "/course/explore?cate=6",
   },
   {
-    src: "Blair/links/outdoor.png",
-    text: "戶外踏青",
-    href: "#",
+    src: "Blair/links/paint.png",
+    text: "藝術繪畫",
+    href: "/course/explore?cate=7",
   },
   {
-    src: "Blair/links/r6.png",
+    src: "Blair/links/dumbbell.png",
     text: "運動健身",
-    href: "#",
+    href: "/course/explore?cate=8",
   }
 ]
 
 const LinkList = () => {
-    return (
-      // 整條Quick-links
-      <div className="LinkArea flex flex-wrap justify-evenly text-center my-4">
-        {links.map((link, index) => (
-
-          // 整個含連結的分類框：icon + text
-          <a key={index} href={link.href} className="w-[100px] h-[100px]">
+  return (
+    <div className="LinkArea flex flex-wrap justify-evenly text-center my-4">
+      {links.map((link, index) => (
+        <Link key={index} href={link.href}>
+          <div className="w-[120px] h-[120px] cursor-pointer"> {/* 這裡加了 cursor-pointer */}
             <div className="linkbox flex justify-end items-center flex-col w-full h-full gap-8">
-
-              {/* icon */}
               <img src={link.src} className="w-[70%] h-[70%]" alt={`icon-${index}`} />
-              {/* text */}
               <p>{link.text}</p>
-
             </div>
-          </a>
-        ))}
-      </div>
-    );
-  };
+          </div>
+        </Link>
+      ))}
+    </div>
+  );
+};
 
 export default function QuickLinks() {
   return <LinkList />;

@@ -5,11 +5,11 @@ import React, { useState, useEffect } from 'react'
 
 // 引入專案組件
 import BtnCTA from '../../_components/btnCTA'
-import GoogleMap from '../../_components/map2';
+// import GoogleMap from '../../_components/map-googlemap';
+import Map from '../../_components/map-leaflet';
 
 // 引入react / Next組件
 import {Button} from "@heroui/react";
-import Link from 'next/link';
 
 // 引入React icon
 import { PiTicketDuotone } from "react-icons/pi";
@@ -27,11 +27,17 @@ import './product.css';
 
 // 引入路由
 import { PRODUCT } from '@/lib/course-api';
+import { useRouter } from 'next/navigation';  //跳轉訂單頁面用
 
-export default function Product(props) {
 
-// ------ 動態路由設置 START ------
-  const [courseData, setCourseData] = useState(null);
+export default function Product() {
+
+  const router = useRouter()   //跳轉訂單頁面用
+
+  // ------ 動態路由設置 START ------
+  const [courseData, setCourseData] = useState({
+
+  });
   const params = useParams();
   const { c_id } = params; // 獲取動態路由參數 c_id
 // ------ 動態路由設置 END ------
@@ -49,14 +55,23 @@ export default function Product(props) {
         .then((response) => response.json())  //箱子
         .then((data) => {   //包裝紙：解析箱子（後台送來的物件們）  
           console.log("API回應:", data);
-          setCourseData(data[0]);
+          if(data.length){
+            setCourseData(data[0]);
+          }
+          
         })
         .catch((error) => console.error("fetch課程資料失敗:", error));
     }
   }, [c_id]);
 
   if (!courseData) return <p>Loading...</p>; // 等待 API 回應
+
+console.log(courseData)
+
 // ------ 串接資料庫 END------
+
+  // 📊 數據測試
+  // return <pre>{JSON.stringify(courseData, null, 4)}</pre>;
 
   return (
     <>
@@ -73,7 +88,7 @@ export default function Product(props) {
   {/* PInfo 課程圖片+資訊 */}
       <div className="PInfo flex">
         <div className="PInfoImg w-[800px] h-[400px]">
-          <img className="w-full h-full object-cover" src="https://images.agriharvest.tw/wp-content/uploads/2022/01/0-24-1024x708.jpg" />
+          <img className="w-full h-full object-cover" src={courseData?.cover_image} />
         </div>
         
         <div className="PInfoContent flex flex-col justify-between">
@@ -105,11 +120,9 @@ export default function Product(props) {
           <Button radius="none" className="bg-[#f7f5f1] text-black text-[15px] w-[200px] h-[50px] border-black border-2">LIKE<GoHeart />
           </Button>
 
-      {/* NEXT link 到訂單頁面 */}
-        <Link href="/order">
-          <Button radius="none" className="bg-[#000000] text-white text-[15px] w-[200px] h-[50px]">BUY<BsArrowRight />
+      {/* onPress 跳轉到訂單頁面 */}
+          <Button radius="none" className="bg-[#000000] text-white text-[15px] w-[200px] h-[50px]"  onPress={() => router.push(`/order?c_id=${c_id}`)} >BUY<BsArrowRight />
           </Button>
-        </Link>
         </div>
 
           </div>
@@ -148,12 +161,19 @@ export default function Product(props) {
     </div>
 
 
-{/* ------ Section4: 場地、聯絡方式 ------ */}
+{/* ------ Section4: 場地、聯絡方式 (leaflet地圖) ------ */}
     <div className="section4 flex flex-row gap-4">
       <div className="Locate flex flex-col gap-4 w-1/2">
         <p className="subtitle">課程地點｜Location</p>
         <div className="map500x400"></div>
-        <GoogleMap address={courseData?.address}/>
+        {/* <GoogleMap address={courseData?.address}/> */}
+        <Map 
+        longitude={courseData?.longitude} 
+        latitude={courseData?.latitude}
+        locat_name={courseData?.locat_name}
+        address={courseData?.address}
+         />
+        
       </div>
 
       <div className="Contact flex flex-col gap-4 w-1/2">

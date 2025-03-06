@@ -1,25 +1,16 @@
 // 這是event頁面
-
 'use client'
 
-import React, { useEffect, useState } from 'react'
-import BtnCTA from '../course/_components/btnCTA'
-import CardB1 from '../course/_components/card-b1'
-import {
-  Accordion as HerouiAccordion,
-  AccordionItem as HerouiAccordionItem,
-} from '@heroui/accordion'
-import Compareimg from '../course/_components/compareimg'
-import ReactPageScroller from 'react-page-scroller'
-import './event.css'
-import { useDisclosure } from '@heroui/react'
+import React, { useState } from 'react';
+import BtnCTA from '../course/_components/btnCTA';
+import CardB1 from '../course/_components/card-b1';
+import ReactCompareImage from 'react-compare-image';
+import ReactPageScroller from 'react-page-scroller';
+import UploadProcess from './_components/upload-process';
+import AccordionQa from './_components/accordion-qa';
+import Special from './_components/special';
 
-// 引用React icon
-import { FaPeopleRobbery } from 'react-icons/fa6'
-import { RiStore2Fill } from 'react-icons/ri'
-import { FaUsers } from 'react-icons/fa'
-import { GiPartyFlags } from 'react-icons/gi'
-import JoinUsModal from '../user/_components/b_player/join-us-modal'
+
 // 引用樣式表
 import './event.css'
 
@@ -30,11 +21,6 @@ export default function Event(props) {
     setCurrentPage(number)
   }
   const { isOpen, onOpenChange } = useDisclosure()
-
-  // Q&A 預設內容
-  const defaultContent = (
-    <p>這是預設內容，您可以在這裡提供問題解答或其他資訊。</p>
-  )
 
   return (
     <div className="whole h-screen w-screen">
@@ -66,158 +52,47 @@ export default function Event(props) {
           </div>
 
           {/* 1.2 平台四特點 */}
-          <div className="flex flex-row w-full justify-evenly items-center h-3/5">
-            <div className="Special h-[70%] flex flex-col items-center">
-              <div className="py-12">
-                <RiStore2Fill size={40} color="#000000" />
-              </div>
-              <div className="2title gap-2 flex flex-col text-center justify-between">
-                <p className="title">超過100家合作品牌</p>
-                <p className="subtitle h-[50%]">
-                  包含多家跨國品牌、中小企業主與個人創作者等。
-                </p>
-              </div>
-            </div>
-
-            <div className="Special h-[70%] flex flex-col items-center">
-              <div className="py-12">
-                <GiPartyFlags size={40} color="#000000" />
-              </div>
-              <div className="2title gap-2 flex flex-col text-center justify-between">
-                <p className="title">展覽+課程</p>
-                <p className="subtitle h-[50%]">雙重活動，一次搞定！</p>
-              </div>
-            </div>
-
-            <div className="Special h-[70%] flex flex-col items-center">
-              <div className="py-12">
-                <FaUsers size={40} color="#000000" />
-              </div>
-              <div className="2title gap-2 flex flex-col text-center justify-between">
-                <p className="title">會員數超過2萬</p>
-                <p className="subtitle h-[50%]">
-                  新會員持續增長，精準分眾推播，提升網站活躍度。
-                </p>
-              </div>
-            </div>
-
-            <div className="Special h-[70%] flex flex-col items-center">
-              <div className="py-12">
-                <FaPeopleRobbery size={40} color="#000000" />
-              </div>
-              <div className="2title gap-2 flex flex-col text-center justify-between">
-                <p className="title">主力消費客層</p>
-                <p className="subtitle h-[50%]">
-                  聚集高收入、高學習力、重視生活風格的活動愛好者。
-                </p>
-              </div>
-            </div>
+          <div className="flex flex-wrap w-full justify-around items-center h-3/5 overflow-auto">
+            <Special />
           </div>
         </div>
 
         {/* 2. 合作品牌 */}
-        <div className="section2 h-screen px-40 bg-[#3c3c3c] bg-opacity-60">
-          <div className="sectionTitle text-white">
-            <p>合作品牌</p>
-          </div>
+        <div className="section2 h-screen px-40 py-8 bg-[#3c3c3c] bg-opacity-60">
           <CardB1 />
         </div>
 
+
         {/* 3. 前後對照圖 */}
-        <div className="h-screen">
-          <Compareimg />
+        <div className="h-screen w-full flex flex-col items-center">
+          <div className="sectionTitle text-black text-center my-8">
+            <p>人氣，就是品牌的影響力— 讓您的空間轉化為熱鬧商機。</p>
+          </div>
+          <div className="compareimg flex justify-center items-center max-w-[60%] w-full">
+            <ReactCompareImage 
+              leftImage="/Blair/event/FlowerShop-before.png" 
+              rightImage="/Blair/event/FlowerShop-after2.png" 
+              style={{ width: '100%' }}
+            />
+          </div>
         </div>
+
 
         {/* 4. 上架流程 */}
         <div className="section3 h-screen w-full flex flex-col px-16">
-          <div className="sectionTitle">
-            <p>上架流程</p>
+          <div className="text h-[20%] flex justify-center items-center">
+            <p className="text-center t-16 text-gray-800">上架流程</p>
           </div>
-
-          <div className="4steps flex flex-wrap justify-around items-center h-[80%]">
-            <div>
-              <img src="https://fakeimg.pl/250x500/" alt="上架流程示意圖" />
-            </div>
-            <div>
-              <img src="https://fakeimg.pl/250x500/" alt="上架流程示意圖" />
-            </div>
-            <div>
-              <img src="https://fakeimg.pl/250x500/" alt="上架流程示意圖" />
-            </div>
-            <div>
-              <img src="https://fakeimg.pl/250x500/" alt="上架流程示意圖" />
-            </div>
+          <div className="4steps flex flex-wrap justify-around  h-[70%] overflow-auto">
+            <UploadProcess />
           </div>
         </div>
 
         {/* 5. 常見問題 */}
-        <div className="section4 h-screen flex flex-col justify-center px-16">
-          <div className="sectionTitle">
-            <p>常見問題</p>
-          </div>
-          <div className="accordion h-[80%] w-full">
-            <HerouiAccordion variant="light" defaultExpandedKeys={['1']}>
-              <HerouiAccordionItem
-                key="1"
-                className="pb-4"
-                aria-label="問題1"
-                title={
-                  <span className="why">
-                    為什麼要將我的品牌加入EventureArts?
-                  </span>
-                }
-              >
-                {defaultContent}
-              </HerouiAccordionItem>
-              <HerouiAccordionItem
-                key="2"
-                className="pb-4"
-                aria-label="問題2"
-                title={<span className="why">如何加入EventureArts？</span>}
-              >
-                {defaultContent}
-              </HerouiAccordionItem>
-              <HerouiAccordionItem
-                key="3"
-                className="pb-4"
-                aria-label="問題3"
-                title={<span className="why">如何加入EventureArts？</span>}
-              >
-                {defaultContent}
-              </HerouiAccordionItem>
-              <HerouiAccordionItem
-                key="4"
-                className="pb-4"
-                aria-label="問題4"
-                title={
-                  <span className="why">
-                    如何在EventureArts上架課程或展覽？
-                  </span>
-                }
-              >
-                {defaultContent}
-              </HerouiAccordionItem>
-              <HerouiAccordionItem
-                key="5"
-                className="pb-4"
-                aria-label="問題5"
-                title={<span className="why">如何選擇場地？</span>}
-              >
-                {defaultContent}
-              </HerouiAccordionItem>
-              <HerouiAccordionItem
-                key="6"
-                className="pb-4"
-                aria-label="問題6"
-                title={
-                  <span className="why">
-                    如何核銷用戶購買的課程或展覽票券？
-                  </span>
-                }
-              >
-                {defaultContent}
-              </HerouiAccordionItem>
-            </HerouiAccordion>
+        <div className="section4 h-screen flex flex-col justify-center px-32 mt-5">
+        <p className="text-center t-16 text-gray-800">常見問題</p>
+          <div className="accordion w-full overflow-y-auto max-h-[calc(100vh-100px)] ">
+            <AccordionQa />
           </div>
         </div>
       </ReactPageScroller>

@@ -60,7 +60,7 @@ export default function TicketPageTicketFront({ ticketData }) {
               <dl className=" self-stretch justify-start items-start gap-1 inline-flex basis-0">
                 <dd className="w-[68px] text-primary-300">票價</dd>
                 <dt className="  text-black break-words text-wrap w-[200px] break-after-auto">
-                  $ {ticketData.event_price} NTD
+                  $ {ticketData.trade_amt} NTD
                 </dt>
               </dl>
             </div>
