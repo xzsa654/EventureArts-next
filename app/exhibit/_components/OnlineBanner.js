@@ -2,8 +2,14 @@
 
 import { useRef } from "react"
 import { motion, useScroll, useTransform, useInView } from "framer-motion"
-import DecryptedText from "./DecryptedText"
-import GridDistortion from "./GridDistortion"
+import dynamic from "next/dynamic"
+import Link from "next/link"
+
+// import DecryptedText from "./DecryptedText"
+// import GridDistortion from "./GridDistortion"
+
+const DecryptedText = dynamic(() => import("./DecryptedText"), { ssr: false })
+const GridDistortion = dynamic(() => import("./GridDistortion"), { ssr: false })
 
 const OnlineBanner = () => {
   const containerRef = useRef(null)
@@ -73,6 +79,8 @@ const OnlineBanner = () => {
             />
           </motion.h3>
 
+          {/* Button */}
+          <Link href="/exhibit/online">
           <motion.button
             className="bg-white/10 backdrop-blur-sm text-white border border-white/20 font-normal 
                      py-4 px-10 rounded-full text-lg tracking-wide hover:bg-white/20 
@@ -93,6 +101,7 @@ const OnlineBanner = () => {
               animateOn="hover"
             />
           </motion.button>
+          </Link>
         </div>
       </div>
     </motion.div>

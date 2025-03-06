@@ -1,4 +1,4 @@
-.map-view {
+/* .map-view {
   flex-grow: 1;
   position: relative;
   width: 100%;
@@ -14,13 +14,176 @@
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
 }
 
-/* add FilterResults style */
+
 html, body {
   margin: 0;
   padding: 0;
   height: 100%;
-  overflow: hidden; /* 防止額外滾動 */
+  overflow: hidden; 
+} */
+.map-view {
+  width: 100%;
+  height: 100%;
 }
+
+.map-container {
+  width: 100%;
+  height: 100%;
+}
+
+/* Custom marker styles */
+.custom-marker {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.marker-pin {
+  width: 20px;
+  height: 20px;
+  border-radius: 50% 50% 50% 0;
+  background: #c30b82;
+  position: absolute;
+  transform: rotate(-45deg);
+  left: 50%;
+  top: 50%;
+  margin: -15px 0 0 -15px;
+  box-shadow: 0 0 0 2px white;
+}
+
+.marker-pin::after {
+  content: "";
+  width: 10px;
+  height: 10px;
+  margin: 5px 0 0 5px;
+  background: white;
+  position: absolute;
+  border-radius: 50%;
+}
+
+/* Exhibition marker */
+.exhibition-pin {
+  background: #e91e63; /* Pink for exhibitions */
+}
+
+/* Course marker */
+.course-pin {
+  background: #2196f3; /* Blue for courses */
+}
+
+/* Path end marker */
+.path-end-pin {
+  width: 24px;
+  height: 24px;
+  background: #4caf50;
+  border-radius: 50%;
+  color: white;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 0 2px white;
+}
+
+/* Popup styles */
+.location-popup .leaflet-popup-content {
+  min-width: 240px;
+  max-width: 300px;
+}
+
+.popup-content {
+  padding: 8px;
+}
+
+/* New popup structure styles */
+.popup-title-type {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #333;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 4px;
+}
+
+.popup-name {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 8px 0 4px;
+  color: #333;
+  line-height: 1.3;
+}
+
+.popup-dates {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.popup-location-name {
+  font-size: 14px;
+  font-weight: 500;
+  margin: 8px 0 4px;
+  color: #444;
+}
+
+.popup-address {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 12px;
+}
+
+.popup-exhibitions h4,
+.popup-courses h4 {
+  font-size: 14px;
+  font-weight: bold;
+  margin: 12px 0 8px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #eee;
+  color: #e91e63;
+}
+
+.popup-courses h4 {
+  color: #2196f3;
+}
+
+.exhibition-list,
+.course-list {
+  max-height: 200px;
+  overflow-y: auto;
+  margin-bottom: 8px;
+}
+
+.exhibition-item,
+.course-item {
+  padding: 6px 0;
+  border-bottom: 1px dotted #eee;
+}
+
+.exhibition-name,
+.course-name {
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.exhibition-dates,
+.course-dates {
+  font-size: 11px;
+  color: #666;
+  margin-top: 2px;
+}
+
+/* Update path card hover effect */
+.path-card:hover {
+  background-color: #f9fafb;
+  border-color: #d1d5db;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+
+
+
 
 
 /* 

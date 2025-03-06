@@ -227,4 +227,22 @@
   border-radius: 8px;
   margin-top: 1rem;
 }
+/* New styles for exhibition items */
+.exhibition-item {
+  padding-bottom: 8px;
+  transition: all 0.2s;
+}
+
+.exhibition-item:hover {
+  background-color: #f9fafb;
+}
+
+.exhibition-name {
+  line-height: 1.2;
+  margin-bottom: 2px;
+}
+
+.exhibition-dates {
+  color: #6b7280;
+}
 
