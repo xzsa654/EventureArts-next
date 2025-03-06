@@ -19,16 +19,16 @@ export default function UserLayout({ children }) {
   const pathName = usePathname().split('/user')[1]
   const [loading, setLoading] = useState(!auth.token)
 
-  // 改背景顏色
-  useEffect(() => {
-    // 進入頁面時修改背景顏色
-    document.body.style.backgroundColor = '#f7f5f1'
+  // // 改背景顏色
+  // useEffect(() => {
+  //   // 進入頁面時修改背景顏色
+  //   document.body.style.backgroundColor = '#f7f5f1'
 
-    // 離開頁面時恢復原本顏色
-    return () => {
-      document.body.style.backgroundColor = ''
-    }
-  }, [])
+  //   // 離開頁面時恢復原本顏色
+  //   return () => {
+  //     document.body.style.backgroundColor = ''
+  //   }
+  // }, [])
 
   // onload 还没载完前的 loading
   useEffect(() => {
