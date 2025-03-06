@@ -33,7 +33,7 @@ function ArtistCard({ artist, index }) {
       transition={{ duration: 0.6 }}
       className="group shrink-0"
     >
-      <Link href={`/artists/${artist.bd_id}`}>
+      <Link href={`/brandsinfo/${artist.bd_id}`}>
         <div
           className={`relative w-[265px] h-[265px] overflow-hidden bg-white ${hoverEffects[effectStyle]}`}
         >
@@ -148,9 +148,7 @@ export default function ArtistSection() {
 
       <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide">
         {artists.map((artist, index) => (
-          <Link href={`/brandsinfo/${artist.bd_id}`} key={artist.bd_id}>
-            <ArtistCard artist={artist} index={index} />
-          </Link>
+          <ArtistCard key={artist.bd_id} artist={artist} index={index} />
         ))}
       </div>
     </section>
