@@ -63,6 +63,12 @@ export function AuthContextProvider({ children }) {
     if (result.success) {
       setAuth(result.data)
       getSocket()
+      addToast({
+        radius: 'lg',
+        description: '成功登入！',
+        color: 'success',
+        timeout: 10000,
+      })
       setFirstLogin({
         user_email: '',
         mobile: '',
