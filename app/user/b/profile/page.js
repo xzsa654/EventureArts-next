@@ -104,24 +104,24 @@ export default function BPlayerProfile(props) {
               <div className="flex flex-col gap-2">
                 <dl className="text-base flex font-cn justify-between">
                   <dt>品牌名稱：</dt>
-                  <dt>{brand?.bd_name}</dt>
+                  <dd>{brand?.bd_name}</dd>
                 </dl>
 
                 <dl className="text-base flex font-cn justify-between">
                   <dt>電話：</dt>
-                  <dt>{brand?.bd_tel}</dt>
+                  <dd>{brand?.bd_tel}</dd>
                 </dl>
                 <dl className="text-base flex font-cn justify-between">
                   <dt>地址：</dt>
-                  <dt>{brand?.bd_address}</dt>
+                  <dd>{brand?.bd_address}</dd>
                 </dl>
                 <dl className="text-base flex font-cn justify-between">
                   <dt>品牌聯絡信箱：</dt>
-                  <dt>{brand?.bd_email}</dt>
+                  <dd>{brand?.bd_email}</dd>
                 </dl>
                 <dl className="text-base flex font-cn justify-between">
                   <dt>品牌官方網站：</dt>
-                  <dt>{brand?.bd_website}</dt>
+                  <dd>{brand?.bd_website}</dd>
                 </dl>
               </div>
             </div>
