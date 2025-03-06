@@ -52,8 +52,34 @@ function ArtistCard({ artist, effectStyle = "invert" }) {
 
 export default function ArtistsPage() {
   const { data, error, isLoading } = useSWR(API_ENDPOINT, fetcher)
-  const artists = data?.success ? data.data : []
-  const effects = ["invert", "grayscale", "negative", "invert"]
+  // const artists = data?.success ? data.data : []
+  //add order logic
+  let artists = data?.success ? data.data : []
+
+
+  if (artists.length) {
+    // 固定前5位
+    const fixedArtists = [53, 54, 55, 52, 51].map(
+      (id) => artists.find((artist) => artist.bd_id === id)
+    ).filter(Boolean) // 避免有null
+
+    // 56~75之間隨機
+    const randomPool = artists.filter(
+      (artist) => artist.bd_id >= 56 && artist.bd_id <= 75
+    )
+
+    // 隨機打亂
+    for (let i = randomPool.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1))
+      ;[randomPool[i], randomPool[j]] = [randomPool[j], randomPool[i]]
+    }
+
+    // 合併起來，最多22筆
+    artists = [...fixedArtists, ...randomPool].slice(0, 22)
+  }
+
+
+   const effects = ["invert", "grayscale", "negative", "invert"]
 
   if (isLoading) {
     return (
