@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Megrim&family=Noto+Sans+TC&family=Noto+Serif+TC:wght@200..900&family=Unna:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 
-
-body {
+/* body {
     margin: 0;
     margin-top: 80px;
     padding: 0;
@@ -9,60 +8,56 @@ body {
     background-color: #f7f5f1;
     overflow: hidden;
     position: fixed;
-}
-
+} */
 
 .Compare {
-    background-color: rgb(59, 59, 59);
+  background-color: rgb(59, 59, 59);
 }
-
 
 /* ------ 1. 上方CTA banner ------ */
 .urge {
-    background-image: url('/Blair/bg-office.png');
-    background-repeat: no-repeat;
-    background-size: cover; /* 背景圖片填滿容器 */
-    backdrop-filter: blur(10px); /* 設定模糊程度 */
-    -webkit-backdrop-filter: blur(10px); /* Safari 兼容 */
-    position: relative;
-    z-index: 1; /* 確保背景在下層 */
-    font-family: 'Unna', sans-serif;
-  }
-  
-  .urge::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(255, 255, 255, 0.5);
-    z-index: -1; /* 使它在背景圖片下面 */
-  }
-
-
-.title{
-    font-size: 1.5rem;
-    padding: 6px 0px;
+  background-image: url('/Blair/bg-office.png');
+  background-repeat: no-repeat;
+  background-size: cover; /* 背景圖片填滿容器 */
+  backdrop-filter: blur(10px); /* 設定模糊程度 */
+  -webkit-backdrop-filter: blur(10px); /* Safari 兼容 */
+  position: relative;
+  z-index: 1; /* 確保背景在下層 */
+  font-family: 'Unna', sans-serif;
 }
 
-.subtitle{
-    font-size: 1rem;
-    color: rgb(86, 86, 86);
+.urge::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.5);
+  z-index: -1; /* 使它在背景圖片下面 */
 }
 
+.title {
+  font-size: 1.5rem;
+  padding: 6px 0px;
+}
+
+.subtitle {
+  font-size: 1rem;
+  color: rgb(86, 86, 86);
+}
 
 /* 區塊標題列 */
 .sectionTitle p {
-    text-align: center;
-    padding: 1rem 0rem;
+  text-align: center;
+  padding: 1rem 0rem;
 }
 
 .section2 {
-    overflow: hidden;
+  overflow: hidden;
 }
 
 .heroui-accordion-item-title {
-    font-size: 1.5rem; /* 24px */
-    font-weight: bold;
-  }
+  font-size: 1.5rem; /* 24px */
+  font-weight: bold;
+}
