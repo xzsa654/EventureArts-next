@@ -46,7 +46,7 @@ export default function UserLayout({ children }) {
 
   // 获取页面标题
   const getPageTitle = () => {
-    if (pathName.startsWith('/b/profile')) return '#Brand PROFILE'
+    if (pathName.startsWith('/b/profile')) return '#MY BRAND'
     if (pathName.startsWith('/b/ex-mang')) return '#EXHIBIT MANG.'
     if (pathName.startsWith('/b/co-mang')) return '#COURSE MANG.'
     if (pathName.startsWith('/c/liked')) return 'LIKED EVENTS *'
@@ -98,10 +98,10 @@ export default function UserLayout({ children }) {
               </li>
               <li className=" font-cn border-black border-b-1 w-full h-[50px] flex items-center justify-center ">
                 <Link
-                  href="#"
+                  href="/user/c/myticket"
                   size="md"
                   className={` text-16 hover:text-yellow-600 ${
-                    pathName == 'order' ? isActive.c : ''
+                    pathName == '/c/myticket' ? isActive.c : ''
                   }`}
                 >
                   訂單

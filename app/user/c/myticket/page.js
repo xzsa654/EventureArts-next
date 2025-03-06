@@ -42,7 +42,8 @@ export default function MyticketPage() {
       </div>
       <div className="flex flex-col border-t-5  border-black">
         {/* 細橫線 */}
-        <div className="border-b-1p border-black w-full mt-2 "></div>
+        <div className="border-b-1p border-black w-full mt-2"></div>
+
         {/* 使用 Tabs 來取代 Button */}
         <Tabs
           size="lg"
@@ -73,7 +74,7 @@ export default function MyticketPage() {
                     <th className="p-[10px] font-regular">課程日期</th>
                     <th className="p-[10px] font-regular">付款金額</th>
                     <th className="p-[10px] font-regular">票券</th>
-                    <th className="p-[10px] font-regular">收據</th>
+                    {/* <th className="p-[10px] font-regular">收據（還沒切頁面）</th> */}
                   </tr>
                   <div className="absolute bottom-0 left-0 w-full h-[3px] bg-black"></div>
                 </thead>
@@ -90,12 +91,14 @@ export default function MyticketPage() {
                           {course.merchant_trade_no}
                         </td>
                         <td className="w-[280px] max-w-[280px] break-words whitespace-normal text-center">
-                          <Link
-                            href={`/course/product/${course.c_id}`}
-                            className="text-primary hover:underline"
-                          >
-                            {course.event_name}
-                          </Link>
+                          <div className="group relative inline-block w-full">
+                            <Link
+                              href={`/course/product/${course.c_id}`}
+                              className="text-primary inline-flex flex-col items-center px-2 py-1 transition-all duration-200 hover:text-green-600 relative after:absolute after:left-0 after:bottom-0 after:w-full after:h-[1px] after:bg-green-600 after:scale-x-0 after:origin-left after:transition-transform after:duration-300 group-hover:after:scale-x-100"
+                            >
+                              {course.event_name}
+                            </Link>
+                          </div>
                         </td>
                         <td className="font-mono w-[280px] max-w-[280px] tracking-wider">
                           {course.event_startdate} ~ {course.event_enddate}
@@ -113,13 +116,13 @@ export default function MyticketPage() {
                             </Link>
                           </div>
                         </td>
-                        <td className="py-4 border-b border-black text-center">
+                        {/* <td className="py-4 border-b border-black text-center">
                           <div className="flex justify-center items-center">
                             <Link href="#" className="block">
                               <HiOutlineReceiptPercent size={28} />
                             </Link>
                           </div>
-                        </td>
+                        </td> */}
                       </tr>
                     ))}
                 </tbody>
@@ -152,9 +155,9 @@ export default function MyticketPage() {
                     <th className="border-b-3 border-black p-[10px] font-regular">
                       票券
                     </th>
-                    <th className="border-b-3 border-black p-[10px] font-regular">
-                      收據
-                    </th>
+                    {/* <th className="border-b-3 border-black p-[10px] font-regular">
+                      收據（還沒切頁面）
+                    </th> */}
                   </tr>
                 </thead>
                 <tbody className="text-center font-cn h-8">
@@ -169,13 +172,15 @@ export default function MyticketPage() {
                         <td className="font-mono w-[280px] max-w-[280px]">
                           {exhibit.merchant_trade_no}
                         </td>
-                        <td className=" w-[280px] max-w-[280px] break-words whitespace-normal text-center">
-                          <Link
-                            href={`/exhibit/detail/${exhibit.e_id}`}
-                            className="text-primary hover:underline"
-                          >
-                            {exhibit.event_name}
-                          </Link>
+                        <td className="w-[280px] max-w-[280px] break-words whitespace-normal text-center">
+                          <div className="group relative inline-block w-full">
+                            <Link
+                              href={`/exhibit/detail/${exhibit.e_id}`}
+                              className="text-primary inline-flex flex-col items-center px-2 py-1 transition-all duration-200 hover:text-green-600 relative after:absolute after:left-0 after:bottom-0 after:w-full after:h-[1px] after:bg-green-600 after:scale-x-0 after:origin-left after:transition-transform after:duration-300 group-hover:after:scale-x-100"
+                            >
+                              {exhibit.event_name}
+                            </Link>
+                          </div>
                         </td>
                         <td className="font-mono w-[280px] max-w-[280px] tracking-wider ">
                           {exhibit.event_startdate} ~ {exhibit.event_enddate}
@@ -193,13 +198,13 @@ export default function MyticketPage() {
                             </Link>
                           </div>
                         </td>
-                        <td className="py-4 border-b border-black text-center">
+                        {/* <td className="py-4 border-b border-black text-center">
                           <div className="flex justify-center items-center">
                             <Link href="#" className="block">
                               <HiOutlineReceiptPercent size={28} />
                             </Link>
                           </div>
-                        </td>
+                        </td> */}
                       </tr>
                     ))}
                 </tbody>
