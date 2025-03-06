@@ -15,7 +15,7 @@ export default function EventCard({ event }) {
 
   // 生成圖片路徑
   const eventImage = event.image
-    ? `http://localhost:3001/uploads/${event.image}`
+    ? `http://localhost:3001/uploads/chu-uploads/${event.image}`
     : 'https://heroui.com/images/hero-card-complete.jpeg' // 預設圖片
 
   // 動態決定跳轉網址
