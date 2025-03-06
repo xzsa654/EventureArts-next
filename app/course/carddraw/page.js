@@ -10,11 +10,10 @@ import 'swiper/css';
 import 'swiper/css/mousewheel';
 import { Mousewheel } from 'swiper/modules';
 import './carddraw.css'
-
-
+import { useAuth } from '@/hooks/use-auth';  //🔑登入驗證（需要登入的頁面都需要0）
 
 export default function Carddraw(props) {
-
+  const {getAuthHeader,auth}=useAuth()  //🔑登入驗證（需要登入的頁面都需要0；#1 帶擋頭；#2 帶會員狀態）
   const [cardData, setCardData] = useState(null);
   const [specialPrice] = useState(1000);  // 固定優惠價格（目前只有一個級距：1000～1999的課程優惠價格$1000）
   const [userId, setUserId] = useState(null); 
@@ -23,8 +22,15 @@ export default function Carddraw(props) {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch(`http://localhost:3001/course/carddraw/init`);
+        
+        const response = await fetch(`http://localhost:3001/course/carddraw/init`,{
+          headers:{
+            ...getAuthHeader()   //🔑登入驗證
+          }
+        });
         const data = await response.json();
+        console.log(data);
+        
         if (data.user_id) {
           setUserId(data.user_id);  // 如成功獲取user_id, 則設置狀態
           setCardData(data);  // 設置卡片訊息 💳
@@ -35,19 +41,26 @@ export default function Carddraw(props) {
         console.error('❌ 數據庫讀取錯誤-1', error);
       }
     };    
-    fetchUserData();
-  }, []);
+    if(auth.token){   //🔑登入驗證
+          
+      fetchUserData();
+    }
+  }, [auth.token]);
 
 
   // 執行抽卡邏輯（POST API）
   const handleCardDraw = async () => {
-    console.log("userId:", userId);  // 確認user_id是否被正確傳遞
+    //🔑登入驗證
+    if (!auth.token) {   
+      alert("請先登入再抽卡！");
+      return;
+    }
 
     try {
       const response = await fetch(`http://localhost:3001/course/carddraw/draw`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json', ...getAuthHeader()   //🔑登入驗證
         },
         body: JSON.stringify({ user_id: userId }), // 傳送用戶ID
       });
