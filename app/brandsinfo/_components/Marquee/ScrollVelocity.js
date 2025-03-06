@@ -42,7 +42,7 @@ export const ScrollVelocity = ({
   scrollerClassName = 'scroller',
   parallaxStyle,
   scrollerStyle,
-  isPaused = true, // 新增控制是否暫停的 prop，做完開啟請改成 "false"
+  isPaused = false, // 新增控制是否暫停的 prop，做完開啟請改成 "false"
 }) => {
   function VelocityText({
     children,

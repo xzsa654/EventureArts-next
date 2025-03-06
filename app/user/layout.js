@@ -49,7 +49,7 @@ export default function UserLayout({ children }) {
     if (pathName.startsWith('/b/co-mang')) return '#COURSE MANG.'
     if (pathName.startsWith('/c/liked')) return 'LIKED EVENTS *'
     if (pathName.startsWith('/c/profile')) return 'MY PROFILE *'
-    if (pathName.startsWith('/c/myticket')) return 'MY TICKET *'
+    if (pathName.startsWith('/c/myticket')) return 'MY TICKETS *'
     if (pathName.startsWith('/message')) return 'Message'
     return ''
   }
