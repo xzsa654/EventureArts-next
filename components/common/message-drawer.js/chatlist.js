@@ -37,8 +37,11 @@ export default function ChatList({ chatHandle = () => {}, filterValue = '' }) {
       socket.on('newMessage', (message) => {
         const nextData = data?.map((v) => {
           if (message.sender_id == v.id) {
-            let n = message.count + v.unread_count
-            return { ...v, text: message.text, unread_count: n }
+            return {
+              ...v,
+              text: message.text,
+              unread_count: 1 + v.unread_count++,
+            }
           } else return v
         })
         setFilterData(nextData)
@@ -84,7 +87,7 @@ export default function ChatList({ chatHandle = () => {}, filterValue = '' }) {
                             !!v.unread_count && 'text-black font-medium'
                           } `}
                         >
-                          {v.text}
+                          {!v.text ? '傳送了一張圖片' : v.text}
                         </div>
                       }
                       onClick={() => {

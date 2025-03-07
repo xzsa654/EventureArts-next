@@ -8,7 +8,7 @@ import { HiOutlineX } from 'react-icons/hi'
 
 export default function BottomMessage({ renderHandler = () => {}, chatWith }) {
   // 控制輸入框的可控元件
-  const [text, setText] = useState()
+  const [text, setText] = useState('')
   const { getAuthHeader, auth, socket } = useAuth()
   // 控制需要幾張圖片與容器開啟
   const [howManyPicture, setHowManyPicture] = useState([])
@@ -18,8 +18,6 @@ export default function BottomMessage({ renderHandler = () => {}, chatWith }) {
   const onSubmit = async (e) => {
     e.preventDefault()
     if (text === '' && mypic.length === 0) return
-    console.log(1)
-
     const fm = new FormData(e.target)
     fm.set('receiver_id', chatWith)
     fm.set('sender_id', auth.user_id)
@@ -47,6 +45,7 @@ export default function BottomMessage({ renderHandler = () => {}, chatWith }) {
 
   const imgStore = (e) => {
     const files = e.target.files
+    console.log(files)
 
     for (let file of files) {
       setMyPic((prev) => [...prev, file])
@@ -66,6 +65,9 @@ export default function BottomMessage({ renderHandler = () => {}, chatWith }) {
     const nextData2 = mypic.filter((v, index) => key !== index)
     setHowManyPicture(nextData)
     setMyPic(nextData2)
+    if (fileRef.current) {
+      fileRef.current.value = ''
+    }
   }
 
   useEffect(() => {
