@@ -47,7 +47,7 @@ export default function UserLayout({ children }) {
     if (pathName.startsWith('/b/profile')) return '#MY BRAND'
     if (pathName.startsWith('/b/ex-mang')) return '#EXHIBIT MANG.'
     if (pathName.startsWith('/b/co-mang')) return '#COURSE MANG.'
-    if (pathName.startsWith('/c/liked')) return 'LIKED EVENTS *'
+    if (pathName.startsWith('/c/generateavatar')) return 'AVATAR GENERATOR *'
     if (pathName.startsWith('/c/profile')) return 'MY PROFILE *'
     if (pathName.startsWith('/c/myticket')) return 'MY TICKETS *'
     if (pathName.startsWith('/message')) return 'Message'
@@ -107,13 +107,13 @@ export default function UserLayout({ children }) {
               </li>
               <li className=" font-cn border-black border-b-1 w-full h-[50px] flex items-center justify-center ">
                 <Link
-                  href="/user/c/liked"
+                  href="/user/c/generateavatar'"
                   size="md"
                   className={`text-16 hover:text-yellow-600 ${
-                    pathName == '/c/liked' ? isActive.c : ''
+                    pathName == '/c/generateavatar' ? isActive.c : ''
                   }`}
                 >
-                  收藏
+                  創意生成
                 </Link>
               </li>
             </ul>

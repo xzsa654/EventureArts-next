@@ -54,6 +54,9 @@ export default function UserPage() {
                 <Button
                   radius="none"
                   className="px-5 text-base bg-primary text-white hover:text-[#E3C8B9] hover:scale-110 transition-transform duration-200 cursor-pointer flex items-center group gap-x-2 "
+                  onPress={() => {
+                    router.push('/user/c/generateavatar')
+                  }}
                 >
                   嘗試創意生成
                   <HiArrowRight className="transition-transform duration-300 ease-out group-hover:translate-x-3" />
@@ -90,34 +93,29 @@ export default function UserPage() {
                 />
               </div>
             </div>
-            <div className="w-1/2 flex flex-col justify-between h-full p-4 ">
-              {/* 讓 info 貼齊上方，與 dl 分開 */}
+            <div className="w-1/2 flex flex-col h-full p-4">
+              {/* info 標題 */}
               <h3 className="text-6xl text-start font-bold pb-4">info</h3>
 
-              {/* 讓 dl 的容器貼齊下方 */}
-              <div className="flex flex-col gap-2">
-                <dl className="text-base grid grid-cols-2 font-cn">
-                  <dt>姓名：</dt>
-                  <dd className="break-words w-full">
-                    {data?.user_name || '暫無'}
-                  </dd>
-                </dl>
-                <dl className="text-base grid grid-cols-2 font-cn">
-                  <dt>暱稱：</dt>
-                  <dd className="break-words w-full">{data?.nickname}</dd>
-                </dl>
-                <dl className="text-base grid grid-cols-2 font-cn">
-                  <dt>生日：</dt>
-                  <dd className="break-words w-full">{data?.birthday}</dd>
-                </dl>
-                <dl className="text-base grid grid-cols-2 font-cn">
-                  <dt>性別：</dt>
-                  <dd className="break-words w-full">{gender[data.gender]}</dd>
-                </dl>
-                <dl className="text-base grid grid-cols-2 font-cn">
-                  <dt>email：</dt>
-                  <dd className="break-words w-full">{data?.user_email}</dd>
-                </dl>
+              {/* 讓 dl 區塊填滿剩餘空間，並靠上對齊 */}
+              <div className="flex flex-col gap-2 flex-grow justify-end">
+                {[
+                  { label: '姓名：', value: data?.user_name || '暫無' },
+                  { label: '暱稱：', value: data?.nickname || '暫無' },
+                  { label: '生日：', value: data?.birthday || '暫無' },
+                  { label: '性別：', value: gender[data.gender] || '暫無' },
+                  { label: 'email：', value: data?.user_email || '暫無' },
+                ].map((item, index) => (
+                  <dl
+                    key={index}
+                    className="text-base flex font-cn justify-between w-full"
+                  >
+                    <dt className="min-w-[80px]">{item.label}</dt>
+                    <dd className="break-words overflow-wrap text-right w-full">
+                      {item.value}
+                    </dd>
+                  </dl>
+                ))}
               </div>
             </div>
           </div>
