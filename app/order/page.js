@@ -23,6 +23,17 @@ export default function Orderpage(props) {
   const [loading, setLoading] = useState(true)
   const { onOpenChange } = useModal().login
 
+  // 改背景顏色
+  useEffect(() => {
+    // 進入頁面時修改背景顏色
+    document.body.style.backgroundColor = '#f7f5f1'
+
+    // 離開頁面時恢復原本顏色
+    return () => {
+      document.body.style.backgroundColor = ''
+    }
+  }, [])
+
   useEffect(() => {
     if ((e_id || c_id) && !orderData) {
       // 加入 Authorization 標頭
@@ -51,146 +62,150 @@ export default function Orderpage(props) {
   return (
     <>
       {/*---------- 上—— 商家資料 ----------*/}
-      <div className="detail">
-        <div className="orderTitle">
-          <p>商品明細</p>
+      <div className="mt-20">
+        <div className="detail">
+          <div className="orderTitle">
+            <p>商品明細</p>
+          </div>
+          <hr />
+          {/* 1. 活動名稱 */}
+          <div className="flex flex-row justify-between">
+            <p>活動名稱</p>
+            <p>{orderData.event_name}</p>
+          </div>
+          {/* 2. 活動價格 */}
+          <div className="flex flex-row justify-between">
+            <p>活動票價</p>
+            <p>$ {orderData.event_price} NTD</p>
+          </div>
+          {/* 3. 活動時間 */}
+          <div className="flex flex-row justify-between">
+            <p>活動時間</p>
+            <p>
+              {orderData.event_startdate} ~ {orderData.event_enddate}
+            </p>
+          </div>
+          {/* 4. 活動地址 */}
+          <div className="flex flex-row justify-between">
+            <p>活動地址</p>
+            <p>
+              {orderData.city}
+              {orderData.district}
+              {orderData.address}
+            </p>
+          </div>
+          {/* 4. 課程備註 */}
+          <div className="flex flex-row justify-between">
+            <p> </p>
+            <p className="note ">
+              *請於付款後，致電品牌方進行預約確認，謝謝您。
+            </p>
+          </div>
         </div>
-        <hr />
-        {/* 1. 活動名稱 */}
-        <div className="flex flex-row justify-between">
-          <p>活動名稱</p>
-          <p>{orderData.event_name}</p>
+        {/*---------- 中—— 商品明細 ----------*/}
+        <div className="detail">
+          <div className="orderTitle">
+            <p>商家資料</p>
+          </div>
+          <hr />
+          {/* 1. 課程名稱&價格 */}
+          <div className="flex flex-row justify-between">
+            <p>商家名稱</p>
+            <p>{orderData.bd_name}</p>
+          </div>
+          {/* 2. 課程時間 */}
+          <div className="flex flex-row justify-between">
+            <p>聯絡電話</p>
+            <p>{orderData.bd_tel}</p>
+          </div>
+          {/* 3. 課程地址 */}
+          <div className="flex flex-row justify-between">
+            <p>聯絡信箱</p>
+            <p>{orderData.bd_email}</p>
+          </div>
         </div>
-        {/* 2. 活動價格 */}
-        <div className="flex flex-row justify-between">
-          <p>活動票價</p>
-          <p>$ {orderData.event_price} NTD</p>
-        </div>
-        {/* 3. 活動時間 */}
-        <div className="flex flex-row justify-between">
-          <p>活動時間</p>
-          <p>
-            {orderData.event_startdate} ~ {orderData.event_enddate}
-          </p>
-        </div>
-        {/* 4. 活動地址 */}
-        <div className="flex flex-row justify-between">
-          <p>活動地址</p>
-          <p>
-            {orderData.city}
-            {orderData.district}
-            {orderData.address}
-          </p>
-        </div>
-        {/* 4. 課程備註 */}
-        <div className="flex flex-row justify-between">
-          <p> </p>
-          <p className="note ">*請於付款後，致電品牌方進行預約確認，謝謝您。</p>
-        </div>
-      </div>
-      {/*---------- 中—— 商品明細 ----------*/}
-      <div className="detail">
-        <div className="orderTitle">
-          <p>商家資料</p>
-        </div>
-        <hr />
-        {/* 1. 課程名稱&價格 */}
-        <div className="flex flex-row justify-between">
-          <p>商家名稱</p>
-          <p>{orderData.bd_name}</p>
-        </div>
-        {/* 2. 課程時間 */}
-        <div className="flex flex-row justify-between">
-          <p>聯絡電話</p>
-          <p>{orderData.bd_tel}</p>
-        </div>
-        {/* 3. 課程地址 */}
-        <div className="flex flex-row justify-between">
-          <p>聯絡信箱</p>
-          <p>{orderData.bd_email}</p>
-        </div>
-      </div>
 
-      {/*---------- 下—— 付款方式 ----------*/}
-      <div className="detail">
-        <div className="orderTitle">
-          <p>付款方式</p>
+        {/*---------- 下—— 付款方式 ----------*/}
+        <div className="detail">
+          <div className="orderTitle">
+            <p>付款方式</p>
+          </div>
+          <hr />
+          {/* 1. 信用卡 */}
+          <div className="paymentTitle flex flex-row justify-between text-16">
+            信用卡一次付清
+            <div className="credit flex flex-row"></div>
+          </div>
         </div>
-        <hr />
-        {/* 1. 信用卡 */}
-        <div className="paymentTitle flex flex-row justify-between text-16">
-          信用卡一次付清
-          <div className="credit flex flex-row"></div>
-        </div>
-      </div>
 
-      {/*---------- 送出訂單 ----------*/}
-      <div className="detail mb-8">
-        {/* 導至綠界金流按鈕 */}
-        <div className="flex justify-center  gap-10">
-          <Button
-            size="sm"
-            radius="none"
-            classNames={{}}
-            variant="light"
-            className="text-base text-gray-600 hover:text-gray-300 hover:scale-110 transition-transform duration-200 cursor-pointer flex items-center group gap-x-2 mt-5 px-7  data-[hover=true]:bg-primary-300"
-            onPress={() => router.push('/')}
-          >
-            取消本次購買
-            <HiArrowRight className="transition-transform duration-300 ease-out group-hover:translate-x-3" />
-          </Button>
-          <Button
-            size="sm"
-            radius="none"
-            classNames={{}}
-            variant="light"
-            className="text-base text-yellow-600 hover:text-yellow-300 hover:scale-110 transition-transform duration-200 cursor-pointer flex items-center group gap-x-2 mt-5 px-7  data-[hover=true]:bg-primary-300"
-            onPress={() => {
-              // ✅ 檢查是否有登入
-              if (!auth?.token) {
-                return onOpenChange(true)
-              }
+        {/*---------- 送出訂單 ----------*/}
+        <div className="detail mb-8">
+          {/* 導至綠界金流按鈕 */}
+          <div className="flex justify-center  gap-10">
+            {/* <Button
+              size="sm"
+              radius="none"
+              classNames={{}}
+              variant="light"
+              className="text-base text-gray-600 hover:text-gray-300 hover:scale-110 transition-transform duration-200 cursor-pointer flex items-center group gap-x-2 mt-5 px-7  data-[hover=true]:bg-primary-300"
+              onPress={() => router.push('/')}
+            >
+              取消本次購買
+              <HiArrowRight className="transition-transform duration-300 ease-out group-hover:translate-x-3" />
+            </Button> */}
+            <Button
+              size="sm"
+              radius="none"
+              classNames={{}}
+              variant="light"
+              className="text-base text-yellow-600 hover:text-yellow-300 hover:scale-110 transition-transform duration-200 cursor-pointer flex items-center group gap-x-2 mt-5 px-7  data-[hover=true]:bg-primary-300"
+              onPress={() => {
+                // ✅ 檢查是否有登入
+                if (!auth?.token) {
+                  return onOpenChange(true)
+                }
 
-              // 使用登入者的 user_id & user_name
-              const data = {
-                user_id: auth.user_id, // 從 `auth` 取得
-                // user_name: auth.user_name, // 從 `auth` 取得
-                e_id,
-                c_id,
-                event_name: orderData.event_name,
-                event_price: orderData.event_price,
-                event_startdate: orderData.event_startdate,
-                event_enddate: orderData.event_enddate,
-                locat_id: orderData.locat_id,
-                locat_name: orderData.locat_name,
-                city: orderData.city,
-                district: orderData.district,
-                address: orderData.address,
-                bd_id: orderData.bd_id,
-                bd_name: orderData.bd_name,
-                bd_tel: orderData.bd_tel,
-                bd_email: orderData.bd_email,
-                amount: orderData.event_price,
-              }
+                // 使用登入者的 user_id & user_name
+                const data = {
+                  user_id: auth.user_id, // 從 `auth` 取得
+                  // user_name: auth.user_name, // 從 `auth` 取得
+                  e_id,
+                  c_id,
+                  event_name: orderData.event_name,
+                  event_price: orderData.event_price,
+                  event_startdate: orderData.event_startdate,
+                  event_enddate: orderData.event_enddate,
+                  locat_id: orderData.locat_id,
+                  locat_name: orderData.locat_name,
+                  city: orderData.city,
+                  district: orderData.district,
+                  address: orderData.address,
+                  bd_id: orderData.bd_id,
+                  bd_name: orderData.bd_name,
+                  bd_tel: orderData.bd_tel,
+                  bd_email: orderData.bd_email,
+                  amount: orderData.event_price,
+                }
 
-              window.location.href = `http://localhost:3001/ecpay-test?${new URLSearchParams(
-                data
-              )}`
-            }}
-          >
-            {/* const { 
+                window.location.href = `http://localhost:3001/ecpay-test?${new URLSearchParams(
+                  data
+                )}`
+              }}
+            >
+              {/* const { 
       user_id, user_name, ticket_code, merchant_trade_no, trade_amt, trade_date, 
       payment_date, payment_type, e_id, c_id, event_name, event_price, 
       event_startdate, event_enddate, locat_id, locat_name, city, district, address, 
       bd_id, bd_name, bd_tel, bd_email 
     } = req.body; */}
-            綠界金流付款
-            <HiArrowRight className="transition-transform duration-300 ease-out group-hover:translate-x-3" />
-          </Button>
+              綠界金流付款
+              <HiArrowRight className="transition-transform duration-300 ease-out group-hover:translate-x-3" />
+            </Button>
+          </div>
         </div>
-      </div>
-      <div className="w-full flex flex-col justify-center px-16 py-16 bg-[#f7f5f1]">
-        <ComponentsReminder />
+        <div className="w-full flex flex-col justify-center px-16 py-16 bg-[#f7f5f1]">
+          <ComponentsReminder />
+        </div>
       </div>
     </>
   )

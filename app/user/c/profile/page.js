@@ -40,21 +40,22 @@ export default function UserPage() {
   }, [auth.token, reSend])
   return (
     <>
-      <div className="flex w-full ">
+      <div className="flex w-full h-[820]">
         {/* 左邊 */}
-        <div className=" w-4/5 flex flex-col border-r-1 border-black">
+        <div className=" w-4/5 flex flex-col border-r-1 border-black ">
           {/* 左上方 */}
-          <div className=" h-auto gap-4  p-4 flex items-center justify-center border-b-1 border-black">
-            <div className="w-3/5 h-auto flex flex-col justify-center items-center">
-              <div className="w-[400px] h-[400px] mb-4 ">
+          <div className="relative p-5 h-3/4 flex items-stretch gap-5 border-b border-black">
+            <div className="w-1/2 h-auto flex flex-col justify-center items-center">
+              <div className=" max-w-[400px] max-h-[400px] overflow-hidden mb-4 ">
                 <Image
                   width={400}
                   height={400}
+                  className="w-full h-full object-cover "
                   alt="avatar"
                   src={`http://localhost:3001/uploads/avatar/${data?.avatar}`}
                 ></Image>
               </div>
-              <div className="flex justify-around w-[400px]">
+              <div className="flex flex-col gap-4 justify-around ">
                 <Button
                   radius="none"
                   className="px-5 text-base bg-primary text-white hover:text-[#E3C8B9] hover:scale-110 transition-transform duration-200 cursor-pointer flex items-center group gap-x-2 "
@@ -71,47 +72,49 @@ export default function UserPage() {
                 </Button>
               </div>
             </div>
-            <div className="w-2/5 flex flex-col justify-between h-full">
-              {/* 讓 info 貼齊上方 */}
-              <h3 className="text-[88px] text-end font-bold">info</h3>
+            <div className="w-1/2 flex flex-col justify-between h-full p-4 ">
+              {/* 讓 info 貼齊上方，與 dl 分開 */}
+              <h3 className="text-6xl text-start font-bold pb-4">info</h3>
 
               {/* 讓 dl 的容器貼齊下方 */}
               <div className="flex flex-col gap-2">
-                <dl className="text-base flex font-cn justify-between">
+                <dl className="text-base grid grid-cols-2 font-cn">
                   <dt>姓名：</dt>
-                  <dt>{data?.user_name || '暫無'}</dt>
+                  <dd className="break-words w-full">
+                    {data?.user_name || '暫無'}
+                  </dd>
                 </dl>
-                <dl className="text-base flex font-cn justify-between">
+                <dl className="text-base grid grid-cols-2 font-cn">
                   <dt>暱稱：</dt>
-                  <dt className="font-sans">{data?.nickname}</dt>
+                  <dd className="break-words w-full">{data?.nickname}</dd>
                 </dl>
-                <dl className="text-base flex font-cn justify-between">
+                <dl className="text-base grid grid-cols-2 font-cn">
                   <dt>生日：</dt>
-                  <dt className="font-sans">{data?.birthday}</dt>
+                  <dd className="break-words w-full">{data?.birthday}</dd>
                 </dl>
-                <dl className="text-base flex font-sans justify-between">
+                <dl className="text-base grid grid-cols-2 font-cn">
                   <dt>性別：</dt>
-                  <dt>{gender[data.gender]}</dt>
+                  <dd className="break-words w-full">{gender[data.gender]}</dd>
                 </dl>
-                <dl className="text-base flex font-sans justify-between">
+                <dl className="text-base grid grid-cols-2 font-cn">
                   <dt>email：</dt>
-                  <dt>{data?.user_email}</dt>
+                  <dd className="break-words w-full">{data?.user_email}</dd>
                 </dl>
               </div>
             </div>
           </div>
           {/* 左下方 */}
-          <div className="relative h-full p-4 flex items-center justify-between">
-            <div className="self-stretch justify-start items-center gap-6">
-              <h5 className="font-cn font-semibold text-3xl mb-4">興趣</h5>
-              <dl className="flex flex-col font-cn text-base mb-2">
-                <dt>展覽：</dt>
-                <dd>{data.e_interest}</dd>
-                <dt>課程：</dt>
-                <dd>{data.c_interest}</dd>
+          <div className="relative h-1/4 p-4 flex items-center justify-between">
+            <div className=" w-11/12 self-stretch justify-start items-center">
+              <h5 className="font-cn font-semibold text-3xl">興趣</h5>
+              <dl className="flex flex-col font-cn text-base">
+                <dt className="font-bold">展覽：</dt>
+                <dd className="text-12">{data.e_interest}</dd>
+                <dt className="font-bold">課程：</dt>
+                <dd className="text-12">{data.c_interest}</dd>
               </dl>
             </div>
-            <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4">
+            <div className=" w-1/12 absolute right-0 top-1/2 -translate-y-1/2 translate-x-4">
               <h5 className="text-3xl font-bold -rotate-90">habit</h5>
             </div>
           </div>
@@ -119,22 +122,23 @@ export default function UserPage() {
 
         {/* 右邊 */}
         <div className=" w-1/5 flex flex-col">
-          {/* 右上方 */}
-          <div className="h-1/2 p-4 flex flex-col border-b-1 border-black">
-            <div className="flex items-center justify-center h-5/6 gap-4">
-              <h4 className="font-cn font-semibold text-4xl self-start mt-0">
-                個人簡介
-              </h4>
-              <p className="font-cn text-base">{data.profile}</p>
+          {/* 右上方*/}
+          <div className="h-2/3 p-4 flex flex-col border-b-1 border-black">
+            <div className="flex items-center justify-center gap-2 h-5/6">
+              <div className="w-1/5">
+                <h6 className="font-cn font-semibold text-3xl">個人簡介</h6>
+              </div>
+              <div className=" w-4/5 font-cn text-12">{data.profile}</div>
             </div>
 
             {/* 讓 about me 貼齊底部 */}
             <div className="h-1/6 flex justify-center items-end">
-              <h4 className="text-4xl text-center font-bold">about me</h4>
+              <h6 className="text-3xl text-center font-bold">about me</h6>
             </div>
           </div>
+
           {/* 右下方 */}
-          <div className="h-1/2 p-4 flex flex-col items-center justify-between">
+          <div className="h-1/3 p-4 flex flex-col items-center justify-around">
             <svg
               width="160"
               height="96"

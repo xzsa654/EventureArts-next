@@ -194,6 +194,7 @@
   justify-content: center;
   align-items: center;
   transition: background-color 0.3s ease, transform 0.2s ease;
+  color: black; /* 預設顏色 */
 }
 .btn:hover {
   transform: translate(-50%, -50%) scale(1.1);
