@@ -44,6 +44,7 @@ const GridDistortion = ({ grid = 8, mouse = 0.3, strength = 0.4, relaxation = 0.
     })
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     container.appendChild(renderer.domElement)
+    const gl = renderer.getContext()
 
     const camera = new THREE.OrthographicCamera(0, 0, 0, 0, -1000, 1000)
     camera.position.z = 2
@@ -67,7 +68,7 @@ const GridDistortion = ({ grid = 8, mouse = 0.3, strength = 0.4, relaxation = 0.
     const size = grid
     const data = new Float32Array(4 * size * size)
     for (let i = 0; i < size * size; i++) {
-      data[i * 4] = Math.random() * 500 - 250 //初始化 dataTexture 時多給一點亂數值
+      data[i * 4] = Math.random() * 500 - 250
       data[i * 4 + 1] = Math.random() * 500 - 250
     }
 
@@ -113,22 +114,15 @@ const GridDistortion = ({ grid = 8, mouse = 0.3, strength = 0.4, relaxation = 0.
 
     const handleMouseMove = (e) => {
       const rect = container.getBoundingClientRect()
-
-      // Check if mouse is within the container bounds
       const isInBounds =
         e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom
-
-      // Calculate normalized coordinates
       const x = (e.clientX - rect.left) / rect.width
       const y = 1 - (e.clientY - rect.top) / rect.height
-
-      // Only update velocity if mouse is in bounds
       if (isInBounds) {
         mouseState.vX = x - mouseState.prevX
         mouseState.vY = y - mouseState.prevY
         Object.assign(mouseState, { x, y, prevX: x, prevY: y })
       } else {
-        // Gradually reduce velocity when mouse is out of bounds
         mouseState.vX *= 0.95
         mouseState.vY *= 0.95
       }
@@ -141,15 +135,14 @@ const GridDistortion = ({ grid = 8, mouse = 0.3, strength = 0.4, relaxation = 0.
 
     window.addEventListener("mousemove", handleMouseMove)
     container.addEventListener("mouseenter", () => {
-      // Reset velocity when mouse enters to prevent jumps
       Object.assign(mouseState, { prevX: mouseState.x, prevY: mouseState.y, vX: 0, vY: 0 })
     })
-
     window.addEventListener("resize", handleResize)
     handleResize()
 
+    let animationFrameId
     const animate = () => {
-      requestAnimationFrame(animate)
+      animationFrameId = requestAnimationFrame(animate)
       uniforms.time.value += 0.05
 
       const data = dataTexture.image.data
@@ -181,16 +174,15 @@ const GridDistortion = ({ grid = 8, mouse = 0.3, strength = 0.4, relaxation = 0.
 
     return () => {
       window.removeEventListener("mousemove", handleMouseMove)
-      container.removeEventListener("mouseenter", () => {
-        // Reset velocity when mouse enters to prevent jumps
-        Object.assign(mouseState, { prevX: mouseState.x, prevY: mouseState.y, vX: 0, vY: 0 })
-      })
       window.removeEventListener("resize", handleResize)
+      cancelAnimationFrame(animationFrameId)
       renderer.dispose()
       geometry.dispose()
       material.dispose()
       dataTexture.dispose()
       if (uniforms.uTexture.value) uniforms.uTexture.value.dispose()
+      const ext = gl.getExtension("WEBGL_lose_context")
+      if (ext) ext.loseContext()
     }
   }, [grid, mouse, strength, relaxation, imageSrc])
 

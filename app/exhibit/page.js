@@ -87,7 +87,7 @@ export default function ExhibitPage() {
   const onlineExhibitions = onlineData.data || []
 
   return (
-    <main className="min-h-screen mt-[80px]">
+    <main className="min-h-screen mt-[80px] relative">
       {/* Exhibition Section */}
       <ExhibitionSection onExhibitionSelect={handleExhibitionSelect} exhibitions={offlineExhibitions} />
 
@@ -179,7 +179,9 @@ export default function ExhibitPage() {
         )}
       </AnimatePresence>
 
-      <OnlineBanner />
+      <section className="relative">
+        <OnlineBanner />
+      </section>
 
       {/* Explore more online Exhibition Section */}
       {/* <section className="py-8 bg-black/40">
