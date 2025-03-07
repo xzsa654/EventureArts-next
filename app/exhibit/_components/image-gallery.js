@@ -37,8 +37,15 @@ export function ImageGallery({ images }) {
       {/* Lightbox */}
       {selectedImage && (
         <div
+          role="button"
+          tabIndex={0}
           className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4"
           onClick={() => setSelectedImage(null)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              setSelectedImage(null)
+            }
+          }}
         >
           <Button
             className="absolute top-4 right-4 text-black"
