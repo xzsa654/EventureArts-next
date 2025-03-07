@@ -8,15 +8,19 @@ import Image from 'next/image'
 import { BRANDSDATA } from '@/lib/brands-api'
 export default function BPlayerProfile(props) {
   const [brand, setBrand] = useState([])
-  const { getAuthHeader } = useAuth()
+  const { getAuthHeader, auth } = useAuth()
   // 獲取brand 的相關資料
   useEffect(() => {
-    fetch(BRANDSDATA, { headers: { ...getAuthHeader() } })
-      .then((r) => r.json())
-      .then((res) => {
-        setBrand(res.body)
-      })
-  }, [])
+    if (auth?.token) {
+      fetch(BRANDSDATA, { headers: { ...getAuthHeader() } })
+        .then((r) => r.json())
+        .then((res) => {
+          console.log(res)
+
+          setBrand(res.body)
+        })
+    }
+  }, [auth?.token])
 
   return (
     <>
@@ -53,7 +57,11 @@ export default function BPlayerProfile(props) {
             {/* 右側圖片填滿 */}
             <div className="w-5/6 overflow-hidden">
               <Image
-                src={`http://localhost:3001/uploads/brand-banner/${brand?.bd_img}`}
+                src={
+                  brand?.bd_img
+                    ? `http://localhost:3001/uploads/brand-logo/${brand?.bd_img}`
+                    : ''
+                }
                 alt="Banner Image"
                 className="w-full h-full object-cover "
                 width={800}

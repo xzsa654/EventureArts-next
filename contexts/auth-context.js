@@ -67,7 +67,7 @@ export function AuthContextProvider({ children }) {
         radius: 'lg',
         description: '成功登入！',
         color: 'success',
-        timeout: 10000,
+        timeout: 3000,
       })
       setFirstLogin({
         user_email: '',
@@ -99,7 +99,7 @@ export function AuthContextProvider({ children }) {
         radius: 'lg',
         description: '成功登入！',
         color: 'success',
-        timeout: 10000,
+        timeout: 3000,
       })
     } else {
       setFirstLogin(result.data)
@@ -126,7 +126,7 @@ export function AuthContextProvider({ children }) {
       radius: 'lg',
       description: '成功登入！',
       color: 'success',
-      timeout: 10000,
+      timeout: 3000,
     })
   }
 
@@ -193,7 +193,7 @@ export function AuthContextProvider({ children }) {
               icon: <CiChat1 />,
               description: `${senderName}向你發出訊息`,
               color: 'danger',
-              timeout: 10000,
+              timeout: 3000,
             })
           }
         })

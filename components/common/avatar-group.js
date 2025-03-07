@@ -7,7 +7,6 @@ import {
   DropdownSection,
   User,
   Image,
-  useDisclosure,
 } from '@heroui/react'
 import {
   CiUser,
@@ -35,7 +34,7 @@ export default function AVatarGroup() {
       >
         <DropdownTrigger>
           <User
-            as="button"
+            // as="button"
             avatarProps={{
               isBordered: true,
               src: `http://localhost:3001/uploads/avatar/${auth?.avatar}`,

@@ -7,12 +7,10 @@ import { HiArrowRight } from 'react-icons/hi2'
 import Image from 'next/image'
 
 export default function EventCard({ event }) {
+  const router = useRouter()
   if (!event) return null // 防止 event 為 null 時出錯
 
-  const router = useRouter()
-
   if (!event || (!event.e_id && !event.c_id)) return null
-
   // 生成圖片路徑
   const eventImage = event.image
     ? event.type === 'exhibition'

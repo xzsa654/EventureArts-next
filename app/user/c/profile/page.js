@@ -11,14 +11,6 @@ import EditModal from '../../_components/c_player/edit-modal'
 export default function UserPage() {
   const router = useRouter()
   const { auth, getAuthHeader } = useAuth()
-  // 未登入轉址
-  useEffect(() => {
-    const fn = async () => {
-      if (!auth.token) {
-        return await router.push('/')
-      }
-    }
-  }, [])
 
   const [data, setData] = useState({})
   const { isOpen, onOpenChange } = useDisclosure()

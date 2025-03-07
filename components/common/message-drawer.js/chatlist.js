@@ -38,29 +38,54 @@ export default function ChatList({ chatHandle = () => {}, filterValue = '' }) {
           <ul className="flex flex-col gap-5 pt-2 ps-2">
             {filterData?.map((v) => {
               return (
-                <Badge
+                <div
                   key={v.id}
-                  content=""
-                  color={
-                    onlineUsers?.includes(`${v.id.toString()}`)
-                      ? 'success'
-                      : 'primary'
-                  }
-                  shape="circle"
-                  placement="bottom-left"
+                  className="flex items-center pe-5 hover:bg-gray-400 hover:rounded-full"
                 >
-                  <User
-                    className=" justify-start w-full hover:bg-gray-400 cursor-pointer "
-                    avatarProps={{
-                      src: `http://localhost:3001/uploads/avatar/${v.avatar}`,
+                  <Badge
+                    content=""
+                    color={
+                      onlineUsers?.includes(`${v.id.toString()}`)
+                        ? 'success'
+                        : 'primary'
+                    }
+                    shape="circle"
+                    placement="bottom-left"
+                    classNames={{
+                      base: 'w-full flex shrink ',
                     }}
-                    name={`${v.name} ${v.brandname ? `(${v.brandname})` : ''} `}
-                    description={v.text}
-                    onClick={() => {
-                      chatHandle(v.id)
-                    }}
-                  />
-                </Badge>
+                  >
+                    <User
+                      className=" flex   justify-normal w-full  cursor-pointer "
+                      avatarProps={{
+                        src: `http://localhost:3001/uploads/avatar/${v.avatar}`,
+                      }}
+                      name={`${v.name} ${
+                        v.brandname ? `(${v.brandname})` : ''
+                      } `}
+                      description={
+                        <div
+                          className={` flex-grow flex justify-end ${
+                            !!v.unread_count && 'text-black font-medium'
+                          } `}
+                        >
+                          {v.text}
+                        </div>
+                      }
+                      onClick={() => {
+                        chatHandle(v.id)
+                      }}
+                    />
+                  </Badge>
+                  {!!v.unread_count && (
+                    <div className=" rounded-full bg-red-200 w-[30px] h-[30px]  flex justify-center items-center ">
+                      <div className=" tracking-wider text-white ">
+                        {' '}
+                        {v.unread_count}
+                      </div>
+                    </div>
+                  )}
+                </div>
               )
             })}
           </ul>
