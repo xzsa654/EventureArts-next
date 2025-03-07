@@ -5,8 +5,8 @@ import { useAuth } from '@/hooks/use-auth'
 import { User, ScrollShadow, Badge } from '@heroui/react'
 
 export default function ChatList({ chatHandle = () => {}, filterValue = '' }) {
-  const { getAuthHeader, auth, onlineUsers } = useAuth()
-  const [data, setData] = useState()
+  const { getAuthHeader, auth, onlineUsers, socket } = useAuth()
+  const [data, setData] = useState(null)
   const [filterData, setFilterData] = useState([])
   useEffect(() => {
     if (auth?.token) {
@@ -31,6 +31,21 @@ export default function ChatList({ chatHandle = () => {}, filterValue = '' }) {
     })
     setFilterData(nextData)
   }, [data, filterValue])
+
+  useEffect(() => {
+    if (socket && data) {
+      socket.on('newMessage', (message) => {
+        const nextData = data?.map((v) => {
+          if (message.sender_id == v.id) {
+            let n = message.count + v.unread_count
+            return { ...v, text: message.text, unread_count: n }
+          } else return v
+        })
+        setFilterData(nextData)
+      })
+    }
+  }, [socket, data])
+
   return (
     <>
       <div className="flex w-full h-full ">
@@ -80,7 +95,6 @@ export default function ChatList({ chatHandle = () => {}, filterValue = '' }) {
                   {!!v.unread_count && (
                     <div className=" rounded-full bg-red-200 w-[30px] h-[30px]  flex justify-center items-center ">
                       <div className=" tracking-wider text-white ">
-                        {' '}
                         {v.unread_count}
                       </div>
                     </div>
