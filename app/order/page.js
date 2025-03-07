@@ -15,13 +15,20 @@ const API_BASE_URL =
 
 export default function Orderpage(props) {
   const searchParams = useSearchParams() // 使用 useSearchParams 取 query
-  const e_id = searchParams.get('e_id')
-  const c_id = searchParams.get('c_id')
   const router = useRouter()
   const { auth, getAuthHeader } = useAuth() // 取得登入資訊
+  const { onOpenChange } = useModal().login
+
+  const [e_id, setEId] = useState(null)
+  const [c_id, setCId] = useState(null)
   const [orderData, setOrderData] = useState(null)
   const [loading, setLoading] = useState(true)
-  const { onOpenChange } = useModal().login
+
+  // ✅ 確保 searchParams 只會在 Client Side 執行
+  useEffect(() => {
+    setEId(searchParams.get('e_id'))
+    setCId(searchParams.get('c_id'))
+  }, [searchParams])
 
   // 改背景顏色
   useEffect(() => {
