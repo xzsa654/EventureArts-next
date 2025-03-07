@@ -3,7 +3,6 @@
 import dynamic from "next/dynamic"
 import { useState, useEffect, useMemo, useCallback } from "react"
 import FilterPanel from "./_components/FilterPanel"
-import "./map.css"
 
 const MapView = dynamic(() => import("./_components/MapView"), {
   ssr: false,

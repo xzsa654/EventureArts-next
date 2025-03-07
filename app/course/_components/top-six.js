@@ -58,8 +58,8 @@ const RankList = () => {
             <div className="RankArea flex flex-wrap gap-8 justify-around">
                 {rankData.map((rank, index) => (
                     // 單個排名卡
-                    <div className="w-[500px]">
-                        <a key={index} href={rank.href} className="w-1/2">
+                    <div key={index} className="w-[500px]">
+                        <a  href={rank.href} className="w-1/2">
                             <div className="flex flex-row">
                                 {/* 左邊- 排名 */}
                                 <div className="rank w-12 text-center">{rank.num}</div>
