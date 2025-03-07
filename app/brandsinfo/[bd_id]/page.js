@@ -99,7 +99,7 @@ export default function BrandsPage({ params }) {
                 {/* 右側圖片填滿 */}
                 <div className="w-11/12 overflow-hidden">
                   <Image
-                    src={`http://localhost:3001/uploads/brand-banner/${brand?.bd_img}`}
+                    src={`http://localhost:3001/uploads/brand-logo/${brand?.bd_img}`}
                     alt="Banner Image"
                     className="w-full h-full object-cover "
                     width={800}

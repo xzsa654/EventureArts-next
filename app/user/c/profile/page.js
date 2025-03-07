@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useAuth } from '@/hooks/use-auth'
 import { useRouter } from 'next/navigation'
 import { Button, useDisclosure } from '@heroui/react'
@@ -22,8 +22,10 @@ export default function UserPage() {
 
   const [data, setData] = useState({})
   const { isOpen, onOpenChange } = useDisclosure()
+  const uploadRef = useRef(null)
   const gender = { male: '男性', female: '女性', 'not provided': '未透露' }
   const [reSend, onReSend] = useState(false)
+
   useEffect(() => {
     if (auth?.token) {
       fetch(USERDATA, {
@@ -38,6 +40,7 @@ export default function UserPage() {
         })
     }
   }, [auth.token, reSend])
+
   return (
     <>
       <div className="flex w-full h-[820]">
@@ -66,10 +69,33 @@ export default function UserPage() {
                 <Button
                   radius="none"
                   className="px-5 text-base bg-primary text-white hover:text-[#E3C8B9] hover:scale-110 transition-transform duration-200 cursor-pointer flex items-center group gap-x-2 "
+                  onPress={() => {
+                    uploadRef.current.click()
+                  }}
                 >
                   上傳新大頭貼
                   <HiArrowRight className="transition-transform duration-300 ease-out group-hover:translate-x-3" />
                 </Button>
+
+                <input
+                  type="file"
+                  ref={uploadRef}
+                  style={{ display: 'none' }}
+                  onChange={(e) => {
+                    const file = e.target.files[0]
+                    const formData = new FormData()
+                    formData.append('avatar', file)
+                    fetch('http://localhost:3001/user/avatar', {
+                      method: 'POST',
+                      headers: {
+                        ...getAuthHeader(),
+                      },
+                      body: formData,
+                    }).then(() => {
+                      onReSend(true)
+                    })
+                  }}
+                />
               </div>
             </div>
             <div className="w-1/2 flex flex-col justify-between h-full p-4 ">
