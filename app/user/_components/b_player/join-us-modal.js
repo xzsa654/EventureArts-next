@@ -53,7 +53,7 @@ export default function JoinUsModal({ isOpen, onOpenChange }) {
         radius: 'lg',
         description: '註冊失敗',
         color: 'danger',
-        timeout: 10000,
+        timeout: 3000,
       })
 
       // 展開錯誤的陣列將值丟到一個物件內
@@ -66,7 +66,7 @@ export default function JoinUsModal({ isOpen, onOpenChange }) {
         radius: 'lg',
         description: '註冊成功！',
         color: 'success',
-        timeout: 10000,
+        timeout: 3000,
       })
       onOpenChange(false)
       // 將 auth 的 role 更改

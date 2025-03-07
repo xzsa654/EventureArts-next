@@ -56,7 +56,7 @@ export default function VerifyEmail() {
         description: '請前往您的信箱查收',
         promise: new Promise((resolve) => setTimeout(resolve, 3000)),
         color: 'success',
-        timeout: 10000,
+        timeout: 3000,
       })
       setIsVerify(true)
       setDisabled(false)
