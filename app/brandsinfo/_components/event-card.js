@@ -20,7 +20,7 @@ export default function EventCard({ event }) {
 
   // 動態決定跳轉網址
   const targetUrl = event.e_id
-    ? `/exhibit/detail/${event.e_id}`
+    ? `/exhibit/online-detail/${event.e_id}`
     : `/course/product/${event.c_id}`
   return (
     <Card
