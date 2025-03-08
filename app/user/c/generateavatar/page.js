@@ -5,7 +5,8 @@ import { useAuth } from '@/hooks/use-auth' // 存會員資料的 hook
 import { useRouter } from 'next/navigation' // 用來跳轉頁面
 import { USERDATA } from '@/lib/user-api'
 import { Button } from '@heroui/react'
-import { HiArrowRight } from 'react-icons/hi'
+// import { HiArrowRight } from 'react-icons/hi'
+import { IoRefreshOutline, IoCheckmarkDone } from 'react-icons/io5'
 
 export default function GenerateavatarPage() {
   const { auth, getAuthHeader } = useAuth() // 取得會員資訊
@@ -41,35 +42,104 @@ function AvatarGenerator({ auth, getAuthHeader }) {
   const router = useRouter() // Next.js 的 Router
   const canvasRef = useRef(null)
   const [avatarFilename, setAvatarFilename] = useState(null)
-  const [userData, setUserData] = useState(null) // 存會員資料
   const [isLoading, setIsLoading] = useState(false) // 控制 Loading 狀態
+  const [userData, setUserData] = useState(null) // 存會員資料
+  const [translateMode, setTranslateMode] = useState('cx-cy') // 預設中心點
+  const [refreshKey, setRefreshKey] = useState(0) // 讓畫布刷新
 
   // **產生完整的圖片 URL**
   const avatarUrl = avatarFilename
     ? `http://localhost:3001/tmp_uploads/avatar/${avatarFilename}`
     : null
 
-  // **畫藍底 + 白色圈圈**
+  // ==============生成式藝術頭像=============
+  // **角度轉弧度**
+  const degToRad = (degrees) => (degrees / 180) * Math.PI
+  // **畫生成式藝術**
   const drawCanvas = () => {
     const canvas = canvasRef.current
     if (!canvas) return
     const ctx = canvas.getContext('2d')
 
-    // 畫背景 (藍色)
-    ctx.fillStyle = '#0000FF'
-    ctx.fillRect(0, 0, 400, 400)
+    // 清空畫布
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-    // 畫白色圓圈
-    ctx.fillStyle = '#FFFFFF'
-    ctx.beginPath()
-    ctx.arc(200, 200, 80, 0, Math.PI * 2)
-    ctx.fill()
+    // 設定背景顏色
+    ctx.fillStyle = '#5F5420'
+    ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+    // 設定中心點
+    const cx = canvas.width * 0.5
+    const cy = canvas.height * 0.5
+
+    const w = canvas.width * 0.01
+    const h = canvas.height * 0.1
+    let x, y
+
+    const num = 40
+    const radius = canvas.width * 0.3
+
+    for (let i = 0; i < num; i++) {
+      ctx.fillStyle = '#Eeaa77'
+      const slice = degToRad(360 / num)
+      const angle = slice * i
+
+      x = cx + radius * Math.sin(angle)
+      y = cy + radius * Math.cos(angle)
+
+      ctx.save()
+      ctx.translate(x, y)
+      ctx.rotate(-angle)
+      ctx.scale(Math.random() * 1.9 + 0.1, Math.random() * 0.3 + 0.2)
+
+      ctx.beginPath()
+      ctx.rect(-w * 0.5, Math.random() * -h * 0.5, w, h)
+      ctx.fill()
+      ctx.restore()
+
+      // **處理四種 `translate` 狀態**
+      ctx.save()
+      if (translateMode === 'cx-cy') ctx.translate(cx, cy)
+      else if (translateMode === 'x-cy') ctx.translate(x, cy)
+      else if (translateMode === 'cx-y') ctx.translate(cx, y)
+      else if (translateMode === 'x-y') ctx.translate(x, y)
+
+      ctx.rotate(-angle)
+
+      // **建立漸層**
+      const gradient = ctx.createRadialGradient(
+        0,
+        0,
+        radius * 0.5,
+        0,
+        0,
+        radius
+      )
+      gradient.addColorStop(0, '#A1ABBE')
+      gradient.addColorStop(0.5, '#A1ABBE')
+      gradient.addColorStop(1, '#EDBEE4')
+
+      ctx.strokeStyle = gradient
+      ctx.lineWidth = Math.random() * 5 + 2
+
+      ctx.beginPath()
+      ctx.arc(
+        0,
+        0,
+        radius * (Math.random() * 0.6 + 0.7),
+        slice * (Math.random() * -5 + 1),
+        slice * (Math.random() * -2 + 1)
+      )
+      ctx.stroke()
+
+      ctx.restore()
+    }
   }
 
   // **載入畫布**
   useEffect(() => {
     drawCanvas()
-  }, [])
+  }, [translateMode, refreshKey]) // **當 `translateMode` 或 `refreshKey` 變動時重新繪製**
 
   // **儲存頭像**
   const saveAvatar = async () => {
@@ -108,7 +178,7 @@ function AvatarGenerator({ auth, getAuthHeader }) {
 
   return (
     <div className="flex flex-col items-center space-y-10 relative">
-      {/* ✅ Loading 畫面：完全覆蓋畫面，並隱藏所有內容 */}
+      {/* Loading 畫面：完全覆蓋畫面，並隱藏所有內容 */}
       {isLoading ? (
         <div className="fixed inset-0 w-screen h-screen flex items-center justify-center bg-black bg-opacity-50 z-[100]">
           <div className="flex flex-col items-center">
@@ -117,33 +187,79 @@ function AvatarGenerator({ auth, getAuthHeader }) {
           </div>
         </div>
       ) : (
-        // ✅ 只有在 `isLoading === false` 時才顯示 UI
         <>
-          {avatarUrl ? (
-            <img
-              src={avatarUrl}
-              alt="Avatar"
-              className="w-40 h-40 rounded-full border"
-            />
-          ) : (
-            <canvas
-              ref={canvasRef}
-              width={400}
-              height={400}
-              className="border"
-            />
-          )}
+          <canvas
+            ref={canvasRef}
+            width={400}
+            height={400}
+            className="border shadow-lg"
+          />
 
-          {auth?.token && (
+          {/* 狀態切換按鈕 */}
+          <div className="flex gap-2">
             <Button
               radius="none"
-              className="px-12 text-base bg-primary text-white hover:text-[#E3C8B9] hover:scale-110 transition-transform duration-200 cursor-pointer flex items-center group gap-x-2 "
-              onPress={saveAvatar}
+              className={`px-4 py-2 ${
+                translateMode === 'cx-cy'
+                  ? 'bg-primary text-secondary'
+                  : 'bg-secondary text-primary'
+              }`}
+              onPress={() => setTranslateMode('cx-cy')}
             >
-              儲存頭像
-              <HiArrowRight className="transition-transform duration-300 ease-out group-hover:translate-x-3" />
+              宇宙之心
             </Button>
-          )}
+            <Button
+              radius="none"
+              className={`px-4 py-2 ${
+                translateMode === 'x-cy'
+                  ? 'bg-primary text-secondary'
+                  : 'bg-secondary text-primary'
+              }`}
+              onPress={() => setTranslateMode('x-cy')}
+            >
+              漂流之線
+            </Button>
+            <Button
+              radius="none"
+              className={`px-4 py-2  ${
+                translateMode === 'cx-y'
+                  ? 'bg-primary text-secondary'
+                  : 'bg-secondary text-primary'
+              }`}
+              onPress={() => setTranslateMode('cx-y')}
+            >
+              地平之上
+            </Button>
+            <Button
+              radius="none"
+              className={`px-4 py-2  ${
+                translateMode === 'x-y'
+                  ? 'bg-primary text-secondary'
+                  : 'bg-secondary text-primary'
+              }`}
+              onPress={() => setTranslateMode('x-y')}
+            >
+              混沌之舞
+            </Button>
+          </div>
+
+          {/* 重整按鈕 */}
+          <Button
+            radius="none"
+            className="px-12 text-base bg-yellow-600 text-white hover:text-[#E3C8B9] hover:scale-110 transition-transform duration-200 cursor-pointer flex items-center group gap-x-2 "
+            onPress={() => setRefreshKey((prev) => prev + 1)}
+          >
+            <IoRefreshOutline /> 重整畫布
+          </Button>
+
+          {/* 儲存按鈕 */}
+          <Button
+            radius="none"
+            className="px-12 text-base bg-green-600 text-white hover:text-[#E3C8B9] hover:scale-110 transition-transform duration-200 cursor-pointer flex items-center group gap-x-2 "
+            onPress={saveAvatar}
+          >
+            儲存頭像 <IoCheckmarkDone />
+          </Button>
         </>
       )}
     </div>
