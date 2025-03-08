@@ -29,7 +29,7 @@ export default function ExhibitionSection({
       {items.map((exhibition, index) => (
         <div key={exhibition.e_id} className="font-en mb-16 space-y-4">
           <span className="block text-7xl font-light">{exhibition.e_id}</span>
-          <div
+          <button
             className="relative aspect-[3/4] cursor-pointer group overflow-hidden w-[300px]"
             onClick={() => onExhibitionSelect(exhibition)}
           >
@@ -49,7 +49,7 @@ export default function ExhibitionSection({
               // sizes="(max-width: 768px) 150vw, (max-width: 1200px) 33vw"
               className="object-cover transition-transform duration-500 group-hover:scale-105"
             />
-          </div>
+          </button>
           <div className="space-y-1">
             <h3 className="font-serif text-lg">{exhibition.e_name}</h3>
           </div>

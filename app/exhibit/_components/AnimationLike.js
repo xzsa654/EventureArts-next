@@ -61,8 +61,8 @@ export default function AnimationLike() {
 
   return (
     <>
-    {/* 整個元件高度在這 [350]*/}
-      <section className="relative w-screen h-[350px] overflow-hidden bg-black"> 
+      {/* 整個元件高度在這 [350]*/}
+      <section className="relative w-screen h-[350px] overflow-hidden bg-black">
         <div className="relative w-full h-full overflow-hidden grid grid-cols-3">
           {columnImages.map((images, columnIndex) => (
             <div key={columnIndex} className="relative">
@@ -90,14 +90,9 @@ export default function AnimationLike() {
                         alt={image.alt}
                         width={400}
                         height={300}
+                        priority={imageIndex === 0 && columnIndex === 0}
                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                       />
-                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                    </div>
-                    <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <h3 className="text-white text-sm font-medium truncate">
-                        {image.alt}
-                      </h3>
                     </div>
                   </button>
                 ))}
