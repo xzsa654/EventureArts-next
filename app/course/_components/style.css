@@ -111,17 +111,17 @@ body {
 }
 
 /* --------- 卡片 card1 START --------- */
-.card1 {
+.card11 {
   border: #000000 1px solid;
   background-color: #f7f5f1;
   width: 370px;
   transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
-.card1:hover {
+.card11:hover {
   background-color: transparent;
-  transform: scale(1.03);
-  border: 2px #f7b0b3 solid;
+  transform: scale(0.98);
+  border: 2px #2a2a2a solid;
 }
 
 .chip {

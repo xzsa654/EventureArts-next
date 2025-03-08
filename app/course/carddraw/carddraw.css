@@ -48,7 +48,7 @@ body {
 
 
 /* --------- 顯示區塊：預設效果 --------- */
-.swiper-slide {
+.swpslide {
     /* background: #eee; */
     display: flex;
     justify-content: center;

@@ -3,7 +3,7 @@
 
 import React, { useState } from 'react';
 import BtnCTA from '../course/_components/btnCTA';
-import CardB1 from '../course/_components/card-b1';
+import CardB1 from './_components/card-b1';
 import ReactCompareImage from 'react-compare-image';
 import ReactPageScroller from 'react-page-scroller';
 import UploadProcess from './_components/upload-process';

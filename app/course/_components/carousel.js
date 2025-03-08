@@ -34,63 +34,34 @@ export default function Carousel(props) {
       >
         <SwiperSlide className="w-1/3 h-auto course">
           <a href="/course/product/2">
-            <img
-              className="w-[800px] h-[300px]"
-              src="/Blair/carousel-banner/banner1-crown.png"
-              alt=""
-            />
-          </a>
-        </SwiperSlide>
+          <img className="w-[800px] h-[250px]" src="/Blair/carousel-banner/banner1-crown.png" alt="" /></a>
+          </SwiperSlide>
 
         <SwiperSlide className="w-1/3 h-auto course">
           <a href="/course/product/2">
-            <img
-              className="w-[800px] h-[300px]"
-              src="/Blair/carousel-banner/banner5-bake.png"
-              alt=""
-            />
-          </a>
-        </SwiperSlide>
+          <img className="w-[800px] h-[250px]" src="/Blair/carousel-banner/banner5-bake.png" alt="" /></a>
+          </SwiperSlide>   
 
         <SwiperSlide className="w-1/3 h-auto course">
           <a href="/course/product/2">
-            <img
-              className="w-[800px] h-[300px]"
-              src="/Blair/carousel-banner/banner2-coffee.png"
-              alt=""
-            />
-          </a>
-        </SwiperSlide>
+          <img className="w-[800px] h-[250px]" src="/Blair/carousel-banner/banner2-coffee.png" alt="" /></a>
+          </SwiperSlide>    
 
         <SwiperSlide className="w-1/3 h-auto course">
           <a href="/course/product/2">
-            <img
-              className="w-[800px] h-[300px]"
-              src="/Blair/carousel-banner/banner3-florist.png"
-              alt=""
-            />
-          </a>
-        </SwiperSlide>
+          <img className="w-[800px] h-[250px]" src="/Blair/carousel-banner/banner3-florist.png" alt="" /></a>
+          </SwiperSlide>
 
         <SwiperSlide className="w-1/3 h-auto course">
           <a href="/course/product/2">
-            <img
-              className="w-[800px] h-[300px]"
-              src="/Blair/carousel-banner/banner4-journal.png"
-              alt=""
-            />
-          </a>
-        </SwiperSlide>
-
-        <SwiperSlide className="w-1/3 h-auto course">
+          <img className="w-[800px] h-[250px]" src="/Blair/carousel-banner/banner4-journal.png" alt="" /></a>
+          </SwiperSlide>
+          
+          <SwiperSlide className="w-1/3 h-auto">
           <a href="/course/product/2">
-            <img
-              className="w-[800px] h-[300px]"
-              src="/Blair/carousel-banner/banner6-tarot.png"
-              alt=""
-            />
-          </a>
-        </SwiperSlide>
+          <img className="w-[800px] h-[250px]" src="/Blair/carousel-banner/banner6-tarot.png" alt="" /></a>
+          </SwiperSlide>    
+          
       </Swiper>
     </>
   )
