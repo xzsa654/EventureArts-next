@@ -108,7 +108,7 @@ export default function Carddraw(props) {
       onSwiper={(swiper) => console.log(swiper)}
     >
       {Array(20).fill(0).map((_, index) => (
-      <SwiperSlide key={index} className="swiper-slide">
+      <SwiperSlide key={index} className="swpslide swiper-slide">
 
         {/* 卡片 */}
           <div className="ticket flex flex-col gap-6">

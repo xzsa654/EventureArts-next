@@ -11,7 +11,7 @@ export default function Card1({
   cate = '縫紉布藝', 
   pname = '線與布的溫度。法式手工刺繡小物製作｜Newbie Friendly', 
   pdate = '2025 | Dec.12th -Dec.20th', 
-  pprice = 'NTD $3,200'
+  pprice = '$ 3200 NTD'
 }) {
   
   return (

@@ -129,7 +129,7 @@ export default function Explore() {
                   cate={categoryMap[course.c_option] || "未知分類"} // 這裡用 map 查找分類名稱
                   pname={course.c_name}
                   pdate={`${course.c_startdate.split("T")[0]} 至 ${course.c_enddate.split("T")[0]}`}
-                  pprice={`NTD $${course.c_price}`}
+                  pprice={`$ ${course.c_price} NTD`}
                 />
               ))
             ) : (
