@@ -107,7 +107,7 @@ export default function UserLayout({ children }) {
               </li>
               <li className=" font-cn border-black border-b-1 w-full h-[50px] flex items-center justify-center ">
                 <Link
-                  href="/user/c/generateavatar'"
+                  href="/user/c/generateavatar"
                   size="md"
                   className={`text-16 hover:text-yellow-600 ${
                     pathName == '/c/generateavatar' ? isActive.c : ''

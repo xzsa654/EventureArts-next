@@ -131,24 +131,24 @@ export default function BrandsPage({ params }) {
                   <div className="flex flex-col gap-2">
                     <dl className="text-base flex font-cn justify-between">
                       <dt>品牌名稱：</dt>
-                      <dt>{brand?.bd_name}</dt>
+                      <dt>{brand?.bd_name || '暫無'}</dt>
                     </dl>
 
                     <dl className="text-base flex font-cn justify-between">
                       <dt>電話：</dt>
-                      <dt>{brand?.bd_tel}</dt>
+                      <dt>{brand?.bd_tel || '暫無'}</dt>
                     </dl>
                     <dl className="text-base flex font-cn justify-between">
                       <dt>地址：</dt>
-                      <dt>{brand?.bd_address}</dt>
+                      <dt>{brand?.bd_address  || '暫無'}</dt>
                     </dl>
                     <dl className="text-base flex font-cn justify-between">
                       <dt>品牌聯絡信箱：</dt>
-                      <dt>{brand?.bd_email}</dt>
+                      <dt>{brand?.bd_email  || '暫無'}</dt>
                     </dl>
                     <dl className="text-base flex font-cn justify-between">
                       <dt>品牌官方網站：</dt>
-                      <dt>{brand?.bd_website}</dt>
+                      <dt>{brand?.bd_website  || '暫無'}</dt>
                     </dl>
                   </div>
                 </div>
