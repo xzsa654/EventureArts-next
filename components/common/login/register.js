@@ -15,10 +15,10 @@ export default function RegisterStep1() {
   const { firstLogin, registerDataHandler } = useAuth()
   const { register1, register2: next } = useModal()
   const { onOpen } = next
-  const [errorMessage, setErrorMessage] = useState(false)
+  const [errorMessage, setErrorMessage] = useState()
   const { isOpen, onOpenChange } = register1
   const { login_type } = firstLogin
-
+  const passwordRef = useRef()
   // 送出驗證email表單
   const onSubmit = async (e) => {
     e.preventDefault()
@@ -32,7 +32,8 @@ export default function RegisterStep1() {
       const res = await fetch(EMAIL_CHECKING, { method: 'POST', body: data })
       const result = await res.json()
       if (!result.success) {
-        return setErrorMessage(!result.success)
+        setErrorMessage(result.message)
+        return
       }
     }
     // 將資料丟回狀態等到最後在一併送出
@@ -68,7 +69,6 @@ export default function RegisterStep1() {
     >
       {!login_type && (
         <>
-          {' '}
           <InputPop
             isRequired
             name="user_email"
@@ -82,9 +82,8 @@ export default function RegisterStep1() {
             }}
             popContent="請輸入有效的電子郵件地址（例：example@email.com）"
             className={`w-full ${
-              errorMessage
-                ? 'after:text-red-500 after:content-["EMAIL已被註冊"]'
-                : ''
+              errorMessage?.includes('email') &&
+              `after:text-red-500 after:content-['e-mail已被註冊過']`
             } `}
             popTitle="Email"
           />
@@ -92,8 +91,23 @@ export default function RegisterStep1() {
             isRequired
             name="password"
             label="密碼"
+            refs={passwordRef}
             type="password"
             realTimeValid={true}
+            className="w-full"
+            isPop={false}
+          />
+          <InputPop
+            isRequired
+            name="password_again"
+            label="重複密碼"
+            type="password"
+            validateItem={(item) => {
+              if (item !== passwordRef.current?.value) {
+                return '兩次密碼不相符'
+              }
+              return
+            }}
             className="w-full"
             isPop={false}
           />
@@ -121,7 +135,10 @@ export default function RegisterStep1() {
         label="手機"
         type="text"
         popContent="請輸入10位數的台灣手機號碼（09開頭）"
-        className="w-full"
+        className={`w-full ${
+          errorMessage?.includes('mobile') &&
+          `after:text-red-500 after:content-['手機號碼已經被註冊過']`
+        } `}
         popTitle="手機格式"
         validateItem={(value) => {
           if (!/^09\d{8}$/.test(value)) {

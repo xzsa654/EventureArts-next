@@ -25,13 +25,13 @@ const InitialPop = ({ popTitle, popContent }) => {
 }
 
 export default function InputPop({
+  refs,
   label = '',
   className = '',
   isPop = true,
   type = '',
   name = '',
   popContent = '',
-
   isRequired = false,
   popTitle = '',
   validateItem = () => {},
@@ -60,6 +60,7 @@ export default function InputPop({
       <div className={className}>
         {realTimeValid ? (
           <Input
+            ref={refs}
             isInvalid={errors.length > 0}
             label={label}
             isRequired

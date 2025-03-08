@@ -20,6 +20,7 @@ export default function ChatRoomHeader({
         <div>
           <Alert
             hideIcon
+            description={`${nickname} ${brandname ? `(${brandname})` : ''}`}
             title={`${nickname} ${brandname ? `(${brandname})` : ''}`}
             startContent={
               <>
