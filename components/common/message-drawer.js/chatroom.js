@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react'
 import { useAuth } from '@/hooks/use-auth'
-import { User, Chip, Image, addToast } from '@heroui/react'
+import { User, Chip, Image } from '@heroui/react'
 import SplitText from './splitText'
 import ChatRoomHeader from './chatroomheader'
 export default function ChatRoom({
@@ -56,7 +56,7 @@ export default function ChatRoom({
           renderHandler(false)
         })
     }
-  }, [auth?.token, renderControl])
+  }, [auth?.token, renderControl, messages])
 
   useEffect(() => {
     if (messages && messageTailRef.current) {

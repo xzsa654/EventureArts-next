@@ -184,7 +184,7 @@ export default function Header(props) {
             ''
           ) : (
             <NavbarContent
-              className="max-md:hidden gap-4 font-cn gap-8"
+              className="max-md:hidden  font-cn gap-8"
               justify="center"
             >
               {menuItems.map((item, i) => {

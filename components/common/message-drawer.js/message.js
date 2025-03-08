@@ -37,46 +37,31 @@ export default function MessageDrawer({
   // 添加通知
   const [senderName, setSenderName] = useState('')
 
+  // 單獨處理 newMessage 事件
   useEffect(() => {
-    // 只在 drawer 關閉且 socket 存在時註冊事件
     if (!socket) return
 
-    // 處理 details 事件
-    const handleDetails = (details) => {
-      if (isOpen) return // 如果 drawer 開啟，不設置 senderName
-
-      if (details.brandname) {
-        setSenderName(`${details.nickname}(${details.brandname})`)
-      } else {
-        setSenderName(`${details.nickname}`)
-      }
-    }
-
-    // 處理 newMessage 事件
     const handleNewMessage = (newMessage) => {
-      if (isOpen) return // 如果 drawer 開啟，不顯示 toast
-
-      if (senderName && +newMessage.receiver_id === auth.user_id) {
+      if (isOpen) return
+      if (+newMessage.receiver_id === auth.user_id) {
+        // 無論 senderName 是否設置，都顯示通知
         addToast({
           radius: 'lg',
           icon: <CiChat1 />,
-          description: `${senderName}向你發出訊息`,
+          description: `${newMessage.senderName} 向你發出訊息
+          `,
           color: 'danger',
           timeout: 3000,
         })
       }
     }
 
-    // 註冊事件監聽器
-    socket.on('details', handleDetails)
     socket.on('newMessage', handleNewMessage)
 
-    // 清理函數，移除事件監聽器
     return () => {
-      socket.off('details', handleDetails)
       socket.off('newMessage', handleNewMessage)
     }
-  }, [socket, isOpen, senderName, auth.user_id])
+  }, [socket, isOpen, auth.user_id, senderName])
 
   const [isChatting, setIsChatting] = useState(false)
   const [chatWith, setChatWith] = useState('')
