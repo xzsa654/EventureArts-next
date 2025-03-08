@@ -10,6 +10,8 @@ import { IoRefreshOutline, IoCheckmarkDone } from 'react-icons/io5'
 
 export default function GenerateavatarPage() {
   const { auth, getAuthHeader } = useAuth() // 取得會員資訊
+  const [userData, setUserData] = useState(null) // 定義 setUserData
+  const [avatarFilename, setAvatarFilename] = useState(null) // 確保 avatarFilename 存在
 
   // **獲取會員登入資訊**
   useEffect(() => {
@@ -33,7 +35,12 @@ export default function GenerateavatarPage() {
   return (
     <div className="flex flex-col w-full h-[760] justify-center items-center gap-4">
       {/* <h1 className="text-xl font-bold mb-4">Generate Avatar Page</h1> */}
-      <AvatarGenerator auth={auth} getAuthHeader={getAuthHeader} />
+      <AvatarGenerator
+        auth={auth}
+        getAuthHeader={getAuthHeader}
+        avatarFilename={avatarFilename} // 傳遞給 AvatarGenerator
+        setAvatarFilename={setAvatarFilename} // 確保可以更新
+      />
     </div>
   )
 }
@@ -91,7 +98,7 @@ function AvatarGenerator() {
       ctx.save()
       ctx.translate(x, y)
       ctx.rotate(-angle)
-      ctx.scale(Math.random() * 1.9 + 0.1, Math.random() * 0.3 + 0.2)
+      ctx.scale(Math.random() * 1.3 + 0.3, Math.random() * 0.6 + 0.6)
 
       ctx.beginPath()
       ctx.rect(-w * 0.5, Math.random() * -h * 0.5, w, h)
