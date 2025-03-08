@@ -8,11 +8,14 @@ import {
   DrawerBody,
   DrawerFooter,
   Input,
+  addToast,
 } from '@heroui/react'
+import { useAuth } from '@/hooks/use-auth'
 import { FaSearch } from 'react-icons/fa'
 import ChatList from './chatlist'
 import ChatRoom from './chatroom'
 import MessageFooter from './messageFooter'
+import { CiChat1 } from 'react-icons/ci'
 
 export default function MessageDrawer({
   onOpenChange = () => {},
@@ -29,6 +32,51 @@ export default function MessageDrawer({
   useEffect(() => {
     if (getId && isOpen) chatHandle(getId)
   }, [isOpen, getId])
+
+  const { auth, socket } = useAuth()
+  // 添加通知
+  const [senderName, setSenderName] = useState('')
+
+  useEffect(() => {
+    // 只在 drawer 關閉且 socket 存在時註冊事件
+    if (!socket) return
+
+    // 處理 details 事件
+    const handleDetails = (details) => {
+      if (isOpen) return // 如果 drawer 開啟，不設置 senderName
+
+      if (details.brandname) {
+        setSenderName(`${details.nickname}(${details.brandname})`)
+      } else {
+        setSenderName(`${details.nickname}`)
+      }
+    }
+
+    // 處理 newMessage 事件
+    const handleNewMessage = (newMessage) => {
+      if (isOpen) return // 如果 drawer 開啟，不顯示 toast
+
+      if (senderName && +newMessage.receiver_id === auth.user_id) {
+        addToast({
+          radius: 'lg',
+          icon: <CiChat1 />,
+          description: `${senderName}向你發出訊息`,
+          color: 'danger',
+          timeout: 3000,
+        })
+      }
+    }
+
+    // 註冊事件監聽器
+    socket.on('details', handleDetails)
+    socket.on('newMessage', handleNewMessage)
+
+    // 清理函數，移除事件監聽器
+    return () => {
+      socket.off('details', handleDetails)
+      socket.off('newMessage', handleNewMessage)
+    }
+  }, [socket, isOpen, senderName, auth.user_id])
 
   const [isChatting, setIsChatting] = useState(false)
   const [chatWith, setChatWith] = useState('')

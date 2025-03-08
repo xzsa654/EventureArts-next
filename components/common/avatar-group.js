@@ -19,11 +19,35 @@ import { useRouter } from 'next/navigation'
 import { useAuth } from '@/hooks/use-auth'
 import MessageDrawer from './message-drawer.js/message'
 import { useModal } from '@/contexts/modal-context'
+import { useEffect, useState } from 'react'
+import { MdShortcut } from 'react-icons/md'
 export default function AVatarGroup() {
   const router = useRouter()
-  const { auth, logOut } = useAuth()
+  const { auth, logOut, socket } = useAuth()
   const { isOpen, onOpenChange } = useModal().message
-
+  const [unread, setUnread] = useState(0)
+  const [rerender, setRerender] = useState(false)
+  useEffect(() => {
+    if (socket) {
+      socket.emit('getUnReadCount', auth.user_id)
+      socket.on('unreadCount', ({ unread }) => {
+        setUnread(unread)
+      })
+      socket.on('newMessage', (data) => {
+        setUnread((prev) => {
+          prev + 1
+        })
+      })
+    }
+  }, [socket, rerender, unread, auth.user_id])
+  useEffect(() => {
+    socket?.on('reRender', () => {
+      setRerender(!rerender)
+    })
+    return () => {
+      socket?.off('reRender')
+    }
+  }, [socket, rerender])
   return (
     <div>
       <Dropdown
@@ -67,6 +91,13 @@ export default function AVatarGroup() {
               key="message"
               onPress={onOpenChange}
               startContent=<CiChat1 size={20} />
+              endContent={
+                !!unread && (
+                  <div className=" rounded-full w-6 h-6 flex justify-center items-center text-white text-center bg-red-400 ">
+                    {unread}
+                  </div>
+                )
+              }
             >
               我的訊息
             </DropdownItem>

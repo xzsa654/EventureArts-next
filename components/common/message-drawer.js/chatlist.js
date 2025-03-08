@@ -40,7 +40,7 @@ export default function ChatList({ chatHandle = () => {}, filterValue = '' }) {
             return {
               ...v,
               text: message.text,
-              unread_count: 1 + v.unread_count++,
+              unread_count: ++v.unread_count,
             }
           } else return v
         })
