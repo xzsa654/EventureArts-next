@@ -1,8 +1,8 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import {Chip} from "@heroui/react";
 import Link from 'next/link';
+import { motion } from "framer-motion";
 
 export default function Card1({
   c_id,
@@ -16,8 +16,16 @@ export default function Card1({
   
   return (
     <>
+    <motion.div
+    initial={{ opacity: 0, y: 50 }} // 初始狀態：透明、向下偏移50px
+    animate={{ opacity: 1, y: 0 }}  // 結束狀態：不透明、完全可見
+    transition={{ duration: 0.8, ease: "easeOut", delay: 0.3 }} // 设置动画时间 & 延迟
+    className=""
+  >
+
+
 <Link href={`/course/product/${c_id || 20}`} className="block">
-      <div className="card1">
+      <div className="card11">
         <img className="w-full aspect-[3/2]" src={img} alt="productImg" />
         <div className="chips flex gap-3 px-4 py-6">
           <div className='chip'>{region}</div>
@@ -30,6 +38,7 @@ export default function Card1({
         </div>
       </div>
 </Link>   
+  </motion.div>
     </>
   )
 }

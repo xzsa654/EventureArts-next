@@ -84,6 +84,7 @@ export default function Explore() {
   };
 
   return (
+
     <div className="main flex flex-col w-full px-16">
       {/* 頁面標題 */}
       <div className="topFrame p-12">
@@ -140,5 +141,6 @@ export default function Explore() {
       </div>
 
     </div>
+ 
   );
 }

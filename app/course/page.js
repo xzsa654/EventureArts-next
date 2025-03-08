@@ -3,17 +3,23 @@
 import React from 'react'
 import Headline from './_components/headline'
 import Carousel from './_components/carousel'
-import Searchbox from './_components/searchbox'
-import ParaTitle from './_components/para-title'
 import QuickLinks from './_components/quick-links'
 import NewProduct from './_components/new-product'
 import CardDraw from './_components/card-draw'
 import TopSix from './_components/top-six'
 import BrandList1 from './_components/brand-list1'
+import { motion } from "framer-motion";
 
 export default function CoursePage(props) {
   return (
-    <div className="bg-[url('/chu-images/img-bg.jpg')] bg-fixed">
+
+  <motion.div
+  initial={{ opacity: 0, y: 50 }} // 初始狀態：透明、向下偏移50px
+  animate={{ opacity: 1, y: 0 }}  // 結束狀態：不透明、完全可見
+  transition={{ duration: 0.8, ease: "easeOut", delay: 0.3 }} // 设置动画时间 & 延迟
+  className=""
+  >
+  <div className="bg-[url('/chu-images/img-bg.jpg')] bg-fixed">
     <div className="flex justify-center flex-col h-full">
         <div className='mt-20 px-16 pt-8 pb-4 mx-auto w-[80%]'><Headline /></div>
         <div className='px-16 pt-8 mx-auto w-full'><Carousel /></div>
@@ -23,7 +29,7 @@ export default function CoursePage(props) {
         <div className='px-16 pt-8 mx-auto w-full'><TopSix /></div>
         <div className='px-16 py-16 mx-auto w-full'><BrandList1 /></div>
     </div>
-
-</div>
+  </div>
+  </motion.div>
   )
 }
