@@ -91,7 +91,6 @@ function ExploreContent() {
   }
 
   return (
-
     <div className="main flex flex-col w-full px-16">
       {/* 頁面標題 */}
       <div className="topFrame p-12">
@@ -146,8 +145,10 @@ function ExploreContent() {
                   region={course.district}
                   cate={categoryMap[course.c_option] || '未知分類'} // 這裡用 map 查找分類名稱
                   pname={course.c_name}
-                  pdate={`${course.c_startdate.split("T")[0]} 至 ${course.c_enddate.split("T")[0]}`}
-                  pprice={`$ ${course.c_price} NTD`}
+                  pdate={`${course.c_startdate.split('T')[0]} 至 ${
+                    course.c_enddate.split('T')[0]
+                  }`}
+                  pprice={`NTD $${course.c_price}`}
                 />
               ))
             ) : (
@@ -157,6 +158,20 @@ function ExploreContent() {
         </div>
       </div>
     </div>
- 
-  );
+  )
+}
+
+// 主要導出的組件，使用 Suspense 包裹
+export default function Explore() {
+  return (
+    <Suspense
+      fallback={
+        <div className="main flex flex-col w-full px-16 min-h-screen items-center justify-center">
+          <p className="text-xl">載入課程資訊中...</p>
+        </div>
+      }
+    >
+      <ExploreContent />
+    </Suspense>
+  )
 }
