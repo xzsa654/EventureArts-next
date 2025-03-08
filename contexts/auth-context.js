@@ -201,6 +201,17 @@ export function AuthContextProvider({ children }) {
     }
   }, [socket, isOpen, senderName])
 
+  // 更新會員頭像 (Avatar)
+  const updateAvatar = (newAvatar) => {
+    setAuth((prevAuth) => {
+      if (!prevAuth) return prevAuth // 確保 `prevAuth` 存在
+  
+      const updatedAuth = { ...prevAuth, avatar: newAvatar }
+      localStorage.setItem(storageKey, JSON.stringify(updatedAuth)) // ✅ 更新 LocalStorage
+      return updatedAuth
+    })
+  }
+
   return (
     <>
       <AuthContext.Provider
@@ -216,6 +227,7 @@ export function AuthContextProvider({ children }) {
           beginBrand,
           socket,
           onlineUsers,
+          updateAvatar, // 傳遞 updateAvatar
         }}
       >
         {children}
@@ -223,4 +235,5 @@ export function AuthContextProvider({ children }) {
     </>
   )
 }
+
 export default AuthContext

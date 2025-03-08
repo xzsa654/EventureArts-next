@@ -37,6 +37,7 @@ export default function AVatarGroup() {
             // as="button"
             avatarProps={{
               isBordered: true,
+              key: auth.avatar, // 強制重新渲染
               src: `http://localhost:3001/uploads/avatar/${auth?.avatar}`,
             }}
             className="transition-transform"

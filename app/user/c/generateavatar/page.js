@@ -38,7 +38,7 @@ export default function GenerateavatarPage() {
   )
 }
 
-function AvatarGenerator({ auth, getAuthHeader }) {
+function AvatarGenerator() {
   const router = useRouter() // Next.js 的 Router
   const canvasRef = useRef(null)
   const [avatarFilename, setAvatarFilename] = useState(null)
@@ -46,6 +46,7 @@ function AvatarGenerator({ auth, getAuthHeader }) {
   const [userData, setUserData] = useState(null) // 存會員資料
   const [translateMode, setTranslateMode] = useState('cx-cy') // 預設中心點
   const [refreshKey, setRefreshKey] = useState(0) // 讓畫布刷新
+  const { auth, updateAvatar, getAuthHeader } = useAuth() // 這裡取得 `auth` & `getAuthHeader`
 
   // **產生完整的圖片 URL**
   const avatarUrl = avatarFilename
@@ -163,11 +164,11 @@ function AvatarGenerator({ auth, getAuthHeader }) {
 
         const data = await response.json()
         if (data.success) {
-          setAvatarFilename(data.filename) // ✅ 更新 filename
-          setTimeout(async () => {
-            await router.push('/user/c/profile') // ✅ 確保頁面成功跳轉後再關閉 Loading
-            setIsLoading(false)
-          }, 3000)
+          setAvatarFilename(data.filename) // 更新 filename
+          updateAvatar(data.filename) // 更新 auth.avatar
+
+          // 強制刷新，並確保跳轉到 `/user/c/profile`**
+          window.location.href = '/user/c/profile'
         }
       } catch (error) {
         console.error('上傳錯誤:', error)
