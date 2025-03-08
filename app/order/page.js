@@ -1,7 +1,6 @@
 'use client'
 
 import { Suspense } from 'react'
-import './order.css'
 
 // 將使用 useSearchParams 的邏輯分離到獨立組件
 function OrderContent() {
@@ -26,7 +25,7 @@ function OrderContent() {
   const [orderData, setOrderData] = useState(null)
   const [loading, setLoading] = useState(true)
 
-  // ✅ 確保 searchParams 只會在 Client Side 執行
+  // 確保 searchParams 只會在 Client Side 執行
   useEffect(() => {
     setEId(searchParams.get('e_id'))
     setCId(searchParams.get('c_id'))
@@ -72,11 +71,11 @@ function OrderContent() {
     <>
       {/*---------- 上—— 商家資料 ----------*/}
       <div className="mt-20">
-        <div className="detail">
+        <div className="py-5 px-16 leading-10">
           <div className="orderTitle">
-            <p>商品明細</p>
+            <p className="text-xl font-bold">商品明細</p>
           </div>
-          <hr />
+          <hr className="bg-[#dadada] h-[1px] border-0" />
           {/* 1. 活動名稱 */}
           <div className="flex flex-row justify-between">
             <p>活動名稱</p>
@@ -106,17 +105,17 @@ function OrderContent() {
           {/* 4. 課程備註 */}
           <div className="flex flex-row justify-between">
             <p> </p>
-            <p className="note ">
+            <p className="text-red-300 ">
               *請於付款後，致電品牌方進行預約確認，謝謝您。
             </p>
           </div>
         </div>
         {/*---------- 中—— 商品明細 ----------*/}
-        <div className="detail">
+        <div className="py-5 px-16 leading-10">
           <div className="orderTitle">
-            <p>商家資料</p>
+            <p className="text-xl font-bold">商家資料</p>
           </div>
-          <hr />
+          <hr className="bg-[#dadada] h-[1px] border-0" />
           {/* 1. 課程名稱&價格 */}
           <div className="flex flex-row justify-between">
             <p>商家名稱</p>
@@ -135,11 +134,11 @@ function OrderContent() {
         </div>
 
         {/*---------- 下—— 付款方式 ----------*/}
-        <div className="detail">
+        <div className="py-5 px-16 leading-10">
           <div className="orderTitle">
-            <p>付款方式</p>
+            <p className="text-xl font-bold">付款方式</p>
           </div>
-          <hr />
+          <hr className="bg-[#dadada] h-[1px] border-0" />
           {/* 1. 信用卡 */}
           <div className="paymentTitle flex flex-row justify-between text-16">
             信用卡一次付清
@@ -154,7 +153,15 @@ function OrderContent() {
             <Button
               size="sm"
               radius="none"
-              classNames={{}}
+              variant="light"
+              className="text-base text-gray-600 hover:text-yellow-300 hover:scale-110 transition-transform duration-200 cursor-pointer flex items-center group gap-x-2 mt-5 px-7 data-[hover=true]:bg-primary-300"
+            >
+              取消本次購買
+              <HiArrowRight className="transition-transform duration-300 ease-out group-hover:translate-x-3" />
+            </Button>
+            <Button
+              size="sm"
+              radius="none"
               variant="light"
               className="text-base text-yellow-600 hover:text-yellow-300 hover:scale-110 transition-transform duration-200 cursor-pointer flex items-center group gap-x-2 mt-5 px-7 data-[hover=true]:bg-primary-300"
               onPress={() => {
