@@ -12,22 +12,24 @@ export default function Footer(props) {
   ]
 
   //  **黑名單頁面（不顯示 Footer）**
-  const pathName = usePathname();
-  const noFooterPages = ["/", "/map"]; //  隱藏首頁/map Footer
+  const pathName = usePathname()
+  const noFooterPages = ['/', '/map'] //  隱藏首頁/map Footer
 
   // **條件判斷**
-  const isHidden = noFooterPages.includes(pathName) || pathName.startsWith("/exhibit/online-detail/");
+  const isHidden =
+    noFooterPages.includes(pathName) ||
+    pathName.startsWith('/exhibit/online-detail/')
 
   //  **確保 Hook 一致後才 return null**
   if (isHidden) {
-    return null;
+    return null
   }
 
   return (
     <>
       <div className="w-full   bg-black text-white flex  max-sm:p-0 p-10 flex-col  justify-center items-center gap-10   bottom-0">
         {/* Footer Content  */}
-        <div className="flex justify-between w-[1140] font-serif  py-5  border-t-1  max-sm:hidden">
+        <div className="flex justify-between w-[1140px] font-serif  py-5  border-t-1  max-sm:hidden">
           {/* start content */}
           <ul className="text-16 w-full  text-secondary px-10 flex flex-col gap-[10] ">
             <p>舉辦活動</p>

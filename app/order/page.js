@@ -1,19 +1,21 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { useSearchParams, useRouter } from 'next/navigation'
-import { useAuth } from '@/hooks/use-auth' // 引入 useAuth
-// import { useOrder } from '@/hooks/use-order'
+import { Suspense } from 'react'
 import './order.css'
-import ComponentsReminder from './_components/reminder'
-import { Button } from '@heroui/button'
-import { HiArrowRight } from 'react-icons/hi2'
-import { useModal } from '@/contexts/modal-context'
 
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3001'
+// 將使用 useSearchParams 的邏輯分離到獨立組件
+function OrderContent() {
+  const { useState, useEffect } = require('react')
+  const { useSearchParams, useRouter } = require('next/navigation')
+  const { useAuth } = require('@/hooks/use-auth')
+  const ComponentsReminder = require('./_components/reminder').default
+  const { Button } = require('@heroui/button')
+  const { HiArrowRight } = require('react-icons/hi2')
+  const { useModal } = require('@/contexts/modal-context')
 
-export default function Orderpage(props) {
+  const API_BASE_URL =
+    process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3001'
+
   const searchParams = useSearchParams() // 使用 useSearchParams 取 query
   const e_id = searchParams.get('e_id')
   const c_id = searchParams.get('c_id')
@@ -141,24 +143,13 @@ export default function Orderpage(props) {
         {/*---------- 送出訂單 ----------*/}
         <div className="detail mb-8">
           {/* 導至綠界金流按鈕 */}
-          <div className="flex justify-center  gap-10">
-            {/* <Button
-              size="sm"
-              radius="none"
-              classNames={{}}
-              variant="light"
-              className="text-base text-gray-600 hover:text-gray-300 hover:scale-110 transition-transform duration-200 cursor-pointer flex items-center group gap-x-2 mt-5 px-7  data-[hover=true]:bg-primary-300"
-              onPress={() => router.push('/')}
-            >
-              取消本次購買
-              <HiArrowRight className="transition-transform duration-300 ease-out group-hover:translate-x-3" />
-            </Button> */}
+          <div className="flex justify-center gap-10">
             <Button
               size="sm"
               radius="none"
               classNames={{}}
               variant="light"
-              className="text-base text-yellow-600 hover:text-yellow-300 hover:scale-110 transition-transform duration-200 cursor-pointer flex items-center group gap-x-2 mt-5 px-7  data-[hover=true]:bg-primary-300"
+              className="text-base text-yellow-600 hover:text-yellow-300 hover:scale-110 transition-transform duration-200 cursor-pointer flex items-center group gap-x-2 mt-5 px-7 data-[hover=true]:bg-primary-300"
               onPress={() => {
                 // ✅ 檢查是否有登入
                 if (!auth?.token) {
@@ -167,8 +158,7 @@ export default function Orderpage(props) {
 
                 // 使用登入者的 user_id & user_name
                 const data = {
-                  user_id: auth.user_id, // 從 `auth` 取得
-                  // user_name: auth.user_name, // 從 `auth` 取得
+                  user_id: auth.user_id,
                   e_id,
                   c_id,
                   event_name: orderData.event_name,
@@ -192,12 +182,6 @@ export default function Orderpage(props) {
                 )}`
               }}
             >
-              {/* const { 
-      user_id, user_name, ticket_code, merchant_trade_no, trade_amt, trade_date, 
-      payment_date, payment_type, e_id, c_id, event_name, event_price, 
-      event_startdate, event_enddate, locat_id, locat_name, city, district, address, 
-      bd_id, bd_name, bd_tel, bd_email 
-    } = req.body; */}
               綠界金流付款
               <HiArrowRight className="transition-transform duration-300 ease-out group-hover:translate-x-3" />
             </Button>
@@ -208,5 +192,20 @@ export default function Orderpage(props) {
         </div>
       </div>
     </>
+  )
+}
+
+// 主要導出的組件，使用 Suspense 包裹
+export default function OrderPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="w-full h-screen flex items-center justify-center bg-[#f7f5f1]">
+          <p className="text-lg font-bold">載入訂單資訊中...</p>
+        </div>
+      }
+    >
+      <OrderContent />
+    </Suspense>
   )
 }

@@ -1,31 +1,32 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useSearchParams, useRouter } from 'next/navigation'
-import { useAuth } from '@/hooks/use-auth' // 引入 useAuth
-
+import { useRouter } from 'next/navigation'
+import { useAuth } from '@/hooks/use-auth'
 import './order.css'
 import ComponentsReminder from '../order/_components/reminder'
 import { Button } from '@heroui/button'
 import { HiArrowRight } from 'react-icons/hi2'
 import { useModal } from '@/contexts/modal-context'
+import { Suspense } from 'react'
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3001'
 
-export default function Orderpage(props) {
-  const searchParams = useSearchParams() // 使用 useSearchParams 取 query
+// 分離使用 useSearchParams 的部分到單獨組件
+function OrderContent() {
+  const { useSearchParams } = require('next/navigation') // 動態引入
+  const searchParams = useSearchParams()
   const e_id = searchParams.get('e_id')
   const c_id = searchParams.get('c_id')
   const router = useRouter()
-  const { auth, getAuthHeader } = useAuth() // 取得登入資訊
+  const { auth, getAuthHeader } = useAuth()
   const [orderData, setOrderData] = useState(null)
   const [loading, setLoading] = useState(true)
   const { onOpenChange } = useModal().login
 
   useEffect(() => {
     if ((e_id || c_id) && !orderData) {
-      // 加入 Authorization 標頭
       fetch(
         `${API_BASE_URL}/order/api/getOrderDetails?e_id=${e_id || ''}&c_id=${
           c_id || ''
@@ -64,7 +65,7 @@ export default function Orderpage(props) {
         {/* 2. 活動價格 */}
         <div className="flex flex-row justify-between">
           <p>活動票價</p>
-          <p className=' line-through'>$ {orderData.event_price} NTD</p>
+          <p className=" line-through">$ {orderData.event_price} NTD</p>
         </div>
         {/* 3. 活動時間 */}
         <div className="flex flex-row justify-between">
@@ -120,7 +121,7 @@ export default function Orderpage(props) {
         {/* 1. 信用卡 */}
         <div className="paymentTitle flex flex-row justify-between text-16">
           <p>信用卡一次付清</p>
-          <h5 className=' text-red font-bold'>$ 1000 NTD</h5>
+          <h5 className=" text-red font-bold">$ 1000 NTD</h5>
         </div>
       </div>
 
@@ -153,8 +154,7 @@ export default function Orderpage(props) {
 
               // 使用登入者的 user_id & user_name
               const data = {
-                user_id: auth.user_id, // 從 `auth` 取得
-                // user_name: auth.user_name, // 從 `auth` 取得
+                user_id: auth.user_id,
                 e_id,
                 c_id,
                 event_name: orderData.event_name,
@@ -178,12 +178,6 @@ export default function Orderpage(props) {
               )}`
             }}
           >
-            {/* const { 
-      user_id, user_name, ticket_code, merchant_trade_no, trade_amt, trade_date, 
-      payment_date, payment_type, e_id, c_id, event_name, event_price, 
-      event_startdate, event_enddate, locat_id, locat_name, city, district, address, 
-      bd_id, bd_name, bd_tel, bd_email 
-    } = req.body; */}
             綠界金流付款
             <HiArrowRight className="transition-transform duration-300 ease-out group-hover:translate-x-3" />
           </Button>
@@ -193,5 +187,13 @@ export default function Orderpage(props) {
         <ComponentsReminder />
       </div>
     </>
+  )
+}
+
+export default function OrderPage() {
+  return (
+    <Suspense fallback={<div>載入訂單中...</div>}>
+      <OrderContent />
+    </Suspense>
   )
 }
