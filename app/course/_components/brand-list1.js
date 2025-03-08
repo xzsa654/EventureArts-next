@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import ParaTitle from './para-title'
-import CardB1 from './card-b1'
+import CardB1 from '../../event/_components/card-b1'
 import { Button } from '@heroui/react'
 
 export default function BrandList1(props) {

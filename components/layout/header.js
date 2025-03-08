@@ -157,7 +157,7 @@ export default function Header(props) {
               'data-[active=true]:after:bg-primary',
             ],
           }}
-          className={` overflow-hidden fixed w-full h-[80] flex justify-between  max-lg:px-0 px-16 py-4 bg-white/30   `}
+          className={` overflow-hidden fixed w-full h-[80px] flex justify-between  max-lg:px-0 px-16 py-4 bg-white/30   `}
           height="5rem"
           maxWidth="full"
         >
@@ -184,7 +184,7 @@ export default function Header(props) {
             ''
           ) : (
             <NavbarContent
-              className="max-md:hidden gap-4 font-cn gap-8"
+              className="max-md:hidden  font-cn gap-8"
               justify="center"
             >
               {menuItems.map((item, i) => {

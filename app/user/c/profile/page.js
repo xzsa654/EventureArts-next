@@ -35,7 +35,7 @@ export default function UserPage() {
 
   return (
     <>
-      <div className="flex w-full h-[820]">
+      <div className="flex w-full h-[820px]">
         {/* 左邊 */}
         <div className=" w-4/5 flex flex-col border-r-1 border-black ">
           {/* 左上方 */}

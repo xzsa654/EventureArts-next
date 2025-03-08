@@ -73,14 +73,14 @@ export default function ModalLayout({
                     {title}
                   </div>
                   {section ? section : ''}
-                  <div className="border border-1 h-full p-[30px] flex gap-[20] flex-col">
+                  <div className=" border-1 h-full p-[30px] flex gap-[20px] flex-col">
                     {prompt ? prompt : ''}
-                    <div className="relative border border-1 h-full border-dashed p-[16px] flex  justify-center items-center ">
+                    <div className="relative  border-1 h-full border-dashed p-[16px] flex  justify-center items-center ">
                       {formBody}
-                      <div className="absolute -top-[18] z-10 -left-[19]">
+                      <div className="absolute -top-[18px] z-10 -left-[19px]">
                         <BracketsIcon />
                       </div>
-                      <div className="absolute -bottom-[18]  -right-[18]">
+                      <div className="absolute -bottom-[18px]  -right-[18px]">
                         <BracketsIcon />
                       </div>
                     </div>

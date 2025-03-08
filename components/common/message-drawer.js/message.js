@@ -8,11 +8,14 @@ import {
   DrawerBody,
   DrawerFooter,
   Input,
+  addToast,
 } from '@heroui/react'
+import { useAuth } from '@/hooks/use-auth'
 import { FaSearch } from 'react-icons/fa'
 import ChatList from './chatlist'
 import ChatRoom from './chatroom'
 import MessageFooter from './messageFooter'
+import { CiChat1 } from 'react-icons/ci'
 
 export default function MessageDrawer({
   onOpenChange = () => {},
@@ -29,6 +32,36 @@ export default function MessageDrawer({
   useEffect(() => {
     if (getId && isOpen) chatHandle(getId)
   }, [isOpen, getId])
+
+  const { auth, socket } = useAuth()
+  // 添加通知
+  const [senderName, setSenderName] = useState('')
+
+  // 單獨處理 newMessage 事件
+  useEffect(() => {
+    if (!socket) return
+
+    const handleNewMessage = (newMessage) => {
+      if (isOpen) return
+      if (+newMessage.receiver_id === auth.user_id) {
+        // 無論 senderName 是否設置，都顯示通知
+        addToast({
+          radius: 'lg',
+          icon: <CiChat1 />,
+          description: `${newMessage.senderName} 向你發出訊息
+          `,
+          color: 'danger',
+          timeout: 3000,
+        })
+      }
+    }
+
+    socket.on('newMessage', handleNewMessage)
+
+    return () => {
+      socket.off('newMessage', handleNewMessage)
+    }
+  }, [socket, isOpen, auth.user_id, senderName])
 
   const [isChatting, setIsChatting] = useState(false)
   const [chatWith, setChatWith] = useState('')

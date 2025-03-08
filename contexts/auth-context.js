@@ -7,7 +7,6 @@ import { addToast } from '@heroui/react'
 import { useRouter } from 'next/navigation'
 import { io } from 'socket.io-client'
 import { useModal } from './modal-context'
-import { CiChat1 } from 'react-icons/ci'
 export function AuthContextProvider({ children }) {
   const BASEURL = 'http://localhost:3001'
   const router = useRouter()
