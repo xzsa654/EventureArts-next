@@ -8,110 +8,110 @@ export default function CardB1() {
 
   const brands = [
     {
-      href: "http://localhost:3000/artists/75",
+      href: "",
       blogo: "/blair/brand-logo/partner-brand.png",
       bname: "Partner Brand",
       binfo: "合作品牌"
     },
     {
-      href: "http://localhost:3000/artists/75",
-      blogo: "https://i.pinimg.com/736x/f4/65/30/f4653008b576255456f94886aa91c39b.jpg",
+      href: "http://localhost:3000/brandsinfo/83",
+      blogo: "/blair/event/brand-logo17.png",
+      bname: "OLIVIA 水晶能量工坊",
+      binfo: "我們相信每一顆水晶都承載著獨特的能量，能夠與人的內在頻率共鳴，帶來正向改變。"
+    },
+    {
+      href: "http://localhost:3000/brandsinfo/83",
+      blogo: "/blair/event/brand-logo16.png",
+      bname: "Kinsley Floral Atelier",
+      binfo: "台北最有質感的花坊"
+    },
+    {
+      href: "http://localhost:3000/brandsinfo/84",
+      blogo: "/blair/event/brand-logo15.png",
+      bname: "AURORA SCENT",
+      binfo: "捕捉極光之息，喚醒靈魂之香。"
+    },
+    {
+      href: "http://localhost:3000/brandsinfo/85",
+      blogo: "/blair/event/brand-logo14.png",
       bname: "Art Gallery",
       binfo: "提供當代藝術作品展示與互動展覽，探索藝術的無限可能性。"
     },
     {
-      href: "http://localhost:3000/artists/75",
-      blogo: "https://i.pinimg.com/736x/cb/32/e1/cb32e1f7887bb4f328ca2e54213e8994.jpg",
+      href: "http://localhost:3000/brandsinfo/86",
+      blogo: "/blair/event/brand-logo13.png",
       bname: "Art Gallery",
       binfo: "提供當代藝術作品展示與互動展覽，探索藝術的無限可能性。"
     },
     {
-      href: "http://localhost:3000/artists/75",
-      blogo: "https://i.pinimg.com/736x/af/43/04/af43048b0821563ea57a617d75b25f04.jpg",
+      href: "http://localhost:3000/brandsinfo/83",
+      blogo: "/blair/event/brand-logo12.png",
       bname: "Art Gallery",
       binfo: "提供當代藝術作品展示與互動展覽，探索藝術的無限可能性。"
     },
     {
-      href: "http://localhost:3000/artists/75",
-      blogo: "https://i.pinimg.com/736x/80/d8/d0/80d8d0b568a9fe5600fc60c13f4578b0.jpg",
+      href: "http://localhost:3000/brandsinfo/83",
+      blogo: "/blair/event/brand-logo11.png",
       bname: "Art Gallery",
       binfo: "提供當代藝術作品展示與互動展覽，探索藝術的無限可能性。"
     },
     {
-      href: "http://localhost:3000/artists/75",
-      blogo: "https://i.pinimg.com/736x/74/60/57/74605710c53bcbdab7c0a9bdadd8f7c1.jpg",
+      href: "http://localhost:3000/brandsinfo/83",
+      blogo: "/blair/event/brand-logo10.png",
       bname: "Art Gallery",
       binfo: "提供當代藝術作品展示與互動展覽，探索藝術的無限可能性。"
     },
     {
-      href: "http://localhost:3000/artists/75",
-      blogo: "https://i.pinimg.com/736x/35/9e/f3/359ef37183095fe7dc30a27301f01f4a.jpg",
+      href: "http://localhost:3000/brandsinfo/83",
+      blogo: "/blair/event/brand-logo9.png",
       bname: "Art Gallery",
       binfo: "提供當代藝術作品展示與互動展覽，探索藝術的無限可能性。"
     },
     {
-      href: "http://localhost:3000/artists/75",
-      blogo: "https://i.pinimg.com/736x/ae/fc/c8/aefcc881320ba0a2a24a6d4a16e2fcce.jpg",
+      href: "http://localhost:3000/brandsinfo/83",
+      blogo: "/blair/event/brand-logo8.png",
       bname: "Art Gallery",
       binfo: "提供當代藝術作品展示與互動展覽，探索藝術的無限可能性。"
     },
     {
-      href: "http://localhost:3000/artists/75",
-      blogo: "https://i.pinimg.com/736x/e4/61/55/e4615551374fd976f96ff85b93622508.jpg",
+      href: "http://localhost:3000/brandsinfo/83",
+      blogo: "/blair/event/brand-logo7.png",
       bname: "Art Gallery",
       binfo: "提供當代藝術作品展示與互動展覽，探索藝術的無限可能性。"
     },
     {
-      href: "http://localhost:3000/artists/75",
-      blogo: "https://i.pinimg.com/736x/7c/fb/6b/7cfb6b62c2b5ae0bb5b38e1f574ab695.jpg",
+      href: "http://localhost:3000/brandsinfo/83",
+      blogo: "/blair/event/brand-logo6.png",
       bname: "Art Gallery",
       binfo: "提供當代藝術作品展示與互動展覽，探索藝術的無限可能性。"
     },
     {
-      href: "http://localhost:3000/artists/75",
-      blogo: "https://i.pinimg.com/736x/c7/f3/28/c7f328137b366f1f1636e96898b0e9c4.jpg",
+      href: "http://localhost:3000/brandsinfo/83",
+      blogo: "/blair/event/brand-logo5.png",
       bname: "Art Gallery",
       binfo: "提供當代藝術作品展示與互動展覽，探索藝術的無限可能性。"
     },
     {
-      href: "http://localhost:3000/artists/75",
-      blogo: "https://i.pinimg.com/736x/c5/50/44/c550440f4bf391e2804bc39dada6e506.jpg",
+      href: "http://localhost:3000/brandsinfo/83",
+      blogo: "/blair/event/brand-logo4.png",
       bname: "Art Gallery",
       binfo: "提供當代藝術作品展示與互動展覽，探索藝術的無限可能性。"
     },
     {
-      href: "http://localhost:3000/artists/75",
-      blogo: "https://i.pinimg.com/736x/27/03/84/2703840652c3d8480fd0ac5c0a111d50.jpg",
+      href: "http://localhost:3000/brandsinfo/83",
+      blogo: "/blair/event/brand-logo3.png",
       bname: "Art Gallery",
       binfo: "提供當代藝術作品展示與互動展覽，探索藝術的無限可能性。"
     },
     {
-      href: "http://localhost:3000/artists/75",
-      blogo: "https://i.pinimg.com/736x/e1/81/9d/e1819d65496154a88c958ac597d900e4.jpg",
+      href: "http://localhost:3000/brandsinfo/83",
+      blogo: "/blair/event/brand-logo2.png",
       bname: "Art Gallery",
       binfo: "提供當代藝術作品展示與互動展覽，探索藝術的無限可能性。"
     },
     {
-      href: "http://localhost:3000/artists/75",
-      blogo: "https://i.pinimg.com/736x/d6/c9/01/d6c901aceea023770800c7f7c586c2f8.jpg",
-      bname: "Art Gallery",
-      binfo: "提供當代藝術作品展示與互動展覽，探索藝術的無限可能性。"
-    },
-    {
-      href: "http://localhost:3000/artists/75",
-      blogo: "https://i.pinimg.com/736x/a9/e7/e3/a9e7e3c0ab6490d0c2e27080e1f85639.jpg",
-      bname: "Art Gallery",
-      binfo: "提供當代藝術作品展示與互動展覽，探索藝術的無限可能性。"
-    },
-    {
-      href: "http://localhost:3000/artists/75",
-      blogo: "https://i.pinimg.com/736x/11/bf/ac/11bfacccdeff70ffa06b985a83e41bc6.jpg",
-      bname: "Art Gallery",
-      binfo: "提供當代藝術作品展示與互動展覽，探索藝術的無限可能性。"
-    },
-    {
-      href: "http://localhost:3000/artists/75",
-      blogo: "https://i.pinimg.com/736x/a4/1b/a2/a41ba29b61d77d6920ad28e6506dfccc.jpg",
+      href: "http://localhost:3000/brandsinfo/83",
+      blogo: "/blair/event/brand-logo1.png",
       bname: "Art Gallery",
       binfo: "提供當代藝術作品展示與互動展覽，探索藝術的無限可能性。"
     },
@@ -119,6 +119,8 @@ export default function CardB1() {
   ];
 
   return (
+
+
     <div className="bcardArea grid grid-cols-6 gap-[2rem] place-items-center">
   {brands.map((brand, index) => (
     <a href={brand.href} key={index} className="relative group">
@@ -135,6 +137,8 @@ export default function CardB1() {
       </div>
     </a>
   ))}
-</div>
+    </div>
+
+
   )
 }

@@ -60,7 +60,7 @@ function OrderContent() {
         {/* 1. 活動名稱 */}
         <div className="flex flex-row justify-between">
           <p>活動名稱</p>
-          <p>{orderData.event_name}</p>
+            <p>{orderData.event_name}</p>
         </div>
         {/* 2. 活動價格 */}
         <div className="flex flex-row justify-between">

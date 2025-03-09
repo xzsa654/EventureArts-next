@@ -13,7 +13,7 @@ export default function Footer(props) {
 
   //  **黑名單頁面（不顯示 Footer）**
   const pathName = usePathname()
-  const noFooterPages = ['/', '/map'] //  隱藏首頁/map Footer
+  const noFooterPages = ['/', '/map', '/event'] // 隱藏首頁、地圖、/event
 
   // **條件判斷**
   const isHidden =

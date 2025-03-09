@@ -1,16 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Megrim&family=Noto+Sans+TC&family=Noto+Serif+TC:wght@200..900&family=Unna:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 
 
-body{
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-}
-
-
 /* ------ 1. 上方CTA banner ------ */
-.urge {
-  background-image: url('/Blair/bg-office.png');
+.section1 {
+  background-image: url('/Blair/event/event-bg.jpg');
   background-repeat: no-repeat;
   background-size: cover; /* 背景圖片填滿容器 */
   backdrop-filter: blur(10px); /* 設定模糊程度 */
@@ -20,7 +13,9 @@ body{
   font-family: 'Unna', sans-serif;
 }
 
-.urge::before {
+
+
+.section1::before {
   content: '';
   position: absolute;
   top: 0;
@@ -31,9 +26,87 @@ body{
   z-index: -1; /* 使它在背景圖片下面 */
 }
 
-.title {
-  font-size: 1.5rem;
+/* 背景動畫 animista.net */
+.section1 {
+  -webkit-animation: section1 1s ease-out reverse both;
+          animation: section1 1s ease-out reverse both;
+}
+
+@-webkit-keyframes section1 {
+  0% {
+    -webkit-transform: scale(1) translate(0, 0);
+            transform: scale(1) translate(0, 0);
+    -webkit-transform-origin: 16% 84%;
+            transform-origin: 16% 84%;
+  }
+  100% {
+    -webkit-transform: scale(1.25) translate(-20px, 15px);
+            transform: scale(1.25) translate(-20px, 15px);
+    -webkit-transform-origin: left bottom;
+            transform-origin: left bottom;
+  }
+}
+@keyframes section1 {
+  0% {
+    -webkit-transform: scale(1) translate(0, 0);
+            transform: scale(1) translate(0, 0);
+    -webkit-transform-origin: 16% 84%;
+            transform-origin: 16% 84%;
+  }
+  100% {
+    -webkit-transform: scale(1.25) translate(-20px, 15px);
+            transform: scale(1.25) translate(-20px, 15px);
+    -webkit-transform-origin: left bottom;
+            transform-origin: left bottom;
+  }
+}
+
+
+
+
+/* 標題動畫 animista.net */
+.focus {
+	-webkit-animation: focus 1.2s cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.2s both;
+	        animation: focus 1.2s cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.2s both;
+}
+
+@-webkit-keyframes focus {
+  0% {
+    letter-spacing: -0.5em;
+    -webkit-filter: blur(12px);
+            filter: blur(12px);
+    opacity: 0;
+  }
+  100% {
+    -webkit-filter: blur(0px);
+            filter: blur(0px);
+    opacity: 1;
+  }
+}
+@keyframes focus {
+  0% {
+    letter-spacing: -0.5em;
+    -webkit-filter: blur(12px);
+            filter: blur(12px);
+    opacity: 0;
+  }
+  100% {
+    -webkit-filter: blur(0px);
+            filter: blur(0px);
+    opacity: 1;
+  }
+}
+
+.special4 {
+  background: rgba(255, 255, 255, 0.5); /* 半透明背景 */
+  backdrop-filter: blur(5px); /* 設定模糊程度 */
+}
+
+.title p {
+  font-size: 3rem;
+  font-weight: 500;
   padding: 6px 0px;
+  color: #2a2429
 }
 
 /* 區塊標題列 */

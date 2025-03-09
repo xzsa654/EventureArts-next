@@ -75,10 +75,35 @@ export default function Carddraw(props) {
       if (response.ok) {
         // 更新卡片資訊
         setCardData(data);  // 更新抽中的卡片資訊
+
+      // 彈出顯示抽到的卡片和優惠價格
+      Swal.fire({
+        title: '抽卡成功',
+        text: `您抽中了課程${data.c_id}，優惠價格為：${data.special_price}元`,
+        icon: 'success',
+        confirmButtonText: '前往結帳',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // 點擊確定後，跳轉至結帳頁面，並傳遞 c_id 作為 URL 參數
+          window.location.href = `/orderspecial?c_id=${data.c_id}`;
+        }
+      });
+    } else {
+
+      // 如果是“您已經使用過抽卡機會”，顯示彈窗
+      if (data.error === '❌ 您已經使用過抽卡機會') {
+        Swal.fire({
+          title: '抽卡機會已使用',
+          text: '您已經使用過抽卡機會。',
+          icon: 'info',
+          confirmButtonText: '確定',
+        });
       } else {
-        alert(data.error);  // 顯示錯誤
+        alert(data.error);  // 如果是其他錯誤，直接用 alert 顯示
       }
-    } catch (error) {
+
+
+    }    } catch (error) {
       console.error('❌資料庫讀取錯誤-2', error);
     }
   };
@@ -86,6 +111,9 @@ export default function Carddraw(props) {
 
   // 測試用
   // return <pre>{JSON.stringify(cardData, null, 4)}</pre>;
+
+
+
 
 
   return (
@@ -104,9 +132,9 @@ export default function Carddraw(props) {
       modules={[Mousewheel]}
       mousewheel={true} // 滾輪控制：on
       centeredSlides={true} // 讓當前 Slide 置中
-      spaceBetween={0} //卡片間隔
+      spaceBetween={10} //卡片間隔
       initialSlide={4} // 從第5張卡片開始（索引從 0 開始）
-      slidesPerView={6.5} //每一幀顯示6張卡片，露出半張
+      slidesPerView={6} //每一幀顯示6張卡片
       onSlideChange={() => console.log('slide change')}
       onSwiper={(swiper) => console.log(swiper)}
     >
@@ -116,7 +144,7 @@ export default function Carddraw(props) {
         {/* 卡片 */}
         <button className="tOutside flex flex-col gap-6 rounded-md" onClick={handleCardDraw}>
           <div className="tInside shack shake-opacity">
-            <img src='/Blair/ticket.jpg' alt={`Card ${index + 1}`} />
+            <img className="drawimg w-[300px] h-[400px]" src='/Blair/ticket.png' alt={`Card ${index + 1}`} />
           </div>
         </button>
 
