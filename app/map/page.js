@@ -368,7 +368,7 @@ const handleSelectLocation = (location) => {
     setFilteredPaths(null)
     setFilteredLocations([])  // 清空行政區篩選器
     setSelectedLocationId(null) // Clear selectedLocationId when changing filter types ＊＊＊非常確定就是這行修正：當選取 Dist. 時之前篩選器搜尋 MRT 結果並在FilterResults中點選path card產生的popup/pin殘留
-    setActiveDataType(type === "district" ? "exhibition" : "courses") // 預設選擇類型
+    // setActiveDataType(type === "district" ? "exhibition" : "courses") // 預設選擇類型
 
   }, [])
 
