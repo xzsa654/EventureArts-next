@@ -14,7 +14,7 @@ export default function CardDraw(props) {
     
     <div className="w-full">
     <Link href="/course/carddraw" passHref>
-      <img className="w-full h-auto" src="/Blair/carddraw banner.jpg" alt="Card Draw Banner" />
+      <img className="w-full h-auto" src="/Blair/carddraw banner.png" alt="Card Draw Banner" />
     </Link>
     </div>
     </div>

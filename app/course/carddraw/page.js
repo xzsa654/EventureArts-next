@@ -75,10 +75,35 @@ export default function Carddraw(props) {
       if (response.ok) {
         // 更新卡片資訊
         setCardData(data);  // 更新抽中的卡片資訊
+
+      // 彈出顯示抽到的卡片和優惠價格
+      Swal.fire({
+        title: '抽卡成功',
+        text: `您抽中了課程${data.c_id}，優惠價格為：${data.special_price}元`,
+        icon: 'success',
+        confirmButtonText: '前往結帳',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // 點擊確定後，跳轉至結帳頁面，並傳遞 c_id 作為 URL 參數
+          window.location.href = `/orderspecial?c_id=${data.c_id}`;
+        }
+      });
+    } else {
+
+      // 如果是“您已經使用過抽卡機會”，顯示彈窗
+      if (data.error === '❌ 您已經使用過抽卡機會') {
+        Swal.fire({
+          title: '抽卡機會已使用',
+          text: '您已經使用過抽卡機會。',
+          icon: 'info',
+          confirmButtonText: '確定',
+        });
       } else {
-        alert(data.error);  // 顯示錯誤
+        alert(data.error);  // 如果是其他錯誤，直接用 alert 顯示
       }
-    } catch (error) {
+
+
+    }    } catch (error) {
       console.error('❌資料庫讀取錯誤-2', error);
     }
   };
