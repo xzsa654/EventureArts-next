@@ -40,6 +40,8 @@ export default function LatestOnlineExhibitions({ onlineExhibitions }) {
           style={{
             '--swiper-pagination-color': '#FFBA08',
           }}
+          initialSlide={1} // 讓 Swiper 預設停在第二個分頁
+
         >
           {Array.isArray(onlineExhibitions) &&
             onlineExhibitions.map((exhibition) => (
