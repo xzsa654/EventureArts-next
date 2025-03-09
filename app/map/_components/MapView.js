@@ -52,13 +52,15 @@ const MapView = ({
   activeFilterType,
   selectedLocationId, //新增從FilterResults.js傳入的selectedLocationId
   onDistrictClick, //新增地圖行政區點擊
+  selectedType // ✅ 改成從 `props` 接收 `selectedType`
 }) => {
+
   const mapRef = useRef(null)
   const center = [25.0449, 121.5233] //善導寺
   const [hoveredRoute, setHoveredRoute] = useState(null)
   const [hoveredDistrict, setHoveredDistrict] = useState(null)
   const [locations, setLocations] = useState([])
-  const [selectedType, setSelectedType] = useState("exhibition") // Default to exhibition
+
 
   // Track previous values to detect changes
   const prevSelectedMRT = useRef(selectedMRT)
@@ -66,12 +68,6 @@ const MapView = ({
   const prevSelectedStation = useRef(selectedStation)
   const prevSelectedDistrict = useRef(selectedDistrict)
 
-  // Get the type from URL or context
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search)
-    const type = urlParams.get("type") || "exhibition"
-    setSelectedType(type)
-  }, [])
 
   // Clear locations when filter criteria changes
   useEffect(() => {
@@ -153,195 +149,184 @@ const MapView = ({
   }, [locations, filteredLocations])
 
   // 監聽 selectedLocationId 變化
-  useEffect(() => {
-    if (!selectedLocationId) return
+// 監聽 selectedLocationId 變化
+useEffect(() => {
+  if (!selectedLocationId) return;
 
-    console.log(`Selected location ID: ${selectedLocationId}`)
+  console.log(`🔍 Selected location ID: ${selectedLocationId}, Type: ${selectedType}`);
 
-    // First check filteredLocations
-    let location = filteredLocations?.find((loc) => loc.locat_id.toString() === selectedLocationId.toString())
+  // 確保 `filteredLocations` 內的資料符合 `selectedType`
+  let location = filteredLocations?.find(
+    (loc) => loc.locat_id.toString() === selectedLocationId.toString() && loc.type === selectedType
+  );
 
-    // If not found in filteredLocations, check in locations from API
-    if (!location) {
-      location = locations.find((loc) => loc.locat_id.toString() === selectedLocationId.toString())
-    }
+  // 如果 `filteredLocations` 找不到，再從 `locations` 查找
+  if (!location) {
+    location = locations.find(
+      (loc) => loc.locat_id.toString() === selectedLocationId.toString() && loc.type === selectedType
+    );
+  }
 
-    console.log("Found location:", location)
+  console.log("✅ Found location in MapView:", location);
 
-    if (location && mapRef.current) {
-      const { latitude, longitude } = location
-      console.log(`Flying to: [${latitude}, ${longitude}]`)
+  if (location && mapRef.current) {
+    const { latitude, longitude } = location;
+    console.log(`📍 Flying to: [${latitude}, ${longitude}]`);
 
-      // Store the marker reference to open its popup after flying
-      let markerToOpen = null
+    // 儲存 marker 以便開啟 popup
+    let markerToOpen = null;
 
-      // Find the marker in the DOM
-      const markers = document.querySelectorAll(".leaflet-marker-icon")
-      markers.forEach((marker) => {
-        const markerElement = marker._leaflet_pos
-        if (markerElement) {
-          const markerInstance = marker._leaflet_id
-            ? Object.values(mapRef.current._layers).find((layer) => layer._leaflet_id === marker._leaflet_id)
-            : null
+    // 在 DOM 中尋找對應的 marker
+    const markers = document.querySelectorAll(".leaflet-marker-icon");
+    markers.forEach((marker) => {
+      const markerElement = marker._leaflet_pos;
+      if (markerElement) {
+        const markerInstance = marker._leaflet_id
+          ? Object.values(mapRef.current._layers).find((layer) => layer._leaflet_id === marker._leaflet_id)
+          : null;
 
-          if (markerInstance && markerInstance.options && markerInstance.options.position) {
-            const pos = markerInstance.options.position
-            // Check if this marker's position matches our target location
-            if (Math.abs(pos[0] - latitude) < 0.0001 && Math.abs(pos[1] - longitude) < 0.0001) {
-              markerToOpen = markerInstance
-            }
+        if (markerInstance && markerInstance.options && markerInstance.options.position) {
+          const pos = markerInstance.options.position;
+          // 比對 marker 的位置是否與目標 location 相符
+          if (Math.abs(pos[0] - latitude) < 0.0001 && Math.abs(pos[1] - longitude) < 0.0001) {
+            markerToOpen = markerInstance;
           }
         }
-      })
-
-      // Fly to the location
-      mapRef.current.flyTo([latitude, longitude], 17, {
-        duration: 1.5,
-        // After flying completes, open the popup
-        callback: () => {
-          if (markerToOpen && markerToOpen.openPopup) {
-            setTimeout(() => {
-              markerToOpen.openPopup()
-            }, 500)
-          }
-        },
-      })
-
-      // Create a temporary marker if we couldn't find the existing one
-      if (!markerToOpen) {
-        // Determine icon based on location type
-        const hasExhibitions = location.exhibitions && location.exhibitions.length > 0
-        const hasCourses = location.courses && location.courses.length > 0
-
-        const icon = hasExhibitions
-          ? exhibitionIcon
-          : hasCourses
-            ? courseIcon
-            : L.divIcon({
-                className: "custom-marker",
-                html: `<div class="marker-pin"></div>`,
-                iconSize: [30, 30],
-                iconAnchor: [15, 30],
-              })
-
-        // Create a temporary marker and open its popup
-        setTimeout(() => {
-          const tempMarker = L.marker([latitude, longitude], { icon }).addTo(mapRef.current)
-
-          // Create popup content
-          const popupContent = document.createElement("div")
-          popupContent.className = "popup-content"
-
-          // Add title based on type
-          const titleType = document.createElement("h3")
-          titleType.className = "popup-title-type"
-          titleType.textContent = hasExhibitions ? "Exhibition" : hasCourses ? "Course" : "Location"
-          popupContent.appendChild(titleType)
-
-          // Add name if it exists (e_name or name)
-          if (location.name) {
-            const nameDiv = document.createElement("div")
-            nameDiv.className = "popup-name"
-            nameDiv.textContent = location.name
-            popupContent.appendChild(nameDiv)
-          }
-
-          // Add dates if they exist
-          if (location.startdate && location.enddate) {
-            const datesDiv = document.createElement("div")
-            datesDiv.className = "popup-dates"
-            datesDiv.textContent = `${formatDate(location.startdate)} - ${formatDate(location.enddate)}`
-            popupContent.appendChild(datesDiv)
-          }
-
-          // Add location name
-          const locationName = document.createElement("div")
-          locationName.className = "popup-location-name"
-          locationName.textContent = location.locat_name
-          popupContent.appendChild(locationName)
-
-          // Add address
-          const address = document.createElement("div")
-          address.className = "popup-address"
-          address.textContent = location.address
-          popupContent.appendChild(address)
-
-          // Add exhibitions if available
-          if (hasExhibitions) {
-            const exhibitionsDiv = document.createElement("div")
-            exhibitionsDiv.className = "popup-exhibitions"
-
-            const exhibitionsTitle = document.createElement("h4")
-            exhibitionsTitle.textContent = "Exhibitions"
-            exhibitionsDiv.appendChild(exhibitionsTitle)
-
-            const exhibitionsList = document.createElement("div")
-            exhibitionsList.className = "exhibition-list"
-
-            location.exhibitions.forEach((exhibition) => {
-              const item = document.createElement("div")
-              item.className = "exhibition-item"
-
-              const name = document.createElement("div")
-              name.className = "exhibition-name"
-              name.textContent = exhibition.e_name || exhibition.name
-
-              const dates = document.createElement("div")
-              dates.className = "exhibition-dates"
-              dates.textContent = `${formatDate(exhibition.e_startdate || exhibition.startdate)} - ${formatDate(exhibition.e_enddate || exhibition.enddate)}`
-
-              item.appendChild(name)
-              item.appendChild(dates)
-              exhibitionsList.appendChild(item)
-            })
-
-            exhibitionsDiv.appendChild(exhibitionsList)
-            popupContent.appendChild(exhibitionsDiv)
-          }
-
-          // Add courses if available
-          if (hasCourses) {
-            const coursesDiv = document.createElement("div")
-            coursesDiv.className = "popup-courses"
-
-            const coursesTitle = document.createElement("h4")
-            coursesTitle.textContent = "Courses"
-            coursesDiv.appendChild(coursesTitle)
-
-            const coursesList = document.createElement("div")
-            coursesList.className = "course-list"
-
-            location.courses.forEach((course) => {
-              const item = document.createElement("div")
-              item.className = "course-item"
-
-              const name = document.createElement("div")
-              name.className = "course-name"
-              name.textContent = course.c_name || course.name
-
-              const dates = document.createElement("div")
-              dates.className = "course-dates"
-              dates.textContent = `${formatDate(course.c_startdate || course.startdate)} - ${formatDate(course.c_enddate || course.enddate)}`
-
-              item.appendChild(name)
-              item.appendChild(dates)
-              coursesList.appendChild(item)
-            })
-
-            coursesDiv.appendChild(coursesList)
-            popupContent.appendChild(coursesDiv)
-          }
-
-          tempMarker.bindPopup(popupContent).openPopup()
-
-          // Remove the temporary marker after some time
-          setTimeout(() => {
-            mapRef.current.removeLayer(tempMarker)
-          }, 10000)
-        }, 1600) // Wait for fly animation to complete
       }
+    });
+
+    // 地圖飛行到該位置
+    mapRef.current.flyTo([latitude, longitude], 17, {
+      duration: 1.5,
+      callback: () => {
+        if (markerToOpen && markerToOpen.openPopup) {
+          setTimeout(() => {
+            markerToOpen.openPopup();
+          }, 500);
+        }
+      },
+    });
+
+    // 如果沒有對應的 marker，則創建一個臨時 marker
+    if (!markerToOpen) {
+      const hasExhibitions = location.exhibitions && location.exhibitions.length > 0;
+      const hasCourses = location.courses && location.courses.length > 0;
+
+      const icon = hasExhibitions
+        ? exhibitionIcon
+        : hasCourses
+          ? courseIcon
+          : L.divIcon({
+              className: "custom-marker",
+              html: `<div class="marker-pin"></div>`,
+              iconSize: [30, 30],
+              iconAnchor: [15, 30],
+            });
+
+      // 創建臨時 marker 並開啟 popup
+      setTimeout(() => {
+        const tempMarker = L.marker([latitude, longitude], { icon }).addTo(mapRef.current);
+
+        // 創建 popup 內容
+        const popupContent = document.createElement("div");
+        popupContent.className = "popup-content";
+
+        const titleType = document.createElement("h3");
+        titleType.className = "popup-title-type";
+        titleType.textContent = hasExhibitions ? "Exhibition" : hasCourses ? "Course" : "Location";
+        popupContent.appendChild(titleType);
+
+        if (location.name) {
+          const nameDiv = document.createElement("div");
+          nameDiv.className = "popup-name";
+          nameDiv.textContent = location.name;
+          popupContent.appendChild(nameDiv);
+        }
+
+        if (location.startdate && location.enddate) {
+          const datesDiv = document.createElement("div");
+          datesDiv.className = "popup-dates";
+          datesDiv.textContent = `${formatDate(location.startdate)} - ${formatDate(location.enddate)}`;
+          popupContent.appendChild(datesDiv);
+        }
+
+        const locationName = document.createElement("div");
+        locationName.className = "popup-location-name";
+        locationName.textContent = location.locat_name;
+        popupContent.appendChild(locationName);
+
+        const address = document.createElement("div");
+        address.className = "popup-address";
+        address.textContent = location.address;
+        popupContent.appendChild(address);
+
+        // 添加展覽資訊
+        if (hasExhibitions) {
+          const exhibitionsDiv = document.createElement("div");
+          exhibitionsDiv.className = "popup-exhibitions";
+          const exhibitionsTitle = document.createElement("h4");
+          exhibitionsTitle.textContent = "Exhibitions";
+          exhibitionsDiv.appendChild(exhibitionsTitle);
+          const exhibitionsList = document.createElement("div");
+          exhibitionsList.className = "exhibition-list";
+
+          location.exhibitions.forEach((exhibition) => {
+            const item = document.createElement("div");
+            item.className = "exhibition-item";
+            const name = document.createElement("div");
+            name.className = "exhibition-name";
+            name.textContent = exhibition.e_name || exhibition.name;
+            const dates = document.createElement("div");
+            dates.className = "exhibition-dates";
+            dates.textContent = `${formatDate(exhibition.e_startdate || exhibition.startdate)} - ${formatDate(exhibition.e_enddate || exhibition.enddate)}`;
+            item.appendChild(name);
+            item.appendChild(dates);
+            exhibitionsList.appendChild(item);
+          });
+
+          exhibitionsDiv.appendChild(exhibitionsList);
+          popupContent.appendChild(exhibitionsDiv);
+        }
+
+        // 添加課程資訊
+        if (hasCourses) {
+          const coursesDiv = document.createElement("div");
+          coursesDiv.className = "popup-courses";
+          const coursesTitle = document.createElement("h4");
+          coursesTitle.textContent = "Courses";
+          coursesDiv.appendChild(coursesTitle);
+          const coursesList = document.createElement("div");
+          coursesList.className = "course-list";
+
+          location.courses.forEach((course) => {
+            const item = document.createElement("div");
+            item.className = "course-item";
+            const name = document.createElement("div");
+            name.className = "course-name";
+            name.textContent = course.c_name || course.name;
+            const dates = document.createElement("div");
+            dates.className = "course-dates";
+            dates.textContent = `${formatDate(course.c_startdate || course.startdate)} - ${formatDate(course.c_enddate || course.enddate)}`;
+            item.appendChild(name);
+            item.appendChild(dates);
+            coursesList.appendChild(item);
+          });
+
+          coursesDiv.appendChild(coursesList);
+          popupContent.appendChild(coursesDiv);
+        }
+
+        tempMarker.bindPopup(popupContent).openPopup();
+
+        // 10 秒後移除臨時標記
+        setTimeout(() => {
+          mapRef.current.removeLayer(tempMarker);
+        }, 10000);
+      }, 1600);
     }
-  }, [selectedLocationId, filteredLocations, locations])
+  }
+}, [selectedLocationId, filteredLocations, locations, selectedType]); // 監聽 selectedType
+
 
   // Use the custom fitBounds hook
   useFitBounds({
@@ -781,12 +766,12 @@ const MapView = ({
                       <div className="popup-courses">
                         <h4>Courses</h4>
                         <div className="course-list">
-                          {loc.courses.map((course, idx) => (
-                            <div key={course.c_id || course.id || idx} className="course-item">
-                              <div className="course-name">{course.c_name || course.name}</div>
+                          {loc.courses.map((courses, idx) => (
+                            <div key={courses.c_id || courses.c_id || idx} className="course-item">
+                              <div className="course-name">{courses.c_name || courses.name}</div>
                               <div className="course-dates">
-                                {formatDate(course.c_startdate || course.startdate)} -{" "}
-                                {formatDate(course.c_enddate || course.enddate)}
+                                {formatDate(courses.c_startdate || courses.startdate)} -{" "}
+                                {formatDate(courses.c_enddate || courses.enddate)}
                               </div>
                             </div>
                           ))}

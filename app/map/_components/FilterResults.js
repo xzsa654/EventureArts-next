@@ -80,6 +80,8 @@ export default function FilterResults({
         const coursesData = locationWithData.courses || locationWithData.course || []
         console.log(`Courses data for location ${locatId}:`, coursesData)
 
+        console.log("🔥 Sending location data to onSelectLocation:", locationWithData);
+
         // Even if there are no courses, we still want to show the location with a "no courses" message
         onSelectLocation(locationWithData.locat_id, locationWithData)
       } else {

@@ -368,6 +368,8 @@ const handleSelectLocation = (location) => {
     setFilteredPaths(null)
     setFilteredLocations([])  // 清空行政區篩選器
     setSelectedLocationId(null) // Clear selectedLocationId when changing filter types ＊＊＊非常確定就是這行修正：當選取 Dist. 時之前篩選器搜尋 MRT 結果並在FilterResults中點選path card產生的popup/pin殘留
+    setActiveDataType(type === "district" ? "exhibition" : "courses") // 預設選擇類型
+
   }, [])
 
   // Update the memoized components to include new props
@@ -429,6 +431,7 @@ const handleSelectLocation = (location) => {
         activeFilterType={activeFilterType}
         selectedLocationId={selectedLocationId} // 新增管理地點狀態
         clickedStationLocations={clickedStationLocations}
+        selectedType={activeDataType} // ✅ 確保 MapView 知道現在是 "courses" 或 "exhibition"
 
       />
     ),
@@ -447,6 +450,8 @@ const handleSelectLocation = (location) => {
       activeFilterType,
       selectedLocationId, // 新增FilterResults的地點到 dependencies
       clickedStationLocations,
+      activeDataType, // ✅ 加到 dependencies，確保當 type 改變時重新渲染
+
     ],
   )
 
