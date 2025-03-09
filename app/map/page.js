@@ -212,6 +212,7 @@ const handleDistrictClick = (districtName) => {
   setSelectedLineStations([])
   setFilteredPaths(null)
   setFilteredLocations([]) // ✅ 清空舊的 pin 結果
+  
 }
 
 // 切換展覽/課程時
@@ -366,6 +367,7 @@ const handleSelectLocation = (location) => {
     }
     setFilteredPaths(null)
     setFilteredLocations([])  // 清空行政區篩選器
+    setSelectedLocationId(null) // Clear selectedLocationId when changing filter types ＊＊＊非常確定就是這行修正：當選取 Dist. 時之前篩選器搜尋 MRT 結果並在FilterResults中點選path card產生的popup/pin殘留
   }, [])
 
   // Update the memoized components to include new props
@@ -474,7 +476,7 @@ const handleSelectLocation = (location) => {
           activeFilterType={activeFilterType}
           shortestPaths={filteredPaths}
           onSelectLocation={setSelectedLocationId}
-          selectedType={activeDataType} // ⭐️ 新增傳入
+          selectedType={activeDataType} // ⭐️ 新增傳入選擇展覽或課程的狀態傳遞
           
         />
       </div>
@@ -482,4 +484,3 @@ const handleSelectLocation = (location) => {
   )
   
 }
-

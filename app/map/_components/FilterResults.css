@@ -251,3 +251,21 @@
   color: #6b7280;
 }
 
+/* Styles for course items - matching exhibition styling */
+.course-item {
+  padding-bottom: 8px;
+  transition: all 0.2s;
+}
+
+.course-item:hover {
+  background-color: #f9fafb;
+}
+
+.course-name {
+  line-height: 1.2;
+  margin-bottom: 2px;
+}
+
+.course-dates {
+  color: #6b7280;
+}
