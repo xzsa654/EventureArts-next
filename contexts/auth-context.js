@@ -134,6 +134,7 @@ export function AuthContextProvider({ children }) {
     router.push('/')
     localStorage.removeItem(storageKey)
     setAuth({ ...defaultAuth })
+    socket.disconnect()
   }
 
   // 變成品牌後更新setAuth
@@ -204,7 +205,7 @@ export function AuthContextProvider({ children }) {
   const updateAvatar = (newAvatar) => {
     setAuth((prevAuth) => {
       if (!prevAuth) return prevAuth // 確保 `prevAuth` 存在
-  
+
       const updatedAuth = { ...prevAuth, avatar: newAvatar }
       localStorage.setItem(storageKey, JSON.stringify(updatedAuth)) // ✅ 更新 LocalStorage
       return updatedAuth

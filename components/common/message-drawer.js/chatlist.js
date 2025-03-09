@@ -73,7 +73,7 @@ export default function ChatList({ chatHandle = () => {}, filterValue = '' }) {
                     shape="circle"
                     placement="bottom-left"
                     classNames={{
-                      base: 'w-full flex  ',
+                      base: ' w-11/12 flex  ',
                     }}
                   >
                     <Image
@@ -83,14 +83,14 @@ export default function ChatList({ chatHandle = () => {}, filterValue = '' }) {
                       className="w-60"
                       src={`http://localhost:3001/uploads/avatar/${v.avatar}`}
                       alt="avatar"
-                    ></Image>
+                    />
 
                     <div className="flex flex-col  ">
                       <div className=" text-start ml-1">{`${v.name} ${
                         v.brandname ? `(${v.brandname})` : ''
                       } `}</div>
                       <div
-                        className={` ml-1 w-full h-5 overflow-hidden text-ellipsis ${
+                        className={` ml-1 w-full h-5 overflow-hidden text-start text-ellipsis ${
                           !!v.unread_count && 'text-black'
                         } text-gray-700 `}
                       >
