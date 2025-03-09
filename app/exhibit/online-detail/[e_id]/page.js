@@ -108,7 +108,7 @@ export default function Page({ params }) {
       antialias: true,
     })
     rendererRef.current.setSize(containerWidth, containerHeight)
-    rendererRef.current.setPixelRatio(window.devicePixelRatio)
+    rendererRef.current.setPixelRatio(window.devicePixelRatio * 3) // 提高解析度
 
     // Use dynamic imports for Three.js modules
     const initControls = async () => {
@@ -129,13 +129,13 @@ export default function Page({ params }) {
         const axesHelper = new THREE.AxesHelper(5)
         sceneRef.current.add(axesHelper)
 
-        // Add a small sphere at the origin for reference
-        const originSphere = new THREE.Mesh(
-          new THREE.SphereGeometry(0.1, 16, 16),
-          new THREE.MeshBasicMaterial({ color: 0xffff00 }),
-        )
-        originSphere.position.set(0, 0, 0)
-        sceneRef.current.add(originSphere)
+        // yello sphere
+        // const originSphere = new THREE.Mesh(
+        //   new THREE.SphereGeometry(0.1, 16, 16),
+        //   new THREE.MeshBasicMaterial({ color: 0xffff00 }),
+        // )
+        // originSphere.position.set(0, 0, 0)
+        // sceneRef.current.add(originSphere)
 
         // Load 3D model based on type
         switch (media.media_type) {
@@ -282,7 +282,7 @@ export default function Page({ params }) {
             // 2. Temporarily disable downsampling to test with full dataset
             // Comment out or modify the downsampling code
             // If point count is very large, reduce it
-            if (originalPointCount > 1000000) {
+            if (originalPointCount > 3000000) {
               // Instead of reducing to 1M points, use a higher number or the full dataset
               targetPointCount = originalPointCount // Load the full dataset for testing
               console.log(`Using full point cloud with ${originalPointCount} points`)
@@ -338,12 +338,13 @@ export default function Page({ params }) {
 
             // 3. Ensure point cloud colors are visible with these material settings
             const material = new THREE.PointsMaterial({
-              size: 0.1, // Much larger point size for visibility
-              vertexColors: true, // Always enable vertex colors
-              color: new THREE.Color(0xffffff), // White base color
-              transparent: false, // Disable transparency
-              opacity: 1.0, // Full opacity
-              sizeAttenuation: true, // Enable size attenuation
+              size: 0.002, // 調小點的大小
+              vertexColors: true, // 保留顏色
+              color: new THREE.Color(0xffffff), // 預設白色
+              transparent: true, // 啟用透明度處理
+              opacity: 1.0, // 確保點是完全不透明的
+              alphaTest: 0.1, // 避免點之間的模糊混合
+              sizeAttenuation: true, // 讓點隨距離縮放
             })
 
             const pointCloud = new THREE.Points(geometry, material)
@@ -392,6 +393,8 @@ export default function Page({ params }) {
             // Make points larger to ensure visibility
             material.size = 0.02 // Increase point size for better visibility
 
+            pointCloud.rotation.x = -Math.PI / 2; // 繞 X 軸旋轉 -90°
+
             // 加入場景
             sceneRef.current.add(pointCloud)
 
@@ -402,7 +405,9 @@ export default function Page({ params }) {
             // 設定相機位置
             const boundingSphere = new THREE.Sphere()
             box.getBoundingSphere(boundingSphere)
-            cameraRef.current.position.set(5, 5, 5)
+
+            // 調整相機距離
+            cameraRef.current.position.set(10, 10, 10)
             cameraRef.current.lookAt(0, 0, 0)
 
             // 更新控制器
