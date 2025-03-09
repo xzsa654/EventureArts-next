@@ -10,7 +10,6 @@ import {
   useVelocity,
   useAnimationFrame,
 } from 'framer-motion'
-import './Marquee.css'
 
 function useElementWidth(ref) {
   const [width, setWidth] = useState(0)
@@ -38,11 +37,6 @@ export const ScrollVelocity = ({
   stiffness = 400,
   numCopies = 6,
   velocityMapping = { input: [0, 1000], output: [0, 5] },
-  parallaxClassName = 'parallax',
-  scrollerClassName = 'scroller',
-  parallaxStyle,
-  scrollerStyle,
-  isPaused = false, // 新增控制是否暫停的 prop，做完開啟請改成 "false"
 }) => {
   function VelocityText({
     children,
@@ -53,10 +47,6 @@ export const ScrollVelocity = ({
     stiffness,
     numCopies,
     velocityMapping,
-    parallaxClassName,
-    scrollerClassName,
-    parallaxStyle,
-    scrollerStyle,
   }) {
     const baseX = useMotionValue(0)
     const scrollOptions = scrollContainerRef
@@ -91,8 +81,6 @@ export const ScrollVelocity = ({
 
     const directionFactor = useRef(1)
     useAnimationFrame((t, delta) => {
-      if (isPaused) return // 新增：當 isPaused 為 true，則不更新動畫
-
       let moveBy = directionFactor.current * baseVelocity * (delta / 1000)
 
       if (velocityFactor.get() < 0) {
@@ -106,19 +94,23 @@ export const ScrollVelocity = ({
     })
 
     const spans = []
-    for (let i = 0; i < numCopies; i++) {
+    for (let i = 0; i < (numCopies ?? 1); i++) {
       spans.push(
-        <span className={className} key={i} ref={i === 0 ? copyRef : null}>
+        <span
+          className={`flex-shrink-0 ${className}`}
+          key={i}
+          ref={i === 0 ? copyRef : null}
+        >
           {children}
         </span>
       )
     }
 
     return (
-      <div className={parallaxClassName} style={parallaxStyle}>
+      <div className="relative overflow-hidden">
         <motion.div
-          className={scrollerClassName}
-          style={{ x, ...scrollerStyle }}
+          className="flex whitespace-nowrap text-center font-sans text-4xl font-bold tracking-[-0.02em] drop-shadow md:text-[5rem] md:leading-[5rem]"
+          style={{ x }}
         >
           {spans}
         </motion.div>
@@ -138,10 +130,6 @@ export const ScrollVelocity = ({
           stiffness={stiffness}
           numCopies={numCopies}
           velocityMapping={velocityMapping}
-          parallaxClassName={parallaxClassName}
-          scrollerClassName={scrollerClassName}
-          parallaxStyle={parallaxStyle}
-          scrollerStyle={scrollerStyle}
         >
           {text}&nbsp;
         </VelocityText>
