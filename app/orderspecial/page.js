@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/hooks/use-auth'
-import './order.css'
 import ComponentsReminder from '../order/_components/reminder'
 import { Button } from '@heroui/button'
 import { HiArrowRight } from 'react-icons/hi2'
@@ -24,6 +23,17 @@ function OrderContent() {
   const [orderData, setOrderData] = useState(null)
   const [loading, setLoading] = useState(true)
   const { onOpenChange } = useModal().login
+
+// 改背景顏色
+useEffect(() => {
+  // 進入頁面時修改背景顏色
+  document.body.style.backgroundColor = '#f7f5f1'
+
+  // 離開頁面時恢復原本顏色
+  return () => {
+    document.body.style.backgroundColor = ''
+  }
+}, [])
 
   useEffect(() => {
     if ((e_id || c_id) && !orderData) {
@@ -52,11 +62,12 @@ function OrderContent() {
   return (
     <>
       {/*---------- 上—— 商家資料 ----------*/}
-      <div className="detail">
+      <div className="mt-20">
+      <div className="py-5 px-16 leading-10">
         <div className="orderTitle">
-          <p>商品明細</p>
+        <p className="text-xl font-bold">商品明細</p>
         </div>
-        <hr />
+        <hr className="bg-[#dadada] h-[1px] border-0" />
         {/* 1. 活動名稱 */}
         <div className="flex flex-row justify-between">
           <p>活動名稱</p>
@@ -90,11 +101,11 @@ function OrderContent() {
         </div>
       </div>
       {/*---------- 中—— 商品明細 ----------*/}
-      <div className="detail">
+      <div className="py-5 px-16 leading-10">
         <div className="orderTitle">
-          <p>商家資料</p>
+        <p className="text-xl font-bold">商家資料</p>
         </div>
-        <hr />
+        <hr className="bg-[#dadada] h-[1px] border-0" />
         {/* 1. 課程名稱&價格 */}
         <div className="flex flex-row justify-between">
           <p>商家名稱</p>
@@ -113,11 +124,11 @@ function OrderContent() {
       </div>
 
       {/*---------- 下—— 付款方式 ----------*/}
-      <div className="detail">
+      <div className="py-5 px-16 leading-10">
         <div className="orderTitle">
-          <p>付款方式</p>
+        <p className="text-xl font-bold">付款方式</p>
         </div>
-        <hr />
+        <hr className="bg-[#dadada] h-[1px] border-0" />
         {/* 1. 信用卡 */}
         <div className="paymentTitle flex flex-row justify-between text-16">
           <p>信用卡一次付清</p>
@@ -185,6 +196,7 @@ function OrderContent() {
       </div>
       <div className="w-full flex flex-col justify-center px-16 py-16 bg-[#f7f5f1]">
         <ComponentsReminder />
+      </div>
       </div>
     </>
   )
