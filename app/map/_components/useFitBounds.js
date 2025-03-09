@@ -32,7 +32,7 @@ export function useFitBounds({
     let hasBounds = false
 
     const defaultOptions = {
-      padding: [100, 100],
+      padding: [50, 50],
       maxZoom: 16,
       minZoom: 13,
       animate: true,
@@ -104,7 +104,7 @@ export function useFitBounds({
 
       if (hasBounds) {
         const boundsZoom = map.getBoundsZoom(bounds, false, options.padding)
-        const finalZoom = Math.min(Math.max(boundsZoom, 9), 11)
+        const finalZoom = Math.min(Math.max(boundsZoom, 12), 16)
         map.fitBounds(bounds, { ...options, maxZoom: finalZoom })
       }
     }
@@ -133,51 +133,62 @@ export function useFitBounds({
       }
     }
     // Handle new MRT line selection - only apply when there are shortestPaths (after Apply is pressed)
-    else if (
-      isNewMRT &&
-      selectedMRT &&
-      mrtRoutes &&
-      activeFilterType === "mrt" &&
-      shortestPaths?.features?.length > 0
-    ) {
-      const route = mrtRoutes.features.find(
-        (feature) => feature.properties.MRTCODE === selectedMRT
-      );
-    
-      if (route) {
-        if (
-          route.geometry.type === "MultiLineString" &&
-          route.geometry.coordinates.length > 0
-        ) {
-          route.geometry.coordinates.forEach((line) => {
-            line.forEach((coord) => {
+// Handle initial district tab selection
+else if (isNewFilterType && activeFilterType === "district" && taipeiDistricts?.features) {
+  taipeiDistricts.features.forEach((district) => {
+    try {
+      if (district.geometry.type === "MultiPolygon") {
+        district.geometry.coordinates.forEach((polygon) => {
+          polygon.forEach((ring) => {
+            ring.forEach((coord) => {
               bounds = bounds.extend([coord[1], coord[0]]);
-              hasBounds = true;
             });
           });
-        } else if (
-          route.geometry.type === "LineString" &&
-          route.geometry.coordinates.length > 0
-        ) {
-          route.geometry.coordinates.forEach((coord) => {
+        });
+        hasBounds = true;
+      } else if (district.geometry.type === "Polygon") {
+        district.geometry.coordinates.forEach((ring) => {
+          ring.forEach((coord) => {
             bounds = bounds.extend([coord[1], coord[0]]);
-            hasBounds = true;
           });
-        } else {
-          console.warn("No valid coordinates for MRT route:", selectedMRT);
-        }
-    
-        if (hasBounds && bounds.isValid()) {
-          const boundsZoom = map.getBoundsZoom(bounds, false, options.padding);
-          const finalZoom = Math.min(Math.max(boundsZoom, 13), 15);
-          map.fitBounds(bounds, { ...options, maxZoom: finalZoom });
-        } else {
-          console.warn("Invalid bounds for MRT route:", selectedMRT);
-        }
-      } else {
-        console.warn("MRT route not found:", selectedMRT);
+        });
+        hasBounds = true;
       }
+    } catch (e) {
+      console.error("Error processing district geometry:", e);
     }
+  });
+
+  if (hasBounds) {
+    const boundsZoom = map.getBoundsZoom(bounds, false, options.padding);
+    const finalZoom = Math.min(Math.max(boundsZoom, 13), 16); // ✅ 限制縮放範圍，避免過度縮小
+    map.fitBounds(bounds, { ...options, maxZoom: finalZoom });
+  }
+}
+
+// Handle selecting MRT filter (before Apply is pressed)
+else if (isNewFilterType && activeFilterType === "mrt" && mrtRoutes?.features) {
+  let hasBounds = false;
+
+  // ✅ 當還沒有選擇特定捷運站時，把所有捷運線放進視口
+  mrtRoutes.features.forEach((route) => {
+    if (route.geometry.type === "MultiLineString") {
+      route.geometry.coordinates.forEach((line) => {
+        line.forEach((coord) => bounds.extend([coord[1], coord[0]]));
+      });
+    } else if (route.geometry.type === "LineString") {
+      route.geometry.coordinates.forEach((coord) => bounds.extend([coord[1], coord[0]]));
+    }
+    hasBounds = true;
+  });
+
+  if (hasBounds && bounds.isValid()) {
+    const boundsZoom = map.getBoundsZoom(bounds, false, options.padding);
+    const finalZoom = Math.min(Math.max(boundsZoom, 12), 14); // ✅ 限制縮放範圍
+    map.fitBounds(bounds, { ...options, maxZoom: finalZoom });
+  }
+}
+
     
 
     // Update refs with current values
