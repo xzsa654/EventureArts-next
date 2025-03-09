@@ -20,17 +20,20 @@ export default function ChatRoomHeader({
         <div>
           <Alert
             hideIcon
-            description={`${nickname} ${brandname ? `(${brandname})` : ''}`}
-            title={`${nickname} ${brandname ? `(${brandname})` : ''}`}
+            description={
+              <div className="font-bold">
+                {nickname}
+                {brandname ? `(${brandname})` : ''}
+              </div>
+            }
+            // title={`${nickname} ${brandname ? `(${brandname})` : ''}`}
             startContent={
               <>
                 <Button
                   aria-label="backToList"
                   className="bg-transparent rounded-full hover:bg-gray-300 "
                   isIconOnly
-                  onPress={() => {
-                    chatHandle()
-                  }}
+                  onPress={chatHandle}
                 >
                   <HiArrowLeft size={20} className=" hover:text-gray-900" />
                 </Button>

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { useAuth } from '@/hooks/use-auth'
-import { User, ScrollShadow, Badge } from '@heroui/react'
+import { Image, ScrollShadow, Badge, Avatar } from '@heroui/react'
 
 export default function ChatList({ chatHandle = () => {}, filterValue = '' }) {
   const { getAuthHeader, auth, onlineUsers, socket } = useAuth()
@@ -56,9 +56,12 @@ export default function ChatList({ chatHandle = () => {}, filterValue = '' }) {
           <ul className="flex flex-col gap-5 pt-2 ps-2">
             {filterData?.map((v) => {
               return (
-                <div
+                <button
+                  onClick={() => {
+                    chatHandle(v.id)
+                  }}
                   key={v.id}
-                  className="flex items-center pe-5 hover:bg-gray-400 hover:rounded-full"
+                  className="flex  items-center pe-5 hover:bg-gray-400 hover:rounded-full"
                 >
                   <Badge
                     content=""
@@ -70,30 +73,30 @@ export default function ChatList({ chatHandle = () => {}, filterValue = '' }) {
                     shape="circle"
                     placement="bottom-left"
                     classNames={{
-                      base: 'w-full flex shrink ',
+                      base: 'w-full flex  ',
                     }}
                   >
-                    <User
-                      className=" flex   justify-normal w-full  cursor-pointer "
-                      avatarProps={{
-                        src: `http://localhost:3001/uploads/avatar/${v.avatar}`,
-                      }}
-                      name={`${v.name} ${
+                    <Image
+                      radius="full"
+                      width={40}
+                      height={40}
+                      className="w-60"
+                      src={`http://localhost:3001/uploads/avatar/${v.avatar}`}
+                      alt="avatar"
+                    ></Image>
+
+                    <div className="flex flex-col  ">
+                      <div className=" text-start ml-1">{`${v.name} ${
                         v.brandname ? `(${v.brandname})` : ''
-                      } `}
-                      description={
-                        <div
-                          className={` flex-grow flex justify-end ${
-                            !!v.unread_count && 'text-black font-medium'
-                          } `}
-                        >
-                          {!v.text ? '傳送了一張圖片' : v.text}
-                        </div>
-                      }
-                      onClick={() => {
-                        chatHandle(v.id)
-                      }}
-                    />
+                      } `}</div>
+                      <div
+                        className={` ml-1 w-full h-5 overflow-hidden text-ellipsis ${
+                          !!v.unread_count && 'text-black'
+                        } text-gray-700 `}
+                      >
+                        {!v.text ? '傳送了一張圖片' : v.text}
+                      </div>
+                    </div>
                   </Badge>
                   {!!v.unread_count && (
                     <div className=" rounded-full bg-red-200 w-[30px] h-[30px]  flex justify-center items-center ">
@@ -102,7 +105,7 @@ export default function ChatList({ chatHandle = () => {}, filterValue = '' }) {
                       </div>
                     </div>
                   )}
-                </div>
+                </button>
               )
             })}
           </ul>

@@ -39,7 +39,8 @@ export default function ChatRoom({
 
   useEffect(() => {
     socket.on('eachTyping', (data) => {
-      setTyping(data)
+      const sender_id = +data.sender_id
+      if (chatWith == sender_id) setTyping(data.text)
     })
   }, [chatWith, socket])
   useEffect(() => {
@@ -58,13 +59,20 @@ export default function ChatRoom({
     }
   }, [auth?.token, renderControl, messages])
 
+  const previousMessagesLength = useRef(0)
   useEffect(() => {
-    if (messages && messageTailRef.current) {
+    // 創建一個參考來記錄先前的消息數量
+
+    // 只有當新消息添加或正在輸入時才自動滾動
+    if (messages.length > previousMessagesLength.current || typing) {
       setTimeout(() => {
         messageTailRef.current?.scrollIntoView({ behavior: 'auto' })
       }, 50)
     }
-  }, [messages, typing])
+
+    // 更新先前的消息數量記錄
+    previousMessagesLength.current = messages.length
+  }, [typing, messages])
 
   const handleAnimationComplete = () => {
     console.log('All letters have animated!')
@@ -115,7 +123,14 @@ export default function ChatRoom({
                     </div>
                   </>
                 ) : (
-                  <Chip color="primary" radius="lg">
+                  <Chip
+                    color="primary"
+                    radius="lg"
+                    classNames={{
+                      base: 'relative max-w-full min-w-min items-start justify-start box-border px-1 text-small rounded-large bg-primary text-primary-foreground text-wrap max-w-auto py-2 h-auto inline-block whitespace-normal',
+                      content: 'flex text-start justify-start items-start',
+                    }}
+                  >
                     {message.text}
                   </Chip>
                 )}
