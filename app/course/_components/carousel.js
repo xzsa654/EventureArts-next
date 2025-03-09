@@ -33,7 +33,7 @@ export default function Carousel(props) {
         className="mySwiper"
       >
         <SwiperSlide className="w-1/3 h-auto course">
-          <a href="/course/product/2">
+          <a href="/course/product/200">
           <img className="w-[800px] h-[250px]" src="/Blair/carousel-banner/banner1-crown.png" alt="" /></a>
           </SwiperSlide>
 

@@ -9,13 +9,12 @@ import ReactPageScroller from 'react-page-scroller';
 import UploadProcess from './_components/upload-process';
 import AccordionQa from './_components/accordion-qa';
 import Special from './_components/special';
-
 import { useDisclosure } from '@heroui/react'
 import JoinUsModal from '../user/_components/b_player/join-us-modal'
 
 
 // 引用樣式表
-import './event.css'
+import styles from "./event.module.css";
 
 export default function Event(props) {
   // 使用Full page Scroll
@@ -32,10 +31,10 @@ export default function Event(props) {
         customPageNumber={currentPage}
       >
         {/* 1. 讓您的品牌被看見 Banner*/}
-        <div className="section1 h-screen flex flex-col gap-4 justify-between items-center">
+        <div className="section1 h-screen mt-20 flex flex-col gap-4 justify-between items-center">
           {/* 1.1 讓您的品牌被看見 */}
-          <div className="urge flex flex-col items-center justify-center w-full h-2/5">
-            <div className="title">
+          <div className={`${styles.urge} flex flex-col items-center justify-center w-full h-2/5`}>
+            <div className={styles.title}>
               <p>讓您的品牌被看見</p>
             </div>
             <div className="btns flex flex-row gap-8 pt-4">
@@ -68,7 +67,7 @@ export default function Event(props) {
 
         {/* 3. 前後對照圖 */}
         <div className="h-screen w-full flex flex-col items-center">
-          <div className="sectionTitle text-black text-center my-8">
+          <div className={`${styles.sectionTitle} text-black text-center my-8`}>
             <p>人氣，就是品牌的影響力— 讓您的空間轉化為熱鬧商機。</p>
           </div>
           <div className="compareimg flex justify-center items-center max-w-[60%] w-full">
