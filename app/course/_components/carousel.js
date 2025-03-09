@@ -25,7 +25,7 @@ export default function Carousel(props) {
           bulletClass: 'swiper-pagination-bullet',
           bulletActiveClass: 'swiper-pagination-bullet-active',
         }}
-        modules={[Pagination, Autoplay]} // 加入 Autoplay 模組
+        modules={[Autoplay]} // 加入 Autoplay 模組
         autoplay={{
           delay: 3000, // 設定自動輪播的時間間隔，單位是毫秒
           disableOnInteraction: false, // 即便用戶與輪播互動，也會繼續自動播放
@@ -34,34 +34,63 @@ export default function Carousel(props) {
       >
         <SwiperSlide className="w-1/3 h-auto course">
           <a href="/course/product/200">
-          <img className="w-[800px] h-[250px]" src="/Blair/carousel-banner/banner1-crown.png" alt="" /></a>
-          </SwiperSlide>
+            <img
+              className="w-[800px] h-[250px] swiperImg"
+              src="/Blair/carousel-banner/banner1-crown.png"
+              alt=""
+            />
+          </a>
+        </SwiperSlide>
 
         <SwiperSlide className="w-1/3 h-auto course">
           <a href="/course/product/2">
-          <img className="w-[800px] h-[250px]" src="/Blair/carousel-banner/banner5-bake.png" alt="" /></a>
-          </SwiperSlide>   
+            <img
+              className="w-[800px] h-[250px] swiperImg"
+              src="/Blair/carousel-banner/banner5-bake.png"
+              alt=""
+            />
+          </a>
+        </SwiperSlide>
 
         <SwiperSlide className="w-1/3 h-auto course">
           <a href="/course/product/2">
-          <img className="w-[800px] h-[250px]" src="/Blair/carousel-banner/banner2-coffee.png" alt="" /></a>
-          </SwiperSlide>    
+            <img
+              className="w-[800px] h-[250px] swiperImg"
+              src="/Blair/carousel-banner/banner2-coffee.png"
+              alt=""
+            />
+          </a>
+        </SwiperSlide>
 
         <SwiperSlide className="w-1/3 h-auto course">
           <a href="/course/product/2">
-          <img className="w-[800px] h-[250px]" src="/Blair/carousel-banner/banner3-florist.png" alt="" /></a>
-          </SwiperSlide>
+            <img
+              className="w-[800px] h-[250px] swiperImg"
+              src="/Blair/carousel-banner/banner3-florist.png"
+              alt=""
+            />
+          </a>
+        </SwiperSlide>
 
         <SwiperSlide className="w-1/3 h-auto course">
           <a href="/course/product/2">
-          <img className="w-[800px] h-[250px]" src="/Blair/carousel-banner/banner4-journal.png" alt="" /></a>
-          </SwiperSlide>
-          
-          <SwiperSlide className="w-1/3 h-auto">
+            <img
+              className="w-[800px] h-[250px] swiperImg"
+              src="/Blair/carousel-banner/banner4-journal.png"
+              alt=""
+            />
+          </a>
+        </SwiperSlide>
+
+        <SwiperSlide className="w-1/3 h-auto">
           <a href="/course/product/2">
-          <img className="w-[800px] h-[250px]" src="/Blair/carousel-banner/banner6-tarot.png" alt="" /></a>
-          </SwiperSlide>    
-          
+            <img
+              className="w-[800px] h-[250px] swiperImg"
+              src="/Blair/carousel-banner/banner6-tarot.png"
+              alt=""
+            />
+          </a>
+        </SwiperSlide>
       </Swiper>
     </>
   )

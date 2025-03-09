@@ -4,7 +4,6 @@
   height: 100%;
 }
 
-
 /* --------- headline START --------- */
 /* 設定主標題邊框 */
 .headMain {
@@ -70,20 +69,14 @@
   align-items: center;
 }
 
-.swiper-slide img {
+.swiperImg {
   padding-right: 5px;
 
   display: block;
   aspect-ratio: 2 / 1; /* 設定寬高比為 2:1 */
   object-fit: cover;
 }
-/* 導航點點顏色 */
-.mySwiper .swiper-pagination-bullet {
-  background-color: #e3c8b9;
-}
-.mySwiper .swiper-pagination-bullet-active {
-  background-color: #f7b0b3;
-}
+
 /* --------- Carousel END --------- */
 
 /* 分類文字 */
