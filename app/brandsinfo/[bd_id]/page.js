@@ -86,7 +86,7 @@ export default function BrandsPage({ params }) {
               #BRAND PROFILE
             </h2>
           </div>
-          <div className="flex w-full h-[760]">
+          <div className="flex w-full h-[760px]">
             {/* 左邊 */}
             <div className=" w-4/5 flex flex-col border-r-2 border-black ">
               {/* 左上方 */}

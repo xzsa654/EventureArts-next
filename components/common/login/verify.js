@@ -35,32 +35,32 @@ export default function VerifyEmail() {
   }, [isOpen])
 
   const verifyEmail = async () => {
-    const email = formRef.current.email.value
-    if (email.length < 7) return setErrorMessage('email不符合格式')
-    const res = await fetch(VERIFY_EMAIL, {
-      method: 'POST',
-      body: JSON.stringify({ email }),
-      headers: {
-        'Content-Type': 'application/JSON',
-      },
-    })
-    const result = await res.json()
-    // 後端驗證查無 email
-    if (!result.success) {
-      return setErrorMessage(result.message)
-    } else {
-      setErrorMessage('')
-      addToast({
-        title: '驗證信已送出！',
-        radius: 'lg',
-        description: '請前往您的信箱查收',
-        promise: new Promise((resolve) => setTimeout(resolve, 3000)),
-        color: 'success',
-        timeout: 3000,
-      })
-      setIsVerify(true)
-      setDisabled(false)
-    }
+    // const email = formRef.current.email.value
+    // if (email.length < 7) return setErrorMessage('email不符合格式')
+    // const res = await fetch(VERIFY_EMAIL, {
+    //   method: 'POST',
+    //   body: JSON.stringify({ email }),
+    //   headers: {
+    //     'Content-Type': 'application/JSON',
+    //   },
+    // })
+    // const result = await res.json()
+    // // 後端驗證查無 email
+    // if (!result.success) {
+    //   return setErrorMessage(result.message)
+    // } else {
+    //   setErrorMessage('')
+    //   addToast({
+    //     title: '驗證信已送出！',
+    //     radius: 'lg',
+    //     description: '請前往您的信箱查收',
+    //     promise: new Promise((resolve) => setTimeout(resolve, 3000)),
+    //     color: 'success',
+    //     timeout: 3000,
+    //   })
+    setIsVerify(true)
+    setDisabled(false)
+    // }
   }
 
   const onsubmitHandle = async (e) => {

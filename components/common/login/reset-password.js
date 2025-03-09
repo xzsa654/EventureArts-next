@@ -43,9 +43,7 @@ export default function ResetPassword({ isVerify, formRef }) {
         },
       })
         .then((r) => r.json())
-        .then((result) => {
-          
-        })
+        .then((result) => {})
       setSecond(30) // 重置秒數
       let timer = setInterval(() => {
         setSecond((prev) => {
@@ -71,12 +69,12 @@ export default function ResetPassword({ isVerify, formRef }) {
 
   return (
     <>
-      <div className="text-white w-full text-base ">
+      <div className="text-white w-full text-base  ">
         <p className="after:content-['*'] after:text-red after:mr-2">驗證碼</p>
         <InputOtp
           isRequired
           name="otp"
-          className="w-full flex justify-between"
+          className="w-[250px] flex justify-between"
           classNames={{
             segment: 'data-[has-value=true]:text-white text-white',
             errorMessage: 'text-red',

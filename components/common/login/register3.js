@@ -65,7 +65,7 @@ export default function RegisterStep3(props) {
           onPress={() => {
             fileRef.current.click()
           }}
-          className="w-[250] h-[250] bg-gray-800 flex flex-col items-center justify-center "
+          className="w-[250px] h-[250px] bg-gray-800 flex flex-col items-center justify-center "
         >
           <AvatarIcon />
           <span className="text-white text-xl">點我</span>
