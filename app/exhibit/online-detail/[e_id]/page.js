@@ -108,7 +108,7 @@ export default function Page({ params }) {
       antialias: true,
     })
     rendererRef.current.setSize(containerWidth, containerHeight)
-    rendererRef.current.setPixelRatio(window.devicePixelRatio * 3) // 提高解析度
+    rendererRef.current.setPixelRatio(window.devicePixelRatio)
 
     // Use dynamic imports for Three.js modules
     const initControls = async () => {
@@ -129,7 +129,7 @@ export default function Page({ params }) {
         const axesHelper = new THREE.AxesHelper(5)
         sceneRef.current.add(axesHelper)
 
-        // yello sphere
+        // yello center sphere
         // const originSphere = new THREE.Mesh(
         //   new THREE.SphereGeometry(0.1, 16, 16),
         //   new THREE.MeshBasicMaterial({ color: 0xffff00 }),
@@ -172,12 +172,23 @@ export default function Page({ params }) {
     // Load OBJ Model function
     const loadOBJModel = async (url) => {
       try {
+        // Show loading indicator
+        const loadingDiv = document.createElement("div")
+        loadingDiv.className = "absolute inset-0 flex items-center justify-center bg-black/70 z-10"
+        loadingDiv.innerHTML = '<div class="text-white text-xl">Loading 3D Model...</div>'
+        canvasRef.current.parentElement.appendChild(loadingDiv)
+
         const { OBJLoader } = await import("three/examples/jsm/loaders/OBJLoader")
         const objLoader = new OBJLoader()
 
         objLoader.load(
           url,
           (obj) => {
+            // Remove loading indicator
+            if (loadingDiv.parentNode) {
+              loadingDiv.parentNode.removeChild(loadingDiv)
+            }
+
             // Add material if the model doesn't have one
             obj.traverse((child) => {
               if (child instanceof THREE.Mesh) {
@@ -242,7 +253,13 @@ export default function Page({ params }) {
             })
           },
           (xhr) => {
-            console.log(`Loading: ${(xhr.loaded / xhr.total) * 100}%`)
+            const percent = Math.round((xhr.loaded / xhr.total) * 100)
+            console.log(`Loading Progress: ${percent}%`)
+
+            // Update loading indicator if it exists
+            if (loadingDiv.parentNode) {
+              loadingDiv.innerHTML = `<div class="text-white text-xl">Loading 3D Model: ${percent}%</div>`
+            }
           },
           (error) => console.error("Error loading OBJ model:", error),
         )
@@ -282,7 +299,7 @@ export default function Page({ params }) {
             // 2. Temporarily disable downsampling to test with full dataset
             // Comment out or modify the downsampling code
             // If point count is very large, reduce it
-            if (originalPointCount > 3000000) {
+            if (originalPointCount > 200000) {
               // Instead of reducing to 1M points, use a higher number or the full dataset
               targetPointCount = originalPointCount // Load the full dataset for testing
               console.log(`Using full point cloud with ${originalPointCount} points`)
@@ -338,13 +355,13 @@ export default function Page({ params }) {
 
             // 3. Ensure point cloud colors are visible with these material settings
             const material = new THREE.PointsMaterial({
-              size: 0.002, // 調小點的大小
-              vertexColors: true, // 保留顏色
-              color: new THREE.Color(0xffffff), // 預設白色
-              transparent: true, // 啟用透明度處理
-              opacity: 1.0, // 確保點是完全不透明的
-              alphaTest: 0.1, // 避免點之間的模糊混合
-              sizeAttenuation: true, // 讓點隨距離縮放
+              size: 0.0005, // Much smaller point size for better detail
+              vertexColors: true, // Always enable vertex colors
+              color: new THREE.Color(0xffffff), // White base color
+              transparent: true, // Enable transparency
+              opacity: 1.0, // Full opacity
+              alphaTest: 0.1, // Avoid blending between points
+              sizeAttenuation: true, // Enable size attenuation
             })
 
             const pointCloud = new THREE.Points(geometry, material)
@@ -391,8 +408,9 @@ export default function Page({ params }) {
             // pointCloud.rotation.x = -Math.PI / 2; // This line should remain commented out
 
             // Make points larger to ensure visibility
-            material.size = 0.02 // Increase point size for better visibility
+            // material.size = 0.02 // Increase point size for better visibility
 
+            //rotate
             pointCloud.rotation.x = -Math.PI / 2; // 繞 X 軸旋轉 -90°
 
             // 加入場景
@@ -405,9 +423,7 @@ export default function Page({ params }) {
             // 設定相機位置
             const boundingSphere = new THREE.Sphere()
             box.getBoundingSphere(boundingSphere)
-
-            // 調整相機距離
-            cameraRef.current.position.set(10, 10, 10)
+            cameraRef.current.position.set(5, 5, 5)
             cameraRef.current.lookAt(0, 0, 0)
 
             // 更新控制器
@@ -453,12 +469,23 @@ export default function Page({ params }) {
     // Load GLTF Model function
     const loadGLTFModel = async (url) => {
       try {
+        // Show loading indicator
+        const loadingDiv = document.createElement("div")
+        loadingDiv.className = "absolute inset-0 flex items-center justify-center bg-black/70 z-10"
+        loadingDiv.innerHTML = '<div class="text-white text-xl">Loading 3D Model...</div>'
+        canvasRef.current.parentElement.appendChild(loadingDiv)
+
         const { GLTFLoader } = await import("three/examples/jsm/loaders/GLTFLoader")
         const gltfLoader = new GLTFLoader()
 
         gltfLoader.load(
           url,
           (gltf) => {
+            // Remove loading indicator
+            if (loadingDiv.parentNode) {
+              loadingDiv.parentNode.removeChild(loadingDiv)
+            }
+
             const model = gltf.scene
 
             // Debug initial state
@@ -512,11 +539,22 @@ export default function Page({ params }) {
             sceneRef.current.add(axesHelper)
           },
           (progress) => {
-            console.log(`Loading progress: ${(progress.loaded / progress.total) * 100}%`)
+            const percent = Math.round((progress.loaded / progress.total) * 100)
+            console.log(`Loading progress: ${percent}%`)
+
+            // Update loading indicator if it exists
+            if (loadingDiv.parentNode) {
+              loadingDiv.innerHTML = `<div class="text-white text-xl">Loading 3D Model: ${percent}%</div>`
+            }
           },
           (error) => {
             console.error("Error loading GLTF model:", error)
             setLoadingError("Failed to load 3D model")
+
+            // Remove loading indicator
+            if (loadingDiv.parentNode) {
+              loadingDiv.parentNode.removeChild(loadingDiv)
+            }
           },
         )
       } catch (error) {
@@ -581,7 +619,7 @@ export default function Page({ params }) {
         })
 
         if (!hasPointCloud) {
-          console.warn("No point cloud found in scene!")
+          console.log("No point cloud found in scene!")
         }
       }
 
