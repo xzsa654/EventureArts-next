@@ -841,10 +841,10 @@ export default function Page({ params }) {
         {/* Info Panel - Keep this as the single source of exhibition info */}
         {showInfo && (
           <motion.div
-            className="fixed right-0 top-16 bottom-0 w-80 bg-black/90 backdrop-blur-lg p-6 text-white overflow-auto z-40"
-            initial={{ x: '100%' }}
-            animate={{ x: 0 }}
-            exit={{ x: '100%' }}
+            className="fixed right-0 top-16 bottom-0 w-80 max-w-[90vw] sm:max-w-[350px] bg-black/90 backdrop-blur-lg p-6 text-white overflow-auto z-40"
+            initial={{ x: '100%' }} // 進場前隱藏在畫面外
+            animate={{ x: 0 }} // 進場動畫 (滑入)
+            exit={{ x: '100%' }} // 離場動畫 (滑出)
             transition={{ type: 'spring', damping: 30 }}
           >
             <div className="space-y-6">
@@ -973,10 +973,10 @@ export default function Page({ params }) {
       {/* Info Panel */}
       {showInfo && (
         <motion.div
-          className="absolute right-0 top-16 bottom-20 w-80 bg-black/90 backdrop-blur-lg p-6 text-white overflow-auto"
-          initial={{ x: '100%' }}
-          animate={{ x: 0 }}
-          exit={{ x: '100%' }}
+          className="fixed right-0 top-16 bottom-0 w-80 max-w-[90vw] sm:max-w-[350px] bg-black/90 backdrop-blur-lg p-6 text-white overflow-auto z-40"
+          initial={{ x: '100%' }} // 進場前隱藏在畫面外
+          animate={{ x: 0 }} // 進場動畫 (滑入)
+          exit={{ x: '100%' }} // 離場動畫 (滑出)
           transition={{ type: 'spring', damping: 30 }}
         >
           <div className="space-y-6">
