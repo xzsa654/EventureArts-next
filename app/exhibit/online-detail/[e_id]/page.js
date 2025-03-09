@@ -1,16 +1,17 @@
-"use client"
+'use client'
 
-import { useState, useEffect, useRef } from "react"
-import useSWR from "swr"
-import { Button } from "@heroui/react"
-import Link from "next/link"
-import { FiInfo, FiArrowLeft, FiShare2 } from "react-icons/fi"
-import { IoMdHeartEmpty } from "react-icons/io"
-import * as THREE from "three"
-import { ImageGallery } from "../../_components/image-gallery"
-import { motion } from "framer-motion"
+import { useState, useEffect, useRef } from 'react'
+import useSWR from 'swr'
+import { Button } from '@heroui/react'
+import Link from 'next/link'
+import { FiInfo, FiArrowLeft, FiShare2 } from 'react-icons/fi'
+import { IoMdHeartEmpty } from 'react-icons/io'
+import * as THREE from 'three'
+import { ImageGallery } from '../../_components/image-gallery'
+import { motion } from 'framer-motion'
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3001"
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3001'
 
 //改善fetcher~避免因為請求失敗時回傳 null，導致useSWR 當掉
 const fetcher = async (url) => {
@@ -23,7 +24,7 @@ const fetcher = async (url) => {
 
     return await res.json()
   } catch (error) {
-    console.error("API 請求錯誤:", error)
+    console.error('API 請求錯誤:', error)
     return null // 避免 useSWR 當掉
   }
 }
@@ -64,12 +65,12 @@ export default function Page({ params }) {
     const media = exhibitionData.media_files?.[0]
     if (!media) return
 
-    console.log("Loading media:", media.media_url, "Type:", media.media_type)
+    console.log('Loading media:', media.media_url, 'Type:', media.media_type)
 
     // For 2D content, we'll render differently
-    if (media.media_type === "image" || media.media_type.startsWith("2d-")) {
+    if (media.media_type === 'image' || media.media_type.startsWith('2d-')) {
       if (canvasRef.current) {
-        canvasRef.current.style.display = "none"
+        canvasRef.current.style.display = 'none'
       }
       return
     }
@@ -80,7 +81,7 @@ export default function Page({ params }) {
 
     // Show the 3D canvas
     if (canvasRef.current) {
-      canvasRef.current.style.display = "block"
+      canvasRef.current.style.display = 'block'
     }
 
     // Initialize scene
@@ -100,7 +101,12 @@ export default function Page({ params }) {
     sceneRef.current.add(directionalLight2)
 
     // Initialize camera
-    cameraRef.current = new THREE.PerspectiveCamera(50, containerWidth / containerHeight, 0.01, 1000)
+    cameraRef.current = new THREE.PerspectiveCamera(
+      50,
+      containerWidth / containerHeight,
+      0.01,
+      1000
+    )
 
     // Initialize renderer
     rendererRef.current = new THREE.WebGLRenderer({
@@ -114,10 +120,15 @@ export default function Page({ params }) {
     const initControls = async () => {
       try {
         // Dynamically import OrbitControls
-        const { OrbitControls } = await import("three/examples/jsm/controls/OrbitControls")
+        const { OrbitControls } = await import(
+          'three/examples/jsm/controls/OrbitControls'
+        )
 
         // Initialize controls
-        controlsRef.current = new OrbitControls(cameraRef.current, rendererRef.current.domElement)
+        controlsRef.current = new OrbitControls(
+          cameraRef.current,
+          rendererRef.current.domElement
+        )
         controlsRef.current.enableDamping = true
         controlsRef.current.dampingFactor = 0.05
 
@@ -139,31 +150,31 @@ export default function Page({ params }) {
 
         // Load 3D model based on type
         switch (media.media_type) {
-          case "3d-obj":
+          case '3d-obj':
             loadOBJModel(media.media_url)
             break
-          case "3d-ply":
+          case '3d-ply':
             loadPLYModel(media.media_url)
             break
-          case "3d-model":
-            if (media.media_url.toLowerCase().endsWith(".ply")) {
+          case '3d-model':
+            if (media.media_url.toLowerCase().endsWith('.ply')) {
               loadPLYModel(media.media_url)
             } else {
               loadGLTFModel(media.media_url)
             }
             break
-          case "3d-pointcloud":
+          case '3d-pointcloud':
             loadPointCloudModel(media.media_url)
             break
           default:
-            console.warn("Unsupported media type:", media.media_type)
+            console.warn('Unsupported media type:', media.media_type)
         }
 
         // Start animation loop
         animate()
       } catch (error) {
-        console.error("Error initializing Three.js modules:", error)
-        setLoadingError("Failed to load 3D viewer components")
+        console.error('Error initializing Three.js modules:', error)
+        setLoadingError('Failed to load 3D viewer components')
       }
     }
 
@@ -173,12 +184,16 @@ export default function Page({ params }) {
     const loadOBJModel = async (url) => {
       try {
         // Show loading indicator
-        const loadingDiv = document.createElement("div")
-        loadingDiv.className = "absolute inset-0 flex items-center justify-center bg-black/70 z-10"
-        loadingDiv.innerHTML = '<div class="text-white text-xl">Loading 3D Model...</div>'
+        const loadingDiv = document.createElement('div')
+        loadingDiv.className =
+          'absolute inset-0 flex items-center justify-center bg-black/70 z-10'
+        loadingDiv.innerHTML =
+          '<div class="text-white text-xl">Loading 3D Model...</div>'
         canvasRef.current.parentElement.appendChild(loadingDiv)
 
-        const { OBJLoader } = await import("three/examples/jsm/loaders/OBJLoader")
+        const { OBJLoader } = await import(
+          'three/examples/jsm/loaders/OBJLoader'
+        )
         const objLoader = new OBJLoader()
 
         objLoader.load(
@@ -204,7 +219,7 @@ export default function Page({ params }) {
 
             // Get the initial bounding box to check position
             const initialBox = new THREE.Box3().setFromObject(obj)
-            console.log("Initial bounds:", initialBox.min, initialBox.max)
+            console.log('Initial bounds:', initialBox.min, initialBox.max)
 
             // Reset position and normalize coordinates
             obj.position.set(0, 0, 0)
@@ -233,11 +248,15 @@ export default function Page({ params }) {
 
             // Calculate optimal camera position
             const fov = cameraRef.current.fov * (Math.PI / 180)
-            const horizontalFov = Math.atan(Math.tan(fov / 2) * cameraRef.current.aspect) * 2
-            const distance = boundingSphere.radius / Math.sin(Math.min(fov, horizontalFov) / 2)
+            const horizontalFov =
+              Math.atan(Math.tan(fov / 2) * cameraRef.current.aspect) * 2
+            const distance =
+              boundingSphere.radius / Math.sin(Math.min(fov, horizontalFov) / 2)
 
             // Position camera to view model
-            const offset = new THREE.Vector3(1, 0.5, 1).normalize().multiplyScalar(distance)
+            const offset = new THREE.Vector3(1, 0.5, 1)
+              .normalize()
+              .multiplyScalar(distance)
             cameraRef.current.position.copy(boundingSphere.center).add(offset)
             cameraRef.current.lookAt(boundingSphere.center)
 
@@ -245,7 +264,7 @@ export default function Page({ params }) {
             controlsRef.current.target.copy(boundingSphere.center)
             controlsRef.current.update()
 
-            console.log("Model loaded:", {
+            console.log('Model loaded:', {
               position: obj.position,
               scale: obj.scale,
               boundingSphere: boundingSphere,
@@ -261,24 +280,28 @@ export default function Page({ params }) {
               loadingDiv.innerHTML = `<div class="text-white text-xl">Loading 3D Model: ${percent}%</div>`
             }
           },
-          (error) => console.error("Error loading OBJ model:", error),
+          (error) => console.error('Error loading OBJ model:', error)
         )
       } catch (error) {
-        console.error("Error loading OBJ module:", error)
-        setLoadingError("Failed to load OBJ model loader")
+        console.error('Error loading OBJ module:', error)
+        setLoadingError('Failed to load OBJ model loader')
       }
     }
 
     // Load PLY Model function
     const loadPLYModel = async (url) => {
       try {
-        const { PLYLoader } = await import("three/examples/jsm/loaders/PLYLoader")
+        const { PLYLoader } = await import(
+          'three/examples/jsm/loaders/PLYLoader'
+        )
         const plyLoader = new PLYLoader()
 
         // Show loading indicator
-        const loadingDiv = document.createElement("div")
-        loadingDiv.className = "absolute inset-0 flex items-center justify-center bg-black/70 z-10"
-        loadingDiv.innerHTML = '<div class="text-white text-xl">Loading 3D Model...</div>'
+        const loadingDiv = document.createElement('div')
+        loadingDiv.className =
+          'absolute inset-0 flex items-center justify-center bg-black/70 z-10'
+        loadingDiv.innerHTML =
+          '<div class="text-white text-xl">Loading 3D Model...</div>'
         canvasRef.current.parentElement.appendChild(loadingDiv)
 
         plyLoader.load(
@@ -290,7 +313,10 @@ export default function Page({ params }) {
             }
 
             // 1. Add a check to confirm point count before any processing
-            console.log("Original PLY point count before processing:", geometry.attributes.position.count)
+            console.log(
+              'Original PLY point count before processing:',
+              geometry.attributes.position.count
+            )
 
             // Optimize geometry by reducing points for large models
             const originalPointCount = geometry.attributes.position.count
@@ -302,7 +328,9 @@ export default function Page({ params }) {
             if (originalPointCount > 200000) {
               // Instead of reducing to 1M points, use a higher number or the full dataset
               targetPointCount = originalPointCount // Load the full dataset for testing
-              console.log(`Using full point cloud with ${originalPointCount} points`)
+              console.log(
+                `Using full point cloud with ${originalPointCount} points`
+              )
 
               // Keep the downsampling code but don't execute it for now
               /*
@@ -351,7 +379,7 @@ export default function Page({ params }) {
             }
 
             // 確認 PLY 是否包含顏色屬性
-            const hasColor = geometry.hasAttribute("color")
+            const hasColor = geometry.hasAttribute('color')
 
             // 3. Ensure point cloud colors are visible with these material settings
             const material = new THREE.PointsMaterial({
@@ -385,7 +413,7 @@ export default function Page({ params }) {
             pointCloud.scale.multiplyScalar(scale)
 
             // Add diagnostic logging
-            console.log("Point cloud diagnostic info:", {
+            console.log('Point cloud diagnostic info:', {
               geometryBounds: {
                 min: box.min,
                 max: box.max,
@@ -411,7 +439,7 @@ export default function Page({ params }) {
             // material.size = 0.02 // Increase point size for better visibility
 
             //rotate
-            pointCloud.rotation.x = -Math.PI / 2; // 繞 X 軸旋轉 -90°
+            pointCloud.rotation.x = -Math.PI / 2 // 繞 X 軸旋轉 -90°
 
             // 加入場景
             sceneRef.current.add(pointCloud)
@@ -431,9 +459,12 @@ export default function Page({ params }) {
             controlsRef.current.update()
 
             // 6. Log the final point count after all processing
-            console.log("Final PLY point count after processing:", geometry.attributes.position.count)
+            console.log(
+              'Final PLY point count after processing:',
+              geometry.attributes.position.count
+            )
 
-            console.log("PLY 點雲已載入", {
+            console.log('PLY 點雲已載入', {
               hasColor,
               pointCount: geometry.attributes.position.count,
               position: pointCloud.position,
@@ -451,18 +482,18 @@ export default function Page({ params }) {
             }
           },
           (error) => {
-            console.error("載入 PLY 模型錯誤:", error)
-            setLoadingError("無法載入 PLY 模型")
+            console.error('載入 PLY 模型錯誤:', error)
+            setLoadingError('無法載入 PLY 模型')
 
             // Remove loading indicator
             if (loadingDiv.parentNode) {
               loadingDiv.parentNode.removeChild(loadingDiv)
             }
-          },
+          }
         )
       } catch (error) {
-        console.error("載入 PLY 模組錯誤:", error)
-        setLoadingError("無法載入 PLY 模組")
+        console.error('載入 PLY 模組錯誤:', error)
+        setLoadingError('無法載入 PLY 模組')
       }
     }
 
@@ -470,12 +501,16 @@ export default function Page({ params }) {
     const loadGLTFModel = async (url) => {
       try {
         // Show loading indicator
-        const loadingDiv = document.createElement("div")
-        loadingDiv.className = "absolute inset-0 flex items-center justify-center bg-black/70 z-10"
-        loadingDiv.innerHTML = '<div class="text-white text-xl">Loading 3D Model...</div>'
+        const loadingDiv = document.createElement('div')
+        loadingDiv.className =
+          'absolute inset-0 flex items-center justify-center bg-black/70 z-10'
+        loadingDiv.innerHTML =
+          '<div class="text-white text-xl">Loading 3D Model...</div>'
         canvasRef.current.parentElement.appendChild(loadingDiv)
 
-        const { GLTFLoader } = await import("three/examples/jsm/loaders/GLTFLoader")
+        const { GLTFLoader } = await import(
+          'three/examples/jsm/loaders/GLTFLoader'
+        )
         const gltfLoader = new GLTFLoader()
 
         gltfLoader.load(
@@ -489,15 +524,15 @@ export default function Page({ params }) {
             const model = gltf.scene
 
             // Debug initial state
-            console.log("Initial model position:", model.position)
-            console.log("Initial model scale:", model.scale)
+            console.log('Initial model position:', model.position)
+            console.log('Initial model scale:', model.scale)
 
             // Center the model
             const box = new THREE.Box3().setFromObject(model)
             const center = box.getCenter(new THREE.Vector3())
             const size = box.getSize(new THREE.Vector3())
 
-            console.log("Model bounds:", {
+            console.log('Model bounds:', {
               center: center,
               size: size,
               min: box.min,
@@ -527,7 +562,7 @@ export default function Page({ params }) {
             controlsRef.current.target.set(0, 0, 0)
             controlsRef.current.update()
 
-            console.log("Model loaded with:", {
+            console.log('Model loaded with:', {
               finalPosition: model.position,
               finalScale: model.scale,
               cameraPosition: cameraRef.current.position,
@@ -548,25 +583,27 @@ export default function Page({ params }) {
             }
           },
           (error) => {
-            console.error("Error loading GLTF model:", error)
-            setLoadingError("Failed to load 3D model")
+            console.error('Error loading GLTF model:', error)
+            setLoadingError('Failed to load 3D model')
 
             // Remove loading indicator
             if (loadingDiv.parentNode) {
               loadingDiv.parentNode.removeChild(loadingDiv)
             }
-          },
+          }
         )
       } catch (error) {
-        console.error("Error loading GLTF module:", error)
-        setLoadingError("Failed to load GLTF model loader")
+        console.error('Error loading GLTF module:', error)
+        setLoadingError('Failed to load GLTF model loader')
       }
     }
 
     // Load Point Cloud Model function
     const loadPointCloudModel = async (url) => {
       try {
-        const { PCDLoader } = await import("three/examples/jsm/loaders/PCDLoader")
+        const { PCDLoader } = await import(
+          'three/examples/jsm/loaders/PCDLoader'
+        )
         const pcdLoader = new PCDLoader()
 
         pcdLoader.load(
@@ -582,20 +619,21 @@ export default function Page({ params }) {
             points.scale.multiplyScalar(scale)
 
             sceneRef.current.add(points)
-            console.log("Point Cloud Loaded Successfully!")
+            console.log('Point Cloud Loaded Successfully!')
           },
           undefined,
-          (error) => console.error("Error loading Point Cloud:", error),
+          (error) => console.error('Error loading Point Cloud:', error)
         )
       } catch (error) {
-        console.error("Error loading PCD module:", error)
-        setLoadingError("Failed to load point cloud loader")
+        console.error('Error loading PCD module:', error)
+        setLoadingError('Failed to load point cloud loader')
       }
     }
 
     // Animation loop
     const animate = () => {
-      if (!sceneRef.current || !cameraRef.current || !rendererRef.current) return
+      if (!sceneRef.current || !cameraRef.current || !rendererRef.current)
+        return
 
       window.animationFrameId = requestAnimationFrame(animate)
 
@@ -609,7 +647,7 @@ export default function Page({ params }) {
         sceneRef.current.traverse((object) => {
           if (object instanceof THREE.Points) {
             hasPointCloud = true
-            console.log("Point cloud is in scene:", {
+            console.log('Point cloud is in scene:', {
               visible: object.visible,
               position: object.position,
               scale: object.scale,
@@ -619,7 +657,7 @@ export default function Page({ params }) {
         })
 
         if (!hasPointCloud) {
-          console.log("No point cloud found in scene!")
+          console.log('No point cloud found in scene!')
         }
       }
 
@@ -637,23 +675,23 @@ export default function Page({ params }) {
       cameraRef.current.updateProjectionMatrix()
       rendererRef.current.setSize(newWidth, newHeight)
     }
-    window.addEventListener("resize", handleResize)
+    window.addEventListener('resize', handleResize)
 
     return () => {
-      window.removeEventListener("resize", handleResize)
+      window.removeEventListener('resize', handleResize)
 
-      console.log("Cleaning up 3D resources...")
+      console.log('Cleaning up 3D resources...')
 
       // Cancel animation frame to stop rendering loop
       if (window.animationFrameId) {
-        console.log("Cancelling animation frame:", window.animationFrameId)
+        console.log('Cancelling animation frame:', window.animationFrameId)
         cancelAnimationFrame(window.animationFrameId)
         window.animationFrameId = null
       }
 
       // Dispose of all Three.js resources
       if (sceneRef.current) {
-        console.log("Disposing scene objects...")
+        console.log('Disposing scene objects...')
         let objectsDisposed = 0
 
         // Recursively dispose of all objects in the scene
@@ -698,8 +736,8 @@ export default function Page({ params }) {
 
         // Force release of WebGL context
         const gl = rendererRef.current.getContext()
-        if (gl && gl.getExtension("WEBGL_lose_context")) {
-          gl.getExtension("WEBGL_lose_context").loseContext()
+        if (gl && gl.getExtension('WEBGL_lose_context')) {
+          gl.getExtension('WEBGL_lose_context').loseContext()
         }
 
         rendererRef.current = null
@@ -713,9 +751,16 @@ export default function Page({ params }) {
 
   // Rest of your component remains the same...
   // Render 2D content
-  if (exhibitionData?.media_files?.some((file) => file.media_type === "image" || file.media_type.startsWith("2d-"))) {
+  if (
+    exhibitionData?.media_files?.some(
+      (file) => file.media_type === 'image' || file.media_type.startsWith('2d-')
+    )
+  ) {
     const images = exhibitionData.media_files
-      .filter((file) => file.media_type === "image" || file.media_type.startsWith("2d-"))
+      .filter(
+        (file) =>
+          file.media_type === 'image' || file.media_type.startsWith('2d-')
+      )
       .map((file) => ({
         media_url: file.media_url,
         alt: exhibitionData.e_name,
@@ -732,13 +777,25 @@ export default function Page({ params }) {
             className="text-white/70 hover:text-white transition-colors flex items-center gap-2"
           >
             <FiArrowLeft size={20} />
-            <span>Back to Online.</span>
+            <span className="text-sm">Back to Online.</span>
           </Link>
           <div className="flex gap-4">
-            <Button variant="ghost" className="text-white/70 hover:text-white" onClick={() => setIsLiked(!isLiked)}>
-              {isLiked ? <IoMdHeartEmpty size={20} className="text-red-500" /> : <IoMdHeartEmpty size={20} />}
+            <Button
+              variant="ghost"
+              className="text-white/70 hover:text-white"
+              onClick={() => setIsLiked(!isLiked)}
+            >
+              {isLiked ? (
+                <IoMdHeartEmpty size={20} className="text-red-500" />
+              ) : (
+                <IoMdHeartEmpty size={20} />
+              )}
             </Button>
-            <Button variant="ghost" className="text-white/70 hover:text-white" onClick={() => setShowInfo(!showInfo)}>
+            <Button
+              variant="ghost"
+              className="text-white/70 hover:text-white"
+              onClick={() => setShowInfo(!showInfo)}
+            >
               <FiInfo size={20} />
             </Button>
             <Button
@@ -756,7 +813,9 @@ export default function Page({ params }) {
         {/* Main Content */}
         <div className="flex-grow relative">
           <div className="absolute inset-0 w-full h-full overflow-hidden">
-            <h1 className="text-3xl font-bold text-center mt-8 text-white z-10 relative">{exhibitionData.e_name}</h1>
+            <h1 className="text-3xl font-bold text-center mt-8 text-white z-10 relative">
+              {exhibitionData.e_name}
+            </h1>
             <ImageGallery images={images} />
           </div>
         </div>
@@ -773,7 +832,9 @@ export default function Page({ params }) {
             >
               Contact Artist
             </Button>
-            <Button className="bg-white text-black hover:bg-white/90 transition-colors">Inquire About Purchase</Button>
+            <Button className="bg-white text-black hover:bg-white/90 transition-colors">
+              Inquire About Purchase
+            </Button>
           </div>
         </div>
 
@@ -781,24 +842,32 @@ export default function Page({ params }) {
         {showInfo && (
           <motion.div
             className="fixed right-0 top-16 bottom-0 w-80 bg-black/90 backdrop-blur-lg p-6 text-white overflow-auto z-40"
-            initial={{ x: "100%" }}
+            initial={{ x: '100%' }}
             animate={{ x: 0 }}
-            exit={{ x: "100%" }}
-            transition={{ type: "spring", damping: 30 }}
+            exit={{ x: '100%' }}
+            transition={{ type: 'spring', damping: 30 }}
           >
             <div className="space-y-6">
               <div>
-                <h2 className="text-lg font-semibold mb-2">About this Exhibition</h2>
-                <p className="text-white/70 text-sm leading-relaxed">{exhibitionData.e_desc}</p>
+                <h2 className="text-lg font-semibold mb-2">
+                  About this Exhibition
+                </h2>
+                <p className="text-white/70 text-sm leading-relaxed">
+                  {exhibitionData.e_desc}
+                </p>
               </div>
               <div>
                 <h3 className="text-lg font-semibold mb-2">Artist</h3>
-                <p className="text-white/70 text-sm">{exhibitionData.bd_name}</p>
+                <p className="text-white/70 text-sm">
+                  {exhibitionData.bd_name}
+                </p>
               </div>
               {images.length > 1 && (
                 <div>
                   <h3 className="text-lg font-semibold mb-2">Gallery</h3>
-                  <p className="text-white/70 text-sm">This exhibition contains {images.length} images.</p>
+                  <p className="text-white/70 text-sm">
+                    This exhibition contains {images.length} images.
+                  </p>
                 </div>
               )}
             </div>
@@ -809,17 +878,24 @@ export default function Page({ params }) {
   }
 
   // Render video content
-  if (exhibitionData?.media_files?.[0]?.media_type === "video") {
+  if (exhibitionData?.media_files?.[0]?.media_type === 'video') {
     return (
       <div className="h-screen flex items-center justify-center bg-black">
-        <video controls className="max-w-full max-h-full" src={exhibitionData.media_files[0].media_url} />
+        <video
+          controls
+          className="max-w-full max-h-full"
+          src={exhibitionData.media_files[0].media_url}
+        />
       </div>
     )
   }
 
   // **新的fetcher有新的錯誤處理方式**
   if (!data) return <div className="text-white">⌛ Loading...</div> // 等待 API 回應
-  if (!exhibitionData) return <div className="text-white">⚠️ Failed to load exhibition data...</div>
+  if (!exhibitionData)
+    return (
+      <div className="text-white">⚠️ Failed to load exhibition data...</div>
+    )
   if (loadingError) return <div className="text-white">❌ {loadingError}</div>
 
   // Render 3D content
@@ -832,13 +908,25 @@ export default function Page({ params }) {
           className="text-white/70 hover:text-white transition-colors flex items-center gap-2"
         >
           <FiArrowLeft size={20} />
-          <span>Back to Online.</span>
+          <span className="text-sm">Back to Online.</span>
         </Link>
         <div className="flex gap-4">
-          <Button variant="ghost" className="text-white/70 hover:text-white" onClick={() => setIsLiked(!isLiked)}>
-            {isLiked ? <IoMdHeartEmpty size={20} className="text-red-500" /> : <IoMdHeartEmpty size={20} />}
+          <Button
+            variant="ghost"
+            className="text-white/70 hover:text-white"
+            onClick={() => setIsLiked(!isLiked)}
+          >
+            {isLiked ? (
+              <IoMdHeartEmpty size={20} className="text-red-500" />
+            ) : (
+              <IoMdHeartEmpty size={20} />
+            )}
           </Button>
-          <Button variant="ghost" className="text-white/70 hover:text-white" onClick={() => setShowInfo(!showInfo)}>
+          <Button
+            variant="ghost"
+            className="text-white/70 hover:text-white"
+            onClick={() => setShowInfo(!showInfo)}
+          >
             <FiInfo size={20} />
           </Button>
           <Button
@@ -867,7 +955,7 @@ export default function Page({ params }) {
       <div className="h-20 bg-black/90 backdrop-blur-lg border-t border-white/10 flex items-center justify-between px-4">
         <div>
           <h2 className="text-lg font-semibold">{exhibitionData.e_name}</h2>
-          <p className="text-sm text-white/70">{exhibitionData.creator_name}</p>
+          <p className="text-sm text-white/70">{exhibitionData.bd_name}</p>
         </div>
         <div className="flex gap-4">
           <Button
@@ -876,7 +964,9 @@ export default function Page({ params }) {
           >
             Contact Artist
           </Button>
-          <Button className="bg-white text-black hover:bg-white/90 transition-colors">Inquire About Purchase</Button>
+          <Button className="bg-white text-black hover:bg-white/90 transition-colors">
+            Inquire About Purchase
+          </Button>
         </div>
       </div>
 
@@ -884,15 +974,19 @@ export default function Page({ params }) {
       {showInfo && (
         <motion.div
           className="absolute right-0 top-16 bottom-20 w-80 bg-black/90 backdrop-blur-lg p-6 text-white overflow-auto"
-          initial={{ x: "100%" }}
+          initial={{ x: '100%' }}
           animate={{ x: 0 }}
-          exit={{ x: "100%" }}
-          transition={{ type: "spring", damping: 30 }}
+          exit={{ x: '100%' }}
+          transition={{ type: 'spring', damping: 30 }}
         >
           <div className="space-y-6">
             <div>
-              <h2 className="text-lg font-semibold mb-2">About this Model</h2>
-              <p className="text-white/70 text-sm leading-relaxed">{exhibitionData.e_desc}</p>
+              <h2 className="text-lg font-semibold mb-2">
+                About {exhibitionData.e_name}
+              </h2>
+              <p className="text-white/70 text-sm leading-relaxed">
+                {exhibitionData.e_desc}
+              </p>
             </div>
             <div>
               <h2 className="text-lg font-semibold mb-2">Controls</h2>
@@ -902,10 +996,17 @@ export default function Page({ params }) {
                 <li>• Scroll to zoom in/out</li>
               </ul>
             </div>
+            <div>
+              <h3 className="text-lg font-semibold mb-2">Artist</h3>
+              <p className="text-white/70 text-sm">
+                <span className="text-blue-500 hover:underline cursor-pointer">
+                  {exhibitionData?.bd_name}
+                </span>
+              </p>
+            </div>
           </div>
         </motion.div>
       )}
     </div>
   )
 }
-
