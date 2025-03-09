@@ -88,6 +88,9 @@ export default function Carddraw(props) {
   // return <pre>{JSON.stringify(cardData, null, 4)}</pre>;
 
 
+
+
+
   return (
     <>
 
@@ -116,7 +119,7 @@ export default function Carddraw(props) {
         {/* 卡片 */}
         <button className="tOutside flex flex-col gap-6 rounded-md" onClick={handleCardDraw}>
           <div className="tInside shack shake-opacity">
-            <img src='/Blair/ticket.jpg' alt={`Card ${index + 1}`} />
+            <img className="drawimg" src='/Blair/ticket.png' alt={`Card ${index + 1}`} />
           </div>
         </button>
 

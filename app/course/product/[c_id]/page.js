@@ -2,6 +2,7 @@
 
 'use client'
 import React, { useState, useEffect } from 'react'
+import { motion } from "framer-motion";
 
 // 引入專案組件
 import BtnCTA from '../../_components/btnCTA'
@@ -70,7 +71,17 @@ export default function Product() {
 
   return (
     <>
+    <motion.div
+    initial={{ opacity: 0, y: 50 }} // 初始狀態：透明、向下偏移50px
+    animate={{ opacity: 1, y: 0 }}  // 結束狀態：不透明、完全可見
+    transition={{ duration: 0.8, ease: "easeOut", delay: 0.3 }} // 设置动画时间 & 延迟
+    className=""
+    >
+
+    <div className={styles.overall}>
       {/* ------ Section1: 課程資訊 ------ */}
+      <br />
+      <br />
       <div className={styles.section1}>
         {/* PTitle 上方課程名稱 */}
         <div className={styles.PTitle}>
@@ -206,14 +217,14 @@ export default function Product() {
       {/* ------ Section5: 品牌名片 ------ */}
       <div className={`${styles.section5} flex flex-col`}>
         <p className="subtitle">關於品牌｜About Us</p>
-        {/* <div className="bg-[url('https://images.unsplash.com/photo-1547322617-3f783b07f999?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] bg-fixed"> */}
+        {/* <div className="bg-black> */}
 
         <div className="flex flex-row gap-4 justify-center items-center">
           {/* 左邊Logo 300*300 */}
           <div className="BLogo w-1/2">
             <img
               className="w-[300px] h-[300px]"
-              src="https://i.pinimg.com/736x/ba/30/a8/ba30a87feda549c25f258e66eb0b8aa0.jpg"
+              src="/Blair/brand-logo/logo4.png"
             />
           </div>
 
@@ -222,12 +233,22 @@ export default function Product() {
             <div className="BInfoinner flex flex-col w-1/2 gap-8">
               <p>{courseData?.bd_name}</p>
               <p>{courseData?.bd_info}</p>
-              <BtnCTA text={'去探索'} />
+              {/* 跳轉品牌頁面 */}
+              <Button
+              radius="none"
+              className="bg-[#000000] text-white text-[15px] w-[200px] h-[50px]"
+              onPress={() => router.push(`/brandsinfo/${courseData?.bd_id}`)}
+            > 
+              ABOUT US
+              </Button>          
             </div>
           </div>
         </div>
-        {/* </div> */}
       </div>
+
+    </div>
+
+    </motion.div>
     </>
   )
 }
