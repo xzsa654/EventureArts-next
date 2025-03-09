@@ -11,7 +11,7 @@ export default function BrandList1(props) {
     <>
     <div className="">
       <div className="para">
-          <ParaTitle title="合作品牌｜Brand Partners" link="/event" btn="See more" />
+          <ParaTitle title="合作品牌｜Brand Partners" link="/event" btn=" " />
       </div>
 
       {/* 品牌卡集合 */}

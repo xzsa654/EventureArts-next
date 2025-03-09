@@ -132,9 +132,9 @@ export default function Carddraw(props) {
       modules={[Mousewheel]}
       mousewheel={true} // 滾輪控制：on
       centeredSlides={true} // 讓當前 Slide 置中
-      spaceBetween={0} //卡片間隔
+      spaceBetween={10} //卡片間隔
       initialSlide={4} // 從第5張卡片開始（索引從 0 開始）
-      slidesPerView={6.5} //每一幀顯示6張卡片，露出半張
+      slidesPerView={6} //每一幀顯示6張卡片
       onSlideChange={() => console.log('slide change')}
       onSwiper={(swiper) => console.log(swiper)}
     >
@@ -144,7 +144,7 @@ export default function Carddraw(props) {
         {/* 卡片 */}
         <button className="tOutside flex flex-col gap-6 rounded-md" onClick={handleCardDraw}>
           <div className="tInside shack shake-opacity">
-            <img className="drawimg" src='/Blair/ticket.png' alt={`Card ${index + 1}`} />
+            <img className="drawimg w-[300px] h-[400px]" src='/Blair/ticket.png' alt={`Card ${index + 1}`} />
           </div>
         </button>
 

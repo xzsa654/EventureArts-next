@@ -56,11 +56,16 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 500px;
-    width: 250px;
+    height: 600px;
+
+  }
+
+  .tInside {
+
   }
 
   .tInside:hover {
     border-radius: 20px;
     box-shadow: 0 0 30px 10px rgba(255, 248, 206, 0.8); /* 金黃色光暈 */
+    
   }
