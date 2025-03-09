@@ -4,17 +4,6 @@
   height: 100%;
 }
 
-body {
-  margin: 0;
-  padding: 0;
-  position: relative;
-  height: 100%;
-  /* background-image: url('/chu-images/img-bg.jpg'); */
-  /* background-repeat: repeat-y; */
-  /* object-fit: fill; */
-  /* width: 100%;
-    height: 100%; */
-}
 
 /* --------- headline START --------- */
 /* 設定主標題邊框 */

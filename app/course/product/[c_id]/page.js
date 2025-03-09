@@ -23,7 +23,7 @@ import { FaRegSmileWink } from 'react-icons/fa'
 import { BsArrowRight } from 'react-icons/bs'
 
 // 引入css
-import './product.css'
+import styles from "./product.module.css";
 
 // 引入路由
 import { PRODUCT } from '@/lib/course-api'
@@ -71,10 +71,10 @@ export default function Product() {
   return (
     <>
       {/* ------ Section1: 課程資訊 ------ */}
-      <div className="section1">
+      <div className={styles.section1}>
         {/* PTitle 上方課程名稱 */}
-        <div className="PTitle">
-          <div className="PTitleInner text-center">
+        <div className={styles.PTitle}>
+          <div className={styles.PTitleInner}>
             <p>{courseData?.c_name}</p>
           </div>
         </div>
@@ -92,7 +92,7 @@ export default function Product() {
             <div className="ProductDetail flex flex-col justify-between gap-3 px-8 h-[400px]">
               <div className="ABC flex flex-col gap-4">
                 {/* A.日期 */}
-                <div className="items">
+                <div className={styles.items}>
                   <IoCalendarNumberOutline />
                   <p>
                     {' '}
@@ -106,14 +106,14 @@ export default function Product() {
                   </p>
                 </div>
                 {/* B.名稱 */}
-                <div className="items">
+                <div className={styles.items}>
                   <PiTicketDuotone />
                   <div className="">
                     <p>{courseData?.bd_name}</p>
                   </div>
                 </div>
                 {/* C.地址 */}
-                <div className="items">
+                <div className={styles.items}>
                   <GrLocation />
                   <div className="">
                     <p>{courseData?.address}</p>
@@ -150,21 +150,21 @@ export default function Product() {
       </div>
 
       {/* ------ Section2: 課程3特點 ------ */}
-      <div className="section2 flex flex-row justify-around h-1/3">
+      <div className={`${styles.section2} flex flex-row justify-around h-1/3`}>
         {/* 特點一 */}
-        <div className="Special">
+        <div className={styles.Special}>
           <FiCheckCircle size={40} color="#F17C80" />
           <p className="text-2xl font-bold">{courseData?.c_v1}</p>
           <p>{courseData?.c_vdes1}</p>
         </div>
         {/* 特點二 */}
-        <div className="Special">
+        <div className={styles.Special}>
           <AiOutlineHeart size={40} color="#F17C80" />
           <p className="text-2xl font-bold">{courseData?.c_v2}</p>
           <p>{courseData?.c_vdes2}</p>
         </div>
         {/* 特點三 */}
-        <div className="Special">
+        <div className={styles.Special}>
           <FaRegSmileWink size={40} color="#F17C80" />
           <p className="text-2xl font-bold">{courseData?.c_v3}</p>
           <p>{courseData?.c_vdes3}</p>
@@ -172,13 +172,13 @@ export default function Product() {
       </div>
 
       {/* ------ Section3: 課程介紹 ------ */}
-      <div className="section3 flex flex-col gap-4 h-1/2">
-        <p className="subtitle">課程介紹｜Introduction</p>
-        <p className="content">{courseData?.c_desc}</p>
+      <div className={`${styles.section3} flex flex-col gap-4 h-1/2`}>
+        <p className={styles.subtitle}>課程介紹｜Introduction</p>
+        <p className={styles.content}>{courseData?.c_desc}</p>
       </div>
 
       {/* ------ Section4: 場地、聯絡方式 (leaflet地圖) ------ */}
-      <div className="section4 flex flex-row gap-4">
+      <div className={`${styles.section4} flex flex-row gap-4`}>
         <div className="Locate flex flex-col gap-4 w-1/2">
           <p className="subtitle">課程地點｜Location</p>
           <div className="map500x400"></div>
@@ -204,7 +204,7 @@ export default function Product() {
       </div>
 
       {/* ------ Section5: 品牌名片 ------ */}
-      <div className="section5 flex flex-col">
+      <div className={`${styles.section5} flex flex-col`}>
         <p className="subtitle">關於品牌｜About Us</p>
         {/* <div className="bg-[url('https://images.unsplash.com/photo-1547322617-3f783b07f999?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] bg-fixed"> */}
 

@@ -3,8 +3,8 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { BsArrowRight } from "react-icons/bs";
-import {Button} from "@heroui/react";
+import Swal from 'sweetalert2';
+import 'csshake/dist/csshake.min.css';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/mousewheel';
@@ -52,10 +52,15 @@ export default function Carddraw(props) {
   const handleCardDraw = async () => {
     //🔑登入驗證
     if (!auth.token) {   
-      alert("請先登入再抽卡！");
-      return;
+        Swal.fire({
+            title: '登入提示',
+            text: '請先登入以進行抽卡',
+            icon: 'warning',
+            confirmButtonText: '確定'
+        });
+        return;
     }
-
+    
     try {
       const response = await fetch(`http://localhost:3001/course/carddraw/draw`, {
         method: 'POST',
@@ -86,13 +91,11 @@ export default function Carddraw(props) {
   return (
     <>
 
-<div className="main masked-image">
+<div className="main mt-20">
 
     {/* ----- 上方標題區塊 ----- */}
     <div className="flex flex-col justify-center items-center">
         <p className='t-title'>請憑直覺選擇一張喜愛的票券：</p>
-        <br />
-        <p className='t-subtitle'>Please select a ticket that resonates with you the most.</p>
     </div>
 
     {/* ----- 下方活動區塊 ----- */}
@@ -101,7 +104,7 @@ export default function Carddraw(props) {
       modules={[Mousewheel]}
       mousewheel={true} // 滾輪控制：on
       centeredSlides={true} // 讓當前 Slide 置中
-      spaceBetween={150} //卡片間隔
+      spaceBetween={0} //卡片間隔
       initialSlide={4} // 從第5張卡片開始（索引從 0 開始）
       slidesPerView={6.5} //每一幀顯示6張卡片，露出半張
       onSlideChange={() => console.log('slide change')}
@@ -111,21 +114,11 @@ export default function Carddraw(props) {
       <SwiperSlide key={index} className="swpslide swiper-slide">
 
         {/* 卡片 */}
-          <div className="ticket flex flex-col gap-6">
-            <img src='/Blair/ticket.png' alt={`Card ${index + 1}`}  />
-
-            {/* 按鈕 */}
-            <div className="btn flex gap-4 items-center h-10">
-            <Button 
-                      radius="none" 
-                      className="bg-[#000000] text-white h-full" 
-                      onPress={handleCardDraw}  // 點擊時觸發抽卡
-                    >                
-                    <span>就是你了</span>
-                <BsArrowRight />
-              </Button>
-            </div>
+        <button className="tOutside flex flex-col gap-6 rounded-md" onClick={handleCardDraw}>
+          <div className="tInside shack shake-opacity">
+            <img src='/Blair/ticket.jpg' alt={`Card ${index + 1}`} />
           </div>
+        </button>
 
         </SwiperSlide>
         ))}
