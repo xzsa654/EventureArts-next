@@ -140,15 +140,15 @@ export default function BrandsPage({ params }) {
                     </dl>
                     <dl className="text-base flex font-cn justify-between">
                       <dt>地址：</dt>
-                      <dt>{brand?.bd_address  || '暫無'}</dt>
+                      <dt>{brand?.bd_address || '暫無'}</dt>
                     </dl>
                     <dl className="text-base flex font-cn justify-between">
                       <dt>品牌聯絡信箱：</dt>
-                      <dt>{brand?.bd_email  || '暫無'}</dt>
+                      <dt>{brand?.bd_email || '暫無'}</dt>
                     </dl>
                     <dl className="text-base flex font-cn justify-between">
                       <dt>品牌官方網站：</dt>
-                      <dt>{brand?.bd_website  || '暫無'}</dt>
+                      <dt>{brand?.bd_website || '暫無'}</dt>
                     </dl>
                   </div>
                 </div>

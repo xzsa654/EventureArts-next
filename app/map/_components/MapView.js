@@ -84,6 +84,22 @@ const MapView = ({
     if (isNewMRT || isNewFilterType || isNewStation || isNewDistrict) {
       console.log("Filter criteria changed, clearing location markers")
       setLocations([])
+
+      // Force clear any existing markers
+      const markerLayerEl = document.querySelector(".leaflet-marker-pane")
+      if (markerLayerEl) {
+        while (markerLayerEl.firstChild) {
+          markerLayerEl.removeChild(markerLayerEl.firstChild)
+        }
+      }
+
+      // Also clear popup pane
+      const popupLayerEl = document.querySelector(".leaflet-popup-pane")
+      if (popupLayerEl) {
+        while (popupLayerEl.firstChild) {
+          popupLayerEl.removeChild(popupLayerEl.firstChild)
+        }
+      }
     }
 
     // Update refs
@@ -95,6 +111,9 @@ const MapView = ({
 
   // Fetch location data when shortestPaths changes
   useEffect(() => {
+    // Don't fetch if we're in district filter mode
+    if (activeFilterType === "district") return
+
     if (!shortestPaths?.features?.length) return
 
     const locatIds = shortestPaths.features.map((path) => path.properties.end_name)
@@ -125,7 +144,7 @@ const MapView = ({
     }
 
     fetchLocations()
-  }, [shortestPaths, selectedType])
+  }, [shortestPaths, selectedType, activeFilterType]) // Add activeFilterType to dependencies
 
   // Debug locations
   useEffect(() => {
@@ -214,10 +233,10 @@ const MapView = ({
           popupContent.className = "popup-content"
 
           // Add title based on type
-          // const titleType = document.createElement("h3")
-          // titleType.className = "popup-title-type"
-          // titleType.textContent = hasExhibitions ? "Exhibition" : hasCourses ? "Course" : "Location"
-          // popupContent.appendChild(titleType)
+          const titleType = document.createElement("h3")
+          titleType.className = "popup-title-type"
+          titleType.textContent = hasExhibitions ? "Exhibition" : hasCourses ? "Course" : "Location"
+          popupContent.appendChild(titleType)
 
           // Add name if it exists (e_name or name)
           if (location.name) {
@@ -427,7 +446,7 @@ const MapView = ({
       color: "#ff7800",
       weight: isSelected || isHovered ? 3 : 1,
       opacity: 0.65,
-      fillOpacity: isSelected ? 0.7 : isHovered ? 0.5 : 0.2,
+      fillOpacity: isSelected ? 0.3 : isHovered ? 0.5 : 0.2,
       fillColor: isSelected ? "#ff7800" : "#ffb380",
     }
   }
@@ -719,9 +738,9 @@ const MapView = ({
                 <Popup className="location-popup">
                   <div className="popup-content">
                     {/* New structure for popup content */}
-                    {/* <h3 className="popup-title-type">
+                    <h3 className="popup-title-type">
                       {hasExhibitions ? "Exhibition" : hasCourses ? "Course" : "Location"}
-                    </h3> */}
+                    </h3>
 
                     {/* Display name if it exists */}
                     {loc.name && <div className="popup-name">{loc.name}</div>}

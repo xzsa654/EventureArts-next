@@ -96,12 +96,12 @@
 /* 手機版 RWD */
 @media (max-width: 768px) {
   .filter-panel {
-    width: 90vw;
-    max-width: 360px;
+  
+    
     padding: 16px;
     top: 16px;
-    left: 50%;
-    transform: translateX(-50%);
+    /* left: 50%; */
+    /* transform: translateX(-50%); */
   }
 
   .filter-results {
