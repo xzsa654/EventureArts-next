@@ -70,6 +70,13 @@ export default function VerifyEmail() {
     const result = await res.json()
     if (result.success) {
       onOpenChange(false)
+      addToast({
+        title: '密碼重設成功！',
+        radius: 'lg',
+        description: '請重新登入！',
+        color: 'success',
+        timeout: 3000,
+      })
     } else {
       setErrorMessage(result.message)
     }
@@ -115,7 +122,7 @@ export default function VerifyEmail() {
               ease: 'easeIn',
             },
           }}
-          className="absolute w-[300] h-[254] bottom-0 flex justify-center items-center z-10"
+          className="absolute w-[300px] h-[300px] bottom-0 flex justify-center items-center z-10"
         >
           <Button size="lg" className="bg-red text-white" onPress={verifyEmail}>
             獲取驗證碼

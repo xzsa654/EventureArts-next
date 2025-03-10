@@ -31,7 +31,7 @@ export default function ModalLayout({
           wrapper: 'z-40',
         }}
         className={`${
-          size ? '' : 'w-[400]'
+          size ? '' : 'w-[400px]'
         }  bg-[FFF2F2] backdrop-blur-[10px]    border-2  rounded-sm `}
         motionProps={{
           variants: {
