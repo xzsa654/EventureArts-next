@@ -82,7 +82,7 @@ export default function Carousel(props) {
           </a>
         </SwiperSlide>
 
-        <SwiperSlide className="w-1/3 h-auto">
+        <SwiperSlide className="w-1/3 h-auto course">
           <a href="/course/product/2">
             <img
               className="w-[800px] h-[250px] swiperImg"
