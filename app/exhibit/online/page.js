@@ -155,7 +155,10 @@ export default function OnlineExhibitions() {
     <div className="pt-[80px] min-h-screen bg-[url('/chu-images/img-bg.jpg')] bg-cover bg-fixed">
       <div className="min-h-screen bg-black bg-opacity-80">
         {/* Custom animation component */}
-        <AnimationLike />
+        <div className="w-full max-w-full overflow-hidden">
+          <AnimationLike />
+        </div>
+
 
         <div className="pt-[70px] px-4 py-8">
           <motion.div
