@@ -1,12 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export', // 對靜態網站部署非常重要
   reactStrictMode: false,
   eslint: {
     // ignoreDuringBuilds: true,
   },
   images: {
-    unoptimized: true, // 靜態輸出需要
     remotePatterns: [
       {
         protocol: 'https',
