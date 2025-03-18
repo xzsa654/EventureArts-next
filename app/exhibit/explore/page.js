@@ -1,28 +1,38 @@
-"use client"
+'use client'
 
-import { useState, useCallback, useEffect } from "react"
-import Excard from "../_components/Excard"
-import { Input, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button } from "@heroui/react"
-import { CiSearch } from "react-icons/ci"
-import { MdSort } from "react-icons/md"
-import useSWR from "swr"
-import "./styles.css"
-import PaginationAdapter from "../PaginationAdapter"
-import Loading from "../loading"
+import { useState, useCallback, useEffect } from 'react'
+import Excard from '../_components/Excard'
+import {
+  Input,
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+  Button,
+} from '@heroui/react'
+import { CiSearch } from 'react-icons/ci'
+import { MdSort } from 'react-icons/md'
+import useSWR from 'swr'
+import './styles.css'
+import PaginationAdapter from '../PaginationAdapter'
+import Loading from '../loading'
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3001"
-
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3001'
 
 // Static options from your e_options table
 const EXHIBITION_OPTIONS = [
-  { e_optionID: 1, e_optionName: "視覺藝術 (Visual Arts)" },
-  { e_optionID: 2, e_optionName: "當代藝術 (Contemporary Art)" },
-  { e_optionID: 3, e_optionName: "藝術與科技 (Art and Technology)" },
-  { e_optionID: 4, e_optionName: "歷史藝術 (Historical Art)" },
-  { e_optionID: 5, e_optionName: "社會與政治藝術 (Social and Political Art)" },
-  { e_optionID: 6, e_optionName: "藝術與文化 (Art and Culture)" },
-  { e_optionID: 7, e_optionName: "藝術裝置與展覽設計 (Art Installation and Exhibition Design)" },
-  { e_optionID: 8, e_optionName: "交互式藝術 (Interactive Art)" },
+  { e_optionID: 1, e_optionName: '視覺藝術 (Visual Arts)' },
+  { e_optionID: 2, e_optionName: '當代藝術 (Contemporary Art)' },
+  { e_optionID: 3, e_optionName: '藝術與科技 (Art and Technology)' },
+  { e_optionID: 4, e_optionName: '歷史藝術 (Historical Art)' },
+  { e_optionID: 5, e_optionName: '社會與政治藝術 (Social and Political Art)' },
+  { e_optionID: 6, e_optionName: '藝術與文化 (Art and Culture)' },
+  {
+    e_optionID: 7,
+    e_optionName: '藝術裝置與展覽設計 (Art Installation and Exhibition Design)',
+  },
+  { e_optionID: 8, e_optionName: '交互式藝術 (Interactive Art)' },
 ]
 
 // Fetcher function for useSWR
@@ -31,17 +41,17 @@ const fetcher = (url) => fetch(url).then((res) => res.json())
 export default function ExploreExhibitions() {
   // State for search and filters
   const [searchParams, setSearchParams] = useState({
-    keyword: "",
-    exhibitionStatus: "",
-    e_optionID: "", // This matches with e_type.e_optionID
-    sort: "asc",
+    keyword: '',
+    exhibitionStatus: '',
+    e_optionID: '', // This matches with e_type.e_optionID
+    sort: 'asc',
     page: 1,
     perPage: 9,
-    exhibition_form: "offline", // Add this line to always show offline exhibitions
+    exhibition_form: 'offline', // Add this line to always show offline exhibitions
   })
 
   // Separate state for search input to prevent API calls on every keystroke
-  const [searchInput, setSearchInput] = useState("")
+  const [searchInput, setSearchInput] = useState('')
   const [showAdvancedSearch, setShowAdvancedSearch] = useState(false)
 
   // Create query string from search params
@@ -51,16 +61,17 @@ export default function ExploreExhibitions() {
     // Only include non-empty values
     if (!queryParams.keyword) delete queryParams.keyword
     if (!queryParams.exhibitionStatus) delete queryParams.exhibitionStatus
-    if (!queryParams.e_optionID && queryParams.e_optionID !== 0) delete queryParams.e_optionID
-    if (queryParams.sort === "asc") delete queryParams.sort
+    if (!queryParams.e_optionID && queryParams.e_optionID !== 0)
+      delete queryParams.e_optionID
+    if (queryParams.sort === 'asc') delete queryParams.sort
     // Always include exhibition_form
-    queryParams.exhibition_form = "offline"
+    queryParams.exhibition_form = 'offline'
 
-    console.log("Query params:", queryParams) // Debug log
+    console.log('Query params:', queryParams) // Debug log
 
     return Object.entries(queryParams)
       .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
-      .join("&")
+      .join('&')
   }, [])
 
   // Fetch exhibitions data with useSWR
@@ -68,7 +79,10 @@ export default function ExploreExhibitions() {
     data: response,
     error,
     isLoading,
-  } = useSWR(`${API_BASE_URL}/exhibit?${createQueryString(searchParams)}`, fetcher)
+  } = useSWR(
+    `${API_BASE_URL}/exhibit?${createQueryString(searchParams)}`,
+    fetcher
+  )
 
   // Handle search - now updates searchParams.keyword from searchInput
   const handleSearch = () => {
@@ -81,7 +95,7 @@ export default function ExploreExhibitions() {
 
   // Handle Enter key press
   const handleKeyPress = (e) => {
-    if (e.key === "Enter") {
+    if (e.key === 'Enter') {
       handleSearch()
     }
   }
@@ -97,14 +111,14 @@ export default function ExploreExhibitions() {
 
   // Handle exhibition type change
   const handleTypeChange = (optionId) => {
-    console.log("Selected option ID:", optionId)
+    console.log('Selected option ID:', optionId)
     console.log(
-      "Selected option:",
-      EXHIBITION_OPTIONS.find((opt) => opt.e_optionID.toString() === optionId),
+      'Selected option:',
+      EXHIBITION_OPTIONS.find((opt) => opt.e_optionID.toString() === optionId)
     )
 
     // Convert the string ID to a number or empty string
-    const numericId = optionId === "" ? "" : Number(optionId)
+    const numericId = optionId === '' ? '' : Number(optionId)
 
     setSearchParams((prev) => ({
       ...prev,
@@ -124,55 +138,62 @@ export default function ExploreExhibitions() {
 
   // Handle page change
   const handlePageChange = (page) => {
-    console.log("handlePageChange called with page:", page)
+    console.log('handlePageChange called with page:', page)
     setSearchParams((prev) => {
-      console.log("Previous search params:", prev)
+      console.log('Previous search params:', prev)
       const newParams = { ...prev, page }
-      console.log("New search params:", newParams)
+      console.log('New search params:', newParams)
       return newParams
     })
-    window.scrollTo({ top: 0, behavior: "smooth" })
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   // Log when searchParams changes
   useEffect(() => {
-    console.log("searchParams updated:", searchParams)
+    console.log('searchParams updated:', searchParams)
   }, [searchParams])
 
   // Log when response changes
   useEffect(() => {
-    console.log("Response data:", response)
+    console.log('Response data:', response)
   }, [response])
 
   // Reset filters
   const handleResetFilters = () => {
-    setSearchInput("") // Reset the search input
+    setSearchInput('') // Reset the search input
     setSearchParams({
-      keyword: "",
-      exhibitionStatus: "",
-      e_optionID: "",
-      sort: "asc",
+      keyword: '',
+      exhibitionStatus: '',
+      e_optionID: '',
+      sort: 'asc',
       page: 1,
       perPage: 9,
-      exhibition_form: "offline", // Maintain the offline filter when resetting
+      exhibition_form: 'offline', // Maintain the offline filter when resetting
     })
   }
 
   // Check if any filters are active
   const hasActiveFilters =
-    searchParams.keyword !== "" ||
-    searchParams.exhibitionStatus !== "" ||
-    searchParams.e_optionID !== "" ||
-    searchParams.sort !== "asc"
+    searchParams.keyword !== '' ||
+    searchParams.exhibitionStatus !== '' ||
+    searchParams.e_optionID !== '' ||
+    searchParams.sort !== 'asc'
 
   // Get the current option name for display
   const getCurrentOptionName = () => {
-    if (!searchParams.e_optionID) return "所有藝術類型"
-    const option = EXHIBITION_OPTIONS.find((opt) => opt.e_optionID.toString() === searchParams.e_optionID)
-    return option ? option.e_optionName : "選擇類型"
+    if (!searchParams.e_optionID) return '所有藝術類型'
+    const option = EXHIBITION_OPTIONS.find(
+      (opt) => opt.e_optionID.toString() === searchParams.e_optionID
+    )
+    return option ? option.e_optionName : '選擇類型'
   }
 
-  if (error) return <div className="text-white text-center pt-[200px]">Error loading exhibitions</div>
+  if (error)
+    return (
+      <div className="text-white text-center pt-[200px]">
+        Error loading exhibitions
+      </div>
+    )
   if (isLoading) return <Loading />
 
   return (
@@ -183,7 +204,9 @@ export default function ExploreExhibitions() {
       <div className="min-h-screen bg-black bg-opacity-50">
         <div className="pt-[120px] px-4 py-8">
           <div className="max-w-4xl mx-auto mb-2">
-            <h1 className="text-4xl font-black text-center mb-12 text-white">Explore your exhibition</h1>
+            <h1 className="text-4xl font-black text-center mb-12 text-white">
+              Explore your exhibition
+            </h1>
 
             {/* Main search input - Updated to use searchInput */}
             <div className="max-w-xl mx-auto mb-8">
@@ -192,26 +215,37 @@ export default function ExploreExhibitions() {
                 onChange={(e) => setSearchInput(e.target.value)}
                 onKeyPress={handleKeyPress}
                 classNames={{
-                  label: "text-white/90",
-                  input: ["bg-transparent", "text-white", "placeholder:text-white/60", "text-[13px]", "py-1", "h-9"],
-                  innerWrapper: "bg-transparent",
+                  label: 'text-white/90',
+                  input: [
+                    'bg-transparent',
+                    'text-white',
+                    'placeholder:text-white/60',
+                    'text-[13px]',
+                    'py-1',
+                    'h-9',
+                  ],
+                  innerWrapper: 'bg-transparent',
                   inputWrapper: [
-                    "bg-transparent",
-                    "hover:bg-transparent",
-                    "group-data-[focus=true]:bg-transparent",
-                    "!cursor-text",
+                    'bg-transparent',
+                    'hover:bg-transparent',
+                    'group-data-[focus=true]:bg-transparent',
+                    '!cursor-text',
                   ],
                 }}
                 placeholder="可輸入作者／作品名等關鍵字"
                 variant="underlined"
-                startContent={<CiSearch className="text-lg text-white/90 pointer-events-none flex-shrink-0 w-5 h-5" />}
+                startContent={
+                  <CiSearch className="text-lg text-white/90 pointer-events-none flex-shrink-0 w-5 h-5" />
+                }
               />
             </div>
 
             {/* Advanced search area */}
             <div
               className={`max-w-xl mx-auto mb-8 overflow-hidden transition-all duration-300 ease-in-out ${
-                showAdvancedSearch ? "advanced-search-open" : "advanced-search-closed"
+                showAdvancedSearch
+                  ? 'advanced-search-open'
+                  : 'advanced-search-closed'
               }`}
             >
               <div className="p-4 border border-white/30 rounded-lg advanced-search">
@@ -219,22 +253,32 @@ export default function ExploreExhibitions() {
                   {/* Exhibition Status Filter */}
                   <Dropdown>
                     <DropdownTrigger>
-                      <Button variant="bordered" className="w-full justify-start text-white border-white/30">
+                      <Button
+                        variant="bordered"
+                        className="w-full justify-start text-white border-white/30"
+                      >
                         {!searchParams.exhibitionStatus
-                          ? "All Exhibitions"
-                          : searchParams.exhibitionStatus === "current"
-                            ? "Current Exhibition"
-                            : searchParams.exhibitionStatus === "future"
-                              ? "Future Exhibition"
-                              : searchParams.exhibitionStatus === "down"
-                                ? "Down Exhibition"
-                                : "Past Exhibition"}
+                          ? 'All Exhibitions'
+                          : searchParams.exhibitionStatus === 'current'
+                          ? 'Current Exhibition'
+                          : searchParams.exhibitionStatus === 'future'
+                          ? 'Future Exhibition'
+                          : searchParams.exhibitionStatus === 'down'
+                          ? 'Down Exhibition'
+                          : 'Past Exhibition'}
                       </Button>
                     </DropdownTrigger>
-                    <DropdownMenu aria-label="Exhibition Status" onAction={handleStatusChange}>
+                    <DropdownMenu
+                      aria-label="Exhibition Status"
+                      onAction={handleStatusChange}
+                    >
                       <DropdownItem key="">All Exhibitions</DropdownItem>
-                      <DropdownItem key="current">Current Exhibition</DropdownItem>
-                      <DropdownItem key="future">Future Exhibition</DropdownItem>
+                      <DropdownItem key="current">
+                        Current Exhibition
+                      </DropdownItem>
+                      <DropdownItem key="future">
+                        Future Exhibition
+                      </DropdownItem>
                       <DropdownItem key="past">Past Exhibition</DropdownItem>
                       <DropdownItem key="down">Down Exhibition</DropdownItem>
                     </DropdownMenu>
@@ -243,7 +287,10 @@ export default function ExploreExhibitions() {
                   {/* Exhibition Type Filter */}
                   <Dropdown>
                     <DropdownTrigger>
-                      <Button variant="bordered" className="w-full justify-start text-white border-white/30">
+                      <Button
+                        variant="bordered"
+                        className="w-full justify-start text-white border-white/30"
+                      >
                         {getCurrentOptionName()}
                       </Button>
                     </DropdownTrigger>
@@ -254,7 +301,9 @@ export default function ExploreExhibitions() {
                     >
                       <DropdownItem key="">所有藝術類型</DropdownItem>
                       {EXHIBITION_OPTIONS.map((option) => (
-                        <DropdownItem key={option.e_optionID.toString()}>{option.e_optionName}</DropdownItem>
+                        <DropdownItem key={option.e_optionID.toString()}>
+                          {option.e_optionName}
+                        </DropdownItem>
                       ))}
                     </DropdownMenu>
                   </Dropdown>
@@ -268,7 +317,7 @@ export default function ExploreExhibitions() {
                 className="hero-btn text-[14px] px-4 py-1 rounded-full border border-white text-white"
                 onClick={() => setShowAdvancedSearch(!showAdvancedSearch)}
               >
-                <span>{showAdvancedSearch ? "隱藏進階搜尋" : "進階搜尋"}</span>
+                <span>{showAdvancedSearch ? '隱藏進階搜尋' : '進階搜尋'}</span>
               </button>
               <button
                 className="hero-btn text-[14px] px-4 py-1 rounded-full border border-white text-white"
@@ -344,4 +393,3 @@ export default function ExploreExhibitions() {
     </div>
   )
 }
-
