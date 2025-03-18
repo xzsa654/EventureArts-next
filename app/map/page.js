@@ -31,9 +31,9 @@ export default function Page() {
   const [activeFilterType, setActiveFilterType] = useState("mrt") // "mrt" or "district"
   // Add a new state for filtered locations
   const [filteredLocations, setFilteredLocations] = useState([])
-  const [selectedLocationId, setSelectedLocationId] = useState(null)//新增管理地圖選取地點的狀態  
+  const [selectedLocationId, setSelectedLocationId] = useState(null)//新增管理地圖選取地點的狀態
 
-  const [activeDataType, setActiveDataType] = useState("")//新增管理展覽或課程的篩選器選擇
+  const [activeDataType, setActiveDataType] = useState("courses")//新增管理展覽或課程的篩選器選擇
 
   const [clickedStationLocations, setClickedStationLocations] = useState([]) //捷運站選取後跟後端資料
 
